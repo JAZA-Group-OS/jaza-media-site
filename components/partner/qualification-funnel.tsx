@@ -23,6 +23,24 @@ function readAnswers(): Answers {
   }
 }
 
+// Mount-time hydration: if the user is entering the funnel (no step param,
+// or explicitly at step 1) we treat it as a fresh start and discard any
+// stale answers from a prior session. Refreshing mid-funnel (?step=N for
+// N >= 2) preserves their progress.
+function readInitialAnswers(): Answers {
+  if (typeof window === 'undefined') return {};
+  const step = new URL(window.location.href).searchParams.get('step');
+  if (step === null || step === '1') {
+    try {
+      window.sessionStorage.removeItem(STORAGE_KEY);
+    } catch {
+      // no-op
+    }
+    return {};
+  }
+  return readAnswers();
+}
+
 function writeAnswers(a: Answers) {
   if (typeof window === 'undefined') return;
   try {
@@ -88,11 +106,12 @@ export function QualificationFunnel() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  // Lazy initializer reads sessionStorage on first render. This component
-  // is wrapped in <Suspense> at app/partner-with-us/page.tsx, and per
-  // Next.js 16 rules a useSearchParams client component renders only on
-  // the client up to that boundary — so `window` is always available here.
-  const [answers, setAnswers] = useState<Answers>(() => readAnswers());
+  // Lazy initializer. The component mounts client-only via next/dynamic
+  // (see funnel-mount.tsx), so `window` is always available here. We
+  // distinguish a fresh entry (?step=1 or no step) from a mid-funnel
+  // refresh: fresh entries clear stale answers, mid-funnel refreshes
+  // restore them so the user doesn't lose progress.
+  const [answers, setAnswers] = useState<Answers>(() => readInitialAnswers());
 
   // Validation is keyed to the step it ran on. When stepFromUrl changes,
   // the derived `error` below becomes null automatically — no effect needed.
