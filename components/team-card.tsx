@@ -28,7 +28,7 @@ export function TeamCard({ member }: { member: Member }) {
   return (
     <article className="flex flex-col items-center text-center">
       <div
-        className={`relative aspect-[4/5] w-full overflow-hidden border-2 ${borderClass} bg-neutral-200`}
+        className={`relative aspect-square w-full overflow-hidden border-2 ${borderClass} bg-neutral-200`}
       >
         {member.image ? (
           <Image
@@ -36,7 +36,7 @@ export function TeamCard({ member }: { member: Member }) {
             alt={altText}
             fill
             sizes="(min-width: 1024px) 320px, (min-width: 640px) 50vw, 100vw"
-            className="object-cover grayscale"
+            className="object-cover object-top grayscale"
           />
         ) : (
           <span className="sr-only">{altText}</span>
