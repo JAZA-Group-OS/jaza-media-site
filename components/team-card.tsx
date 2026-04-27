@@ -12,6 +12,7 @@ function firstName(member: Member): string {
   const trimmed = member.name.trim();
   const space = trimmed.indexOf(" ");
   const first = space === -1 ? trimmed : trimmed.slice(0, space);
+  if (first.length <= 2) return first;
   return first.charAt(0) + first.slice(1).toLowerCase();
 }
 
