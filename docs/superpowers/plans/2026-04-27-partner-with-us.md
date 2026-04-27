@@ -14,7 +14,9 @@
 - `node_modules/@base-ui/react/radio-group/RadioGroup.d.ts` — `RadioGroup<Value>({ value, onValueChange, name, ... })`.
 - `node_modules/@base-ui/react/radio/root/RadioRoot.d.ts` — `Radio.Root({ value })` with `Radio.Indicator` child.
 
-**Test strategy:** This repo has no test framework (only `next dev`/`build`/`start`/`lint` in `package.json`). Adding vitest+RTL+jsdom for Next 16 + Tailwind v4 is non-trivial and out of scope. Verification is via Playwright MCP walkthroughs of qualified/not-qualified/validation paths. The pure `qualify()` function is small and exhaustively walked by Playwright. If franco (QA) requires unit tests in the noxadevteam review pass, that's a follow-up.
+**Test strategy:** This repo has no test framework (only `next dev`/`build`/`start`/`lint` in `package.json`). Adding vitest+RTL+jsdom for Next 16 + Tailwind v4 is non-trivial and out of scope. Verification is via Playwright MCP walkthroughs of qualified/not-qualified/validation paths covering all 4 disqualifiers + a combined-disqualifier case. The pure `qualify()` function is small and exhaustively walked by Playwright. A vitest-based unit test for `qualify()` is on the post-implementation backlog (Franco's call-out from the pre-impl review).
+
+**Pre-implementation review applied:** This plan was reviewed by `/noxadevteam` at the design + plan stage. P0 fixes baked in: removed double-fire onClick on the NEXT submit button, moved `!hydrated` early-return below all hook declarations to satisfy Rules of Hooks, gated the submission `console.log` on `NODE_ENV !== 'production'` to avoid leaking PII (phone, email, name) in production DevTools, replaced the misleading "48 hours" qualified copy with an honest placeholder until the API exists, added `min-h-[44px]` to PREV/NEXT buttons. P1 fixes baked in: added a yellow progress bar above the card, narrowed `useMemo` dep on `currentValue` instead of full `answers`, moved validation error above the answer body so it stays in the mobile viewport, bumped row-stack radio padding to `py-3.5 min-h-[44px]`, stripped destructive `aspect-[5/3]` on mobile cards, switched helper text from foreign blue to `text-neutral-500`, softened "Sorry! You're NOT Yet Qualified" to "Not the right fit — yet.", added 4 more disqualifier walks (3 missing single-field paths + 1 combined-disqualifier path).
 
 ---
 
@@ -301,13 +303,15 @@ Create `components/partner/funnel-step-card.tsx`:
 import type { ReactNode } from 'react';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
 
+// FunnelStepCard expects to live inside a <form>. The submit button advances
+// the funnel via the form's onSubmit handler — no onNext prop needed, which
+// also avoids the double-fire bug where onClick + form submit both fire.
 type Props = {
   title: string;
   helper?: string;
   body: ReactNode;
   error?: string;
   onPrev?: () => void;
-  onNext: () => void;
   isFirst: boolean;
   isLast: boolean;
 };
@@ -318,7 +322,6 @@ export function FunnelStepCard({
   body,
   error,
   onPrev,
-  onNext,
   isFirst,
   isLast,
 }: Props) {
@@ -329,12 +332,10 @@ export function FunnelStepCard({
           {title}
         </h2>
         {helper ? (
-          <p className="mt-2 text-center text-sm text-blue-600 italic">
+          <p className="mt-2 text-center text-sm text-neutral-500 italic">
             ({helper})
           </p>
         ) : null}
-
-        <div className="mt-6 md:mt-8">{body}</div>
 
         {error ? (
           <p
@@ -344,6 +345,8 @@ export function FunnelStepCard({
             {error}
           </p>
         ) : null}
+
+        <div className="mt-6 md:mt-8">{body}</div>
       </div>
 
       <div className="flex items-center justify-between bg-brand-yellow px-6 py-3 md:px-10">
@@ -354,7 +357,7 @@ export function FunnelStepCard({
             type="button"
             onClick={onPrev}
             aria-label="Previous step"
-            className="inline-flex items-center gap-2 text-sm font-bold tracking-wider text-brand-black uppercase transition-opacity hover:opacity-70"
+            className="inline-flex min-h-[44px] items-center gap-2 text-sm font-bold tracking-wider text-brand-black uppercase transition-opacity hover:opacity-70"
           >
             <ArrowLeft className="size-4" strokeWidth={2.5} />
             Previous
@@ -363,9 +366,8 @@ export function FunnelStepCard({
 
         <button
           type="submit"
-          onClick={onNext}
           aria-label={isLast ? 'Submit application' : 'Next step'}
-          className="inline-flex items-center gap-2 text-sm font-bold tracking-wider text-brand-black uppercase transition-opacity hover:opacity-70"
+          className="inline-flex min-h-[44px] items-center gap-2 text-sm font-bold tracking-wider text-brand-black uppercase transition-opacity hover:opacity-70"
         >
           {isLast ? 'Submit' : 'Next'}
           <ArrowRight className="size-4" strokeWidth={2.5} />
@@ -459,7 +461,7 @@ function CardOption({ option }: { option: Option }) {
   return (
     <label
       className={cn(
-        'group relative flex aspect-[5/3] cursor-pointer flex-col items-center justify-center rounded-md border border-neutral-300 bg-white px-4 py-6 text-center transition-colors',
+        'group relative flex min-h-[88px] cursor-pointer flex-col items-center justify-center rounded-md border border-neutral-300 bg-white px-4 py-6 text-center transition-colors md:aspect-[5/3] md:min-h-0',
         'hover:border-neutral-500',
         'has-[[data-checked]]:border-brand-black has-[[data-checked]]:ring-2 has-[[data-checked]]:ring-brand-black/20',
       )}
@@ -484,7 +486,7 @@ function RowOption({ option }: { option: Option }) {
   return (
     <label
       className={cn(
-        'group flex cursor-pointer items-center gap-3 rounded-md border border-neutral-300 bg-white px-4 py-3 transition-colors',
+        'group flex min-h-[44px] cursor-pointer items-center gap-3 rounded-md border border-neutral-300 bg-white px-4 py-3.5 transition-colors',
         'hover:border-neutral-500',
         'has-[[data-checked]]:border-brand-black has-[[data-checked]]:ring-2 has-[[data-checked]]:ring-brand-black/20',
       )}
@@ -738,11 +740,7 @@ export function QualificationFunnel() {
 
   const stepIndex = stepFromUrl - 1;
   const question = QUESTIONS[stepIndex];
-
-  // Avoid a flash of the wrong step before sessionStorage hydrates.
-  if (!hydrated) {
-    return null;
-  }
+  const currentValue = answers[question.id];
 
   const setAnswer = useCallback(
     (id: keyof Answers, value: string) => {
@@ -774,7 +772,8 @@ export function QualificationFunnel() {
     // Final step → qualify and route.
     const outcome = qualify(answers);
     // Submission point: replace with `await fetch('/api/partner', ...)` when API exists.
-    if (typeof console !== 'undefined') {
+    // Gate the dev log so production DevTools never sees PII (phone, email, name).
+    if (process.env.NODE_ENV !== 'production') {
       console.log('partner-with-us submission', { outcome, answers });
     }
     clearAnswers();
@@ -785,13 +784,15 @@ export function QualificationFunnel() {
     );
   }, [answers, question, router, stepFromUrl]);
 
+  // Dep on `currentValue` (not the whole `answers` object) so this memo doesn't
+  // bust on every keystroke of an unrelated text field.
   const body = useMemo(() => {
     if (question.type === 'radio') {
       return (
         <RadioOptions
           name={question.id}
           ariaLabel={question.label}
-          value={answers[question.id] as string | undefined}
+          value={currentValue as string | undefined}
           onChange={(v) => setAnswer(question.id, v)}
           options={question.options}
           layout={question.layout}
@@ -806,14 +807,22 @@ export function QualificationFunnel() {
       <FunnelTextInput
         multiline={isMultiline}
         ariaLabel={question.label}
-        value={(answers[question.id] as string | undefined) ?? ''}
+        value={(currentValue as string | undefined) ?? ''}
         onChange={(v) => setAnswer(question.id, v)}
         placeholder={question.placeholder}
         type={isEmail ? 'email' : isPhone ? 'tel' : 'text'}
         inputMode={isEmail ? 'email' : isPhone ? 'tel' : 'text'}
       />
     );
-  }, [question, answers, setAnswer]);
+  }, [question, currentValue, setAnswer]);
+
+  // Avoid a flash of the wrong step before sessionStorage hydrates.
+  // Placed AFTER all hook declarations so the Rules of Hooks aren't violated.
+  if (!hydrated) {
+    return null;
+  }
+
+  const progressPercent = (stepFromUrl / TOTAL_STEPS) * 100;
 
   return (
     <div className="mx-auto w-full max-w-3xl px-4 py-12 md:py-16">
@@ -828,8 +837,22 @@ export function QualificationFunnel() {
         </h1>
       </div>
 
+      <div
+        role="progressbar"
+        aria-valuenow={stepFromUrl}
+        aria-valuemin={1}
+        aria-valuemax={TOTAL_STEPS}
+        aria-label="Funnel progress"
+        className="mt-8 h-1.5 w-full overflow-hidden rounded-full bg-neutral-200"
+      >
+        <div
+          className="h-full bg-brand-yellow transition-all duration-300 ease-out"
+          style={{ width: `${progressPercent}%` }}
+        />
+      </div>
+
       <form
-        className="mt-10"
+        className="mt-6"
         onSubmit={(e) => {
           e.preventDefault();
           goNext();
@@ -841,7 +864,6 @@ export function QualificationFunnel() {
           body={body}
           error={error ?? undefined}
           onPrev={goPrev}
-          onNext={goNext}
           isFirst={stepFromUrl === 1}
           isLast={stepFromUrl === TOTAL_STEPS}
         />
@@ -1004,7 +1026,8 @@ export default function QualifiedPage() {
         <em className="font-black text-brand-yellow italic">fit</em>.
       </h1>
       <p className="mx-auto mt-4 max-w-md text-sm text-neutral-700 md:text-base">
-        We'll be in touch within 48 hours to schedule your strategy call.
+        We've noted your interest. Keep an eye on your inbox — we'll reach
+        out as soon as a strategist is available.
       </p>
 
       <Link
@@ -1069,15 +1092,14 @@ export default function NotQualifiedPage() {
       </div>
 
       <h1 className="mt-10 font-heading text-3xl font-black tracking-tight text-brand-black md:text-5xl">
-        Sorry! You're{' '}
-        <em className="font-black text-brand-yellow italic">NOT</em> Yet
-        Qualified
+        Not the right{' '}
+        <em className="font-black text-brand-yellow italic">fit</em> — yet.
       </h1>
 
       <p className="mx-auto mt-6 max-w-xl text-sm text-neutral-700 md:text-base">
-        Thank you for your interest in working with JAZA Media. After reviewing
-        your details, it seems you're not quite ready to move forward with us
-        at this time.
+        Thanks for your interest in JAZA Media. Based on your answers, we're
+        not the right partner for you at this stage — but that doesn't mean
+        you're alone in figuring this out.
       </p>
 
       <p className="mt-6 font-heading text-lg font-black text-brand-black md:text-xl">
@@ -1250,6 +1272,24 @@ Console message should show `outcome: 'not_qualified'`.
 Reset to `/partner-with-us`. Repeat with: PH / "Jane" / Service / "Just exploring at the moment." / Web Development / ₱150k–₱500k / Yes / ₱200k–₱500k / "Still figuring it out." / **Just exploring** / "+63 917 999 0000" / "jane2@example.com".
 
 Expected: lands on `/not-qualified` again. Confirms the timeline disqualifier works.
+
+- [ ] **Step 4: Walk a third disqualifier path** (willingToInvest = no)
+
+Reset to `/partner-with-us`. Walk with: PH / "Sam" / Service / "I run a small bakery and want more walk-ins." / Branding & Strategy / ₱500k–₱1M / **No, I'm not ready to invest yet** / ₱200k–₱500k / "Need help reaching new customers." / ASAP / "+63 917 111 2222" / "sam@example.com".
+
+Expected: lands on `/not-qualified`. Confirms the willingToInvest disqualifier works.
+
+- [ ] **Step 5: Walk a fourth disqualifier path** (budget = 30k–50k)
+
+Reset to `/partner-with-us`. Walk with: PH / "Lee" / Ecommerce / "I sell handmade ceramics online." / Marketing Management / ₱150k–₱500k / Yes / **₱30,000 – ₱50,000** / "Want to scale my Instagram." / Within the next month / "+63 917 333 4444" / "lee@example.com".
+
+Expected: lands on `/not-qualified`. Confirms the budget disqualifier works.
+
+- [ ] **Step 6: Walk a combined-disqualifier path**
+
+Reset to `/partner-with-us`. Walk with: PH / "Mike" / Service / "Generic test entry." / Web Development / **₱0** / **No, I'm not ready to invest yet** / **₱30,000 – ₱50,000** / "Tests." / **Just exploring** / "+63 917 555 6666" / "mike@example.com".
+
+Expected: lands on `/not-qualified`. Confirms short-circuit evaluation in `qualify()` doesn't crash when multiple disqualifiers are true at once.
 
 ---
 
