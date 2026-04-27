@@ -85,7 +85,6 @@ export const TEAM: Member[] = [
     name: null,
     role: "UI/UX MANAGER",
     image: null,
-    accent: "purple",
   },
   {
     slug: "lead-ea",
