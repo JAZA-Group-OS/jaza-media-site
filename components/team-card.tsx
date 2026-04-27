@@ -36,7 +36,7 @@ export function TeamCard({ member }: { member: Member }) {
             alt={altText}
             fill
             sizes="(min-width: 1024px) 320px, (min-width: 640px) 50vw, 100vw"
-            className="object-cover object-top grayscale"
+            className={`object-cover object-top grayscale ${member.mirror ? "-scale-x-100" : ""}`}
           />
         ) : (
           <span className="sr-only">{altText}</span>

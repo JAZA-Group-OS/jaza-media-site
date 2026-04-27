@@ -19,7 +19,7 @@ export function TeamBioHero({ member }: { member: Member }) {
               alt={altText}
               fill
               sizes="(min-width: 768px) 384px, 100vw"
-              className="object-cover"
+              className={`object-cover ${member.mirror ? "-scale-x-100" : ""}`}
               priority
             />
           ) : (

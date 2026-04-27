@@ -8,6 +8,7 @@ export type Member = {
   bioImage?: string;
   accent?: Accent;
   bio?: string[];
+  mirror?: boolean;
 };
 
 export const TEAM: Member[] = [
@@ -22,6 +23,7 @@ export const TEAM: Member[] = [
     name: "BELA CAPISTRANO",
     role: "MANAGING PARTNER, CHIEF OPERATING OFFICER",
     image: "/images/bela.webp",
+    mirror: true,
   },
   {
     slug: "manny",
