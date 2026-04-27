@@ -25,29 +25,24 @@ export function TeamCard({ member }: { member: Member }) {
 
   return (
     <article className="flex flex-col items-center text-center">
-      <div className="relative mb-3 w-full">
-        <div
-          className={`relative z-10 w-full border-x-[10px] border-t-[10px] ${borderClass}`}
-        >
-          <div className="relative aspect-square w-full overflow-hidden bg-neutral-200">
-            {member.image ? (
-              <Image
-                src={member.image}
-                alt={altText}
-                fill
-                sizes="(min-width: 1024px) 320px, (min-width: 640px) 50vw, 100vw"
-                className={`object-cover object-top grayscale ${member.mirror ? "-scale-x-100" : ""}`}
-              />
-            ) : (
-              <span className="sr-only">{altText}</span>
-            )}
-          </div>
+      <div
+        className={`w-full border-x-[10px] border-t-[10px] ${borderClass}`}
+      >
+        <div className="relative aspect-square w-full overflow-hidden bg-neutral-200">
+          {member.image ? (
+            <Image
+              src={member.image}
+              alt={altText}
+              fill
+              sizes="(min-width: 1024px) 320px, (min-width: 640px) 50vw, 100vw"
+              className={`object-cover object-top grayscale ${member.mirror ? "-scale-x-100" : ""}`}
+            />
+          ) : (
+            <span className="sr-only">{altText}</span>
+          )}
         </div>
-        <div
-          className="absolute -inset-x-2 top-full h-[15px] bg-brand-yellow"
-          aria-hidden
-        />
       </div>
+      <div className="h-[40px] w-full bg-brand-yellow" aria-hidden />
 
       <h3 className="mt-5 font-heading text-lg font-black uppercase tracking-wide text-brand-yellow md:text-xl">
         {displayName}
