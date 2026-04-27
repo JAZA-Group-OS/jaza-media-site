@@ -28,7 +28,7 @@ export function TeamCard({ member }: { member: Member }) {
   return (
     <article className="flex flex-col items-center text-center">
       <div
-        className={`relative aspect-square w-full overflow-hidden border-2 ${borderClass} bg-neutral-200`}
+        className={`relative aspect-square w-full overflow-hidden border-[3px] ${borderClass} bg-neutral-200`}
       >
         {member.image ? (
           <Image
