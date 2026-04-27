@@ -101,6 +101,11 @@ export function QualificationFunnel() {
   // Heading ref for moving focus on step change (a11y).
   const titleRef = useRef<HTMLHeadingElement>(null);
 
+  // Pending auto-advance timer for radio steps. We schedule on radio change
+  // and cleanup on step change so back-navigation, manual NEXT, or rapid
+  // arrow-key navigation never produces a stale advance.
+  const advanceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
   const rawStep = searchParams.get('step');
   const parsed = rawStep ? Number.parseInt(rawStep, 10) : 1;
   const stepFromUrl =
@@ -146,6 +151,39 @@ export function QualificationFunnel() {
     [],
   );
 
+  // Auto-advance on radio selection (matches acquisition.com flow). Wraps
+  // setAnswer and queues a step advance after a short delay so the user sees
+  // the radio dot fill before the slide. The clear-and-reschedule pattern
+  // means keyboard users arrowing through options don't trigger advance on
+  // every keypress — only when they pause on their choice.
+  const handleRadioChange = useCallback(
+    (id: keyof Answers, value: string) => {
+      setAnswer(id, value);
+      if (advanceTimerRef.current) {
+        clearTimeout(advanceTimerRef.current);
+      }
+      advanceTimerRef.current = setTimeout(() => {
+        // Defensive guard: all current radio questions are mid-funnel, but if
+        // a radio ever lands on the final step we still want manual submit.
+        if (stepFromUrl < TOTAL_STEPS) {
+          router.push(`/partner-with-us?step=${stepFromUrl + 1}`);
+        }
+      }, 350);
+    },
+    [setAnswer, router, stepFromUrl],
+  );
+
+  // Cancel any pending auto-advance when the step changes for any reason
+  // (manual NEXT, PREVIOUS, deep-link, browser back/forward).
+  useEffect(() => {
+    return () => {
+      if (advanceTimerRef.current) {
+        clearTimeout(advanceTimerRef.current);
+        advanceTimerRef.current = null;
+      }
+    };
+  }, [stepFromUrl]);
+
   const goPrev = useCallback(() => {
     if (stepFromUrl <= 1) return;
     router.push(`/partner-with-us?step=${stepFromUrl - 1}`);
@@ -186,7 +224,7 @@ export function QualificationFunnel() {
           name={question.id}
           ariaLabel={question.label}
           value={currentValue as string | undefined}
-          onChange={(v) => setAnswer(question.id, v)}
+          onChange={(v) => handleRadioChange(question.id, v)}
           options={question.options}
           layout={question.layout}
           cols={question.cols}
@@ -220,7 +258,7 @@ export function QualificationFunnel() {
         maxLength={isPhone ? 20 : isDescription ? 500 : undefined}
       />
     );
-  }, [question, currentValue, setAnswer]);
+  }, [question, currentValue, setAnswer, handleRadioChange]);
 
   const progressPercent = (stepFromUrl / TOTAL_STEPS) * 100;
 
