@@ -25,7 +25,7 @@ export function TeamCard({ member }: { member: Member }) {
 
   return (
     <article className="flex flex-col items-center text-center">
-      <div className="relative mb-5 w-full">
+      <div className="relative mb-2 w-full">
         <div
           className={`relative z-10 w-full border-x-[10px] border-t-[10px] ${borderClass}`}
         >
@@ -44,7 +44,7 @@ export function TeamCard({ member }: { member: Member }) {
           </div>
         </div>
         <div
-          className="absolute -inset-x-3 -bottom-5 h-[60px] bg-brand-yellow"
+          className="absolute -inset-x-1.5 -bottom-2 h-[30px] bg-brand-yellow"
           aria-hidden
         />
       </div>
