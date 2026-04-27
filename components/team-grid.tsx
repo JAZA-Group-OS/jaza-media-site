@@ -4,7 +4,7 @@ import { TEAM } from "@/lib/team";
 export function TeamGrid() {
   return (
     <section className="bg-white py-16 md:py-20">
-      <div className="mx-auto max-w-6xl px-4">
+      <div className="mx-auto max-w-5xl px-4">
         <h1 className="text-center font-heading text-3xl font-black tracking-tight md:text-5xl">
           MEET OUR LEADERSHIP TEAM
         </h1>
