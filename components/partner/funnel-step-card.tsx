@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import type { ReactNode, Ref } from 'react';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
 
 // FunnelStepCard expects to live inside a <form>. The submit button advances
@@ -12,6 +12,8 @@ type Props = {
   onPrev?: () => void;
   isFirst: boolean;
   isLast: boolean;
+  /** Heading ref so the parent can move focus on step change (a11y). */
+  titleRef?: Ref<HTMLHeadingElement>;
 };
 
 export function FunnelStepCard({
@@ -22,11 +24,16 @@ export function FunnelStepCard({
   onPrev,
   isFirst,
   isLast,
+  titleRef,
 }: Props) {
   return (
     <div className="overflow-hidden rounded-xl border-[3px] border-brand-black bg-surface-grey shadow-[0_8px_32px_-8px_rgba(0,0,0,0.25)]">
       <div className="px-6 py-8 md:px-12 md:py-10">
-        <h2 className="text-center font-heading text-xl font-black text-brand-black md:text-2xl">
+        <h2
+          ref={titleRef}
+          tabIndex={-1}
+          className="text-center font-heading text-xl font-black text-brand-black outline-none md:text-2xl"
+        >
           {title}
         </h2>
         {helper ? (
@@ -34,6 +41,8 @@ export function FunnelStepCard({
             ({helper})
           </p>
         ) : null}
+
+        <div className="mt-6 md:mt-8">{body}</div>
 
         {error ? (
           <p
@@ -43,8 +52,6 @@ export function FunnelStepCard({
             {error}
           </p>
         ) : null}
-
-        <div className="mt-6 md:mt-8">{body}</div>
       </div>
 
       <div className="flex items-center justify-between bg-brand-yellow px-6 py-3 md:px-10">

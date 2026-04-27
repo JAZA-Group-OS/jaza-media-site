@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { QUESTIONS, TOTAL_STEPS, type Answers, type Question } from '@/lib/partner/questions';
 import { qualify } from '@/lib/partner/qualify';
@@ -98,6 +98,9 @@ export function QualificationFunnel() {
   // the derived `error` below becomes null automatically — no effect needed.
   const [validation, setValidation] = useState<{ step: number; message: string } | null>(null);
 
+  // Heading ref for moving focus on step change (a11y).
+  const titleRef = useRef<HTMLHeadingElement>(null);
+
   const rawStep = searchParams.get('step');
   const parsed = rawStep ? Number.parseInt(rawStep, 10) : 1;
   const stepFromUrl =
@@ -124,6 +127,13 @@ export function QualificationFunnel() {
   const question = QUESTIONS[stepIndex];
   const currentValue = answers[question.id];
   const error = validation?.step === stepFromUrl ? validation.message : null;
+
+  // Move focus to the step heading when the URL step changes — predictable
+  // for keyboard/screen-reader users and dismisses any previously open
+  // virtual keyboard on mobile after a text-step advance.
+  useEffect(() => {
+    titleRef.current?.focus();
+  }, [stepFromUrl]);
 
   const setAnswer = useCallback(
     (id: keyof Answers, value: string) => {
@@ -186,6 +196,7 @@ export function QualificationFunnel() {
     const isMultiline = question.type === 'textarea';
     const isPhone = question.id === 'phone';
     const isEmail = question.id === 'email';
+    const isDescription = question.id === 'description';
     return (
       <FunnelTextInput
         multiline={isMultiline}
@@ -195,6 +206,18 @@ export function QualificationFunnel() {
         placeholder={question.placeholder}
         type={isEmail ? 'email' : isPhone ? 'tel' : 'text'}
         inputMode={isEmail ? 'email' : isPhone ? 'tel' : 'text'}
+        autoComplete={
+          isEmail
+            ? 'email'
+            : isPhone
+              ? 'tel'
+              : question.id === 'fullName'
+                ? 'name'
+                : undefined
+        }
+        // Phone gets a hard cap to bound any ReDoS exposure on the regex.
+        // Description has its own 500-char content rule but cap input too.
+        maxLength={isPhone ? 20 : isDescription ? 500 : undefined}
       />
     );
   }, [question, currentValue, setAnswer]);
@@ -219,8 +242,8 @@ export function QualificationFunnel() {
         aria-valuenow={stepFromUrl}
         aria-valuemin={1}
         aria-valuemax={TOTAL_STEPS}
-        aria-label="Funnel progress"
-        className="mt-8 h-1.5 w-full overflow-hidden rounded-full bg-neutral-200"
+        aria-label={`Step ${stepFromUrl} of ${TOTAL_STEPS}`}
+        className="mt-8 h-2 w-full overflow-hidden rounded-full bg-neutral-200"
       >
         <div
           className="h-full bg-brand-yellow transition-all duration-300 ease-out"
@@ -243,13 +266,15 @@ export function QualificationFunnel() {
           onPrev={goPrev}
           isFirst={stepFromUrl === 1}
           isLast={stepFromUrl === TOTAL_STEPS}
+          titleRef={titleRef}
         />
       </form>
 
-      <p
-        aria-live="polite"
-        className="mt-4 text-center text-xs font-medium text-text-muted"
-      >
+      {/* Screen-reader-only counter; sighted users get the same info from the
+          STEP badge above and the visual progress bar. The progressbar above
+          already carries an aria-valuenow + aria-label, so this paragraph is
+          redundant for AT and is hidden visually as well. */}
+      <p className="sr-only">
         Step {stepFromUrl} of {TOTAL_STEPS}
       </p>
 

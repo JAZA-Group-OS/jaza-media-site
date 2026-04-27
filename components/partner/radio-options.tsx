@@ -59,7 +59,7 @@ function CardOption({ option }: { option: Option }) {
       className={cn(
         'group relative flex min-h-[88px] cursor-pointer flex-col items-center justify-center rounded-md border border-neutral-300 bg-white px-4 py-6 text-center transition-colors md:aspect-[5/3] md:min-h-0',
         'hover:border-neutral-500',
-        'has-[[data-checked]]:border-brand-black has-[[data-checked]]:ring-2 has-[[data-checked]]:ring-brand-black/20',
+        'has-data-[checked]:border-brand-black has-data-[checked]:ring-2 has-data-[checked]:ring-brand-black/20',
       )}
     >
       <Radio.Root
@@ -84,7 +84,7 @@ function RowOption({ option }: { option: Option }) {
       className={cn(
         'group flex min-h-[44px] cursor-pointer items-center gap-3 rounded-md border border-neutral-300 bg-white px-4 py-3.5 transition-colors',
         'hover:border-neutral-500',
-        'has-[[data-checked]]:border-brand-black has-[[data-checked]]:ring-2 has-[[data-checked]]:ring-brand-black/20',
+        'has-data-[checked]:border-brand-black has-data-[checked]:ring-2 has-data-[checked]:ring-brand-black/20',
       )}
     >
       <Radio.Root
