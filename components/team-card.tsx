@@ -26,22 +26,21 @@ export function TeamCard({ member }: { member: Member }) {
   return (
     <article className="flex flex-col items-center text-center">
       <div
-        className={`w-full border-x-[8px] border-t-[8px] border-b-[20px] ${borderClass} border-b-brand-yellow`}
+        className={`relative z-10 aspect-square w-full overflow-hidden border-[6px] ${borderClass} bg-neutral-200`}
       >
-        <div className="relative aspect-square w-full overflow-hidden bg-neutral-200">
-          {member.image ? (
-            <Image
-              src={member.image}
-              alt={altText}
-              fill
-              sizes="(min-width: 1024px) 320px, (min-width: 640px) 50vw, 100vw"
-              className={`object-cover object-top grayscale ${member.mirror ? "-scale-x-100" : ""}`}
-            />
-          ) : (
-            <span className="sr-only">{altText}</span>
-          )}
-        </div>
+        {member.image ? (
+          <Image
+            src={member.image}
+            alt={altText}
+            fill
+            sizes="(min-width: 1024px) 320px, (min-width: 640px) 50vw, 100vw"
+            className={`object-cover object-top grayscale ${member.mirror ? "-scale-x-100" : ""}`}
+          />
+        ) : (
+          <span className="sr-only">{altText}</span>
+        )}
       </div>
+      <div className="-mt-2 h-7 w-full bg-brand-yellow" aria-hidden />
 
       <h3 className="mt-5 font-heading text-lg font-black uppercase tracking-wide text-brand-yellow md:text-xl">
         {displayName}
