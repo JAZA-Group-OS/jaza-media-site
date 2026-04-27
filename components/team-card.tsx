@@ -3,8 +3,8 @@ import Link from "next/link";
 
 import type { Member } from "@/lib/team";
 
-const ACCENT_FRAME: Record<NonNullable<Member["accent"]>, string> = {
-  purple: "bg-purple-500",
+const ACCENT_BORDER: Record<NonNullable<Member["accent"]>, string> = {
+  purple: "border-purple-500",
 };
 
 function firstName(member: Member): string {
@@ -17,7 +17,7 @@ function firstName(member: Member): string {
 }
 
 export function TeamCard({ member }: { member: Member }) {
-  const frameBg = member.accent ? ACCENT_FRAME[member.accent] : "bg-brand-black";
+  const borderClass = member.accent ? ACCENT_BORDER[member.accent] : "border-brand-black";
   const displayName = member.name ?? "NAME";
   const altText = member.name
     ? `${member.name} — ${member.role}`
@@ -26,23 +26,21 @@ export function TeamCard({ member }: { member: Member }) {
   return (
     <article className="flex flex-col items-center text-center">
       <div
-        className={`w-full ${frameBg} pt-[3px] pl-[3px] pr-[10px] pb-[10px]`}
+        className={`relative aspect-square w-full overflow-hidden border-[3px] ${borderClass} bg-neutral-200`}
       >
-        <div className="relative aspect-square w-full overflow-hidden bg-neutral-200">
-          {member.image ? (
-            <Image
-              src={member.image}
-              alt={altText}
-              fill
-              sizes="(min-width: 1024px) 320px, (min-width: 640px) 50vw, 100vw"
-              className={`object-cover object-top grayscale ${member.mirror ? "-scale-x-100" : ""}`}
-            />
-          ) : (
-            <span className="sr-only">{altText}</span>
-          )}
-        </div>
+        {member.image ? (
+          <Image
+            src={member.image}
+            alt={altText}
+            fill
+            sizes="(min-width: 1024px) 320px, (min-width: 640px) 50vw, 100vw"
+            className={`object-cover object-top grayscale ${member.mirror ? "-scale-x-100" : ""}`}
+          />
+        ) : (
+          <span className="sr-only">{altText}</span>
+        )}
       </div>
-      <div className="h-3 w-full bg-brand-yellow" aria-hidden />
+      <div className="h-3 w-4/5 self-start bg-brand-yellow" aria-hidden />
 
       <h3 className="mt-5 font-heading text-lg font-black uppercase tracking-wide text-brand-yellow md:text-xl">
         {displayName}
