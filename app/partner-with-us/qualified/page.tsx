@@ -18,12 +18,12 @@ export default function QualifiedPage() {
       </div>
 
       <h1 className="mt-10 font-heading text-3xl font-black tracking-tight text-brand-black md:text-5xl">
-        Thanks — you're a{' '}
+        Thanks — you&apos;re a{' '}
         <em className="font-black text-brand-yellow italic">fit</em>.
       </h1>
       <p className="mx-auto mt-4 max-w-md text-sm text-neutral-700 md:text-base">
-        We've noted your interest. Keep an eye on your inbox — we'll reach
-        out as soon as a strategist is available.
+        We&apos;ve noted your interest. Keep an eye on your inbox — we&apos;ll
+        reach out as soon as a strategist is available.
       </p>
 
       <Link

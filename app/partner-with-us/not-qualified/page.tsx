@@ -23,9 +23,9 @@ export default function NotQualifiedPage() {
       </h1>
 
       <p className="mx-auto mt-6 max-w-xl text-sm text-neutral-700 md:text-base">
-        Thanks for your interest in JAZA Media. Based on your answers, we're
-        not the right partner for you at this stage — but that doesn't mean
-        you're alone in figuring this out.
+        Thanks for your interest in JAZA Media. Based on your answers, we&apos;re
+        not the right partner for you at this stage — but that doesn&apos;t
+        mean you&apos;re alone in figuring this out.
       </p>
 
       <p className="mt-6 font-heading text-lg font-black text-brand-black md:text-xl">

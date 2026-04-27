@@ -88,15 +88,15 @@ export function QualificationFunnel() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  const [answers, setAnswers] = useState<Answers>({});
-  const [error, setError] = useState<string | null>(null);
-  const [hydrated, setHydrated] = useState(false);
+  // Lazy initializer reads sessionStorage on first render. This component
+  // is wrapped in <Suspense> at app/partner-with-us/page.tsx, and per
+  // Next.js 16 rules a useSearchParams client component renders only on
+  // the client up to that boundary — so `window` is always available here.
+  const [answers, setAnswers] = useState<Answers>(() => readAnswers());
 
-  // Hydrate answers from sessionStorage on mount.
-  useEffect(() => {
-    setAnswers(readAnswers());
-    setHydrated(true);
-  }, []);
+  // Validation is keyed to the step it ran on. When stepFromUrl changes,
+  // the derived `error` below becomes null automatically — no effect needed.
+  const [validation, setValidation] = useState<{ step: number; message: string } | null>(null);
 
   const rawStep = searchParams.get('step');
   const parsed = rawStep ? Number.parseInt(rawStep, 10) : 1;
@@ -106,8 +106,9 @@ export function QualificationFunnel() {
       : 1;
 
   // Redirect invalid steps and any deep-link past the first incomplete step.
+  // Effect runs on URL/answer changes; router.replace is an external action,
+  // not a setState, so this doesn't trigger the cascading-render lint rule.
   useEffect(() => {
-    if (!hydrated) return;
     if (rawStep === null) return; // initial paint at /partner-with-us is fine.
     if (!Number.isFinite(parsed) || parsed < 1 || parsed > TOTAL_STEPS) {
       router.replace('/partner-with-us?step=1');
@@ -117,16 +118,12 @@ export function QualificationFunnel() {
     if (parsed > maxAllowed) {
       router.replace(`/partner-with-us?step=${maxAllowed}`);
     }
-  }, [hydrated, rawStep, parsed, answers, router]);
-
-  // Reset error on step change.
-  useEffect(() => {
-    setError(null);
-  }, [stepFromUrl]);
+  }, [rawStep, parsed, answers, router]);
 
   const stepIndex = stepFromUrl - 1;
   const question = QUESTIONS[stepIndex];
   const currentValue = answers[question.id];
+  const error = validation?.step === stepFromUrl ? validation.message : null;
 
   const setAnswer = useCallback(
     (id: keyof Answers, value: string) => {
@@ -148,7 +145,7 @@ export function QualificationFunnel() {
     const value = answers[question.id];
     const err = validate(question, value);
     if (err) {
-      setError(err);
+      setValidation({ step: stepFromUrl, message: err });
       return;
     }
     if (stepFromUrl < TOTAL_STEPS) {
@@ -201,12 +198,6 @@ export function QualificationFunnel() {
       />
     );
   }, [question, currentValue, setAnswer]);
-
-  // Avoid a flash of the wrong step before sessionStorage hydrates.
-  // Placed AFTER all hook declarations so the Rules of Hooks aren't violated.
-  if (!hydrated) {
-    return null;
-  }
 
   const progressPercent = (stepFromUrl / TOTAL_STEPS) * 100;
 
