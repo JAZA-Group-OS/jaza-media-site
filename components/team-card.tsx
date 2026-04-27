@@ -3,10 +3,6 @@ import Link from "next/link";
 
 import type { Member } from "@/lib/team";
 
-const ACCENT_BORDER: Record<NonNullable<Member["accent"]>, string> = {
-  purple: "border-purple-500",
-};
-
 function firstName(member: Member): string {
   if (!member.name) return "Name";
   const trimmed = member.name.trim();
@@ -17,7 +13,6 @@ function firstName(member: Member): string {
 }
 
 export function TeamCard({ member }: { member: Member }) {
-  const borderClass = member.accent ? ACCENT_BORDER[member.accent] : "border-brand-black";
   const displayName = member.name ?? "NAME";
   const altText = member.name
     ? `${member.name} — ${member.role}`
@@ -25,24 +20,23 @@ export function TeamCard({ member }: { member: Member }) {
 
   return (
     <article className="flex flex-col items-center text-center">
-      <div
-        className={`w-full border-x-[10px] border-t-[10px] ${borderClass}`}
-      >
-        <div className="relative aspect-square w-full overflow-hidden bg-neutral-200">
-          {member.image ? (
-            <Image
-              src={member.image}
-              alt={altText}
-              fill
-              sizes="(min-width: 1024px) 320px, (min-width: 640px) 50vw, 100vw"
-              className={`object-cover object-top grayscale ${member.mirror ? "-scale-x-100" : ""}`}
-            />
-          ) : (
-            <span className="sr-only">{altText}</span>
-          )}
+      {member.image ? (
+        <div className="relative aspect-square w-full">
+          <Image
+            src={member.image}
+            alt={altText}
+            fill
+            sizes="(min-width: 1024px) 320px, (min-width: 640px) 50vw, 100vw"
+            className="object-contain"
+          />
         </div>
-      </div>
-      <div className="h-[40px] w-full bg-brand-yellow" aria-hidden />
+      ) : (
+        <div className="relative flex aspect-square w-full flex-col border-x-[10px] border-t-[10px] border-brand-black">
+          <span className="sr-only">{altText}</span>
+          <div className="flex-1 bg-neutral-200" aria-hidden />
+          <div className="h-[40px] w-full bg-brand-yellow" aria-hidden />
+        </div>
+      )}
 
       <h3 className="mt-5 font-heading text-lg font-black uppercase tracking-wide text-brand-yellow md:text-xl">
         {displayName}
