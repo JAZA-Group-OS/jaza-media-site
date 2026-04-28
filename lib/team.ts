@@ -46,11 +46,10 @@ export const TEAM: Member[] = [
     image: null,
   },
   {
-    slug: "jallah",
-    name: "JALLAH PAYNO",
+    slug: "cmo",
+    name: null,
     role: "MANAGING DIRECTOR, CHIEF MARKETING OFFICER",
-    image: "/about-the-form/Jallah-Payno.png",
-    bioImage: "/about-the-firm/Jallah-Payno-removebg-preview.png",
+    image: null,
   },
   {
     slug: "cto",
@@ -66,10 +65,11 @@ export const TEAM: Member[] = [
     bioImage: "/about-the-firm/Crisia-Manzanilla-removebg-preview.png",
   },
   {
-    slug: "account-manager",
-    name: null,
+    slug: "jallah",
+    name: "JALLAH PAYNO",
     role: "ACCOUNT MANAGER",
-    image: null,
+    image: "/about-the-form/Jallah-Payno.png",
+    bioImage: "/about-the-firm/Jallah-Payno-removebg-preview.png",
   },
   {
     slug: "marketing-manager",
