@@ -31,7 +31,12 @@ export function TeamBioHero({ member }: { member: Member }) {
             {displayName}
           </h1>
           <p className="mt-3 font-heading text-sm font-bold uppercase tracking-wide text-brand-black md:text-base">
-            {member.role}
+            {member.role.split(",").map((part, i, arr) => (
+              <span key={i} className="block">
+                {part.trim()}
+                {i < arr.length - 1 ? "," : ""}
+              </span>
+            ))}
           </p>
         </div>
       </div>
