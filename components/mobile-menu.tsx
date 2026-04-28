@@ -33,7 +33,7 @@ export function MobileMenu({ className = "" }: { className?: string }) {
         aria-label="Open menu"
         className={`text-white ${className}`}
       >
-        <Menu className="size-7" strokeWidth={2.5} />
+        <Menu className="size-9" strokeWidth={2.5} />
       </button>
 
       {open ? (
@@ -58,7 +58,7 @@ export function MobileMenu({ className = "" }: { className?: string }) {
               aria-label="Close menu"
               className="text-white"
             >
-              <X className="size-7" strokeWidth={2.5} />
+              <X className="size-9" strokeWidth={2.5} />
             </button>
           </div>
           <nav className="flex-1 overflow-y-auto px-4 pb-8">

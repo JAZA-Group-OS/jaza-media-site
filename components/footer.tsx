@@ -60,7 +60,7 @@ export function Footer() {
   return (
     <footer className="bg-brand-black pt-12 pb-10 text-white">
       <div className="mx-auto max-w-7xl px-4">
-        <div className="flex flex-col items-start gap-6 md:flex-row md:items-center md:justify-between">
+        <div className="flex items-center justify-between gap-6 md:flex-row">
           <a
             href="#"
             className="flex flex-col items-start leading-none"
