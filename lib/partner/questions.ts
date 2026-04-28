@@ -34,7 +34,7 @@ type RadioQuestion<K extends AnswerKey, V extends string> = {
   type: 'radio';
   label: string;
   helper?: string;
-  layout: 'card-grid' | 'row-stack';
+  layout: 'card-grid' | 'row-stack' | 'flag-card';
   cols: 1 | 2 | 3;
   options: Option<V>[];
 };
@@ -66,7 +66,7 @@ export const QUESTIONS: Question[] = [
     id: 'location',
     type: 'radio',
     label: 'Where is your business based?',
-    layout: 'card-grid',
+    layout: 'flag-card',
     cols: 3,
     options: [
       { value: 'philippines', label: 'PHILIPPINES' },
