@@ -8,7 +8,7 @@ export function AnnouncementBanner() {
           NEW
         </span>
         <p>
-          <span className="font-bold">2026 Scaling Workshop dates Announced:</span>{" "}
+          <span className="whitespace-nowrap font-bold">2026 Scaling Workshop dates Announced:</span>{" "}
           <a
             href="#"
             className="inline-flex items-center gap-1.5 font-semibold underline-offset-2 hover:underline"
