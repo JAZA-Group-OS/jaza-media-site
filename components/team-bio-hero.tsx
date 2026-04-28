@@ -26,8 +26,8 @@ export function TeamBioHero({ member }: { member: Member }) {
             <span className="sr-only">{altText}</span>
           )}
         </div>
-        <div className="flex-1 text-center md:text-left">
-          <h1 className="font-heading text-4xl font-black uppercase leading-[0.95] tracking-tight text-brand-black md:text-5xl lg:text-6xl">
+        <div className="flex-1 text-center md:max-w-[280px] md:text-left">
+          <h1 className="font-heading text-4xl font-black uppercase leading-[0.95] tracking-tight text-white md:text-4xl lg:text-5xl">
             {displayName}
           </h1>
           <p className="mt-3 font-heading text-sm font-bold uppercase tracking-wide text-brand-black md:text-base">
