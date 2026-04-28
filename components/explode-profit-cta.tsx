@@ -4,8 +4,8 @@ import Link from "next/link";
 export function ExplodeProfitCta() {
   return (
     <section className="bg-white pt-12 md:pt-0">
-      <div className="mx-auto grid max-w-6xl items-start gap-6 px-4 md:grid-cols-2 md:gap-12">
-        <div className="relative aspect-[480/431] w-full md:max-h-[500px]">
+      <div className="mx-auto grid max-w-6xl items-start gap-y-6 px-4 md:grid-cols-12 md:gap-x-0 md:pt-12">
+        <div className="relative aspect-[480/431] w-full md:col-span-6 md:row-start-1 md:max-h-[520px]">
           <Image
             src="/about-the-form/jaza-bela.png"
             alt="Jaza and Bela"
@@ -14,7 +14,7 @@ export function ExplodeProfitCta() {
             className="object-contain object-bottom"
           />
         </div>
-        <div className="pb-10 text-center md:pt-10 md:pb-16 md:text-left">
+        <div className="pb-10 text-center md:col-span-8 md:col-start-5 md:row-start-1 md:pb-16 md:pt-8 md:text-left">
           <h2 className="font-heading font-black uppercase leading-[1.05] text-brand-black">
             <span className="block whitespace-nowrap text-2xl md:text-3xl">
               Want us to help you
