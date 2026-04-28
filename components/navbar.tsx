@@ -26,7 +26,7 @@ export function Navbar() {
           <span className="font-display text-3xl tracking-[0.15em] text-white md:text-4xl">
             JAZA
           </span>
-          <span className="font-montserrat -mt-1 text-xs font-bold tracking-[0.2em] text-brand-yellow">
+          <span className="-mt-1 font-heading text-xs font-bold tracking-[0.2em] text-brand-yellow">
             MEDIA
           </span>
         </Link>
