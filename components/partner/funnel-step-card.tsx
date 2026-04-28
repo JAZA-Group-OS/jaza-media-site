@@ -38,7 +38,7 @@ export function FunnelStepCard({
         <h2
           ref={titleRef}
           tabIndex={-1}
-          className="text-center font-heading text-xl font-black text-brand-black outline-none md:text-2xl"
+          className="text-center font-heading text-base font-semibold text-brand-black outline-none md:text-lg"
         >
           {title}
         </h2>
