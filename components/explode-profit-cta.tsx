@@ -15,10 +15,13 @@ export function ExplodeProfitCta() {
           />
         </div>
         <div className="pb-10 text-center md:pb-16 md:text-left">
-          <h2 className="font-heading text-3xl font-black uppercase leading-[1.05] text-brand-black md:text-5xl">
-            Want us to help you
-            <br />
-            Explode Profit?
+          <h2 className="font-heading font-black uppercase leading-[1.05] text-brand-black">
+            <span className="block whitespace-nowrap text-xl md:text-3xl">
+              Want us to help you
+            </span>
+            <span className="block text-4xl md:text-6xl">
+              Explode Profit?
+            </span>
           </h2>
           <p className="mt-4 text-base text-brand-black md:text-lg">
             See how JAZA Media can help
