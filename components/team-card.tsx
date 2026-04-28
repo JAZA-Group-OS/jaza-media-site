@@ -41,8 +41,13 @@ export function TeamCard({ member }: { member: Member }) {
       <h3 className="mt-5 font-heading text-lg font-black uppercase tracking-wide text-brand-yellow md:text-xl">
         {displayName}
       </h3>
-      <p className="mt-1 max-w-[20ch] text-xs font-bold uppercase tracking-wide text-brand-black md:text-sm">
-        {member.role}
+      <p className="mt-1 text-xs font-bold uppercase tracking-wide text-brand-black md:text-sm">
+        {member.role.split(",").map((part, i, arr) => (
+          <span key={i} className="block">
+            {part.trim()}
+            {i < arr.length - 1 ? "," : ""}
+          </span>
+        ))}
       </p>
       <Link
         href={`/team/${member.slug}`}
