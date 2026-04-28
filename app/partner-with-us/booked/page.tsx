@@ -2,10 +2,13 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 
 export const metadata: Metadata = {
-  title: "You're a Fit — JAZA Media",
+  title: "You're Booked — JAZA Media",
+  // Transient confirmation page. Not useful in search results and would
+  // surface as "Congrats you're booked" if indexed.
+  robots: { index: false, follow: false },
 };
 
-export default function QualifiedPage() {
+export default function BookedPage() {
   return (
     <div className="mx-auto w-full max-w-3xl px-4 py-16 text-center md:py-24">
       <div className="mx-auto inline-flex flex-col items-center leading-none">
@@ -18,12 +21,16 @@ export default function QualifiedPage() {
       </div>
 
       <h1 className="mt-10 font-heading text-3xl font-black tracking-tight text-brand-black md:text-5xl">
-        Thanks — you&apos;re a{' '}
-        <em className="font-black text-brand-yellow italic">fit</em>.
+        Congrats — you&apos;re{' '}
+        <em className="font-black text-brand-yellow italic">booked</em>.
       </h1>
       <p className="mx-auto mt-4 max-w-md text-sm text-neutral-700 md:text-base">
-        We&apos;ve noted your interest. Keep an eye on your inbox — we&apos;ll
-        reach out as soon as a strategist is available.
+        Check your inbox for the calendar invite. We&apos;ll see you on the
+        call.
+      </p>
+      <p className="mx-auto mt-3 max-w-md text-sm text-neutral-500 md:text-base">
+        A member of our team will reach out before the call to confirm the
+        agenda.
       </p>
 
       <Link
