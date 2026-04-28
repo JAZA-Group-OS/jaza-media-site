@@ -27,10 +27,10 @@ export function TeamBioHero({ member }: { member: Member }) {
           )}
         </div>
         <div className="flex-1 text-center md:max-w-[280px] md:text-left">
-          <h1 className="font-heading text-4xl font-black uppercase leading-[0.95] tracking-tight text-white md:text-4xl lg:text-5xl">
+          <h1 className="font-heading text-3xl font-black uppercase leading-[0.95] tracking-tight text-white">
             {displayName}
           </h1>
-          <p className="mt-3 font-heading text-sm font-bold uppercase tracking-wide text-brand-black md:text-base">
+          <p className="mt-3 font-heading text-lg font-bold uppercase tracking-wide text-brand-black">
             {member.role.split(",").map((part, i, arr) => (
               <span key={i} className="block">
                 {part.trim()}
