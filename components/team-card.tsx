@@ -21,27 +21,27 @@ export function TeamCard({ member }: { member: Member }) {
   return (
     <article className="flex flex-col items-center text-center">
       {member.image ? (
-        <div className="relative aspect-square w-full">
+        <div className="relative aspect-square w-full max-w-[250px] md:max-w-none">
           <Image
             src={member.image}
             alt={altText}
             fill
-            sizes="(min-width: 1024px) 320px, (min-width: 640px) 50vw, 100vw"
+            sizes="(min-width: 1024px) 320px, (min-width: 640px) 50vw, 250px"
             className="object-contain"
           />
         </div>
       ) : (
-        <div className="relative flex aspect-square w-full flex-col border-x-[10px] border-t-[10px] border-brand-black">
+        <div className="relative flex aspect-square w-full max-w-[250px] flex-col border-x-[10px] border-t-[10px] border-brand-black md:max-w-none">
           <span className="sr-only">{altText}</span>
           <div className="flex-1 bg-neutral-200" aria-hidden />
           <div className="h-[40px] w-full bg-brand-yellow" aria-hidden />
         </div>
       )}
 
-      <h3 className="mt-5 font-heading text-lg font-black uppercase tracking-wide text-brand-yellow md:text-xl">
+      <h3 className="mt-5 font-heading text-xl font-black uppercase tracking-wide text-brand-yellow md:text-2xl">
         {displayName}
       </h3>
-      <p className="mt-1 text-xs font-bold uppercase tracking-wide text-brand-black md:text-sm">
+      <p className="mt-1 text-sm font-bold uppercase tracking-wide text-brand-black md:text-base">
         {member.role.split(",").map((part, i, arr) => (
           <span key={i} className="block">
             {part.trim()}
