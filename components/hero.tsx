@@ -34,17 +34,17 @@ export function Hero() {
       />
 
       <div className="relative mx-auto flex max-w-4xl flex-col items-center px-6 py-16 text-center md:py-24 lg:py-28">
-        <h1 className="font-heading text-3xl leading-[1.05] font-black tracking-tight text-white sm:text-4xl md:text-5xl">
+        <h1 className="font-heading text-5xl leading-[1.05] font-black tracking-tight text-white md:text-6xl">
           DO YOU WANT TO
           <br />
           SCALE YOUR BUSINESS?
         </h1>
-        <p className="mt-6 max-w-md text-sm text-neutral-300 md:text-base">
+        <p className="mt-6 max-w-md text-xl text-neutral-300 md:text-2xl">
           Learn from the team that has scaled a portfolio to over ₱150m+ in annual revenue
         </p>
         <a
           href="#"
-          className="mt-8 inline-flex items-center rounded-full bg-brand-yellow px-10 py-3 text-sm font-black tracking-wider text-brand-black transition-transform hover:scale-[1.02] md:text-base"
+          className="mt-8 inline-flex items-center rounded-full bg-brand-yellow px-10 py-4 text-xl font-black tracking-wider text-brand-black transition-transform hover:scale-[1.02]"
         >
           LEARN TO SCALE
         </a>
