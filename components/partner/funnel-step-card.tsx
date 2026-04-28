@@ -32,7 +32,7 @@ export function FunnelStepCard({
   return (
     <div
       key={shakeKey}
-      className={`overflow-hidden rounded-xl border-[3px] border-brand-black bg-surface-grey shadow-[0_8px_32px_-8px_rgba(0,0,0,0.25)] ${shakeKey > 0 ? 'animate-funnel-shake' : ''}`}
+      className={`overflow-hidden rounded-2xl border border-neutral-200 bg-white shadow-[0_2px_4px_rgba(0,0,0,0.04),0_18px_36px_-12px_rgba(0,0,0,0.18)] ${shakeKey > 0 ? 'animate-funnel-shake' : ''}`}
     >
       <div className="px-6 py-8 md:px-12 md:py-10">
         <h2

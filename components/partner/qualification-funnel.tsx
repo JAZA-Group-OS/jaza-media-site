@@ -345,13 +345,13 @@ export function QualificationFunnel() {
           {stepFromUrl > 1 ? (
             <div
               aria-hidden
-              className="absolute inset-y-2 -left-3 right-3 -z-10 rounded-xl border-[3px] border-brand-black bg-surface-grey opacity-40"
+              className="absolute inset-y-4 -left-2 right-2 -z-10 rounded-2xl border border-neutral-200 bg-white shadow-md"
             />
           ) : null}
           {stepFromUrl < TOTAL_STEPS ? (
             <div
               aria-hidden
-              className="absolute inset-y-2 left-3 -right-3 -z-10 rounded-xl border-[3px] border-brand-black bg-surface-grey opacity-40"
+              className="absolute inset-y-4 left-2 -right-2 -z-10 rounded-2xl border border-neutral-200 bg-white shadow-md"
             />
           ) : null}
 
