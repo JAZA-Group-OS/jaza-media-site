@@ -11,7 +11,7 @@ export function TeamBioHero({ member }: { member: Member }) {
 
   return (
     <section className="bg-brand-yellow">
-      <div className="mx-auto flex max-w-5xl flex-col-reverse items-center gap-6 px-4 pt-8 md:h-[325px] md:flex-row md:items-center md:gap-12 md:pt-0">
+      <div className="mx-auto flex max-w-5xl flex-col-reverse items-center gap-6 px-4 pt-8 md:h-[315px] md:flex-row md:items-center md:gap-12 md:pt-0">
         <div className="relative h-[300px] w-[300px] shrink-0 md:self-end">
           {portrait ? (
             <Image
