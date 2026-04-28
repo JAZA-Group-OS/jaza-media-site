@@ -10,15 +10,15 @@ export function TeamBioHero({ member }: { member: Member }) {
     : "Team member placeholder";
 
   return (
-    <section className="bg-brand-yellow">
-      <div className="mx-auto grid max-w-5xl grid-cols-1 items-end gap-6 px-4 pt-10 md:grid-cols-[auto_1fr] md:items-center md:gap-10 md:pt-12">
-        <div className="relative aspect-square w-full max-w-[260px] border-[3px] border-brand-black">
+    <section className="bg-brand-yellow py-10 md:py-12">
+      <div className="mx-auto flex max-w-5xl flex-col items-center gap-6 px-4 md:flex-row md:items-center md:gap-10">
+        <div className="relative h-[260px] w-[260px] shrink-0 border-[3px] border-brand-black">
           {portrait ? (
             <Image
               src={portrait}
               alt={altText}
               fill
-              sizes="(min-width: 768px) 260px, 100vw"
+              sizes="260px"
               className={`object-contain ${member.mirror ? "-scale-x-100" : ""}`}
               priority
             />
@@ -26,7 +26,7 @@ export function TeamBioHero({ member }: { member: Member }) {
             <span className="sr-only">{altText}</span>
           )}
         </div>
-        <div className="pb-6 md:pb-0">
+        <div className="text-center md:text-left">
           <h1 className="font-heading text-4xl font-black uppercase leading-[0.95] tracking-tight text-brand-black md:text-5xl lg:text-6xl">
             {displayName}
           </h1>
