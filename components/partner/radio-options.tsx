@@ -57,7 +57,7 @@ function CardOption({ option }: { option: Option }) {
   return (
     <label
       className={cn(
-        'group relative flex min-h-[88px] cursor-pointer flex-col items-center justify-center rounded-md border border-neutral-300 bg-white px-4 py-6 text-center transition-colors md:aspect-[5/3] md:min-h-0',
+        'group flex min-h-[44px] cursor-pointer items-center gap-3 rounded-md border border-neutral-300 bg-white px-4 py-3.5 transition-colors',
         'hover:border-neutral-500',
         'has-data-[checked]:border-brand-black has-data-[checked]:ring-2 has-data-[checked]:ring-brand-black/20',
       )}
@@ -65,13 +65,13 @@ function CardOption({ option }: { option: Option }) {
       <Radio.Root
         value={option.value}
         className={cn(
-          'absolute top-3 left-3 grid size-4 place-items-center rounded-full border border-neutral-400 bg-white',
+          'grid size-4 place-items-center rounded-full border border-neutral-400 bg-white',
           'data-[checked]:border-brand-black',
         )}
       >
         <Radio.Indicator className="size-2 rounded-full bg-brand-black opacity-0 data-[checked]:opacity-100" />
       </Radio.Root>
-      <span className="mt-1 text-sm font-medium text-brand-black md:text-base">
+      <span className="text-sm font-medium text-brand-black">
         {option.label}
       </span>
     </label>
