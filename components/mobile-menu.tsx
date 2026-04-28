@@ -68,7 +68,7 @@ export function MobileMenu({ className = "" }: { className?: string }) {
                   <Link
                     href={link.href}
                     onClick={() => setOpen(false)}
-                    className="block bg-brand-yellow px-6 py-4 font-heading text-base font-bold uppercase tracking-wide text-brand-black"
+                    className="block bg-brand-yellow px-[15px] py-5 font-heading text-base font-medium text-brand-black"
                   >
                     {link.label}
                   </Link>
