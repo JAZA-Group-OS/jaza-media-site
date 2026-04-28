@@ -1,3 +1,5 @@
+import { MobileMenu } from "@/components/mobile-menu";
+
 const FOOTER_LINKS = [
   { label: "About us", href: "#" },
   { label: "About the Firm", href: "#" },
@@ -71,7 +73,7 @@ export function Footer() {
               MEDIA
             </span>
           </a>
-          <nav>
+          <nav className="hidden md:block">
             <ul className="flex flex-wrap gap-x-6 gap-y-2 text-sm font-medium">
               {FOOTER_LINKS.map((link) => (
                 <li key={link.label}>
@@ -85,6 +87,7 @@ export function Footer() {
               ))}
             </ul>
           </nav>
+          <MobileMenu className="md:hidden" />
         </div>
 
         <p className="mt-8 text-[11px] leading-relaxed text-text-muted md:text-xs">

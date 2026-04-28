@@ -1,5 +1,7 @@
 import Link from "next/link";
 
+import { MobileMenu } from "@/components/mobile-menu";
+
 const NAV_LINKS = [
   { label: "About us", href: "#" },
   { label: "About the Firm", href: "/about-the-firm" },
@@ -48,6 +50,7 @@ export function Navbar() {
             )}
           </ul>
         </nav>
+        <MobileMenu className="md:hidden" />
       </div>
     </header>
   );
