@@ -101,6 +101,7 @@
   }
   body {
     @apply bg-white text-brand-black;
+    overflow-x: hidden;
   }
   html {
     @apply font-sans;
