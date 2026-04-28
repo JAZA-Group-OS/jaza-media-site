@@ -20,6 +20,35 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
+## Partner With Us — booking setup (REQUIRED before deploy)
+
+The Step 2 booking page (`/partner-with-us/book`) embeds Calendly via the
+URL set by `NEXT_PUBLIC_CALENDLY_URL`. Two manual setup steps are required
+in the Calendly account that owns this URL — without them, the embed
+still works but the team arrives at every discovery call without the
+lead's phone number or business context:
+
+### 1. Add two Invitee Questions to the Calendly event
+
+In the Calendly event's "Booking page" → "Invitee Questions" settings,
+add **in this order**:
+
+1. "Best contact number" — text type
+2. "Tell us about your business" — long text type
+
+Order matters: the booking page passes them as `a1` and `a2` URL params,
+which Calendly maps positionally to the additional-question list.
+
+### 2. Set the env var
+
+Local: `cp .env.example .env.local` (the example contains the production
+URL as a sane default).
+
+Vercel: set `NEXT_PUBLIC_CALENDLY_URL` in Project Settings → Environment
+Variables for Production + Preview environments. The component falls
+back to a hardcoded URL if the env var is missing, but configuring it
+explicitly lets you swap URLs without a redeploy.
+
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:
