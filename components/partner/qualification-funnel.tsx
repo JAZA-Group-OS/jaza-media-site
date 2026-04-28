@@ -4,6 +4,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { QUESTIONS, TOTAL_STEPS, type Answers, type Question } from '@/lib/partner/questions';
 import { qualify } from '@/lib/partner/qualify';
+import { writePrefill } from '@/lib/partner/booking-prefill';
 import { FunnelStepCard } from './funnel-step-card';
 import { RadioOptions } from './radio-options';
 import { FunnelTextInput } from './funnel-text-input';
@@ -226,10 +227,15 @@ export function QualificationFunnel() {
     if (process.env.NODE_ENV !== 'production') {
       console.log('partner-with-us submission', { outcome, answers });
     }
+    if (outcome === 'qualified') {
+      // Mirror name/email/phone/description into the prefill blob so the
+      // Calendly form on /book pre-populates without the user retyping.
+      writePrefill(answers);
+    }
     clearAnswers();
     router.push(
       outcome === 'qualified'
-        ? '/partner-with-us/qualified'
+        ? '/partner-with-us/book'
         : '/partner-with-us/not-qualified',
     );
   }, [answers, question, router, stepFromUrl]);
