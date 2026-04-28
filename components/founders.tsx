@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 export function Founders() {
   return (
     <section className="bg-white py-16 md:py-20">
@@ -7,10 +9,15 @@ export function Founders() {
         </h2>
 
         <div className="mt-10 grid gap-8 md:grid-cols-[1fr_1.5fr] md:gap-12">
-          <div
-            className="aspect-square w-full border-2 border-brand-black bg-neutral-200"
-            aria-label="Founders portrait placeholder"
-          />
+          <div className="relative aspect-square w-full overflow-hidden border-2 border-brand-black bg-neutral-200">
+            <Image
+              src="/about-the-form/bela-jaza.png"
+              alt="Jaza Sarmiento and Bela Capistrano, founders of JAZA Media"
+              fill
+              sizes="(min-width: 768px) 40vw, 100vw"
+              className="object-cover"
+            />
+          </div>
 
           <div className="space-y-4 text-sm leading-relaxed text-brand-black md:text-base">
             <p>
