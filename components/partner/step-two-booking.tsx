@@ -4,6 +4,11 @@ import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Script from 'next/script';
 import { readPrefill, clearPrefill } from '@/lib/partner/booking-prefill';
+import {
+  buildCalendlyUrl,
+  isTrustedCalendlyUrl,
+  makeCalendlyMessageHandler,
+} from '@/lib/partner/calendly';
 
 // SECURITY INVARIANT: this fallback must always be a trusted hardcoded
 // string controlled by JAZA. Never derive it from request parameters,
@@ -12,55 +17,13 @@ import { readPrefill, clearPrefill } from '@/lib/partner/booking-prefill';
 const FALLBACK_CALENDLY_URL =
   'https://calendly.com/jazamediaph/discovery-call';
 
-// Calendly's official postMessage event for a successful booking.
-const SCHEDULED_EVENT = 'calendly.event_scheduled';
-
-// Exported for unit and e2e tests; do not call from production code paths
-// other than the message listener below. Keeping this exported lets us
-// assert routing behavior without spoofing MessageEvent.origin (which is
-// non-configurable on modern Chromium and silently fails Object.defineProperty).
-export function isCalendlyEvent(e: MessageEvent): boolean {
-  return (
-    e.origin === 'https://calendly.com' &&
-    typeof e.data === 'object' &&
-    e.data !== null &&
-    typeof (e.data as { event?: unknown }).event === 'string' &&
-    ((e.data as { event: string }).event as string).startsWith('calendly.')
-  );
-}
-
-// Exported for unit tests of URL composition and prefill encoding.
-export function buildCalendlyUrl(base: string): string {
-  const url = new URL(base);
-  url.searchParams.set('primary_color', '181818');
-  // The funnel's own consent disclaimer covers contact consent for our
-  // PH/AU audience. If we ever expand to EU leads we'll need to drop this
-  // parameter to comply with GDPR Article 13.
-  url.searchParams.set('hide_gdpr_banner', '1');
-
-  const prefill = readPrefill();
-  if (prefill.fullName) url.searchParams.set('name', prefill.fullName);
-  if (prefill.email) url.searchParams.set('email', prefill.email);
-  // Calendly indexes additional invitee questions as a1, a2, ... in URL
-  // params. The user must add these in the Calendly event settings; if
-  // they are missing, Calendly silently ignores the params.
-  if (prefill.phone) url.searchParams.set('a1', prefill.phone);
-  if (prefill.description) url.searchParams.set('a2', prefill.description);
-
-  return url.toString();
-}
-
-// Exported handler for tests. The production listener calls this; tests
-// can call it directly with a synthetic MessageEvent to verify routing
-// without trying to spoof the read-only origin.
-export function makeCalendlyMessageHandler(
-  onScheduled: () => void,
-): (e: MessageEvent) => void {
-  return function (e: MessageEvent) {
-    if (!isCalendlyEvent(e)) return;
-    if ((e.data as { event: string }).event !== SCHEDULED_EVENT) return;
-    onScheduled();
-  };
+function resolveCalendlyBase(): string {
+  const envUrl = process.env.NEXT_PUBLIC_CALENDLY_URL;
+  // Only use the env var if it points at a trusted Calendly host. A typo,
+  // wrong env, or an injected value falls through to the fallback rather
+  // than embedding a foreign URL.
+  if (envUrl && isTrustedCalendlyUrl(envUrl)) return envUrl;
+  return FALLBACK_CALENDLY_URL;
 }
 
 export function StepTwoBooking() {
@@ -69,31 +32,29 @@ export function StepTwoBooking() {
   const containerRef = useRef<HTMLDivElement>(null);
   const [scriptLoaded, setScriptLoaded] = useState(false);
 
-  // Lazy state initializer reads sessionStorage once on mount. Same pattern
-  // as the funnel's answers state — avoids reading sessionStorage during
-  // render and keeps the URL stable across re-renders.
-  const [calendlyUrl] = useState<string>(() => {
-    const base =
-      process.env.NEXT_PUBLIC_CALENDLY_URL ?? FALLBACK_CALENDLY_URL;
-    return buildCalendlyUrl(base);
-  });
+  // Lazy state initializer reads sessionStorage once on first render. Same
+  // pattern as the funnel's answers state — keeps the URL stable across
+  // re-renders and avoids re-reading on every render.
+  const [calendlyUrl] = useState<string>(() =>
+    buildCalendlyUrl(resolveCalendlyBase(), readPrefill()),
+  );
 
-  // Move focus to the heading on mount, then scroll the heading into view
-  // so the calendar widget is reachable on small phones without manual
-  // scroll. The heading is inside the same scroll container as the widget,
-  // so scrolling it is enough to position the page sensibly.
+  // Move focus to the heading on mount so keyboard / screen-reader users
+  // start at a predictable place.
   useEffect(() => {
     titleRef.current?.focus();
-    titleRef.current?.scrollIntoView({ behavior: 'auto', block: 'start' });
   }, []);
 
-  // Initialize Calendly inline widget when both the container and the
-  // script are ready. Two entry paths:
+  // Initialize Calendly inline widget when the script is ready, then
+  // scroll the heading into view. Two entry paths:
   //  - First page load: <Script> loads, onLoad flips scriptLoaded, this
-  //    effect re-runs and inits the widget.
+  //    effect runs once.
   //  - SPA navigation back to /book: <Script> is a no-op (browser cached
-  //    the asset), but window.Calendly already exists from the prior load,
-  //    so the early-init branch fires on mount.
+  //    the asset), but window.Calendly already exists, so the early-init
+  //    branch fires on mount with scriptLoaded=false.
+  // Tying scrollIntoView to this effect (rather than mount) avoids a
+  // jarring double-reflow on slow networks where the iframe arrives
+  // after the initial scroll.
   useEffect(() => {
     const container = containerRef.current;
     if (!container) return;
@@ -106,6 +67,7 @@ export function StepTwoBooking() {
       url: calendlyUrl,
       parentElement: container,
     });
+    titleRef.current?.scrollIntoView({ behavior: 'auto', block: 'start' });
   }, [scriptLoaded, calendlyUrl]);
 
   // Listen for Calendly's "event scheduled" postMessage to detect a
@@ -130,8 +92,7 @@ export function StepTwoBooking() {
 
     // Test-only hook so Playwright can verify the routing branch without
     // forging a MessageEvent origin (non-configurable on modern Chromium).
-    // The production message-listener path is covered by a vitest unit
-    // test of isCalendlyEvent (deferred follow-up).
+    // Production builds tree-shake this branch via NODE_ENV inlining.
     if (process.env.NODE_ENV !== 'production') {
       (window as unknown as { __partnerHandleScheduled?: () => void })
         .__partnerHandleScheduled = onScheduled;
@@ -170,11 +131,11 @@ export function StepTwoBooking() {
         ref={containerRef}
         className="mt-10 overflow-hidden"
         // Vanilla Calendly widget doesn't auto-resize its iframe via
-        // postMessage the way react-calendly's wrapper does. 1050px covers
-        // the tallest step (the details form on a desktop viewport)
-        // without clipping. overflow:hidden contains any unexpected
-        // internal layout drift.
-        style={{ minWidth: '280px', height: '1050px' }}
+        // postMessage the way react-calendly's wrapper does. 1150px gives
+        // a buffer over the tallest step (the details form on a desktop
+        // viewport with custom questions) without clipping. overflow:hidden
+        // contains any unexpected internal layout drift.
+        style={{ minWidth: '280px', height: '1150px' }}
       />
 
       <Script
