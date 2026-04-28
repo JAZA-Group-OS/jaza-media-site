@@ -20,10 +20,15 @@ export function Navbar() {
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5 md:py-6">
         <Link
           href="/"
-          className="font-display text-3xl tracking-[0.15em] text-white md:text-4xl"
-          aria-label="JAZA home"
+          className="flex flex-col items-start leading-none"
+          aria-label="JAZA Media home"
         >
-          JAZA
+          <span className="font-display text-3xl tracking-[0.15em] text-white md:text-4xl">
+            JAZA
+          </span>
+          <span className="font-montserrat mt-1 text-[17.5px] font-bold tracking-[0.4em] text-brand-yellow">
+            MEDIA
+          </span>
         </Link>
         <nav className="hidden md:block">
           <ul className="flex items-center gap-x-8 text-sm font-medium text-white">

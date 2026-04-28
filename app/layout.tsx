@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { GFS_Didot, Poppins, Inter } from "next/font/google";
+import { GFS_Didot, Poppins, Inter, Montserrat } from "next/font/google";
 import "./globals.css";
 
 const gfsDidot = GFS_Didot({
@@ -23,6 +23,13 @@ const inter = Inter({
   display: "swap",
 });
 
+const montserrat = Montserrat({
+  variable: "--font-montserrat",
+  subsets: ["latin"],
+  weight: ["400", "600", "700"],
+  display: "swap",
+});
+
 export const metadata: Metadata = {
   title: "JAZA Media — Scale Your Business",
   description:
@@ -37,7 +44,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${gfsDidot.variable} ${poppins.variable} ${inter.variable} antialiased`}
+      className={`${gfsDidot.variable} ${poppins.variable} ${inter.variable} ${montserrat.variable} antialiased`}
     >
       <body className="min-h-screen bg-white text-brand-black font-sans">
         {children}

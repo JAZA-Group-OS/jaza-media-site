@@ -69,7 +69,7 @@ export function Footer() {
             <span className="font-display text-3xl tracking-[0.15em] text-white md:text-4xl">
               JAZA
             </span>
-            <span className="font-display text-xs tracking-[0.4em] text-white">
+            <span className="font-montserrat text-[17.5px] font-bold tracking-[0.4em] text-brand-yellow">
               MEDIA
             </span>
           </a>
