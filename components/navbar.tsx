@@ -31,7 +31,7 @@ export function Navbar() {
           </span>
         </Link>
         <nav className="hidden md:block">
-          <ul className="flex items-center gap-x-8 text-sm font-medium text-white">
+          <ul className="flex items-center gap-x-8 font-heading text-base font-medium text-white">
             {NAV_LINKS.map((link) =>
               isInternalRoute(link.href) ? (
                 <li key={link.label}>
