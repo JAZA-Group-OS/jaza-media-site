@@ -63,7 +63,7 @@ export function Footer() {
         <div className="flex items-center justify-between gap-6 md:flex-row">
           <a
             href="#"
-            className="flex flex-col items-start leading-none"
+            className="flex flex-col items-center leading-none"
             aria-label="JAZA Media home"
           >
             <span className="font-display text-3xl tracking-[0.15em] text-white md:text-4xl">
