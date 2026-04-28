@@ -62,13 +62,13 @@ export function MobileMenu({ className = "" }: { className?: string }) {
             </button>
           </div>
           <nav className="flex-1 overflow-y-auto px-4 pb-8">
-            <ul className="space-y-1">
+            <ul className="space-y-3">
               {NAV_LINKS.map((link) => (
                 <li key={link.label}>
                   <Link
                     href={link.href}
                     onClick={() => setOpen(false)}
-                    className="block rounded bg-brand-yellow px-6 py-4 font-heading text-base font-bold uppercase tracking-wide text-brand-black"
+                    className="block bg-brand-yellow px-6 py-4 font-heading text-base font-bold uppercase tracking-wide text-brand-black"
                   >
                     {link.label}
                   </Link>
