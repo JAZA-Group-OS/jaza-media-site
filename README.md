@@ -1,25 +1,5 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-## Getting Started
-
-First, run the development server:
-
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
 ## Partner With Us — booking setup (REQUIRED before deploy)
 
 The Step 2 booking page (`/partner-with-us/book`) embeds Calendly via the
@@ -45,9 +25,30 @@ Local: `cp .env.example .env.local` (the example contains the production
 URL as a sane default).
 
 Vercel: set `NEXT_PUBLIC_CALENDLY_URL` in Project Settings → Environment
-Variables for Production + Preview environments. The component falls
-back to a hardcoded URL if the env var is missing, but configuring it
-explicitly lets you swap URLs without a redeploy.
+Variables for Production + Preview environments. The component validates
+the URL is `https://*.calendly.com` and falls back to a hardcoded URL if
+the env var is missing or untrusted, but configuring it explicitly lets
+you swap URLs without a redeploy.
+
+## Getting Started
+
+First, run the development server:
+
+```bash
+npm run dev
+# or
+yarn dev
+# or
+pnpm dev
+# or
+bun dev
+```
+
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+
+You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+
+This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
 ## Learn More
 

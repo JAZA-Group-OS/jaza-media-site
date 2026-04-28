@@ -4,8 +4,9 @@ import Link from 'next/link';
 export const metadata: Metadata = {
   title: "You're Booked — JAZA Media",
   // Transient confirmation page. Not useful in search results and would
-  // surface as "Congrats you're booked" if indexed.
-  robots: { index: false, follow: false },
+  // surface as "Congrats you're booked" if indexed. We still want crawlers
+  // to follow the "Back to Home" link, so noindex without nofollow.
+  robots: { index: false },
 };
 
 export default function BookedPage() {
