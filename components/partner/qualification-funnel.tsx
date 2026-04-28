@@ -118,6 +118,14 @@ export function QualificationFunnel() {
   // the derived `error` below becomes null automatically — no effect needed.
   const [validation, setValidation] = useState<{ step: number; message: string } | null>(null);
 
+  // Slide direction for the inter-step animation. Set right before navigation,
+  // cleared once the animation finishes (cooperative — see effect below).
+  const [direction, setDirection] = useState<'forward' | 'backward' | null>(null);
+
+  // Counter that increments on every validation failure. Passed to the card
+  // as a key prop so the shake animation re-mounts and replays from frame 0.
+  const [shakeKey, setShakeKey] = useState(0);
+
   // Heading ref for moving focus on step change (a11y).
   const titleRef = useRef<HTMLHeadingElement>(null);
 
@@ -160,6 +168,14 @@ export function QualificationFunnel() {
     titleRef.current?.focus();
   }, [stepFromUrl]);
 
+  // Clear slide direction shortly after the animation duration so a stale
+  // direction doesn't leak into a subsequent unrelated re-render.
+  useEffect(() => {
+    if (!direction) return;
+    const id = setTimeout(() => setDirection(null), 350);
+    return () => clearTimeout(id);
+  }, [direction]);
+
   const setAnswer = useCallback(
     (id: keyof Answers, value: string) => {
       setAnswers((prev) => {
@@ -186,6 +202,7 @@ export function QualificationFunnel() {
         // Defensive guard: all current radio questions are mid-funnel, but if
         // a radio ever lands on the final step we still want manual submit.
         if (stepFromUrl < TOTAL_STEPS) {
+          setDirection('forward');
           router.push(`/partner-with-us?step=${stepFromUrl + 1}`);
         }
       }, 350);
@@ -206,6 +223,7 @@ export function QualificationFunnel() {
 
   const goPrev = useCallback(() => {
     if (stepFromUrl <= 1) return;
+    setDirection('backward');
     router.push(`/partner-with-us?step=${stepFromUrl - 1}`);
   }, [router, stepFromUrl]);
 
@@ -214,9 +232,11 @@ export function QualificationFunnel() {
     const err = validate(question, value);
     if (err) {
       setValidation({ step: stepFromUrl, message: err });
+      setShakeKey((k) => k + 1);
       return;
     }
     if (stepFromUrl < TOTAL_STEPS) {
+      setDirection('forward');
       router.push(`/partner-with-us?step=${stepFromUrl + 1}`);
       return;
     }
@@ -321,16 +341,43 @@ export function QualificationFunnel() {
           goNext();
         }}
       >
-        <FunnelStepCard
-          title={question.label}
-          helper={question.helper}
-          body={body}
-          error={error ?? undefined}
-          onPrev={goPrev}
-          isFirst={stepFromUrl === 1}
-          isLast={stepFromUrl === TOTAL_STEPS}
-          titleRef={titleRef}
-        />
+        <div className="relative">
+          {stepFromUrl > 1 ? (
+            <div
+              aria-hidden
+              className="absolute inset-y-2 -left-3 right-3 -z-10 rounded-xl border-[3px] border-brand-black bg-surface-grey opacity-40"
+            />
+          ) : null}
+          {stepFromUrl < TOTAL_STEPS ? (
+            <div
+              aria-hidden
+              className="absolute inset-y-2 left-3 -right-3 -z-10 rounded-xl border-[3px] border-brand-black bg-surface-grey opacity-40"
+            />
+          ) : null}
+
+          <div
+            key={`step-${stepFromUrl}`}
+            className={
+              direction === 'forward'
+                ? 'relative animate-funnel-in-right'
+                : direction === 'backward'
+                  ? 'relative animate-funnel-in-left'
+                  : 'relative'
+            }
+          >
+            <FunnelStepCard
+              title={question.label}
+              helper={question.helper}
+              body={body}
+              error={error ?? undefined}
+              onPrev={goPrev}
+              isFirst={stepFromUrl === 1}
+              isLast={stepFromUrl === TOTAL_STEPS}
+              titleRef={titleRef}
+              shakeKey={shakeKey}
+            />
+          </div>
+        </div>
       </form>
 
       {/* Screen-reader-only counter; sighted users get the same info from the

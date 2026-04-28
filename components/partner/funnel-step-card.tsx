@@ -14,6 +14,8 @@ type Props = {
   isLast: boolean;
   /** Heading ref so the parent can move focus on step change (a11y). */
   titleRef?: Ref<HTMLHeadingElement>;
+  /** Increments on each validation failure to retrigger the shake animation. */
+  shakeKey?: number;
 };
 
 export function FunnelStepCard({
@@ -25,9 +27,13 @@ export function FunnelStepCard({
   isFirst,
   isLast,
   titleRef,
+  shakeKey = 0,
 }: Props) {
   return (
-    <div className="overflow-hidden rounded-xl border-[3px] border-brand-black bg-surface-grey shadow-[0_8px_32px_-8px_rgba(0,0,0,0.25)]">
+    <div
+      key={shakeKey}
+      className={`overflow-hidden rounded-xl border-[3px] border-brand-black bg-surface-grey shadow-[0_8px_32px_-8px_rgba(0,0,0,0.25)] ${shakeKey > 0 ? 'animate-funnel-shake' : ''}`}
+    >
       <div className="px-6 py-8 md:px-12 md:py-10">
         <h2
           ref={titleRef}
