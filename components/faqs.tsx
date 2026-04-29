@@ -9,20 +9,20 @@ import {
 
 const FAQS = [
   {
-    q: "What is the JAZA Media Business Scalling?",
-    a: "Answer coming soon.",
+    q: "What is JAZA Media Business Scaling?",
+    a: "JAZA Media Business Scaling is a hands-on growth partner for businesses ready to scale through proven systems and real execution. We work directly with companies to strengthen marketing, sales, team structure, and profitability using strategies actively implemented inside JAZA Media and our client portfolio. This is not coaching or motivation — it's practical business scaling guided by operators who build and grow brands daily.",
   },
   {
-    q: "How to book a call?",
-    a: "Answer coming soon.",
+    q: "How do I book a call?",
+    a: "Start by clicking Book a Call and completing our short application form. Our team reviews each submission to ensure alignment before inviting qualified businesses to a Discovery and Strategy Call. We limit partnerships to maintain focus, quality, and measurable results.",
   },
   {
-    q: "Who is the right fit for the business scallig?",
-    a: "Answer coming soon.",
+    q: "Who is the right fit for JAZA Media Business Scaling?",
+    a: "We work with business owners who are already operating, generating revenue, and ready to scale with structure and strategy. Our best partners value execution, accountability, and long-term growth. Because we work closely with each company, we selectively accept businesses where we know we can create real impact.",
   },
   {
-    q: "Do you have free trial?",
-    a: "Answer coming soon.",
+    q: "Who are the main speakers?",
+    a: "You'll work directly with JAZA Media's leadership and growth operators — the same team responsible for scaling active brands and client portfolios. Sessions are led by specialists in marketing, sales, operations, and business strategy, ensuring practical insights, clear direction, and actionable outcomes.",
   },
 ];
 
