@@ -38,7 +38,7 @@ export function Hero() {
           src="/about-the-form/Jaza%20no%20bg%20trimmed.png"
           alt=""
           fill
-          className="object-contain object-bottom object-left"
+          className="object-cover object-bottom"
           sizes="(min-width: 1280px) 28vw, 24vw"
           priority
         />
@@ -53,13 +53,13 @@ export function Hero() {
           src="/about-the-form/Bela%20no%20bg%20trimmed.png"
           alt=""
           fill
-          className="object-contain object-bottom object-right"
+          className="object-cover object-bottom"
           sizes="(min-width: 1280px) 28vw, 24vw"
           priority
         />
       </div>
 
-      <div className="relative z-10 mx-auto flex max-w-4xl flex-col items-center px-6 py-12 text-center md:py-16 lg:py-20">
+      <div className="relative z-10 mx-auto flex max-w-4xl flex-col items-center px-6 py-8 text-center md:py-10 lg:py-12">
         <h1 className="font-heading text-5xl leading-[1.05] font-black tracking-tight text-white md:text-6xl">
           DO YOU WANT TO
           <br />
