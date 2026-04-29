@@ -29,16 +29,10 @@ export function Hero() {
         }}
       />
 
-      {/* Jaza — left flank, lg+ only. Bottom edge fades to blend with hero. */}
+      {/* Jaza — left flank, lg+ only. Bottom flush with hero bottom edge. */}
       <div
         aria-hidden
         className="pointer-events-none absolute bottom-0 left-0 hidden h-[88%] w-[24%] lg:block xl:w-[28%]"
-        style={{
-          maskImage:
-            "linear-gradient(to bottom, black 0%, black 78%, transparent 100%)",
-          WebkitMaskImage:
-            "linear-gradient(to bottom, black 0%, black 78%, transparent 100%)",
-        }}
       >
         <Image
           src="/about-the-form/Jaza%20no%20bg.png"
@@ -50,16 +44,10 @@ export function Hero() {
         />
       </div>
 
-      {/* Bela — right flank, lg+ only. Bottom edge fades to blend with hero. */}
+      {/* Bela — right flank, lg+ only. Bottom flush with hero bottom edge. */}
       <div
         aria-hidden
         className="pointer-events-none absolute right-0 bottom-0 hidden h-[88%] w-[24%] lg:block xl:w-[28%]"
-        style={{
-          maskImage:
-            "linear-gradient(to bottom, black 0%, black 78%, transparent 100%)",
-          WebkitMaskImage:
-            "linear-gradient(to bottom, black 0%, black 78%, transparent 100%)",
-        }}
       >
         <Image
           src="/about-the-form/Bela%20no%20bg.png"
