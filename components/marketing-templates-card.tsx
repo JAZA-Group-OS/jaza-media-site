@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 export function MarketingTemplatesCard() {
   return (
     <section className="bg-white pb-16 md:pb-20">
@@ -8,25 +10,15 @@ export function MarketingTemplatesCard() {
           </span>
 
           <div className="grid items-center gap-0 md:grid-cols-2">
-            <div className="relative aspect-video overflow-hidden bg-brand-black md:aspect-auto md:h-full md:min-h-[220px]">
-              <div className="absolute inset-0 flex items-center justify-center p-6">
-                <div className="space-y-2 text-center">
-                  <p className="font-display text-[10px] tracking-[0.3em] text-brand-yellow">
-                    JAZA MEDIA
-                  </p>
-                  <p className="font-heading text-[10px] font-bold tracking-widest text-white">
-                    EPISODE #01
-                  </p>
-                  <h3 className="font-heading text-lg leading-[1.05] font-black text-white md:text-2xl">
-                    HOW GEN Z
-                    <br />
-                    SCALE BUSINESS
-                  </h3>
-                  <p className="pt-1 text-[9px] font-medium tracking-widest text-neutral-300">
-                    WITH JAZA SARMIENTO
-                  </p>
-                </div>
-              </div>
+            <div className="relative">
+              <Image
+                src="/about-the-form/Marketing Templates.png"
+                alt="JAZA Media marketing templates preview"
+                width={4000}
+                height={2250}
+                sizes="(min-width: 768px) 50vw, 100vw"
+                className="block h-auto w-full"
+              />
             </div>
 
             <div className="p-8 md:p-10">

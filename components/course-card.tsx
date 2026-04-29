@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import Image from "next/image";
 
 type BookVariant = "marketing" | "advertising" | "dark";
 
@@ -11,67 +12,29 @@ interface CourseCardProps {
 
 function MarketingBook() {
   return (
-    <div className="relative flex h-52 w-36 flex-col bg-brand-black md:h-60 md:w-40">
-      <div className="space-y-1.5 px-3 pt-3">
-        <p className="font-heading text-[10px] font-semibold tracking-wide text-brand-yellow">
-          JAZA Media
-        </p>
-        <div className="h-px w-full bg-brand-yellow/60" />
-      </div>
-      <div className="flex flex-1 flex-col justify-center px-3">
-        <h4 className="font-heading text-2xl leading-[1.02] font-black text-white">
-          The 10K
-          <br />
-          Rule Of
-        </h4>
-        <p className="mt-1 font-heading text-lg leading-tight font-black text-white">
-          Marketing
-        </p>
-        <p className="mt-2 text-[8px] font-medium text-white/80">
-          Smarter Moves, Massive Returns
-        </p>
-      </div>
-      <div className="bg-brand-yellow px-3 py-1.5 text-center">
-        <p className="font-heading text-[11px] font-black tracking-wider text-brand-black">
-          JAZA
-          <br />
-          SARMIENTO
-        </p>
-      </div>
-    </div>
+    <Image
+      src="/about-the-form/Rule of Marketing.png"
+      alt="The 10K Rule Of Marketing — Smarter Moves, Massive Returns"
+      width={1600}
+      height={2500}
+      sizes="(min-width: 768px) 160px, 144px"
+      className="block h-auto w-36 md:w-40"
+      priority
+    />
   );
 }
 
 function AdvertisingBook() {
   return (
-    <div className="relative flex h-52 w-36 flex-col bg-brand-yellow md:h-60 md:w-40">
-      <div className="space-y-1.5 px-3 pt-3">
-        <p className="font-heading text-[10px] font-semibold tracking-wide text-brand-black">
-          JAZA Media
-        </p>
-        <div className="h-px w-full bg-brand-black/60" />
-      </div>
-      <div className="flex flex-1 flex-col justify-center px-3">
-        <h4 className="font-heading text-2xl leading-[1.02] font-black text-brand-black">
-          The 10K
-          <br />
-          Rule Of
-        </h4>
-        <p className="mt-1 font-heading text-lg leading-tight font-black text-brand-black">
-          Advertising
-        </p>
-        <p className="mt-2 text-[8px] font-medium text-brand-black/80">
-          Smarter Strategy, Maximum ROI
-        </p>
-      </div>
-      <div className="bg-brand-black px-3 py-1.5 text-center">
-        <p className="font-heading text-[11px] font-black tracking-wider text-brand-yellow">
-          JAZA
-          <br />
-          SARMIENTO
-        </p>
-      </div>
-    </div>
+    <Image
+      src="/about-the-form/Rule of Advertising.png"
+      alt="The 10K Rule Of Advertising — Smarter Strategy, Maximum ROI"
+      width={1600}
+      height={2500}
+      sizes="(min-width: 768px) 160px, 144px"
+      className="block h-auto w-36 md:w-40"
+      priority
+    />
   );
 }
 
