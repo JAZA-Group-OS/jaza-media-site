@@ -29,24 +29,25 @@ export function Hero() {
         }}
       />
 
-      {/* Jaza — left flank, lg+ only. object-cover with the close-to-square
-          wrapper crops only ~3% off the top edge, eliminating any residual
-          gap from the PNG's transparent edges. */}
+      {/* Jaza — left flank, lg+ only. Smaller wrapper so the image fits
+          comfortably with object-contain (no head crop). */}
       <div
         aria-hidden
-        className="pointer-events-none absolute bottom-0 left-0 hidden aspect-square w-[24%] max-w-[420px] lg:block xl:w-[28%]"
+        className="pointer-events-none absolute bottom-0 left-0 hidden aspect-square w-[20%] max-w-[360px] lg:block xl:w-[23%]"
       >
         <Image
           src="/about-the-form/Jaza%20no%20bg%20trimmed.png"
           alt=""
           fill
           className="object-contain object-bottom object-left"
-          sizes="(min-width: 1280px) 28vw, 24vw"
+          sizes="(min-width: 1280px) 23vw, 20vw"
           priority
         />
       </div>
 
-      {/* Bela — right flank, lg+ only. */}
+      {/* Bela — right flank, lg+ only. Same size as before. object-cover so
+          her image fills the wrapper edge-to-edge (eliminates the small
+          residual gap between her body and the section line). */}
       <div
         aria-hidden
         className="pointer-events-none absolute right-0 bottom-0 hidden aspect-square w-[24%] max-w-[420px] lg:block xl:w-[28%]"
@@ -55,7 +56,7 @@ export function Hero() {
           src="/about-the-form/Bela%20no%20bg%20trimmed.png"
           alt=""
           fill
-          className="object-contain object-bottom object-right"
+          className="object-cover object-bottom object-right"
           sizes="(min-width: 1280px) 28vw, 24vw"
           priority
         />
