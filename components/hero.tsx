@@ -40,7 +40,7 @@ export function Hero() {
           src="/about-the-form/Jaza%20no%20bg%20trimmed.png"
           alt=""
           fill
-          className="object-cover object-bottom object-left"
+          className="object-contain object-bottom object-left"
           sizes="(min-width: 1280px) 28vw, 24vw"
           priority
         />
@@ -55,7 +55,7 @@ export function Hero() {
           src="/about-the-form/Bela%20no%20bg%20trimmed.png"
           alt=""
           fill
-          className="object-cover object-bottom object-right"
+          className="object-contain object-bottom object-right"
           sizes="(min-width: 1280px) 28vw, 24vw"
           priority
         />
