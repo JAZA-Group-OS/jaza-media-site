@@ -43,7 +43,7 @@ export default async function TeamMemberPage({ params }: { params: Params }) {
       <main>
         <TeamBioHero member={member} />
         <section className="bg-white py-12 md:py-16">
-          <div className="mx-auto max-w-3xl space-y-6 px-4 text-center text-sm leading-relaxed text-brand-black md:text-base">
+          <div className="mx-auto max-w-3xl space-y-6 px-4 text-center font-heading text-sm leading-relaxed text-brand-black">
             {paragraphs.length > 0 ? (
               paragraphs.map((paragraph, i) => <p key={i}>{paragraph}</p>)
             ) : (
