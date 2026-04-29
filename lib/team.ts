@@ -77,6 +77,7 @@ export const TEAM: Member[] = [
     name: "GUIAN BROTONEL",
     role: "MANAGING DIRECTOR, CHIEF MARKETING OFFICER",
     image: "/about-the-form/GUIAN-BROTONEL.png",
+    bioImage: "/about-the-firm/GUIAN-BROTONEL-removebg-preview.png",
   },
   {
     slug: "cto",
