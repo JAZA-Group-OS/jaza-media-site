@@ -29,10 +29,11 @@ export function Hero() {
         }}
       />
 
-      {/* Jaza — left flank, lg+ only. Bottom flush with hero bottom edge. */}
+      {/* Jaza — left flank, lg+ only. Aspect-square wrapper scales with viewport
+          so the image fills the wrapper at every breakpoint (no floating). */}
       <div
         aria-hidden
-        className="pointer-events-none absolute bottom-0 left-0 hidden h-[92%] w-[24%] lg:block xl:w-[28%]"
+        className="pointer-events-none absolute bottom-0 left-0 hidden aspect-square w-[24%] max-w-[420px] lg:block xl:w-[28%]"
       >
         <Image
           src="/about-the-form/Jaza%20no%20bg%20trimmed.png"
@@ -44,10 +45,10 @@ export function Hero() {
         />
       </div>
 
-      {/* Bela — right flank, lg+ only. Bottom flush with hero bottom edge. */}
+      {/* Bela — right flank, lg+ only. */}
       <div
         aria-hidden
-        className="pointer-events-none absolute right-0 bottom-0 hidden h-[92%] w-[24%] lg:block xl:w-[28%]"
+        className="pointer-events-none absolute right-0 bottom-0 hidden aspect-square w-[24%] max-w-[420px] lg:block xl:w-[28%]"
       >
         <Image
           src="/about-the-form/Bela%20no%20bg%20trimmed.png"
@@ -74,6 +75,21 @@ export function Hero() {
         >
           LEARN TO SCALE
         </a>
+
+        {/* Combined Jaza + Bela cutout — shown below lg only (mobile + tablet). */}
+        <div
+          aria-hidden
+          className="relative mt-8 aspect-[7331/6191] w-full max-w-md lg:hidden"
+        >
+          <Image
+            src="/about-the-form/JazaBela%20no%20bg%20trimmed.png"
+            alt=""
+            fill
+            className="object-contain object-bottom"
+            sizes="(max-width: 1024px) 100vw, 0px"
+            priority
+          />
+        </div>
       </div>
     </section>
   );

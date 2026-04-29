@@ -12,7 +12,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, "..");
 const IMG_DIR = path.join(ROOT, "public", "about-the-form");
 
-const SOURCES = ["Jaza no bg.png", "Bela no bg.png"];
+const SOURCES = ["Jaza no bg.png", "Bela no bg.png", "JazaBela no bg.png"];
 
 for (const filename of SOURCES) {
   const inputPath = path.join(IMG_DIR, filename);

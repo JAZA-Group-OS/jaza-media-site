@@ -2,7 +2,7 @@ import { CourseCard } from "./course-card";
 
 export function FreeMarketingSection() {
   return (
-    <section className="bg-white py-16 md:py-20">
+    <section className="bg-white py-[70px]">
       <div className="mx-auto max-w-6xl px-4">
         <div className="text-center">
           <h2 className="font-heading text-3xl font-black tracking-tight md:text-5xl">
