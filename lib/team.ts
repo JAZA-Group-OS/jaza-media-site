@@ -76,7 +76,7 @@ export const TEAM: Member[] = [
     slug: "guian",
     name: "GUIAN BROTONEL",
     role: "MANAGING DIRECTOR, CHIEF MARKETING OFFICER",
-    image: null,
+    image: "/about-the-form/GUIAN-BROTONEL.png",
   },
   {
     slug: "cto",
