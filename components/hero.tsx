@@ -1,6 +1,9 @@
+import Image from "next/image";
+
 export function Hero() {
   return (
-    <section className="relative w-full overflow-hidden bg-brand-black">
+    <section className="relative isolate w-full overflow-hidden bg-brand-black">
+      {/* Diagonal yellow checker (subtle texture). */}
       <div
         className="pointer-events-none absolute inset-0 opacity-60"
         style={{
@@ -16,24 +19,47 @@ export function Hero() {
         aria-hidden
       />
 
+      {/* Warm yellow radial glow centered behind the headline. */}
       <div
-        className="absolute top-0 bottom-0 left-0 hidden w-[26%] md:block lg:w-[30%]"
+        aria-hidden
+        className="pointer-events-none absolute inset-0"
         style={{
           background:
-            "linear-gradient(to right, rgba(55,55,55,0.95) 0%, rgba(40,40,40,0.7) 60%, rgba(24,24,24,0) 100%)",
+            "radial-gradient(ellipse 70% 60% at 50% 40%, rgba(255, 202, 38, 0.18) 0%, rgba(255, 202, 38, 0.05) 45%, transparent 75%)",
         }}
-        aria-label="Co-founder portrait placeholder"
-      />
-      <div
-        className="absolute top-0 right-0 bottom-0 hidden w-[26%] md:block lg:w-[30%]"
-        style={{
-          background:
-            "linear-gradient(to left, rgba(55,55,55,0.95) 0%, rgba(40,40,40,0.7) 60%, rgba(24,24,24,0) 100%)",
-        }}
-        aria-label="Co-founder portrait placeholder"
       />
 
-      <div className="relative mx-auto flex max-w-4xl flex-col items-center px-6 py-16 text-center md:py-24 lg:py-28">
+      {/* Jaza — left flank, lg+ only. */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute bottom-0 left-0 hidden h-[88%] w-[24%] lg:block xl:w-[28%]"
+      >
+        <Image
+          src="/about-the-form/Jaza%20no%20bg.png"
+          alt=""
+          fill
+          className="object-contain object-bottom object-left"
+          sizes="(min-width: 1280px) 28vw, 24vw"
+          priority
+        />
+      </div>
+
+      {/* Bela — right flank, lg+ only. */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute right-0 bottom-0 hidden h-[88%] w-[24%] lg:block xl:w-[28%]"
+      >
+        <Image
+          src="/about-the-form/Bela%20no%20bg.png"
+          alt=""
+          fill
+          className="object-contain object-bottom object-right"
+          sizes="(min-width: 1280px) 28vw, 24vw"
+          priority
+        />
+      </div>
+
+      <div className="relative z-10 mx-auto flex max-w-4xl flex-col items-center px-6 py-16 text-center md:py-24 lg:py-28">
         <h1 className="font-heading text-5xl leading-[1.05] font-black tracking-tight text-white md:text-6xl">
           DO YOU WANT TO
           <br />
