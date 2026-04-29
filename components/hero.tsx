@@ -29,18 +29,18 @@ export function Hero() {
         }}
       />
 
-      {/* Jaza — left flank, lg+ only. Smaller wrapper so the image fits
-          comfortably with object-contain (no head crop). */}
+      {/* Jaza — left flank, lg+ only. Slightly smaller than Bela so the
+          image fits comfortably with object-contain (head not clipped). */}
       <div
         aria-hidden
-        className="pointer-events-none absolute bottom-0 left-0 hidden aspect-square w-[20%] max-w-[360px] lg:block xl:w-[23%]"
+        className="pointer-events-none absolute bottom-0 left-0 hidden aspect-square w-[22%] max-w-[400px] lg:block xl:w-[26%]"
       >
         <Image
           src="/about-the-form/Jaza%20no%20bg%20trimmed.png"
           alt=""
           fill
           className="object-contain object-bottom object-left"
-          sizes="(min-width: 1280px) 23vw, 20vw"
+          sizes="(min-width: 1280px) 26vw, 22vw"
           priority
         />
       </div>
