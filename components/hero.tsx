@@ -29,11 +29,11 @@ export function Hero() {
         }}
       />
 
-      {/* Jaza — left flank, lg+ only. Aspect-square wrapper scales with viewport
-          so the image fills the wrapper at every breakpoint (no floating). */}
+      {/* Jaza — left flank, lg+ only. Aspect matches the trimmed image exactly
+          so object-contain fills the wrapper edge-to-edge (no floating gap). */}
       <div
         aria-hidden
-        className="pointer-events-none absolute bottom-0 left-0 hidden aspect-square w-[24%] max-w-[420px] lg:block xl:w-[28%]"
+        className="pointer-events-none absolute bottom-0 left-0 hidden aspect-[6140/6327] w-[24%] max-w-[420px] lg:block xl:w-[28%]"
       >
         <Image
           src="/about-the-form/Jaza%20no%20bg%20trimmed.png"
@@ -45,10 +45,10 @@ export function Hero() {
         />
       </div>
 
-      {/* Bela — right flank, lg+ only. */}
+      {/* Bela — right flank, lg+ only. Aspect matches the trimmed image exactly. */}
       <div
         aria-hidden
-        className="pointer-events-none absolute right-0 bottom-0 hidden aspect-square w-[24%] max-w-[420px] lg:block xl:w-[28%]"
+        className="pointer-events-none absolute right-0 bottom-0 hidden aspect-[6616/6334] w-[24%] max-w-[420px] lg:block xl:w-[28%]"
       >
         <Image
           src="/about-the-form/Bela%20no%20bg%20trimmed.png"
@@ -75,21 +75,22 @@ export function Hero() {
         >
           LEARN TO SCALE
         </a>
+      </div>
 
-        {/* Combined Jaza + Bela cutout — shown below lg only (mobile + tablet). */}
-        <div
-          aria-hidden
-          className="relative mt-8 aspect-[7331/6191] w-full max-w-md lg:hidden"
-        >
-          <Image
-            src="/about-the-form/JazaBela%20no%20bg%20trimmed.png"
-            alt=""
-            fill
-            className="object-contain object-bottom"
-            sizes="(max-width: 1024px) 100vw, 0px"
-            priority
-          />
-        </div>
+      {/* Combined Jaza + Bela cutout — sibling of content so its bottom sits
+          flush against the section line on mobile + tablet (lg:hidden). */}
+      <div
+        aria-hidden
+        className="relative z-10 mx-auto w-full max-w-md aspect-[7331/6191] lg:hidden"
+      >
+        <Image
+          src="/about-the-form/JazaBela%20no%20bg%20trimmed.png"
+          alt=""
+          fill
+          className="object-contain object-bottom"
+          sizes="(max-width: 1024px) 100vw, 0px"
+          priority
+        />
       </div>
     </section>
   );
