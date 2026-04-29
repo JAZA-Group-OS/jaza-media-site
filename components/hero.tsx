@@ -32,10 +32,10 @@ export function Hero() {
       {/* Jaza — left flank, lg+ only. Bottom flush with hero bottom edge. */}
       <div
         aria-hidden
-        className="pointer-events-none absolute bottom-0 left-0 hidden h-[88%] w-[24%] lg:block xl:w-[28%]"
+        className="pointer-events-none absolute bottom-0 left-0 hidden h-[92%] w-[24%] lg:block xl:w-[28%]"
       >
         <Image
-          src="/about-the-form/Jaza%20no%20bg.png"
+          src="/about-the-form/Jaza%20no%20bg%20trimmed.png"
           alt=""
           fill
           className="object-contain object-bottom object-left"
@@ -47,10 +47,10 @@ export function Hero() {
       {/* Bela — right flank, lg+ only. Bottom flush with hero bottom edge. */}
       <div
         aria-hidden
-        className="pointer-events-none absolute right-0 bottom-0 hidden h-[88%] w-[24%] lg:block xl:w-[28%]"
+        className="pointer-events-none absolute right-0 bottom-0 hidden h-[92%] w-[24%] lg:block xl:w-[28%]"
       >
         <Image
-          src="/about-the-form/Bela%20no%20bg.png"
+          src="/about-the-form/Bela%20no%20bg%20trimmed.png"
           alt=""
           fill
           className="object-contain object-bottom object-right"
@@ -59,7 +59,7 @@ export function Hero() {
         />
       </div>
 
-      <div className="relative z-10 mx-auto flex max-w-4xl flex-col items-center px-6 py-16 text-center md:py-24 lg:py-28">
+      <div className="relative z-10 mx-auto flex max-w-4xl flex-col items-center px-6 py-12 text-center md:py-16 lg:py-20">
         <h1 className="font-heading text-5xl leading-[1.05] font-black tracking-tight text-white md:text-6xl">
           DO YOU WANT TO
           <br />
