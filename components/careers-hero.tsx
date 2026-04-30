@@ -6,7 +6,7 @@ function HeroImagePlaceholder() {
   return (
     <div
       aria-hidden
-      className="relative aspect-[4/3] w-full overflow-hidden rounded-md border-4 border-white bg-white/90 shadow-inner lg:aspect-auto lg:h-full"
+      className="relative aspect-[5/3] w-full overflow-hidden rounded-md border-4 border-white bg-white/90 shadow-inner lg:aspect-auto lg:h-full lg:min-h-[440px]"
     >
       <div className="absolute inset-3 animate-about-shimmer rounded-sm opacity-60" />
     </div>
@@ -21,8 +21,8 @@ export function CareersHero() {
 
   return (
     <section className="bg-white pt-12 pb-16 md:pt-16 md:pb-20">
-      <div className="mx-auto max-w-5xl px-4 lg:max-w-6xl">
-        <div className="grid gap-8 lg:grid-cols-[5fr_6fr] lg:items-center lg:gap-12">
+      <div className="mx-auto max-w-5xl px-4 lg:max-w-7xl">
+        <div className="grid gap-8 lg:grid-cols-[2fr_3fr] lg:items-center lg:gap-12">
           <div>
             <h1
               ref={headlineRef}
