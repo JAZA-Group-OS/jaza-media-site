@@ -26,18 +26,19 @@ export function CareersHero() {
           <div>
             <h1
               ref={headlineRef}
-              className={`font-heading text-[26px] font-bold leading-[1.1] tracking-tight text-brand-black md:text-[34px] lg:text-[42px] xl:text-5xl ${
+              className={`font-heading font-bold leading-[1.05] tracking-tight text-brand-black ${
                 headlineIn ? "animate-about-fade-up" : "opacity-0"
               }`}
             >
-              <span className="whitespace-nowrap">
+              <span className="block whitespace-nowrap text-[26px] md:text-[34px] lg:text-[40px] xl:text-[54px]">
                 Join a{" "}
                 <span className="text-brand-yellow underline decoration-brand-yellow decoration-2 underline-offset-4">
                   world-record
                 </span>
               </span>
-              <br />
-              breaking team!
+              <span className="block whitespace-nowrap text-[34px] md:text-[44px] lg:text-[52px] xl:text-[68px]">
+                breaking team!
+              </span>
             </h1>
 
             <div
