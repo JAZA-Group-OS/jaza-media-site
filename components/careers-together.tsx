@@ -26,7 +26,7 @@ export function CareersTogether() {
             headIn ? "animate-about-fade-up" : "opacity-0"
           }`}
         >
-          <h2 className="font-heading text-[26px] font-bold tracking-tight text-brand-black md:text-3xl lg:text-[34px]">
+          <h2 className="font-heading text-[34px] font-bold leading-[1.1] tracking-tight text-brand-black md:text-[48px] lg:text-[64px] xl:text-[80px]">
             How we work TOGETHER!
           </h2>
         </div>
