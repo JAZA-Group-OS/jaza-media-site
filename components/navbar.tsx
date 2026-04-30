@@ -30,7 +30,7 @@ export function Navbar() {
             MEDIA
           </span>
         </Link>
-        <nav className="hidden xl:block">
+        <nav className="hidden md:block">
           <ul className="flex items-center gap-x-8 font-heading text-base font-medium text-white">
             {NAV_LINKS.map((link) =>
               isInternalRoute(link.href) ? (
@@ -55,7 +55,7 @@ export function Navbar() {
             )}
           </ul>
         </nav>
-        <MobileMenu className="xl:hidden" />
+        <MobileMenu className="md:hidden" />
       </div>
     </header>
   );
