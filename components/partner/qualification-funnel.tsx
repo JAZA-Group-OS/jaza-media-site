@@ -242,11 +242,20 @@ export function QualificationFunnel() {
     }
     // Final step → qualify and route.
     const outcome = qualify(answers);
-    // Submission point: replace with `await fetch('/api/partner', ...)` when API exists.
     // Gate the dev log so production DevTools never sees PII (phone, email, name).
     if (process.env.NODE_ENV !== 'production') {
       console.log('partner-with-us submission', { outcome, answers });
     }
+    // Persist the inquiry. keepalive lets the request complete even after we navigate.
+    fetch('/api/partner', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(answers),
+      keepalive: true,
+    }).catch((err) => {
+      // Don't block the user on a logging failure.
+      console.error('Failed to persist partner inquiry:', err);
+    });
     if (outcome === 'qualified') {
       // Mirror name/email/phone/description into the prefill blob so the
       // Calendly form on /book pre-populates without the user retyping.
