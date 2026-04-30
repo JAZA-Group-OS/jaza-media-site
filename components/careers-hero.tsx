@@ -1,10 +1,71 @@
 "use client";
 
-export function CareersHero() {
+import { useInView } from "@/lib/use-in-view";
+
+function HeroImagePlaceholder() {
   return (
-    <section className="bg-white py-12 md:py-16">
+    <div
+      aria-hidden
+      className="relative aspect-[4/3] w-full overflow-hidden rounded-md border-4 border-white bg-white/90 shadow-inner lg:aspect-auto lg:h-full"
+    >
+      <div className="absolute inset-3 animate-about-shimmer rounded-sm opacity-60" />
+    </div>
+  );
+}
+
+export function CareersHero() {
+  const { ref: headlineRef, inView: headlineIn } =
+    useInView<HTMLHeadingElement>();
+  const { ref: copyRef, inView: copyIn } = useInView<HTMLDivElement>();
+  const { ref: imageRef, inView: imageIn } = useInView<HTMLDivElement>();
+
+  return (
+    <section className="bg-white pt-12 pb-16 md:pt-16 md:pb-20">
       <div className="mx-auto max-w-5xl px-4">
-        <p className="text-brand-black">CareersHero placeholder</p>
+        <div className="grid gap-8 lg:grid-cols-2 lg:items-center lg:gap-12">
+          <div>
+            <h1
+              ref={headlineRef}
+              className={`font-heading text-[32px] font-bold leading-[1.15] tracking-tight text-brand-black md:text-[40px] lg:text-5xl xl:text-[56px] ${
+                headlineIn ? "animate-about-fade-up" : "opacity-0"
+              }`}
+            >
+              Join a{" "}
+              <span className="bg-brand-yellow px-1 underline decoration-brand-black decoration-2 underline-offset-4">
+                world-record
+              </span>
+              <br className="hidden md:block" /> breaking team!
+            </h1>
+
+            <div
+              ref={copyRef}
+              style={{ animationDelay: copyIn ? "120ms" : undefined }}
+              className={copyIn ? "animate-about-fade-up" : "opacity-0"}
+            >
+              <p className="mt-6 max-w-xl text-base leading-relaxed text-brand-black/90 md:text-lg">
+                We&apos;re seeking teammates who lead with trust, work with
+                discipline, and play to win as a team.
+              </p>
+
+              <a
+                href="#openings"
+                className="mt-6 inline-block rounded-full bg-brand-yellow px-6 py-3 font-heading text-sm font-bold text-brand-black shadow-sm transition-colors hover:bg-yellow-400 md:text-base"
+              >
+                View Job Openings
+              </a>
+            </div>
+          </div>
+
+          <div
+            ref={imageRef}
+            style={{ animationDelay: imageIn ? "200ms" : undefined }}
+            className={`lg:h-full ${
+              imageIn ? "animate-about-pop-in" : "opacity-0"
+            }`}
+          >
+            <HeroImagePlaceholder />
+          </div>
+        </div>
       </div>
     </section>
   );
