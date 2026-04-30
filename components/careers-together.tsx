@@ -22,11 +22,11 @@ export function CareersTogether() {
       <div className="mx-auto max-w-5xl px-4">
         <div
           ref={headRef}
-          className={`flex justify-center ${
+          className={`text-center ${
             headIn ? "animate-about-fade-up" : "opacity-0"
           }`}
         >
-          <h2 className="inline-block rounded-md border-2 border-violet-600 px-6 py-3 font-heading text-[26px] font-bold uppercase tracking-tight text-brand-black md:text-3xl lg:text-[34px]">
+          <h2 className="font-heading text-[26px] font-bold tracking-tight text-brand-black md:text-3xl lg:text-[34px]">
             How we work TOGETHER!
           </h2>
         </div>
