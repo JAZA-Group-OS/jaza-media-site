@@ -6,7 +6,7 @@ const NAV_LINKS = [
   { label: "About us", href: "/about-us" },
   { label: "About the Firm", href: "/about-the-firm" },
   { label: "Partner With Us", href: "/partner-with-us" },
-  { label: "Careers", href: "#" },
+  { label: "Careers", href: "/careers" },
   { label: "Support", href: "#" },
 ];
 
@@ -30,7 +30,7 @@ export function Navbar() {
             MEDIA
           </span>
         </Link>
-        <nav className="hidden md:block">
+        <nav className="hidden xl:block">
           <ul className="flex items-center gap-x-8 font-heading text-base font-medium text-white">
             {NAV_LINKS.map((link) =>
               isInternalRoute(link.href) ? (
@@ -55,7 +55,7 @@ export function Navbar() {
             )}
           </ul>
         </nav>
-        <MobileMenu className="md:hidden" />
+        <MobileMenu className="xl:hidden" />
       </div>
     </header>
   );
