@@ -21,20 +21,23 @@ export function CareersHero() {
 
   return (
     <section className="bg-white pt-12 pb-16 md:pt-16 md:pb-20">
-      <div className="mx-auto max-w-5xl px-4">
-        <div className="grid gap-8 lg:grid-cols-2 lg:items-center lg:gap-12">
+      <div className="mx-auto max-w-5xl px-4 lg:max-w-6xl">
+        <div className="grid gap-8 lg:grid-cols-[5fr_6fr] lg:items-center lg:gap-12">
           <div>
             <h1
               ref={headlineRef}
-              className={`font-heading text-[32px] font-bold leading-[1.15] tracking-tight text-brand-black md:text-[40px] lg:text-5xl xl:text-[56px] ${
+              className={`font-heading text-[26px] font-bold leading-[1.1] tracking-tight text-brand-black md:text-[34px] lg:text-[42px] xl:text-5xl ${
                 headlineIn ? "animate-about-fade-up" : "opacity-0"
               }`}
             >
-              Join a{" "}
-              <span className="bg-brand-yellow px-1 underline decoration-brand-black decoration-2 underline-offset-4">
-                world-record
+              <span className="whitespace-nowrap">
+                Join a{" "}
+                <span className="text-brand-yellow underline decoration-brand-yellow decoration-2 underline-offset-4">
+                  world-record
+                </span>
               </span>
-              <br className="hidden md:block" /> breaking team!
+              <br />
+              breaking team!
             </h1>
 
             <div
