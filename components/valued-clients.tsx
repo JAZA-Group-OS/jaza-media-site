@@ -45,12 +45,12 @@ const SLIDES: Client[] = [...CLIENTS, ...CLIENTS];
 
 function ClientLogo({ name, src, boost }: Client) {
   return (
-    <div className="relative h-20 w-40 shrink-0 md:h-24 md:w-48">
+    <div className="relative h-24 w-48 shrink-0 md:h-32 md:w-64">
       <Image
         src={src}
         alt={`${name} logo`}
         fill
-        sizes="(min-width: 768px) 192px, 160px"
+        sizes="(min-width: 768px) 256px, 192px"
         className={`object-contain ${boost ? "scale-[2.1]" : ""}`}
       />
     </div>
@@ -96,7 +96,7 @@ export function ValuedClients() {
 
       <div
         ref={stripRef}
-        className={`mt-8 bg-neutral-200/70 py-4 md:py-6 ${
+        className={`mt-8 bg-neutral-200/70 py-2 ${
           stripIn ? "animate-about-fade-in" : "opacity-0"
         }`}
       >
@@ -105,7 +105,7 @@ export function ValuedClients() {
             {SLIDES.map((client, index) => (
               <div
                 key={`${client.name}-${index}`}
-                className="shrink-0 pl-6 md:pl-10"
+                className="shrink-0 pl-2 md:pl-4"
               >
                 <ClientLogo {...client} />
               </div>
