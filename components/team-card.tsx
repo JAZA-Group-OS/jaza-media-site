@@ -41,7 +41,7 @@ export function TeamCard({ member }: { member: Member }) {
       <h3 className="mt-5 font-heading text-xl font-black uppercase tracking-wide text-brand-yellow md:text-2xl">
         {displayName}
       </h3>
-      <p className="mt-1 text-sm font-bold uppercase tracking-wide text-brand-black md:text-base">
+      <p className="mt-1 text-base font-bold uppercase tracking-wide text-brand-black md:text-lg">
         {member.role.split(",").map((part, i, arr) => (
           <span key={i} className="block">
             {part.trim()}
@@ -51,7 +51,7 @@ export function TeamCard({ member }: { member: Member }) {
       </p>
       <Link
         href={`/team/${member.slug}`}
-        className="mt-4 inline-flex items-center rounded-full bg-brand-yellow px-5 py-2 text-xs font-bold text-brand-black transition-transform hover:scale-[1.02] md:text-sm"
+        className="mt-4 inline-flex items-center rounded-full bg-brand-yellow px-5 py-2 text-sm font-bold text-brand-black transition-transform hover:scale-[1.02] md:text-base"
       >
         About {firstName(member)}
       </Link>

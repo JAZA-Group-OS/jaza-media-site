@@ -18,10 +18,10 @@ export function ExplodeProfitCta() {
           </div>
           <div className="relative z-10 flex flex-col items-end pt-6 pb-10 text-right md:pt-6 md:pb-12 md:pr-40">
             <h2 className="font-heading font-black uppercase leading-[0.95] text-brand-black">
-              <span className="block text-3xl max-[374px]:text-2xl sm:text-4xl md:text-5xl lg:text-6xl">
+              <span className="block text-3xl max-[374px]:text-2xl sm:text-4xl md:text-4xl lg:text-5xl">
                 Want us to help you
               </span>
-              <span className="mt-2 block text-4xl max-[374px]:text-3xl sm:text-5xl md:text-6xl lg:text-7xl">
+              <span className="mt-2 block text-4xl max-[374px]:text-3xl sm:text-5xl md:text-5xl lg:text-6xl">
                 Explode Profit?
               </span>
             </h2>
@@ -30,7 +30,7 @@ export function ExplodeProfitCta() {
             </p>
             <Link
               href="#"
-              className="mt-3 inline-flex items-center rounded-full bg-brand-yellow px-8 py-3 text-sm font-black uppercase tracking-wide text-brand-black transition-transform hover:scale-105 max-[374px]:px-6 max-[374px]:py-2.5 max-[374px]:text-xs md:mt-6 md:text-base"
+              className="mt-3 inline-flex items-center rounded-full bg-brand-yellow px-8 py-3 text-base font-black uppercase tracking-wide text-brand-black transition-transform hover:scale-105 max-[374px]:px-6 max-[374px]:py-2.5 max-[374px]:text-xs md:mt-6 md:text-lg"
             >
               Learn More
             </Link>

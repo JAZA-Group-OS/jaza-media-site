@@ -17,8 +17,8 @@ function MarketingBook() {
       alt="The 10K Rule Of Marketing — Smarter Moves, Massive Returns"
       width={1600}
       height={2500}
-      sizes="(min-width: 768px) 160px, 144px"
-      className="block h-auto w-36 md:w-40"
+      sizes="(min-width: 1024px) 224px, (min-width: 768px) 208px, 176px"
+      className="block h-auto w-44 md:w-52 lg:w-56"
       priority
     />
   );
@@ -31,8 +31,8 @@ function AdvertisingBook() {
       alt="The 10K Rule Of Advertising — Smarter Strategy, Maximum ROI"
       width={1600}
       height={2500}
-      sizes="(min-width: 768px) 160px, 144px"
-      className="block h-auto w-36 md:w-40"
+      sizes="(min-width: 1024px) 224px, (min-width: 768px) 208px, 176px"
+      className="block h-auto w-44 md:w-52 lg:w-56"
       priority
     />
   );
@@ -40,7 +40,7 @@ function AdvertisingBook() {
 
 function DarkBlock() {
   return (
-    <div className="h-52 w-36 bg-brand-black md:h-60 md:w-40" aria-hidden />
+    <div className="h-64 w-44 bg-brand-black md:h-72 md:w-52 lg:h-80 lg:w-56" aria-hidden />
   );
 }
 
@@ -55,13 +55,13 @@ export function CourseCard({
       <span className="inline-block rounded-md bg-tag-red px-3 py-1 text-[10px] font-black tracking-wide text-white uppercase">
         {tag}
       </span>
-      <h3 className="mt-3 font-heading text-xl leading-tight font-black tracking-tight md:text-2xl lg:text-3xl">
+      <h3 className="mt-3 font-heading text-lg leading-tight font-black tracking-tight md:text-xl">
         {title}
       </h3>
 
-      <div className="relative mt-6 flex h-72 w-72 items-center justify-center md:h-80 md:w-80">
+      <div className="relative mt-6 flex h-80 w-80 items-center justify-center md:h-[340px] md:w-[340px] lg:h-[360px] lg:w-[360px]">
         <div
-          className="absolute top-1/2 left-1/2 size-56 -translate-x-1/2 -translate-y-1/2 rounded-full bg-neutral-200 md:size-64"
+          className="absolute top-1/2 left-1/2 size-64 -translate-x-1/2 -translate-y-1/2 rounded-full bg-neutral-200 md:size-72 lg:size-[300px]"
           aria-hidden
         />
         <div className="relative">

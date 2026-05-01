@@ -29,22 +29,22 @@ const FAQS = [
 export function Faqs() {
   return (
     <section className="bg-surface-grey py-16 md:py-20">
-      <div className="mx-auto max-w-3xl px-4">
-        <h2 className="text-center font-heading text-4xl font-black tracking-tight text-brand-black md:text-6xl lg:text-7xl">
+      <div className="mx-auto max-w-4xl px-4">
+        <h2 className="text-center font-heading text-2xl font-extrabold tracking-tight text-brand-black md:text-3xl">
           FAQs
         </h2>
 
-        <Accordion className="mt-10">
+        <Accordion className="mt-12">
           {FAQS.map((item, i) => (
             <AccordionItem
               key={i}
               value={`faq-${i}`}
-              className="!border-b-2 !border-dotted !border-neutral-500/70 py-1"
+              className="!border-b-2 !border-dotted !border-neutral-500/70"
             >
-              <AccordionTrigger className="py-4 text-left font-heading text-base font-bold text-brand-black hover:no-underline md:text-lg">
+              <AccordionTrigger className="py-4 text-left font-heading text-lg font-bold text-brand-black hover:no-underline md:text-[22px]">
                 {item.q}
               </AccordionTrigger>
-              <AccordionContent className="text-sm text-neutral-700 md:text-base">
+              <AccordionContent className="text-base text-neutral-700 md:text-lg">
                 {item.a}
               </AccordionContent>
             </AccordionItem>

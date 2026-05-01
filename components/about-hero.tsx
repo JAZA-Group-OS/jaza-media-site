@@ -47,10 +47,10 @@ function InfoCard({
         inView ? "animate-about-fade-up" : "opacity-0"
       }`}
     >
-      <h3 className="font-heading text-base font-bold tracking-wide text-brand-black">
+      <h3 className="font-heading text-lg font-bold tracking-wide text-brand-black md:text-xl">
         {title}
       </h3>
-      <p className="mt-3 font-heading text-[13px] font-semibold leading-relaxed text-brand-black md:text-sm">
+      <p className="mt-3 font-heading text-base font-semibold leading-relaxed text-brand-black md:text-lg">
         {body}
       </p>
     </div>
@@ -111,7 +111,7 @@ export function AboutHero() {
         <div
           ref={bodyRef}
           style={{ animationDelay: bodyIn ? "240ms" : undefined }}
-          className={`mt-10 space-y-4 text-sm leading-relaxed text-brand-black/90 md:text-[15px] ${
+          className={`mt-10 space-y-4 text-base leading-relaxed text-brand-black/90 md:text-lg ${
             bodyIn ? "animate-about-fade-up" : "opacity-0"
           }`}
         >

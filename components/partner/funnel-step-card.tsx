@@ -38,12 +38,12 @@ export function FunnelStepCard({
         <h2
           ref={titleRef}
           tabIndex={-1}
-          className="text-center font-heading text-base font-semibold text-brand-black outline-none md:text-lg"
+          className="text-center font-heading text-lg font-semibold text-brand-black outline-none md:text-xl"
         >
           {title}
         </h2>
         {helper ? (
-          <p className="mt-2 text-center text-sm text-neutral-500 italic">
+          <p className="mt-2 text-center text-base text-neutral-500 italic">
             ({helper})
           </p>
         ) : null}
@@ -53,7 +53,7 @@ export function FunnelStepCard({
         {error ? (
           <p
             role="alert"
-            className="mt-4 text-center text-sm font-semibold text-tag-red"
+            className="mt-4 text-center text-base font-semibold text-tag-red"
           >
             {error}
           </p>
@@ -68,7 +68,7 @@ export function FunnelStepCard({
             type="button"
             onClick={onPrev}
             aria-label="Previous step"
-            className="inline-flex min-h-[44px] items-center gap-2 text-sm font-bold tracking-wider text-brand-black uppercase transition-opacity hover:opacity-70"
+            className="inline-flex min-h-[44px] items-center gap-2 text-base font-bold tracking-wider text-brand-black uppercase transition-opacity hover:opacity-70"
           >
             <ArrowLeft className="size-4" strokeWidth={2.5} />
             Previous

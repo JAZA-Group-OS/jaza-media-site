@@ -83,7 +83,7 @@ function CardOption({ option }: { option: Option }) {
       >
         <Radio.Indicator className="size-2 rounded-full bg-brand-black opacity-0 data-[checked]:opacity-100" />
       </Radio.Root>
-      <span className="text-sm font-medium text-brand-black">
+      <span className="text-base font-medium text-brand-black">
         {option.label}
       </span>
     </label>
@@ -108,7 +108,7 @@ function RowOption({ option }: { option: Option }) {
       >
         <Radio.Indicator className="size-2 rounded-full bg-brand-black opacity-0 data-[checked]:opacity-100" />
       </Radio.Root>
-      <span className="text-sm font-medium text-brand-black">
+      <span className="text-base font-medium text-brand-black">
         {option.label}
       </span>
     </label>

@@ -22,14 +22,14 @@ export function MarketingTemplatesCard() {
             </div>
 
             <div className="p-8 md:p-10">
-              <h3 className="font-heading text-xl leading-tight font-black text-brand-black md:text-2xl">
+              <h3 className="font-heading text-2xl leading-tight font-black text-brand-black md:text-3xl">
                 JAZA MEDIA
                 <br />
                 MARKETING TEMPLATES
               </h3>
               <a
                 href="#"
-                className="mt-5 inline-flex items-center rounded-full bg-brand-yellow px-8 py-3 text-sm font-bold text-brand-black transition-transform hover:scale-[1.02]"
+                className="mt-5 inline-flex items-center rounded-full bg-brand-yellow px-8 py-3 text-base font-bold text-brand-black transition-transform hover:scale-[1.02] md:text-lg"
               >
                 Download Now
               </a>

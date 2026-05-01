@@ -26,7 +26,7 @@ export function FunnelTextInput({
   maxLength,
 }: Props) {
   const baseClass = cn(
-    'w-full rounded-md border border-neutral-300 bg-white px-4 py-3 text-sm text-brand-black outline-none transition-colors',
+    'w-full rounded-md border border-neutral-300 bg-white px-4 py-3 text-base text-brand-black outline-none transition-colors',
     'placeholder:text-neutral-400',
     'focus:border-brand-black focus:ring-2 focus:ring-brand-black/20',
   );

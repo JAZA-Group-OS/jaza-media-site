@@ -63,10 +63,10 @@ function CellImagePlaceholder() {
 function ValueTextCard({ value }: { value: ValueCard }) {
   return (
     <div className="flex h-full flex-col justify-center rounded-md bg-white p-5 shadow-sm md:p-6">
-      <h3 className="font-heading text-base font-bold text-brand-black md:text-lg">
+      <h3 className="font-heading text-xl font-bold text-brand-black md:text-2xl">
         {value.title}
       </h3>
-      <div className="mt-3 space-y-3 text-sm leading-relaxed text-brand-black/90 md:text-[15px]">
+      <div className="mt-3 space-y-3 text-base leading-relaxed text-brand-black/90 md:text-lg">
         {value.paragraphs.map((p, i) => (
           <p key={i}>{p}</p>
         ))}
@@ -101,17 +101,17 @@ export function CareersValues() {
       <div className="mx-auto max-w-5xl px-4">
         <div
           ref={headRef}
-          className={`mx-auto max-w-3xl text-center ${
+          className={`mx-auto max-w-4xl text-center ${
             headIn ? "animate-about-fade-up" : "opacity-0"
           }`}
         >
-          <h2 className="font-heading text-[26px] font-bold leading-tight text-brand-black md:text-3xl lg:text-[34px]">
+          <h2 className="font-heading text-3xl font-bold leading-[1.15] text-brand-black md:text-4xl lg:text-[48px]">
             We want disciplined team players who trust and{" "}
-            <span className="underline decoration-2 underline-offset-4">
+            <span className="underline decoration-[3px] underline-offset-[6px] md:decoration-4 md:underline-offset-8">
               win together.
             </span>
           </h2>
-          <p className="mt-5 text-sm leading-relaxed text-brand-black/90 md:text-[15px]">
+          <p className="mt-6 text-lg leading-[1.5] text-brand-black/90 md:text-xl lg:text-2xl">
             At JAZA Media you&apos;ll help entrepreneurs build real businesses
             with strong foundations, scalable systems, and lasting impact. Our
             mission is straightforward: make real world business scaling
@@ -139,7 +139,7 @@ export function CareersValues() {
         >
           <a
             href="#openings"
-            className="inline-block rounded-full bg-brand-yellow px-6 py-3 font-heading text-sm font-bold text-brand-black shadow-sm transition-colors hover:bg-yellow-400 md:text-base"
+            className="inline-block rounded-full bg-brand-yellow px-6 py-3 font-heading text-base font-bold text-brand-black shadow-sm transition-colors hover:bg-yellow-400 md:text-lg"
           >
             View Job Openings
           </a>

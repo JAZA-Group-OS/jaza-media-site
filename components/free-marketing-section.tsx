@@ -5,7 +5,7 @@ export function FreeMarketingSection() {
     <section className="bg-white py-[70px]">
       <div className="mx-auto max-w-6xl px-4">
         <div className="text-center">
-          <h2 className="font-heading text-4xl font-black tracking-tight md:text-6xl lg:text-7xl">
+          <h2 className="font-heading text-3xl font-black tracking-tight md:text-4xl lg:text-[36px]">
             <span className="text-brand-yellow">FREE</span>{" "}
             <span className="text-brand-black">ADVANCE MARKETING</span>
           </h2>

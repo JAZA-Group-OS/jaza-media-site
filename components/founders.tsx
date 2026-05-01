@@ -4,7 +4,7 @@ export function Founders() {
   return (
     <section className="bg-white py-16 md:py-20">
       <div className="mx-auto max-w-5xl px-4">
-        <h2 className="text-center font-heading text-3xl font-black tracking-tight md:text-5xl">
+        <h2 className="text-center font-heading text-2xl font-black tracking-tight md:text-3xl">
           ABOUT OUR FOUNDERS
         </h2>
 
@@ -19,7 +19,7 @@ export function Founders() {
             />
           </div>
 
-          <div className="space-y-4 text-sm leading-relaxed text-brand-black md:text-base">
+          <div className="space-y-4 text-base leading-relaxed text-brand-black md:text-lg">
             <p>
               Jaza and Bela are the co-founders and managing partners of JAZA Media.
               In just three years, they have grown the company&apos;s portfolio to over
