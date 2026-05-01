@@ -5,11 +5,11 @@ export function FreeMarketingSection() {
     <section className="bg-white py-[70px]">
       <div className="mx-auto max-w-6xl px-4">
         <div className="text-center">
-          <h2 className="font-heading text-3xl font-black tracking-tight md:text-5xl">
+          <h2 className="font-heading text-4xl font-black tracking-tight md:text-6xl lg:text-7xl">
             <span className="text-brand-yellow">FREE</span>{" "}
             <span className="text-brand-black">ADVANCE MARKETING</span>
           </h2>
-          <p className="mx-auto mt-3 max-w-md text-sm text-neutral-700 md:text-base">
+          <p className="mx-auto mt-4 max-w-lg text-base text-neutral-700 md:text-lg">
             Videos, eBooks, Guides, Templates, Downloads &amp; more to help you succeed:
           </p>
           <div className="mx-auto mt-6 h-px w-24 bg-brand-black md:w-32" />

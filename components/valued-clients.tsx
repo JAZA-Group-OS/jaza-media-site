@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import AutoScroll from "embla-carousel-auto-scroll";
 import useEmblaCarousel from "embla-carousel-react";
 
@@ -7,30 +8,35 @@ import { useInView } from "@/lib/use-in-view";
 
 type Client = {
   name: string;
-  src?: string;
+  src: string;
 };
 
+const LOGO_DIR = "/images/client-logo/Clients%20Logo";
+
 const CLIENTS: Client[] = [
-  { name: "Client 1" },
-  { name: "Client 2" },
-  { name: "Client 3" },
-  { name: "Client 4" },
-  { name: "Client 5" },
-  { name: "Client 6" },
+  ...Array.from({ length: 27 }, (_, i) => ({
+    name: `Client ${i + 1}`,
+    src: `${LOGO_DIR}/${i + 1}.png`,
+  })),
+  { name: "Client 28", src: `${LOGO_DIR}/Client%20Logo%20(30).png` },
 ];
 
 // Duplicate the list so the marquee always has enough slides to span the
 // viewport at any breakpoint — Embla's auto-scroll requires total slide width
 // to exceed viewport width for a seamless loop.
-const SLIDES: Client[] = [...CLIENTS, ...CLIENTS, ...CLIENTS];
+const SLIDES: Client[] = [...CLIENTS, ...CLIENTS];
 
-function ClientLogoPlaceholder({ name }: { name: string }) {
+function ClientLogo({ name, src }: Client) {
   return (
-    <div
-      role="img"
-      aria-label={`${name} logo`}
-      className="size-20 shrink-0 rounded-full bg-neutral-100 shadow-sm ring-1 ring-neutral-200 md:size-24"
-    />
+    <div className="relative h-16 w-32 shrink-0 md:h-20 md:w-40">
+      <Image
+        src={src}
+        alt={`${name} logo`}
+        fill
+        sizes="(min-width: 768px) 160px, 128px"
+        className="object-contain"
+      />
+    </div>
   );
 }
 
@@ -84,7 +90,7 @@ export function ValuedClients() {
                 key={`${client.name}-${index}`}
                 className="shrink-0 pl-6 md:pl-10"
               >
-                <ClientLogoPlaceholder name={client.name} />
+                <ClientLogo name={client.name} src={client.src} />
               </div>
             ))}
           </div>

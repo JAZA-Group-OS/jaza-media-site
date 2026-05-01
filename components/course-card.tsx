@@ -55,7 +55,7 @@ export function CourseCard({
       <span className="inline-block rounded-md bg-tag-red px-3 py-1 text-[10px] font-black tracking-wide text-white uppercase">
         {tag}
       </span>
-      <h3 className="mt-3 font-heading text-base leading-tight font-black tracking-tight md:text-lg">
+      <h3 className="mt-3 font-heading text-xl leading-tight font-black tracking-tight md:text-2xl lg:text-3xl">
         {title}
       </h3>
 

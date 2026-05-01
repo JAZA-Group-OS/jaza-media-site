@@ -30,7 +30,7 @@ export function Faqs() {
   return (
     <section className="bg-surface-grey py-16 md:py-20">
       <div className="mx-auto max-w-3xl px-4">
-        <h2 className="text-center font-heading text-3xl font-black tracking-tight text-brand-black md:text-5xl">
+        <h2 className="text-center font-heading text-4xl font-black tracking-tight text-brand-black md:text-6xl lg:text-7xl">
           FAQs
         </h2>
 
