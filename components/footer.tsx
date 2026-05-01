@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 import { MobileMenu } from "@/components/mobile-menu";
 
 const FOOTER_LINKS = [
@@ -108,12 +110,12 @@ export function Footer() {
         </p>
 
         <div className="mt-8 flex flex-col items-start justify-between gap-4 md:flex-row md:items-center">
-          <a
-            href="#"
-            className="inline-flex items-center rounded-full bg-brand-yellow px-6 py-2.5 text-sm font-bold text-brand-black transition-transform hover:scale-[1.02]"
+          <Link
+            href="/partner-with-us"
+            className="inline-flex items-center rounded-full bg-brand-yellow px-6 py-2.5 font-heading text-sm font-bold text-brand-black transition-transform hover:scale-[1.02]"
           >
             Send Us Message
-          </a>
+          </Link>
 
           <div className="flex items-center gap-3">
             {SOCIALS.map(({ label, href, Icon }) => (

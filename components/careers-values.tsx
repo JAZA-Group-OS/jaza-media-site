@@ -1,5 +1,7 @@
 "use client";
 
+import Image from "next/image";
+
 import { useInView } from "@/lib/use-in-view";
 
 type ValueCard = {
@@ -24,38 +26,77 @@ const VALUES: ValueCard[] = [
     ],
   },
   {
-    title: "You value people over hype.",
+    title: "You thrive in disciplined execution.",
     paragraphs: [
-      "You know real businesses aren't built on trends or noise…",
-      "They're built on trust. You invest in relationships, lead with integrity, and focus on what drives lasting results for founders, teams, and customers.",
+      "Big ideas matter, but execution wins. You bring focus, structure, and accountability to your work.",
+      "You know consistency beats intensity, and disciplined execution is how great businesses are built.",
+    ],
+  },
+  {
+    title: "You win together.",
+    paragraphs: [
+      "You're competitive, but not at the expense of the team. You share credit, support others, and play to win as one.",
+      "Because when the team succeeds, everyone does.",
     ],
   },
 ];
 
-// Document order maps directly onto the 3×2 grid:
+// Document order maps directly onto the 4×2 grid:
 //   row 1: image, value[0]
 //   row 2: value[1], image
 //   row 3: image, value[2]
+//   row 4: value[3], image
 type Cell =
-  | { kind: "image"; key: string }
+  | { kind: "image"; key: string; src?: string; alt?: string }
   | { kind: "text"; value: ValueCard };
 
 const CELLS: Cell[] = [
   { kind: "image", key: "img-1" },
   { kind: "text", value: VALUES[0] },
   { kind: "text", value: VALUES[1] },
-  { kind: "image", key: "img-2" },
-  { kind: "image", key: "img-3" },
+  {
+    kind: "image",
+    key: "img-2",
+    src: "/images/careers%203.png",
+    alt: "JAZA Media teammates collaborating",
+  },
+  {
+    kind: "image",
+    key: "img-3",
+    src: "/images/careers%204.png",
+    alt: "JAZA Media teammates with certificates",
+  },
   { kind: "text", value: VALUES[2] },
+  { kind: "text", value: VALUES[3] },
+  {
+    kind: "image",
+    key: "img-4",
+    src: "/images/careers%202.png",
+    alt: "JAZA Media team on set at VIRSPACE",
+  },
 ];
 
 function CellImagePlaceholder() {
   return (
     <div
       aria-hidden
-      className="relative aspect-[4/3] w-full overflow-hidden rounded-md border-4 border-white bg-white/90 shadow-inner"
+      className="relative aspect-[572/377] w-full overflow-hidden rounded-md border-4 border-white bg-white/90 shadow-inner"
     >
       <div className="absolute inset-3 animate-about-shimmer rounded-sm opacity-60" />
+    </div>
+  );
+}
+
+function CellImage({ src, alt }: { src: string; alt: string }) {
+  return (
+    <div className="relative aspect-[572/377] w-full overflow-hidden rounded-md">
+      <Image
+        src={src}
+        alt={alt}
+        fill
+        className="object-cover"
+        sizes="(min-width: 768px) 50vw, 100vw"
+      />
     </div>
   );
 }
@@ -66,7 +107,7 @@ function ValueTextCard({ value }: { value: ValueCard }) {
       <h3 className="font-heading text-xl font-bold text-brand-black md:text-2xl">
         {value.title}
       </h3>
-      <div className="mt-3 space-y-3 text-base leading-relaxed text-brand-black/90 md:text-lg">
+      <div className="mt-3 space-y-3 font-heading text-base leading-relaxed text-brand-black/90 md:text-lg">
         {value.paragraphs.map((p, i) => (
           <p key={i}>{p}</p>
         ))}
@@ -84,7 +125,11 @@ function GridCell({ cell, index }: { cell: Cell; index: number }) {
       className={inView ? "animate-about-fade-up" : "opacity-0"}
     >
       {cell.kind === "image" ? (
-        <CellImagePlaceholder />
+        cell.src ? (
+          <CellImage src={cell.src} alt={cell.alt ?? ""} />
+        ) : (
+          <CellImagePlaceholder />
+        )
       ) : (
         <ValueTextCard value={cell.value} />
       )}
@@ -111,7 +156,7 @@ export function CareersValues() {
               win together.
             </span>
           </h2>
-          <p className="mt-6 text-lg leading-[1.5] text-brand-black/90 md:text-xl lg:text-2xl">
+          <p className="mt-6 font-heading text-lg leading-[1.5] text-brand-black/90 md:text-xl lg:text-2xl">
             At JAZA Media you&apos;ll help entrepreneurs build real businesses
             with strong foundations, scalable systems, and lasting impact. Our
             mission is straightforward: make real world business scaling

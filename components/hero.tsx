@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 
 export function Hero() {
   return (
@@ -44,12 +45,12 @@ export function Hero() {
         <p className="font-heading mt-6 max-w-lg text-lg text-neutral-300 md:text-xl">
           Learn from the team that has scaled a portfolio to over ₱150m+ in annual revenue
         </p>
-        <a
-          href="#"
+        <Link
+          href="/partner-with-us"
           className="mt-8 inline-flex items-center rounded-full bg-brand-yellow px-10 py-4 text-base font-black tracking-wider text-brand-black transition-transform hover:scale-[1.02] md:text-lg"
         >
           LEARN TO SCALE
-        </a>
+        </Link>
 
         {/* Combined Jaza + Bela cutout — mobile only (below md). Negative bottom
             margin absorbs the content div's bottom padding so the photo sits

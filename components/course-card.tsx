@@ -1,13 +1,15 @@
 import type { ReactNode } from "react";
 import Image from "next/image";
+import Link from "next/link";
 
-type BookVariant = "marketing" | "advertising" | "dark";
+type BookVariant = "marketing" | "advertising" | "scaling";
 
 interface CourseCardProps {
   tag: string;
   title: ReactNode;
   bookVariant: BookVariant;
   ctaLabel: string;
+  ctaHref: string;
 }
 
 function MarketingBook() {
@@ -38,21 +40,35 @@ function AdvertisingBook() {
   );
 }
 
-function DarkBlock() {
+function ScalingBook() {
   return (
-    <div className="h-64 w-44 bg-brand-black md:h-72 md:w-52 lg:h-80 lg:w-56" aria-hidden />
+    <Image
+      src="/images/Business Scaling.png"
+      alt="JAZA Media Business Scaling program"
+      width={1600}
+      height={2500}
+      sizes="(min-width: 1024px) 224px, (min-width: 768px) 208px, 176px"
+      className="block h-auto w-44 md:w-52 lg:w-56"
+      priority
+    />
   );
 }
+
+const isInternalRoute = (href: string) => href.startsWith("/");
 
 export function CourseCard({
   tag,
   title,
   bookVariant,
   ctaLabel,
+  ctaHref,
 }: CourseCardProps) {
+  const ctaClassName =
+    "mt-6 inline-flex items-center justify-center rounded-full bg-brand-yellow px-10 py-3 font-heading text-base font-bold text-brand-black transition-transform hover:scale-[1.02]";
+
   return (
     <div className="flex flex-col items-center text-center">
-      <span className="inline-block rounded-md bg-tag-red px-3 py-1 text-[10px] font-black tracking-wide text-white uppercase">
+      <span className="inline-block rounded-md bg-tag-red px-3 py-1 font-heading text-[10px] font-black tracking-wide text-white uppercase">
         {tag}
       </span>
       <h3 className="mt-3 font-heading text-lg leading-tight font-black tracking-tight md:text-xl">
@@ -67,16 +83,19 @@ export function CourseCard({
         <div className="relative">
           {bookVariant === "marketing" && <MarketingBook />}
           {bookVariant === "advertising" && <AdvertisingBook />}
-          {bookVariant === "dark" && <DarkBlock />}
+          {bookVariant === "scaling" && <ScalingBook />}
         </div>
       </div>
 
-      <a
-        href="#"
-        className="mt-6 inline-flex items-center justify-center rounded-full bg-brand-yellow px-10 py-3 text-base font-bold text-brand-black transition-transform hover:scale-[1.02]"
-      >
-        {ctaLabel}
-      </a>
+      {isInternalRoute(ctaHref) ? (
+        <Link href={ctaHref} className={ctaClassName}>
+          {ctaLabel}
+        </Link>
+      ) : (
+        <a href={ctaHref} className={ctaClassName}>
+          {ctaLabel}
+        </a>
+      )}
     </div>
   );
 }

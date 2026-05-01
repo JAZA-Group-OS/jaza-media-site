@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 
 export function AnnouncementBanner() {
@@ -9,13 +10,13 @@ export function AnnouncementBanner() {
         </span>
         <p>
           <span className="font-bold md:whitespace-nowrap">2026 Scaling Workshop dates Announced:</span>{" "}
-          <a
-            href="#"
+          <Link
+            href="/partner-with-us"
             className="inline-flex items-center gap-1.5 font-semibold underline-offset-2 hover:underline"
           >
             Find out if you are a fit
             <ArrowRight className="size-4" strokeWidth={2.5} />
-          </a>
+          </Link>
         </p>
       </div>
     </div>

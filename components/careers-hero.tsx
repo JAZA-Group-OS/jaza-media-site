@@ -1,14 +1,20 @@
 "use client";
 
+import Image from "next/image";
+
 import { useInView } from "@/lib/use-in-view";
 
-function HeroImagePlaceholder() {
+function HeroImage() {
   return (
-    <div
-      aria-hidden
-      className="relative aspect-[525/442] w-full max-w-[525px] overflow-hidden rounded-md border-4 border-white bg-white/90 shadow-inner lg:ml-auto"
-    >
-      <div className="absolute inset-3 animate-about-shimmer rounded-sm opacity-60" />
+    <div className="relative aspect-[2346/2106] w-full max-w-[680px] overflow-hidden rounded-md lg:ml-auto">
+      <Image
+        src="/images/careers%201.png"
+        alt="JAZA Media team at work"
+        fill
+        className="object-cover"
+        sizes="(min-width: 1024px) 680px, 100vw"
+        priority
+      />
     </div>
   );
 }
@@ -20,9 +26,9 @@ export function CareersHero() {
   const { ref: imageRef, inView: imageIn } = useInView<HTMLDivElement>();
 
   return (
-    <section className="bg-white pt-12 pb-16 md:pt-16 md:pb-20">
+    <section className="bg-white pt-4 pb-16 md:pt-0 md:pb-20">
       <div className="mx-auto max-w-5xl px-4 lg:max-w-7xl">
-        <div className="grid gap-8 lg:grid-cols-[1fr_525px] lg:items-center lg:gap-12">
+        <div className="grid gap-8 lg:grid-cols-[1fr_680px] lg:items-center lg:gap-12">
           <div>
             <h1
               ref={headlineRef}
@@ -30,13 +36,13 @@ export function CareersHero() {
                 headlineIn ? "animate-about-fade-up" : "opacity-0"
               }`}
             >
-              <span className="block whitespace-nowrap text-[26px] md:text-[34px] lg:text-[40px] xl:text-[54px]">
+              <span className="block whitespace-nowrap text-[22px] sm:text-[26px] md:text-[34px] lg:text-[40px] xl:text-[54px]">
                 Join a{" "}
                 <span className="text-brand-yellow underline decoration-brand-yellow decoration-2 underline-offset-4">
                   world-record
                 </span>
               </span>
-              <span className="block whitespace-nowrap text-[34px] md:text-[44px] lg:text-[52px] xl:text-[68px]">
+              <span className="block whitespace-nowrap text-[28px] sm:text-[34px] md:text-[44px] lg:text-[52px] xl:text-[68px]">
                 breaking team!
               </span>
             </h1>
@@ -46,7 +52,7 @@ export function CareersHero() {
               style={{ animationDelay: copyIn ? "120ms" : undefined }}
               className={copyIn ? "animate-about-fade-up" : "opacity-0"}
             >
-              <p className="mt-6 max-w-xl text-base leading-relaxed text-brand-black/90 md:text-lg">
+              <p className="mt-6 max-w-xl font-heading text-base leading-relaxed text-brand-black/90 md:text-lg">
                 We&apos;re seeking teammates who lead with trust, work with
                 discipline, and play to win as a team.
               </p>
@@ -67,7 +73,7 @@ export function CareersHero() {
               imageIn ? "animate-about-pop-in" : "opacity-0"
             }`}
           >
-            <HeroImagePlaceholder />
+            <HeroImage />
           </div>
         </div>
       </div>

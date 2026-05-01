@@ -2,6 +2,9 @@ import type { Metadata } from "next";
 
 import { AnnouncementBanner } from "@/components/announcement-banner";
 import { CareersHero } from "@/components/careers-hero";
+import { CareersHire } from "@/components/careers-hire";
+import { CareersInvesting } from "@/components/careers-investing";
+import { CareersTestimonials } from "@/components/careers-testimonials";
 import { CareersTogether } from "@/components/careers-together";
 import { CareersValues } from "@/components/careers-values";
 import { CopyrightBar } from "@/components/copyright-bar";
@@ -23,6 +26,9 @@ export default function CareersPage() {
         <CareersHero />
         <CareersValues />
         <CareersTogether />
+        <CareersHire />
+        <CareersInvesting />
+        <CareersTestimonials />
       </main>
       <Footer />
       <CopyrightBar />

@@ -27,6 +27,7 @@ export function FreeMarketingSection() {
             }
             bookVariant="marketing"
             ctaLabel="Take this Course"
+            ctaHref="#"
           />
           <CourseCard
             tag="NEW RELEASE"
@@ -39,6 +40,7 @@ export function FreeMarketingSection() {
             }
             bookVariant="advertising"
             ctaLabel="Take this Course"
+            ctaHref="#"
           />
           <CourseCard
             tag="ONLINE/ONSITE"
@@ -46,11 +48,12 @@ export function FreeMarketingSection() {
               <>
                 BUSINESS
                 <br />
-                SCALLING
+                SCALING
               </>
             }
-            bookVariant="dark"
+            bookVariant="scaling"
             ctaLabel="Book a Call"
+            ctaHref="/partner-with-us"
           />
         </div>
       </div>

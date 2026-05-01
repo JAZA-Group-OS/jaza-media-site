@@ -1,27 +1,20 @@
 "use client";
 
+import Image from "next/image";
+
 import { useInView } from "@/lib/use-in-view";
 
-function TeamImagePlaceholder() {
+function TeamImage() {
   return (
     <div className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl bg-neutral-200 shadow-md ring-1 ring-black/5 lg:aspect-auto lg:h-full">
-      {/* TODO: drop the team photo at /public/images/jaza-team.jpg and
-          swap this placeholder for a <next/image> with the same wrapper. */}
-      <div
-        aria-hidden
-        className="absolute inset-0 bg-gradient-to-br from-neutral-200 via-neutral-100 to-neutral-300"
+      <Image
+        src="/images/About us.png"
+        alt="JAZA Media team"
+        fill
+        sizes="(min-width: 1024px) 50vw, 100vw"
+        className="object-cover"
+        priority
       />
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 opacity-30"
-        style={{
-          backgroundImage:
-            "repeating-linear-gradient(45deg, transparent 0 8px, rgba(0, 0, 0, 0.04) 8px 9px)",
-        }}
-      />
-      <div className="absolute inset-0 flex items-center justify-center text-xs font-semibold uppercase tracking-[0.18em] text-brand-black/40">
-        Team Photo
-      </div>
     </div>
   );
 }
@@ -103,7 +96,7 @@ export function AboutHero() {
               imageIn ? "animate-about-pop-in" : "opacity-0"
             }`}
           >
-            <TeamImagePlaceholder />
+            <TeamImage />
           </div>
         </div>
 

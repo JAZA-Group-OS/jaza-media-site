@@ -29,8 +29,8 @@ export function ExplodeProfitCta() {
               See how JAZA Media can help
             </p>
             <Link
-              href="#"
-              className="mt-3 inline-flex items-center rounded-full bg-brand-yellow px-8 py-3 text-base font-black uppercase tracking-wide text-brand-black transition-transform hover:scale-105 max-[374px]:px-6 max-[374px]:py-2.5 max-[374px]:text-xs md:mt-6 md:text-lg"
+              href="/partner-with-us"
+              className="mt-3 inline-flex items-center rounded-full bg-brand-yellow px-8 py-3 font-heading text-base font-black uppercase tracking-wide text-brand-black transition-transform hover:scale-105 max-[374px]:px-6 max-[374px]:py-2.5 max-[374px]:text-xs md:mt-6 md:text-lg"
             >
               Learn More
             </Link>
