@@ -2,6 +2,11 @@ import { NextResponse } from 'next/server';
 import { CareerApplicationSchema } from '@/lib/validations/career-application';
 import { createAdminClient } from '@/lib/supabase/admin';
 import { getClientIp, rateLimit } from '@/lib/rate-limit';
+import {
+  corsHeaders,
+  handlePreflight,
+  rejectDisallowedOrigin,
+} from '@/lib/cors';
 import { sendCareerThankYouEmail } from '@/lib/email/career-thank-you';
 import { POSITION_LABELS } from '@/lib/career/questions';
 
@@ -10,15 +15,24 @@ export const runtime = 'nodejs';
 // 5 applications per IP per 10 minutes is plenty for legit submitters.
 const RATE_LIMIT = { windowMs: 10 * 60 * 1000, max: 5 };
 
+export async function OPTIONS(request: Request) {
+  return handlePreflight(request) ?? new Response(null, { status: 204 });
+}
+
 export async function POST(request: Request) {
+  const originReject = rejectDisallowedOrigin(request);
+  if (originReject) return originReject;
+  const cors = corsHeaders(request.headers.get('origin'));
+
   const ip = getClientIp(request);
-  const limit = rateLimit(`career-apply:${ip}`, RATE_LIMIT);
+  const limit = await rateLimit(`career-apply:${ip}`, RATE_LIMIT);
   if (!limit.allowed) {
     return NextResponse.json(
       { error: 'Too many requests. Please try again later.' },
       {
         status: 429,
         headers: {
+          ...cors,
           'Retry-After': String(Math.ceil(limit.resetMs / 1000)),
           'X-RateLimit-Remaining': '0',
         },
@@ -30,7 +44,7 @@ export async function POST(request: Request) {
   try {
     body = await request.json();
   } catch {
-    return NextResponse.json({ error: 'Invalid JSON' }, { status: 400 });
+    return NextResponse.json({ error: 'Invalid JSON' }, { status: 400, headers: cors });
   }
 
   const parsed = CareerApplicationSchema.safeParse(body);
@@ -43,7 +57,7 @@ export async function POST(request: Request) {
           message: i.message,
         })),
       },
-      { status: 400 },
+      { status: 400, headers: cors },
     );
   }
 
@@ -82,7 +96,7 @@ export async function POST(request: Request) {
       );
       return NextResponse.json(
         { error: 'Failed to save application' },
-        { status: 500 },
+        { status: 500, headers: cors },
       );
     }
 
@@ -99,10 +113,10 @@ export async function POST(request: Request) {
       console.error('[api/career-apply] email send error:', message);
     }
 
-    return NextResponse.json({ success: true });
+    return NextResponse.json({ success: true }, { headers: cors });
   } catch (err) {
     const message = err instanceof Error ? err.message : 'unknown';
     console.error('[api/career-apply] unexpected error:', message);
-    return NextResponse.json({ error: 'Server error' }, { status: 500 });
+    return NextResponse.json({ error: 'Server error' }, { status: 500, headers: cors });
   }
 }

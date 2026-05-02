@@ -3,6 +3,11 @@ import { CourseRequestSchema } from '@/lib/validations/course-request';
 import { COURSE_CATALOG, findAssetOption } from '@/lib/courses/catalog';
 import { createAdminClient } from '@/lib/supabase/admin';
 import { getClientIp, rateLimit } from '@/lib/rate-limit';
+import {
+  corsHeaders,
+  handlePreflight,
+  rejectDisallowedOrigin,
+} from '@/lib/cors';
 import { sendCourseDeliveryEmail } from '@/lib/email/course-delivery';
 
 export const runtime = 'nodejs';
@@ -11,15 +16,24 @@ export const runtime = 'nodejs';
 // catching obvious floods if someone scripts the form.
 const RATE_LIMIT = { windowMs: 10 * 60 * 1000, max: 10 };
 
+export async function OPTIONS(request: Request) {
+  return handlePreflight(request) ?? new Response(null, { status: 204 });
+}
+
 export async function POST(request: Request) {
+  const originReject = rejectDisallowedOrigin(request);
+  if (originReject) return originReject;
+  const cors = corsHeaders(request.headers.get('origin'));
+
   const ip = getClientIp(request);
-  const limit = rateLimit(`course-request:${ip}`, RATE_LIMIT);
+  const limit = await rateLimit(`course-request:${ip}`, RATE_LIMIT);
   if (!limit.allowed) {
     return NextResponse.json(
       { error: 'Too many requests. Please try again later.' },
       {
         status: 429,
         headers: {
+          ...cors,
           'Retry-After': String(Math.ceil(limit.resetMs / 1000)),
           'X-RateLimit-Remaining': '0',
         },
@@ -31,7 +45,7 @@ export async function POST(request: Request) {
   try {
     body = await request.json();
   } catch {
-    return NextResponse.json({ error: 'Invalid JSON' }, { status: 400 });
+    return NextResponse.json({ error: 'Invalid JSON' }, { status: 400, headers: cors });
   }
 
   const parsed = CourseRequestSchema.safeParse(body);
@@ -44,7 +58,7 @@ export async function POST(request: Request) {
           message: i.message,
         })),
       },
-      { status: 400 },
+      { status: 400, headers: cors },
     );
   }
 
@@ -58,7 +72,7 @@ export async function POST(request: Request) {
   if (!asset) {
     return NextResponse.json(
       { error: 'Unknown asset selection' },
-      { status: 400 },
+      { status: 400, headers: cors },
     );
   }
 
@@ -101,7 +115,7 @@ export async function POST(request: Request) {
       );
       return NextResponse.json(
         { error: 'Failed to save request' },
-        { status: 500 },
+        { status: 500, headers: cors },
       );
     }
 
@@ -142,10 +156,13 @@ export async function POST(request: Request) {
       console.error('[api/course-request] email send error:', message);
     }
 
-    return NextResponse.json({ success: true, emailStatus: emailDetail ?? 'sent' });
+    return NextResponse.json(
+      { success: true, emailStatus: emailDetail ?? 'sent' },
+      { headers: cors },
+    );
   } catch (err) {
     const message = err instanceof Error ? err.message : 'unknown';
     console.error('[api/course-request] unexpected error:', message);
-    return NextResponse.json({ error: 'Server error' }, { status: 500 });
+    return NextResponse.json({ error: 'Server error' }, { status: 500, headers: cors });
   }
 }

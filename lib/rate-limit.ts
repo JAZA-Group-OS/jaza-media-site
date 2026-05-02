@@ -1,13 +1,14 @@
 /**
- * Simple in-memory token bucket rate limiter.
+ * Rate limiter with Upstash Redis when configured, in-memory fallback otherwise.
  *
- * Limitation: state lives in module memory, so each serverless instance has
- * its own counters. On Vercel, a sustained attack against many cold-start
- * instances could partially evade this. For production-grade limiting, swap
- * in `@upstash/ratelimit` with Upstash Redis or Vercel KV.
- *
- * For a solo-dev launch with modest traffic, this catches obvious floods.
+ * Set UPSTASH_REDIS_REST_URL + UPSTASH_REDIS_REST_TOKEN to use the distributed
+ * counter (recommended for production — survives multi-instance/serverless).
+ * Without those, we fall back to a per-instance in-memory bucket — fine for
+ * local dev, leaky under real load on Vercel.
  */
+
+import { Ratelimit } from '@upstash/ratelimit';
+import { Redis } from '@upstash/redis';
 
 type Bucket = { count: number; windowStart: number };
 
@@ -19,10 +20,49 @@ export interface RateLimitResult {
   resetMs: number;
 }
 
-export function rateLimit(
+const upstashUrl = process.env.UPSTASH_REDIS_REST_URL;
+const upstashToken = process.env.UPSTASH_REDIS_REST_TOKEN;
+const upstashEnabled = Boolean(upstashUrl && upstashToken);
+
+const redis = upstashEnabled
+  ? new Redis({ url: upstashUrl!, token: upstashToken! })
+  : null;
+
+// Cache one Ratelimit instance per (windowMs:max) pair so we don't recreate
+// the sliding-window helper on every call.
+const rlCache = new Map<string, Ratelimit>();
+
+function getRl(options: { windowMs: number; max: number }): Ratelimit | null {
+  if (!redis) return null;
+  const key = `${options.windowMs}:${options.max}`;
+  let rl = rlCache.get(key);
+  if (!rl) {
+    rl = new Ratelimit({
+      redis,
+      limiter: Ratelimit.slidingWindow(options.max, `${options.windowMs} ms`),
+      analytics: false,
+      prefix: 'jaza-rl',
+    });
+    rlCache.set(key, rl);
+  }
+  return rl;
+}
+
+export async function rateLimit(
   key: string,
   options: { windowMs: number; max: number },
-): RateLimitResult {
+): Promise<RateLimitResult> {
+  const rl = getRl(options);
+  if (rl) {
+    const result = await rl.limit(key);
+    return {
+      allowed: result.success,
+      remaining: result.remaining,
+      resetMs: Math.max(0, result.reset - Date.now()),
+    };
+  }
+
+  // In-memory fallback (single-instance only).
   const now = Date.now();
   const bucket = BUCKETS.get(key);
 
