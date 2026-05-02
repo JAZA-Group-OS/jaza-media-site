@@ -1,14 +1,7 @@
 import Link from "next/link";
 
 import { MobileMenu } from "@/components/mobile-menu";
-
-const FOOTER_LINKS = [
-  { label: "About us", href: "#" },
-  { label: "About the Firm", href: "#" },
-  { label: "Partner With Us", href: "/partner-with-us" },
-  { label: "Careers", href: "#" },
-  { label: "Support", href: "#" },
-];
+import { NAV_LINKS, isInternalRoute } from "@/lib/site-nav";
 
 function GmailIcon({ className }: { className?: string }) {
   return (
@@ -63,8 +56,8 @@ export function Footer() {
     <footer className="bg-brand-black pt-12 pb-10 text-white">
       <div className="mx-auto max-w-7xl px-4">
         <div className="flex items-center justify-between gap-6 md:flex-row">
-          <a
-            href="#"
+          <Link
+            href="/"
             className="flex flex-col items-center leading-none"
             aria-label="JAZA Media home"
           >
@@ -74,19 +67,30 @@ export function Footer() {
             <span className="-mt-1 font-heading text-xs font-bold tracking-[0.2em] text-brand-yellow">
               MEDIA
             </span>
-          </a>
+          </Link>
           <nav className="hidden md:block">
             <ul className="flex flex-wrap gap-x-6 gap-y-2 text-sm font-medium">
-              {FOOTER_LINKS.map((link) => (
-                <li key={link.label}>
-                  <a
-                    href={link.href}
-                    className="transition-colors hover:text-brand-yellow"
-                  >
-                    {link.label}
-                  </a>
-                </li>
-              ))}
+              {NAV_LINKS.map((link) =>
+                isInternalRoute(link.href) ? (
+                  <li key={link.label}>
+                    <Link
+                      href={link.href}
+                      className="transition-colors hover:text-brand-yellow"
+                    >
+                      {link.label}
+                    </Link>
+                  </li>
+                ) : (
+                  <li key={link.label}>
+                    <a
+                      href={link.href}
+                      className="transition-colors hover:text-brand-yellow"
+                    >
+                      {link.label}
+                    </a>
+                  </li>
+                ),
+              )}
             </ul>
           </nav>
           <MobileMenu className="md:hidden" />

@@ -4,13 +4,7 @@ import { Menu, X } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
-const NAV_LINKS = [
-  { label: "About us", href: "/about-us" },
-  { label: "About the Firm", href: "/about-the-firm" },
-  { label: "Partner With Us", href: "/partner-with-us" },
-  { label: "Careers", href: "/careers" },
-  { label: "Support", href: "#" },
-];
+import { NAV_LINKS } from "@/lib/site-nav";
 
 export function MobileMenu({ className = "" }: { className?: string }) {
   const [open, setOpen] = useState(false);
