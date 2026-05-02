@@ -100,10 +100,11 @@ export const TEAM: Member[] = [
     bioImage: "/about-the-firm/Jallah-Payno-removebg-preview.png",
   },
   {
-    slug: "marketing-manager",
-    name: null,
+    slug: "cristal",
+    name: "CRISTAL TAUP",
     role: "MARKETING MANAGER",
-    image: null,
+    image: "/about-the-form/Cristal-Taup.png",
+    bioImage: "/about-the-firm/Cristal-Taup-removebg-preview.png",
   },
   {
     slug: "jm",
@@ -127,11 +128,11 @@ export const TEAM: Member[] = [
     bioImage: "/about-the-firm/Omhar-Regidor-removebg-preview.png",
   },
   {
-    slug: "cristal",
-    name: "CRISTAL TAUP",
+    slug: "sofhia",
+    name: "SOFHIA CABALLERO",
     role: "KOL MANAGER",
-    image: "/about-the-form/Cristal-Taup.png",
-    bioImage: "/about-the-firm/Cristal-Taup-removebg-preview.png",
+    image: "/about-the-form/Sofhia-Caballero.png",
+    bioImage: "/about-the-firm/Sofhia-Caballero-removebg-preview.png",
   },
 ];
 

@@ -227,6 +227,103 @@ export interface PartnerInquiryUpdate {
 }
 
 // ============================================================================
+// career_applications — submissions from the /careers/apply funnel
+// ============================================================================
+
+export type CareerLocation = 'luzon' | 'visayas' | 'mindanao';
+export type CareerPosition =
+  | 'advertiser'
+  | 'sales_closer'
+  | 'social_media_manager'
+  | 'graphic_artist'
+  | 'video_editor'
+  | 'other';
+
+export interface CareerApplication {
+  id: string; // UUID
+  full_name: string;
+  email: string;
+  phone: string;
+  facebook: string | null;
+  location: CareerLocation;
+  position: CareerPosition;
+  description: string;
+  resume_url: string;
+  resume_filename: string;
+  resume_size_bytes: number;
+  resume_mime_type: string;
+  portfolio_url: string;
+  portfolio_filename: string;
+  portfolio_size_bytes: number;
+  portfolio_mime_type: string;
+  follow_up_status: FollowUpStatus;
+  admin_notes: string | null;
+  source: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface CareerApplicationInsert {
+  full_name: string;
+  email: string;
+  phone: string;
+  facebook?: string | null;
+  location: CareerLocation;
+  position: CareerPosition;
+  description: string;
+  resume_url: string;
+  resume_filename: string;
+  resume_size_bytes: number;
+  resume_mime_type: string;
+  portfolio_url: string;
+  portfolio_filename: string;
+  portfolio_size_bytes: number;
+  portfolio_mime_type: string;
+  follow_up_status?: FollowUpStatus;
+  admin_notes?: string | null;
+  source?: string;
+}
+
+export interface CareerApplicationUpdate {
+  follow_up_status?: FollowUpStatus;
+  admin_notes?: string | null;
+}
+
+// ============================================================================
+// course_requests — claim submissions from /courses/[slug]
+// ============================================================================
+
+export type CourseSlug = 'marketing' | 'lead-generation';
+
+export interface CourseRequest {
+  id: string; // UUID
+  course_slug: CourseSlug;
+  first_name: string;
+  last_name: string;
+  email: string;
+  email_sent_at: string | null;
+  email_error: string | null;
+  source: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface CourseRequestInsert {
+  course_slug: CourseSlug;
+  first_name: string;
+  last_name: string;
+  email: string;
+  email_sent_at?: string | null;
+  email_error?: string | null;
+  source?: string;
+}
+
+export interface CourseRequestUpdate {
+  email_sent_at?: string | null;
+  email_error?: string | null;
+}
+
+// ============================================================================
 // INSERT TYPES (for creating new records)
 // ============================================================================
 
@@ -408,6 +505,18 @@ export type Database = {
         Row: PartnerInquiry;
         Insert: PartnerInquiryInsert;
         Update: PartnerInquiryUpdate;
+        Relationships: [];
+      };
+      career_applications: {
+        Row: CareerApplication;
+        Insert: CareerApplicationInsert;
+        Update: CareerApplicationUpdate;
+        Relationships: [];
+      };
+      course_requests: {
+        Row: CourseRequest;
+        Insert: CourseRequestInsert;
+        Update: CourseRequestUpdate;
         Relationships: [];
       };
     };

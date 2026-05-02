@@ -9,8 +9,9 @@ import { supabase } from '@/lib/supabase/client';
 import AdminNavigation from '@/components/admin/admin-navigation';
 import DashboardOverview from '@/components/admin/dashboard-overview';
 import PartnerLeadsManager from '@/components/admin/partner-leads-manager';
+import CareerApplicationsManager from '@/components/admin/career-applications-manager';
 
-type DashboardTab = 'overview' | 'leads';
+type DashboardTab = 'overview' | 'leads' | 'applications';
 
 export default function AdminDashboardPage() {
   const router = useRouter();
@@ -50,6 +51,7 @@ export default function AdminDashboardPage() {
 
             {activeTab === 'overview' && <DashboardOverview />}
             {activeTab === 'leads' && <PartnerLeadsManager />}
+            {activeTab === 'applications' && <CareerApplicationsManager />}
           </div>
         </div>
       </div>

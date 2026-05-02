@@ -126,7 +126,7 @@ export function CareersInvesting() {
           }`}
         >
           <a
-            href="#openings"
+            href="/careers/apply"
             className="inline-block rounded-full bg-brand-yellow px-6 py-3 font-heading text-base font-bold text-brand-black shadow-sm transition-colors hover:bg-yellow-400 md:text-lg"
           >
             View Job Openings

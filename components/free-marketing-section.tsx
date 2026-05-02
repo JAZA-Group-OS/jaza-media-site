@@ -27,7 +27,7 @@ export function FreeMarketingSection() {
             }
             bookVariant="marketing"
             ctaLabel="Take this Course"
-            ctaHref="#"
+            ctaHref="/courses/marketing"
           />
           <CourseCard
             tag="NEW RELEASE"
@@ -40,7 +40,7 @@ export function FreeMarketingSection() {
             }
             bookVariant="advertising"
             ctaLabel="Take this Course"
-            ctaHref="#"
+            ctaHref="/courses/lead-generation"
           />
           <CourseCard
             tag="ONLINE/ONSITE"

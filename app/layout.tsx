@@ -39,7 +39,10 @@ export default function RootLayout({
       lang="en"
       className={`${gfsDidot.variable} ${poppins.variable} ${inter.variable} antialiased`}
     >
-      <body className="min-h-screen bg-white text-brand-black font-sans">
+      <body
+        className="min-h-screen bg-white text-brand-black font-sans"
+        suppressHydrationWarning
+      >
         {children}
       </body>
     </html>

@@ -103,7 +103,7 @@ function CellImage({ src, alt }: { src: string; alt: string }) {
 
 function ValueTextCard({ value }: { value: ValueCard }) {
   return (
-    <div className="flex h-full flex-col justify-center rounded-md bg-white p-5 shadow-sm md:p-6">
+    <div className="flex h-full flex-col justify-center rounded-md bg-white p-5 shadow-sm md:p-6 lg:p-8">
       <h3 className="font-heading text-xl font-bold text-brand-black md:text-2xl">
         {value.title}
       </h3>
@@ -137,26 +137,74 @@ function GridCell({ cell, index }: { cell: Cell; index: number }) {
   );
 }
 
+// On mobile we render each value as image-then-text so the flow stays
+// consistent. The desktop 4×2 zigzag grid above keeps its current layout.
+const MOBILE_PAIRS: { src?: string; alt?: string; value: ValueCard }[] = [
+  // First card has no photo yet — leave the placeholder.
+  { value: VALUES[0] },
+  {
+    src: "/images/careers%203.png",
+    alt: "JAZA Media teammates collaborating",
+    value: VALUES[1],
+  },
+  {
+    src: "/images/careers%204.png",
+    alt: "JAZA Media teammates with certificates",
+    value: VALUES[2],
+  },
+  {
+    src: "/images/careers%202.png",
+    alt: "JAZA Media team on set at VIRSPACE",
+    value: VALUES[3],
+  },
+];
+
+function MobilePair({
+  pair,
+  index,
+}: {
+  pair: (typeof MOBILE_PAIRS)[number];
+  index: number;
+}) {
+  const { ref, inView } = useInView<HTMLDivElement>();
+  return (
+    <div
+      ref={ref}
+      style={{ animationDelay: inView ? `${index * 80}ms` : undefined }}
+      className={`flex flex-col gap-4 ${
+        inView ? "animate-about-fade-up" : "opacity-0"
+      }`}
+    >
+      {pair.src ? (
+        <CellImage src={pair.src} alt={pair.alt ?? ""} />
+      ) : (
+        <CellImagePlaceholder />
+      )}
+      <ValueTextCard value={pair.value} />
+    </div>
+  );
+}
+
 export function CareersValues() {
   const { ref: headRef, inView: headIn } = useInView<HTMLDivElement>();
   const { ref: ctaRef, inView: ctaIn } = useInView<HTMLDivElement>();
 
   return (
     <section className="bg-neutral-100 py-12 md:py-16">
-      <div className="mx-auto max-w-5xl px-4">
+      <div className="mx-auto max-w-5xl px-4 lg:max-w-[1200px]">
         <div
           ref={headRef}
           className={`mx-auto max-w-4xl text-center ${
             headIn ? "animate-about-fade-up" : "opacity-0"
           }`}
         >
-          <h2 className="font-heading text-3xl font-bold leading-[1.15] text-brand-black md:text-4xl lg:text-[48px]">
+          <h2 className="font-heading text-[48px] font-bold leading-[1.15] text-brand-black md:text-4xl lg:text-[48px]">
             We want disciplined team players who trust and{" "}
             <span className="underline decoration-[3px] underline-offset-[6px] md:decoration-4 md:underline-offset-8">
               win together.
             </span>
           </h2>
-          <p className="mt-6 font-heading text-lg leading-[1.5] text-brand-black/90 md:text-xl lg:text-2xl">
+          <p className="mt-6 font-heading text-2xl leading-[1.5] text-brand-black/90 md:text-xl lg:text-2xl">
             At JAZA Media you&apos;ll help entrepreneurs build real businesses
             with strong foundations, scalable systems, and lasting impact. Our
             mission is straightforward: make real world business scaling
@@ -166,7 +214,13 @@ export function CareersValues() {
           </p>
         </div>
 
-        <div className="mt-10 grid gap-4 md:grid-cols-2 md:gap-6">
+        <div className="mt-10 flex flex-col gap-6 md:hidden">
+          {MOBILE_PAIRS.map((pair, i) => (
+            <MobilePair key={pair.value.title} pair={pair} index={i} />
+          ))}
+        </div>
+
+        <div className="mt-10 hidden gap-4 md:grid md:grid-cols-2 md:gap-6">
           {CELLS.map((cell, i) => (
             <GridCell
               key={cell.kind === "image" ? cell.key : cell.value.title}
@@ -183,7 +237,7 @@ export function CareersValues() {
           }`}
         >
           <a
-            href="#openings"
+            href="/careers/apply"
             className="inline-block rounded-full bg-brand-yellow px-6 py-3 font-heading text-base font-bold text-brand-black shadow-sm transition-colors hover:bg-yellow-400 md:text-lg"
           >
             View Job Openings

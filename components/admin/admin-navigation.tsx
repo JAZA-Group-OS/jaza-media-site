@@ -1,7 +1,14 @@
 'use client';
 
 import { AnimatePresence, motion } from 'framer-motion';
-import { LayoutDashboard, TrendingUp, ChevronDown, Menu, X } from 'lucide-react';
+import {
+  LayoutDashboard,
+  TrendingUp,
+  Briefcase,
+  ChevronDown,
+  Menu,
+  X,
+} from 'lucide-react';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
@@ -14,6 +21,7 @@ interface AdminNavigationProps {
 const MENU_ITEMS = [
   { id: 'overview', label: 'Dashboard', icon: LayoutDashboard },
   { id: 'leads', label: 'Partner Leads', icon: TrendingUp },
+  { id: 'applications', label: 'Career Applications', icon: Briefcase },
 ] as const;
 
 export default function AdminNavigation({
