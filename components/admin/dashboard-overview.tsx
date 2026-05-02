@@ -7,7 +7,6 @@ import {
   Bell,
   Calendar,
   BookOpen,
-  Target,
   FileBox,
   Briefcase,
 } from 'lucide-react';
@@ -77,12 +76,9 @@ export default function DashboardOverview() {
   const data = loading ? null : inquiries;
 
   // Per-funnel counts. Course requests come from one table sliced by slug
-  // so we don't fan out into three Realtime channels for the same data.
-  const marketingCount = courseRequests.filter(
-    (r) => r.course_slug === 'marketing',
-  ).length;
-  const leadGenCount = courseRequests.filter(
-    (r) => r.course_slug === 'lead-generation',
+  // so we don't fan out into multiple Realtime channels for the same data.
+  const ruleOf10xCount = courseRequests.filter(
+    (r) => r.course_slug === 'rule-of-10x',
   ).length;
   const templatesCount = courseRequests.filter(
     (r) => r.course_slug === 'marketing-templates',
@@ -185,30 +181,24 @@ export default function DashboardOverview() {
         <p className="mb-3 text-[10px] uppercase tracking-[0.18em] text-gray-500 sm:text-xs">
           Lead Magnet Funnels
         </p>
-        <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
+        <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-3">
           <FunnelTile
-            label="Marketing Course"
-            count={marketingCount}
+            label="Rule of 10X"
+            count={ruleOf10xCount}
             icon={BookOpen}
             delay={0.05}
-          />
-          <FunnelTile
-            label="Lead Gen Course"
-            count={leadGenCount}
-            icon={Target}
-            delay={0.1}
           />
           <FunnelTile
             label="Marketing Templates"
             count={templatesCount}
             icon={FileBox}
-            delay={0.15}
+            delay={0.1}
           />
           <FunnelTile
             label="Career Applications"
             count={careerCount}
             icon={Briefcase}
-            delay={0.2}
+            delay={0.15}
           />
         </div>
       </div>

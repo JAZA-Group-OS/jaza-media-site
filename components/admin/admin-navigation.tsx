@@ -6,7 +6,6 @@ import {
   TrendingUp,
   Briefcase,
   BookOpen,
-  Target,
   FileBox,
   ChevronDown,
   Menu,
@@ -25,8 +24,7 @@ const MENU_ITEMS = [
   { id: 'overview', label: 'Dashboard', icon: LayoutDashboard },
   { id: 'leads', label: 'Partner Leads', icon: TrendingUp },
   { id: 'applications', label: 'Career Applications', icon: Briefcase },
-  { id: 'course-marketing', label: 'Marketing Course', icon: BookOpen },
-  { id: 'course-lead-generation', label: 'Lead Generation Course', icon: Target },
+  { id: 'course-rule-of-10x', label: 'Rule of 10X', icon: BookOpen },
   { id: 'course-marketing-templates', label: 'Marketing Templates', icon: FileBox },
 ] as const;
 

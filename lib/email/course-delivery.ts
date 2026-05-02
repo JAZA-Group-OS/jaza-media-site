@@ -1,16 +1,15 @@
 /**
- * Sends the "Here's your free course" email to people who claim a course
- * from /courses/[slug]. Uses Resend, mirroring lib/email/career-thank-you.ts.
+ * Sends the "Here's your free [asset]" email to people who claim something
+ * from the course/template funnel. Mirrors lib/email/career-thank-you.ts.
  *
  * Requires the following env vars at runtime:
  *   RESEND_API_KEY        — your Resend API key
  *   RESEND_FROM_EMAIL     — verified sender address
  *                            (COURSES_FROM_EMAIL also accepted as override)
  *
- * The course-asset URL is resolved from env per slug (see
- * lib/courses/catalog.ts → resolveCourseAssetUrl). Until the client provides
- * the real PDF/landing page links, a placeholder is used and the email
- * still sends so the form can be tested end-to-end.
+ * The asset URL is resolved from the catalog (per selected_asset, with env
+ * overrides). Until the client provides real download links, placeholders
+ * are used — the email still sends so the funnel can be tested end-to-end.
  *
  * The send is best-effort: API route callers should `await` this but treat
  * a thrown error as non-fatal (we'd rather save the request than block on
@@ -18,8 +17,8 @@
  */
 
 import {
-  resolveCourseAssetUrl,
-  type CourseSlug,
+  resolveAssetUrl,
+  type AssetOption,
   type CourseDetails,
 } from '@/lib/courses/catalog';
 
@@ -29,6 +28,7 @@ type SendArgs = {
   toEmail: string;
   toName: string;
   course: CourseDetails;
+  asset: AssetOption;
 };
 
 export type CourseDeliveryResult =
@@ -38,18 +38,25 @@ export type CourseDeliveryResult =
 export function buildCourseDeliveryEmail({
   toName,
   course,
+  asset,
   assetUrl,
 }: {
   toName: string;
   course: CourseDetails;
+  asset: AssetOption;
   assetUrl: string;
 }) {
-  const subject = course.emailSubject;
+  const isTemplates = course.slug === 'marketing-templates';
+  const noun = isTemplates ? 'template' : 'course';
+  const subject = `Your free ${asset.label} is here`;
+  const heading = `Your free ${noun} is ready`;
+  const buttonLabel = isTemplates ? 'Open my template' : 'Open my course';
+  const intro = `Thanks for claiming ${asset.label}. You can open your ${noun} using the button below.`;
 
   const text = [
     `Hi ${toName},`,
     '',
-    course.emailIntro,
+    intro,
     '',
     'Open it here:',
     assetUrl,
@@ -62,9 +69,9 @@ export function buildCourseDeliveryEmail({
   ].join('\n');
 
   const safeName = escapeHtml(toName);
-  const safeIntro = escapeHtml(course.emailIntro);
-  const safeHeading = escapeHtml(course.emailHeading);
-  const safeButtonLabel = escapeHtml(course.emailButtonLabel);
+  const safeIntro = escapeHtml(intro);
+  const safeHeading = escapeHtml(heading);
+  const safeButtonLabel = escapeHtml(buttonLabel);
   const safeUrl = escapeHtml(assetUrl);
 
   // Inline-styled HTML — most major email clients strip <style> blocks and
@@ -139,6 +146,7 @@ export async function sendCourseDeliveryEmail({
   toEmail,
   toName,
   course,
+  asset,
 }: SendArgs): Promise<CourseDeliveryResult> {
   const apiKey = process.env.RESEND_API_KEY;
   const from = process.env.COURSES_FROM_EMAIL ?? process.env.RESEND_FROM_EMAIL;
@@ -150,10 +158,11 @@ export async function sendCourseDeliveryEmail({
     return { sent: false, reason: 'missing_config' };
   }
 
-  const assetUrl = resolveCourseAssetUrl(course.slug as CourseSlug);
+  const assetUrl = resolveAssetUrl(asset.value) ?? asset.defaultAssetUrl;
   const { subject, html, text } = buildCourseDeliveryEmail({
     toName,
     course,
+    asset,
     assetUrl,
   });
 

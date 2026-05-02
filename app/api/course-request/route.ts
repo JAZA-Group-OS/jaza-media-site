@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { CourseRequestSchema } from '@/lib/validations/course-request';
-import { COURSE_CATALOG } from '@/lib/courses/catalog';
+import { COURSE_CATALOG, findAssetOption } from '@/lib/courses/catalog';
 import { createAdminClient } from '@/lib/supabase/admin';
 import { getClientIp, rateLimit } from '@/lib/rate-limit';
 import { sendCourseDeliveryEmail } from '@/lib/email/course-delivery';
@@ -50,6 +50,17 @@ export async function POST(request: Request) {
 
   const data = parsed.data;
   const course = COURSE_CATALOG[data.courseSlug];
+  const asset = findAssetOption(data.selectedAsset);
+
+  // Defense-in-depth: zod already constrains selectedAsset to known values,
+  // but if it ever drifts out of catalog we want to fail loudly here rather
+  // than send a half-broken email later.
+  if (!asset) {
+    return NextResponse.json(
+      { error: 'Unknown asset selection' },
+      { status: 400 },
+    );
+  }
 
   try {
     const supabase = createAdminClient();
@@ -71,6 +82,12 @@ export async function POST(request: Request) {
         last_name: data.lastName,
         email: data.email,
         phone: data.phone,
+        shipping_street: data.shippingStreet,
+        shipping_city: data.shippingCity,
+        shipping_state: data.shippingState,
+        shipping_country: data.shippingCountry,
+        shipping_postal: data.shippingPostal,
+        selected_asset: data.selectedAsset,
         source: 'courses_site',
       })
       .select('id')
@@ -96,6 +113,7 @@ export async function POST(request: Request) {
         toEmail: data.email,
         toName: data.firstName,
         course,
+        asset,
       });
       const update: Record<string, unknown> =
         result.sent

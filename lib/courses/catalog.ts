@@ -1,48 +1,58 @@
-// Lead-magnet catalog — single source of truth for the free assets the site
-// hands out (the two free courses + the marketing templates pack).
+// Lead-magnet catalog — single source of truth for the two free funnels:
 //
-// Despite the file/table name "course_requests", the slug 'marketing-templates'
-// is also stored here. Keeping them in one catalog/table avoids a near-clone
-// of the API route, validation, email helper, and admin manager. The form
-// copy adapts per slug via the fields below.
+//   "rule-of-10x"          — entered from either course card on the home
+//                            page (Marketing Course / Lead Generation
+//                            Course). The user picks Marketing or Advertising
+//                            on step 5 of the funnel.
+//   "marketing-templates"  — entered from the Marketing Templates card.
+//                            User picks one of four templates on step 5.
 //
-// Asset URLs fall back to placeholders until the client provides the real
-// download links. Set the corresponding env keys in production to override.
+// Both flows share the same 5-step REQUEST FORM (Name → Email → Phone →
+// Shipping → Selection). The funnel reads its copy + selection options from
+// here.
+//
+// Asset URLs are per-selected-asset (the thing they actually chose at step 5),
+// not per-funnel-slug. Set the corresponding env keys in production to
+// override the placeholder defaults.
 
-export type CourseSlug = 'marketing' | 'lead-generation' | 'marketing-templates';
+export type CourseSlug = 'rule-of-10x' | 'marketing-templates';
+
+// What the user picks on step 5. The values are stored in
+// course_requests.selected_asset.
+export type SelectedAsset =
+  | 'rule_of_10x_marketing'
+  | 'rule_of_10x_advertising'
+  | 'sales_call_script'
+  | 'ai_prompt'
+  | 'content_calendar'
+  | 'text';
+
+export type AssetOption = {
+  value: SelectedAsset;
+  label: string; // shown next to the radio button
+  envKey: string; // env var that overrides defaultAssetUrl
+  defaultAssetUrl: string; // placeholder until the client provides the real link
+};
 
 export type CourseDetails = {
   slug: CourseSlug;
-  // The full title shown on cards / metadata / admin tab — e.g.
-  // "The 10K Rule of Marketing", "Marketing Templates".
+  // Tab title in admin + page title.
   title: string;
-  // Short label for the admin sidebar tab.
   shortName: string;
-  // Visual hero image rendered above the form. Keep dimensions matching
-  // the source asset so Next/Image can size it without CLS.
+  // Hero image rendered above the funnel intro.
   heroImage: { src: string; alt: string; width: number; height: number };
-  // The yellow-highlighted phrase inside the form H1:
-  //   "Get instant access to your FREE [HIGHLIGHT][formHighlightSuffix] in under 30 seconds!"
-  // Courses set HIGHLIGHT=`"The 10K Rule of Marketing"` and suffix=` course`.
-  // Templates set HIGHLIGHT=`Marketing Templates` and suffix=`` (no extra word).
+  // Yellow-highlighted phrase in the intro H1:
+  //   "Get instant access to your FREE [HIGHLIGHT][SUFFIX] in under 30 seconds!"
   formHighlight: string;
   formHighlightSuffix: string;
-  // Email copy. Stored verbatim so we can pluralize ("are" vs "is") without
-  // string-template logic in the email helper.
-  emailSubject: string;
-  emailHeading: string; // shown as <h1> in the email body
-  emailButtonLabel: string;
-  emailIntro: string; // sentence: "Thanks for claiming X. You can ... using the button below."
-  // Two-line subcopy below the submit button. Plural noun differs (Course
-  // vs Templates) and the social-proof number can vary per magnet.
+  // Two-line subcopy under the intro CTA.
   subCopyLine1: string;
   subCopyLine2: string;
-  // Asset link the email points to.
-  defaultAssetUrl: string;
-  envKey:
-    | 'COURSE_MARKETING_URL'
-    | 'COURSE_LEAD_GENERATION_URL'
-    | 'COURSE_MARKETING_TEMPLATES_URL';
+  // Step 5 — the asset selection question.
+  selectionQuestion: string; // "Which course would you like to access?" / "Which template..."
+  selectionCtaLabel: string; // "GET MY COURSE" / "GET MY TEMPLATE"
+  selectionLayoutCols: 2 | 1; // 2 cols for both flows; 4 templates wraps via grid
+  assetOptions: AssetOption[];
 };
 
 const TWO_BOOKS_HERO = {
@@ -53,40 +63,34 @@ const TWO_BOOKS_HERO = {
 };
 
 export const COURSE_CATALOG: Record<CourseSlug, CourseDetails> = {
-  marketing: {
-    slug: 'marketing',
-    title: 'The 10K Rule of Marketing',
-    shortName: 'Marketing Course',
+  'rule-of-10x': {
+    slug: 'rule-of-10x',
+    title: 'The Rule of 10X',
+    shortName: 'Rule of 10X',
     heroImage: TWO_BOOKS_HERO,
-    formHighlight: '“The 10K Rule of Marketing”',
+    formHighlight: '“The Rule of 10X”',
     formHighlightSuffix: ' course',
-    emailSubject: 'Your free The 10K Rule of Marketing is here',
-    emailHeading: 'Your free course is ready',
-    emailButtonLabel: 'Open my course',
-    emailIntro:
-      'Thanks for claiming The 10K Rule of Marketing. You can open your course using the button below.',
     subCopyLine1: 'Get Your FREE Course in Less than 30 Seconds.',
     subCopyLine2: 'Requested by over 2,000 Business Owners.',
-    defaultAssetUrl: 'https://jaza-media.com/courses/placeholder-marketing',
-    envKey: 'COURSE_MARKETING_URL',
-  },
-  'lead-generation': {
-    slug: 'lead-generation',
-    title: 'The 10K Rule of Advertising',
-    shortName: 'Lead Generation Course',
-    heroImage: TWO_BOOKS_HERO,
-    formHighlight: '“The 10K Rule of Advertising”',
-    formHighlightSuffix: ' course',
-    emailSubject: 'Your free The 10K Rule of Advertising is here',
-    emailHeading: 'Your free course is ready',
-    emailButtonLabel: 'Open my course',
-    emailIntro:
-      'Thanks for claiming The 10K Rule of Advertising. You can open your course using the button below.',
-    subCopyLine1: 'Get Your FREE Course in Less than 30 Seconds.',
-    subCopyLine2: 'Requested by over 2,000 Business Owners.',
-    defaultAssetUrl:
-      'https://jaza-media.com/courses/placeholder-lead-generation',
-    envKey: 'COURSE_LEAD_GENERATION_URL',
+    selectionQuestion: 'Which course would you like to access?',
+    selectionCtaLabel: 'Get My Course',
+    selectionLayoutCols: 2,
+    assetOptions: [
+      {
+        value: 'rule_of_10x_marketing',
+        label: 'The Rule of 10X Marketing',
+        envKey: 'COURSE_RULE_OF_10X_MARKETING_URL',
+        defaultAssetUrl:
+          'https://jaza-media.com/courses/placeholder-rule-of-10x-marketing',
+      },
+      {
+        value: 'rule_of_10x_advertising',
+        label: 'The Rule of 10X Advertising',
+        envKey: 'COURSE_RULE_OF_10X_ADVERTISING_URL',
+        defaultAssetUrl:
+          'https://jaza-media.com/courses/placeholder-rule-of-10x-advertising',
+      },
+    ],
   },
   'marketing-templates': {
     slug: 'marketing-templates',
@@ -100,41 +104,70 @@ export const COURSE_CATALOG: Record<CourseSlug, CourseDetails> = {
     },
     formHighlight: 'Marketing Templates',
     formHighlightSuffix: '',
-    emailSubject: 'Your free Marketing Templates are here',
-    emailHeading: 'Your free templates are ready',
-    emailButtonLabel: 'Open my templates',
-    emailIntro:
-      'Thanks for claiming the JAZA Media Marketing Templates. You can open your templates using the button below.',
     subCopyLine1: 'Get Your FREE Templates in Less than 30 Seconds.',
     subCopyLine2: 'Requested by over 1,800 Business Owners.',
-    defaultAssetUrl:
-      'https://jaza-media.com/templates/placeholder-marketing-templates',
-    envKey: 'COURSE_MARKETING_TEMPLATES_URL',
+    selectionQuestion: 'Which template would you like to access?',
+    selectionCtaLabel: 'Get My Template',
+    selectionLayoutCols: 2,
+    assetOptions: [
+      {
+        value: 'sales_call_script',
+        label: 'Sales Call Script',
+        envKey: 'TEMPLATE_SALES_CALL_SCRIPT_URL',
+        defaultAssetUrl:
+          'https://jaza-media.com/templates/placeholder-sales-call-script',
+      },
+      {
+        value: 'ai_prompt',
+        label: 'AI Prompt',
+        envKey: 'TEMPLATE_AI_PROMPT_URL',
+        defaultAssetUrl: 'https://jaza-media.com/templates/placeholder-ai-prompt',
+      },
+      {
+        value: 'content_calendar',
+        label: 'Content Calendar',
+        envKey: 'TEMPLATE_CONTENT_CALENDAR_URL',
+        defaultAssetUrl:
+          'https://jaza-media.com/templates/placeholder-content-calendar',
+      },
+      {
+        value: 'text',
+        label: 'Text',
+        envKey: 'TEMPLATE_TEXT_URL',
+        defaultAssetUrl: 'https://jaza-media.com/templates/placeholder-text',
+      },
+    ],
   },
 };
 
-export const COURSE_SLUGS: CourseSlug[] = [
-  'marketing',
-  'lead-generation',
-  'marketing-templates',
-];
+export const COURSE_SLUGS: CourseSlug[] = ['rule-of-10x', 'marketing-templates'];
 
 export function isCourseSlug(value: string): value is CourseSlug {
-  return (
-    value === 'marketing' ||
-    value === 'lead-generation' ||
-    value === 'marketing-templates'
-  );
+  return value === 'rule-of-10x' || value === 'marketing-templates';
 }
 
 export function getCourse(slug: string): CourseDetails | null {
   return isCourseSlug(slug) ? COURSE_CATALOG[slug] : null;
 }
 
-// Resolve the actual asset URL the user receives in the email. Reads the
-// env override at call time so a deployment can swap in the real link
-// without code changes.
-export function resolveCourseAssetUrl(slug: CourseSlug): string {
-  const course = COURSE_CATALOG[slug];
-  return process.env[course.envKey] ?? course.defaultAssetUrl;
+// Map a selected-asset value back to its catalog entry across all funnels.
+// Used by the email helper to resolve the right URL + label without coupling
+// to a particular slug.
+export function findAssetOption(value: string): AssetOption | null {
+  for (const slug of COURSE_SLUGS) {
+    const found = COURSE_CATALOG[slug].assetOptions.find(
+      (a) => a.value === value,
+    );
+    if (found) return found;
+  }
+  return null;
+}
+
+// Resolve the asset URL the user receives in the email. Reads the env override
+// at call time so a deployment can swap in real PDF/landing links without
+// code changes.
+export function resolveAssetUrl(value: string): string | null {
+  const opt = findAssetOption(value);
+  if (!opt) return null;
+  return process.env[opt.envKey] ?? opt.defaultAssetUrl;
 }

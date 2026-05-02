@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { CourseClaimForm } from '@/components/course/course-claim-form';
+import { CourseFunnel } from '@/components/course/course-funnel';
 import { COURSE_SLUGS, getCourse } from '@/lib/courses/catalog';
 
 type Params = Promise<{ slug: string }>;
@@ -33,5 +33,5 @@ export default async function CourseClaimPage({
   const { slug } = await params;
   const course = getCourse(slug);
   if (!course) notFound();
-  return <CourseClaimForm course={course} />;
+  return <CourseFunnel course={course} />;
 }

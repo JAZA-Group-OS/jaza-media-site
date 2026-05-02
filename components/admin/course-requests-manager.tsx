@@ -12,10 +12,13 @@ import {
   ChevronDown,
   ChevronUp,
   ExternalLink,
+  MapPin,
+  BookOpen,
 } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { supabase } from '@/lib/supabase/client';
 import { useRealtimeTable } from '@/lib/admin/use-realtime-table';
+import { findAssetOption } from '@/lib/courses/catalog';
 import type {
   CourseRequest,
   CourseSlug,
@@ -194,6 +197,11 @@ export default function CourseRequestsManager({
           {filtered.map((req, index) => {
             const isExpanded = expandedId === req.id;
             const fullName = `${req.first_name} ${req.last_name}`.trim();
+            // Map the stored selected_asset back to its catalog label for
+            // display. If a row has an asset we don't recognise (catalog
+            // changed since the row was written), fall back to the raw value.
+            const assetOpt = findAssetOption(req.selected_asset);
+            const assetLabel = assetOpt?.label ?? req.selected_asset;
             return (
               <motion.div
                 key={req.id}
@@ -221,6 +229,16 @@ export default function CourseRequestsManager({
                         className={`w-4 h-4 text-gray-400 shrink-0 mt-1 transition-transform duration-200 ${isExpanded ? 'rotate-180' : ''}`}
                       />
                     </div>
+                    {/* Asset is the lead's #1 signal — what they asked for —
+                        so it gets a full-width row with the brand yellow. */}
+                    <div className="rounded-md bg-[#FFB829]/10 px-3 py-2 border border-[#FFB829]/20">
+                      <p className="text-[10px] uppercase tracking-[0.12em] text-[#FFB829]/70">
+                        Asset chosen
+                      </p>
+                      <p className="mt-0.5 text-sm font-semibold text-[#FFB829] truncate">
+                        {assetLabel}
+                      </p>
+                    </div>
                     <div className="grid grid-cols-2 gap-x-4 gap-y-3">
                       <div className="min-w-0">
                         <p className="text-[10px] uppercase tracking-[0.12em] text-gray-500">
@@ -242,6 +260,14 @@ export default function CourseRequestsManager({
                       </div>
                       <div className="min-w-0">
                         <p className="text-[10px] uppercase tracking-[0.12em] text-gray-500">
+                          Submitted
+                        </p>
+                        <p className="mt-0.5 text-sm font-semibold truncate">
+                          {formatDateShort(req.created_at)}
+                        </p>
+                      </div>
+                      <div className="min-w-0">
+                        <p className="text-[10px] uppercase tracking-[0.12em] text-gray-500">
                           Email
                         </p>
                         <div className="mt-0.5 text-sm">
@@ -250,14 +276,6 @@ export default function CourseRequestsManager({
                             emailError={req.email_error}
                           />
                         </div>
-                      </div>
-                      <div className="min-w-0">
-                        <p className="text-[10px] uppercase tracking-[0.12em] text-gray-500">
-                          Submitted
-                        </p>
-                        <p className="mt-0.5 text-sm font-semibold truncate">
-                          {formatDateShort(req.created_at)}
-                        </p>
                       </div>
                       <div>
                         <p className="text-[10px] uppercase tracking-[0.12em] text-gray-500">
@@ -281,13 +299,20 @@ export default function CourseRequestsManager({
                       </p>
                     </div>
 
+                    <div className="sm:col-span-3 text-xs">
+                      <p className="text-gray-500">Asset chosen</p>
+                      <p className="font-semibold text-[#FFB829] truncate">
+                        {assetLabel}
+                      </p>
+                    </div>
+
                     <div className="sm:col-span-2 text-xs">
                       <p className="text-gray-500">Phone</p>
                       {req.phone ? (
                         <a
                           href={`tel:${req.phone}`}
                           onClick={(e) => e.stopPropagation()}
-                          className="font-semibold text-[#FFB829] hover:underline"
+                          className="font-semibold text-[#FFB829] hover:underline truncate block"
                         >
                           {req.phone}
                         </a>
@@ -296,24 +321,16 @@ export default function CourseRequestsManager({
                       )}
                     </div>
 
-                    <div className="sm:col-span-3 text-xs">
+                    <div className="sm:col-span-2 text-xs">
                       <p className="text-gray-500">Submitted</p>
                       <p className="font-semibold">
-                        {formatDate(req.created_at)}
+                        {formatDateShort(req.created_at)}
                       </p>
                     </div>
 
-                    <div className="sm:col-span-1 text-xs">
-                      <p className="text-gray-500">Email</p>
-                      <EmailStatus
-                        sentAt={req.email_sent_at}
-                        emailError={req.email_error}
-                      />
-                    </div>
-
-                    <div className="sm:col-span-2">
+                    <div className="sm:col-span-1">
                       <span
-                        className={`inline-block px-2.5 py-1 rounded-full text-[10px] font-semibold uppercase tracking-wide border ${followUpColors[req.follow_up_status]}`}
+                        className={`inline-block px-2 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wide border ${followUpColors[req.follow_up_status]}`}
                       >
                         {followUpLabels[req.follow_up_status]}
                       </span>
@@ -342,6 +359,11 @@ export default function CourseRequestsManager({
                         value={fullName}
                       />
                       <DetailItem
+                        icon={<BookOpen className="w-3.5 h-3.5" />}
+                        label="Asset chosen"
+                        value={assetLabel}
+                      />
+                      <DetailItem
                         icon={<Mail className="w-3.5 h-3.5" />}
                         label="Email"
                         value={req.email}
@@ -367,6 +389,25 @@ export default function CourseRequestsManager({
                             : 'Not sent'
                         }
                       />
+                    </div>
+
+                    {/* Shipping address — collected at step 4 of the funnel.
+                        Rendered as a single labeled block since the address
+                        reads as one mailing destination, not five separate
+                        fields. */}
+                    <div className="rounded-md border border-[#1a1a1a] bg-black/40 p-3">
+                      <p className="flex items-center gap-1.5 text-xs text-gray-500 mb-1.5">
+                        <MapPin className="w-3.5 h-3.5" />
+                        Shipping address
+                      </p>
+                      <p className="text-sm leading-relaxed text-gray-200">
+                        {req.shipping_street}
+                        <br />
+                        {req.shipping_city}, {req.shipping_state}{' '}
+                        {req.shipping_postal}
+                        <br />
+                        {req.shipping_country}
+                      </p>
                     </div>
 
                     {req.email_error ? (

@@ -17,8 +17,7 @@ type DashboardTab =
   | 'overview'
   | 'leads'
   | 'applications'
-  | 'course-marketing'
-  | 'course-lead-generation'
+  | 'course-rule-of-10x'
   | 'course-marketing-templates';
 
 export default function AdminDashboardPage() {
@@ -60,16 +59,10 @@ export default function AdminDashboardPage() {
             {activeTab === 'overview' && <DashboardOverview />}
             {activeTab === 'leads' && <PartnerLeadsManager />}
             {activeTab === 'applications' && <CareerApplicationsManager />}
-            {activeTab === 'course-marketing' && (
+            {activeTab === 'course-rule-of-10x' && (
               <CourseRequestsManager
-                courseSlug="marketing"
-                courseTitle={COURSE_CATALOG.marketing.shortName}
-              />
-            )}
-            {activeTab === 'course-lead-generation' && (
-              <CourseRequestsManager
-                courseSlug="lead-generation"
-                courseTitle={COURSE_CATALOG['lead-generation'].shortName}
+                courseSlug="rule-of-10x"
+                courseTitle={COURSE_CATALOG['rule-of-10x'].shortName}
               />
             )}
             {activeTab === 'course-marketing-templates' && (

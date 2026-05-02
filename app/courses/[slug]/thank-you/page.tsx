@@ -1,10 +1,15 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
+import Image from 'next/image';
 import Link from 'next/link';
-import { COURSE_SLUGS, getCourse } from '@/lib/courses/catalog';
+import {
+  COURSE_SLUGS,
+  findAssetOption,
+  getCourse,
+} from '@/lib/courses/catalog';
 
 type Params = Promise<{ slug: string }>;
-type Search = Promise<{ e?: string }>;
+type Search = Promise<{ e?: string; a?: string }>;
 
 export function generateStaticParams() {
   return COURSE_SLUGS.map((slug) => ({ slug }));
@@ -33,14 +38,18 @@ export default async function CourseThankYouPage({
   searchParams: Search;
 }) {
   const { slug } = await params;
-  const { e: emailParam } = await searchParams;
+  const { a: assetParam } = await searchParams;
   const course = getCourse(slug);
   if (!course) notFound();
 
-  const maskedEmail = emailParam ? maskEmail(emailParam) : null;
+  // What asset they actually picked at step 5; falls back to the funnel
+  // shortName if missing so the copy still reads sensibly.
+  const asset = assetParam ? findAssetOption(assetParam) : null;
+  const assetLabel = asset?.label ?? course.shortName;
+  const isTemplates = course.slug === 'marketing-templates';
 
   return (
-    <div className="mx-auto w-full max-w-3xl px-4 py-16 text-center md:py-20">
+    <div className="mx-auto w-full max-w-2xl px-4 py-16 text-center md:py-20">
       <div className="mx-auto inline-flex flex-col items-center leading-none">
         <span className="font-display text-5xl tracking-[0.15em] text-brand-black md:text-6xl">
           JAZA
@@ -50,43 +59,51 @@ export default async function CourseThankYouPage({
         </span>
       </div>
 
-      <h1 className="mt-10 font-heading text-3xl font-black tracking-tight text-brand-black md:text-5xl">
-        Check your <em className="font-black text-brand-yellow not-italic">inbox</em>
+      <h1 className="mt-10 font-heading text-3xl font-black leading-tight tracking-tight text-brand-black md:text-4xl">
+        Check Your Email for Your{' '}
+        <em className="font-black text-brand-yellow not-italic">
+          FREE {isTemplates ? 'Template' : 'Course'}!
+        </em>
       </h1>
 
-      <p className="mx-auto mt-6 max-w-xl text-base text-neutral-700 md:text-lg">
-        Your free copy of <strong>{course.title}</strong> is on its way
-        {maskedEmail ? (
-          <>
-            {' '}to <span className="font-semibold text-brand-black">{maskedEmail}</span>
-          </>
-        ) : null}
-        .
+      <p className="mx-auto mt-6 max-w-xl text-sm leading-relaxed text-neutral-700 md:text-base">
+        Thank you for your interest in studying{' '}
+        <strong>{assetLabel}</strong> by JAZA Media.
       </p>
 
-      <p className="mx-auto mt-4 max-w-xl text-sm leading-relaxed text-neutral-600 md:text-base">
-        It usually arrives within a minute. If you don&rsquo;t see it, check your spam
-        or promotions folder.
+      <p className="mx-auto mt-6 max-w-xl text-sm leading-relaxed text-neutral-700 md:text-base">
+        We truly appreciate your enthusiasm and commitment to growth, and we
+        encourage you to continue strengthening your business foundation. As
+        part of this journey, you may also explore JAZA Media&rsquo;s other
+        free resources&mdash;designed to help you stay aligned with current
+        market trends while providing practical, actionable guidance to support
+        your business growth.
       </p>
+
+      <div className="mt-10 flex justify-center">
+        <Image
+          src="/images/2 books.png"
+          alt="JAZA Media — The 10K Rule of Marketing & Advertising"
+          width={1200}
+          height={900}
+          sizes="(min-width: 768px) 360px, 70vw"
+          className="block h-auto w-[260px] md:w-[340px]"
+        />
+      </div>
 
       <Link
-        href="/"
-        className="mt-10 inline-flex items-center justify-center rounded-full border border-brand-black px-8 py-3 font-heading text-sm font-black tracking-wide text-brand-black uppercase transition-colors hover:bg-brand-black hover:text-white"
+        href="/#free-advance-marketing"
+        className="mt-8 inline-flex items-center justify-center rounded-full bg-brand-yellow px-8 py-3 font-heading text-sm font-black tracking-wide text-brand-black transition-transform hover:scale-[1.02]"
       >
-        Back to home
+        Take Another Course
       </Link>
+
+      <p className="mx-auto mt-10 max-w-xl text-sm leading-relaxed text-neutral-700 md:text-base">
+        We look forward to the possibility of working with you in the future
+        and learning more about your business. Our team is excited to explore
+        how we can support you in reaching your next level of growth and
+        success. Thank you again, and we hope to connect with you soon.
+      </p>
     </div>
   );
-}
-
-// Show "j••••a@gmail.com" rather than the full address — the visitor knows
-// the email they typed, the masked form just confirms it without exposing
-// the full string in browser history / shoulder-surfing scenarios.
-function maskEmail(email: string): string {
-  const at = email.indexOf('@');
-  if (at < 1) return email;
-  const local = email.slice(0, at);
-  const domain = email.slice(at);
-  if (local.length <= 2) return local[0] + '••' + domain;
-  return local[0] + '••••' + local[local.length - 1] + domain;
 }
