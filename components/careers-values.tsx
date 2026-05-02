@@ -51,7 +51,12 @@ type Cell =
   | { kind: "text"; value: ValueCard };
 
 const CELLS: Cell[] = [
-  { kind: "image", key: "img-1" },
+  {
+    kind: "image",
+    key: "img-1",
+    src: "/images/careers%201.png",
+    alt: "JAZA Media team at work",
+  },
   { kind: "text", value: VALUES[0] },
   { kind: "text", value: VALUES[1] },
   {
@@ -140,8 +145,11 @@ function GridCell({ cell, index }: { cell: Cell; index: number }) {
 // On mobile we render each value as image-then-text so the flow stays
 // consistent. The desktop 4×2 zigzag grid above keeps its current layout.
 const MOBILE_PAIRS: { src?: string; alt?: string; value: ValueCard }[] = [
-  // First card has no photo yet — leave the placeholder.
-  { value: VALUES[0] },
+  {
+    src: "/images/careers%201.png",
+    alt: "JAZA Media team at work",
+    value: VALUES[0],
+  },
   {
     src: "/images/careers%203.png",
     alt: "JAZA Media teammates collaborating",

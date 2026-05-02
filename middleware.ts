@@ -56,11 +56,16 @@ export async function middleware(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
-  // Step 4: On the admin subdomain, gate non-login traffic on a real session.
+  const ADMIN_EMAIL = 'jaza.intern@gmail.com';
+  const isAdmin = user?.email === ADMIN_EMAIL;
+
+  // Step 4: On the admin subdomain, gate non-login traffic on a real session
+  // AND on the admin email — RLS protects data, but the dashboard bundle is
+  // sensitive enough to deny non-admin authenticated users at the edge.
   if (isAdminSubdomain) {
     const isLoginPath = url.pathname === '/login' || url.pathname === '/admin/login';
 
-    if (!user && !isLoginPath) {
+    if (!isAdmin && !isLoginPath) {
       const loginUrl = url.clone();
       loginUrl.pathname = '/admin/login';
       return NextResponse.redirect(loginUrl);

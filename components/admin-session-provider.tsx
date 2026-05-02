@@ -5,6 +5,8 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabase/client';
 
+const ADMIN_EMAIL = 'jaza.intern@gmail.com';
+
 export default function AdminSessionProvider({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const [checked, setChecked] = useState(false);
@@ -14,7 +16,7 @@ export default function AdminSessionProvider({ children }: { children: React.Rea
 
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (!active) return;
-      if (!session) {
+      if (!session || session.user.email !== ADMIN_EMAIL) {
         router.replace('/login');
         return;
       }
@@ -24,7 +26,7 @@ export default function AdminSessionProvider({ children }: { children: React.Rea
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {
-      if (!session) {
+      if (!session || session.user.email !== ADMIN_EMAIL) {
         router.replace('/login');
       }
     });

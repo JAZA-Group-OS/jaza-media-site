@@ -103,14 +103,12 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const { data: publicUrlData } = supabase.storage
-      .from(bucket)
-      .getPublicUrl(objectKey);
-
+    // Buckets are private — we store the object key (not a public URL) and
+    // the admin dashboard mints a short-lived signed URL on demand.
     return NextResponse.json({
       success: true,
       data: {
-        url: publicUrlData.publicUrl,
+        url: objectKey,
         filename: file.name,
         size: file.size,
         type: file.type,

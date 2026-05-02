@@ -364,14 +364,16 @@ export default function CareerApplicationsManager() {
                         label="Resume / CV"
                         filename={app.resume_filename}
                         size={app.resume_size_bytes}
-                        url={app.resume_url}
+                        bucket="career_resumes"
+                        path={app.resume_url}
                       />
                       <FileLink
                         icon={<Folder className="w-4 h-4" />}
                         label="Portfolio"
                         filename={app.portfolio_filename}
                         size={app.portfolio_size_bytes}
-                        url={app.portfolio_url}
+                        bucket="career_portfolios"
+                        path={app.portfolio_url}
                       />
                     </div>
 
@@ -497,24 +499,54 @@ function DetailItem({
   );
 }
 
+// Storage buckets are private. Older rows (pre-secure-buckets migration)
+// stored the full public URL; new rows store just the object key. We derive
+// the object path from either shape and mint a short-lived signed URL on
+// click so the admin can preview/download the file.
+function extractObjectPath(stored: string, bucket: string): string {
+  const marker = `/storage/v1/object/public/${bucket}/`;
+  const i = stored.indexOf(marker);
+  if (i !== -1) return stored.slice(i + marker.length);
+  return stored;
+}
+
 function FileLink({
   icon,
   label,
   filename,
   size,
-  url,
+  bucket,
+  path,
 }: {
   icon: React.ReactNode;
   label: string;
   filename: string;
   size: number;
-  url: string;
+  bucket: 'career_resumes' | 'career_portfolios';
+  path: string;
 }) {
+  const [opening, setOpening] = useState(false);
+
+  async function openSignedUrl(e: React.MouseEvent) {
+    e.preventDefault();
+    if (opening) return;
+    setOpening(true);
+    const objectPath = extractObjectPath(path, bucket);
+    const { data, error } = await supabase.storage
+      .from(bucket)
+      .createSignedUrl(objectPath, 60 * 10);
+    setOpening(false);
+    if (error || !data?.signedUrl) {
+      console.error('[file-link] signed url failed:', error?.message);
+      return;
+    }
+    window.open(data.signedUrl, '_blank', 'noopener,noreferrer');
+  }
+
   return (
     <a
-      href={url}
-      target="_blank"
-      rel="noopener noreferrer"
+      href="#"
+      onClick={openSignedUrl}
       className="flex items-center gap-3 rounded-md bg-[#0a0a0a] border border-[#1a1a1a] p-3 hover:border-[#FFB829]/40 hover:text-white transition-colors group"
     >
       <span className="text-[#FFB829] shrink-0">{icon}</span>
@@ -525,7 +557,9 @@ function FileLink({
         <span className="block text-sm text-gray-200 truncate">
           {filename}
         </span>
-        <span className="block text-xs text-gray-500">{formatBytes(size)}</span>
+        <span className="block text-xs text-gray-500">
+          {opening ? 'Opening…' : formatBytes(size)}
+        </span>
       </span>
       <ExternalLink className="w-4 h-4 text-gray-500 group-hover:text-[#FFB829] shrink-0" />
     </a>

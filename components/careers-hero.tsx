@@ -36,13 +36,13 @@ export function CareersHero() {
                 headlineIn ? "animate-about-fade-up" : "opacity-0"
               }`}
             >
-              <span className="block text-[48px] md:whitespace-nowrap md:text-[34px] lg:text-[40px] xl:text-[54px]">
+              <span className="block text-[36px] sm:text-[44px] md:whitespace-nowrap md:text-[34px] lg:text-[40px] xl:text-[54px]">
                 Join a{" "}
                 <span className="text-brand-yellow underline decoration-brand-yellow decoration-2 underline-offset-4">
                   world-record
                 </span>
               </span>
-              <span className="block text-[48px] md:whitespace-nowrap md:text-[44px] lg:text-[52px] xl:text-[68px]">
+              <span className="block text-[44px] sm:text-[54px] md:whitespace-nowrap md:text-[44px] lg:text-[52px] xl:text-[68px]">
                 breaking team!
               </span>
             </h1>
@@ -52,14 +52,14 @@ export function CareersHero() {
               style={{ animationDelay: copyIn ? "120ms" : undefined }}
               className={copyIn ? "animate-about-fade-up" : "opacity-0"}
             >
-              <p className="mt-6 max-w-xl font-heading text-2xl leading-relaxed text-brand-black/90 md:text-base lg:text-lg">
+              <p className="mt-6 max-w-xl font-heading text-base leading-relaxed text-brand-black/90 sm:text-lg md:text-base lg:text-lg">
                 We&apos;re seeking teammates who lead with trust, work with
                 discipline, and play to win as a team.
               </p>
 
               <a
                 href="/careers/apply"
-                className="mt-6 inline-block rounded-full bg-brand-yellow px-[50px] py-[15px] font-heading text-lg font-bold text-brand-black shadow-sm transition-colors hover:bg-yellow-400 md:px-6 md:py-3 md:text-base lg:text-lg"
+                className="mt-6 inline-block rounded-full bg-brand-yellow px-8 py-3 font-heading text-base font-bold text-brand-black shadow-sm transition-colors hover:bg-yellow-400 md:px-6 lg:text-lg"
               >
                 View Job Openings
               </a>

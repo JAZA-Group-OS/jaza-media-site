@@ -26,15 +26,15 @@ export default function ApplyThankYouPage() {
       </p>
 
       <p className="mx-auto mt-6 max-w-xl text-base leading-relaxed text-neutral-700 md:text-lg">
-        After reviewing your application, we&apos;re pleased to inform you that
-        you have successfully moved forward to the next step of the process.
-        Please allow up to 24 hours for one of our team members to reach out
-        and schedule your final interview call with the assigned JAZA Media
-        specialist.
+        We&apos;ve received your application and our team will review it
+        carefully. If your background looks like a strong match for the role,
+        we&apos;ll reach out within a few business days to schedule a
+        conversation. Please keep an eye on the email and contact number you
+        provided.
       </p>
 
       <p className="mt-10 font-heading text-xl font-black text-brand-black md:text-2xl">
-        We look forward to speaking with you soon!
+        Thanks again — we appreciate your interest!
       </p>
     </div>
   );
