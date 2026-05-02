@@ -54,7 +54,7 @@ const CELLS: Cell[] = [
   {
     kind: "image",
     key: "img-1",
-    src: "/images/careers%201.png",
+    src: "/images/maju.png",
     alt: "JAZA Media team at work",
   },
   { kind: "text", value: VALUES[0] },
@@ -146,7 +146,7 @@ function GridCell({ cell, index }: { cell: Cell; index: number }) {
 // consistent. The desktop 4×2 zigzag grid above keeps its current layout.
 const MOBILE_PAIRS: { src?: string; alt?: string; value: ValueCard }[] = [
   {
-    src: "/images/careers%201.png",
+    src: "/images/maju.png",
     alt: "JAZA Media team at work",
     value: VALUES[0],
   },

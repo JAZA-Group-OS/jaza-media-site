@@ -10,12 +10,20 @@
  */
 
 const STATIC_ALLOWLIST = [
+  // Production (canonical, no hyphen)
+  'https://jazamedia.com',
+  'https://www.jazamedia.com',
+  'https://admin.jazamedia.com',
+  // Hyphenated alias kept in case any old links / staging hostnames still
+  // resolve to the site.
   'https://jaza-media.com',
   'https://www.jaza-media.com',
   'https://admin.jaza-media.com',
+  // Local dev
   'http://localhost:3000',
   'http://localhost:3001',
   'http://127.0.0.1:3000',
+  'http://admin.localhost:3000',
 ];
 
 function getAllowlist(): string[] {

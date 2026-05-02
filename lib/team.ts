@@ -73,11 +73,10 @@ export const TEAM: Member[] = [
     image: null,
   },
   {
-    slug: "guian",
-    name: "GUIAN BROTONEL",
+    slug: "cmo",
+    name: null,
     role: "MANAGING DIRECTOR, CHIEF MARKETING OFFICER",
-    image: "/about-the-form/GUIAN-BROTONEL.png",
-    bioImage: "/about-the-firm/GUIAN-BROTONEL-removebg-preview.png",
+    image: null,
   },
   {
     slug: "cto",
@@ -133,6 +132,12 @@ export const TEAM: Member[] = [
     role: "KOL MANAGER",
     image: "/about-the-form/Sofhia-Caballero.png",
     bioImage: "/about-the-firm/Sofhia-Caballero-removebg-preview.png",
+  },
+  {
+    slug: "executive-assistant",
+    name: null,
+    role: "EXECUTIVE ASSISTANT",
+    image: null,
   },
 ];
 
