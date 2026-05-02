@@ -20,7 +20,7 @@ export async function generateMetadata({
     return { title: 'Course — JAZA Media' };
   }
   return {
-    title: `${course.title} — Free Course | JAZA Media`,
+    title: `${course.title} — Free Download | JAZA Media`,
     description: `Claim your free copy of ${course.title} from JAZA Media. Delivered to your inbox in under 30 seconds.`,
   };
 }

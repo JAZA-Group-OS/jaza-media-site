@@ -6,6 +6,9 @@ import Image from 'next/image';
 import type { CourseDetails } from '@/lib/courses/catalog';
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+// Permissive phone format — accept +, digits, spaces, parens, dashes; require
+// at least 7 input characters so we don't accept obvious junk like "1".
+const PHONE_RE = /^[+\d][\d\s()-]{6,}$/;
 
 const DISCLAIMER =
   'By providing your information you consent to JAZA Media contacting you by phone, text, or email using automated telephone dialing systems and AI to the information provided, even if the phone number is present on a state or national Do Not Call List. We do not sell your personal information. By providing this information you agree to our Privacy Policy and Terms of Service.';
@@ -19,6 +22,7 @@ export function CourseClaimForm({ course }: CourseClaimFormProps) {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
 
@@ -29,6 +33,7 @@ export function CourseClaimForm({ course }: CourseClaimFormProps) {
     const fn = firstName.trim();
     const ln = lastName.trim();
     const em = email.trim();
+    const ph = phone.trim();
 
     if (fn.length < 1) {
       setError('Please enter your first name.');
@@ -40,6 +45,10 @@ export function CourseClaimForm({ course }: CourseClaimFormProps) {
     }
     if (!EMAIL_RE.test(em)) {
       setError('Please enter a valid email address.');
+      return;
+    }
+    if (!PHONE_RE.test(ph)) {
+      setError('Please enter a valid contact number.');
       return;
     }
 
@@ -55,6 +64,7 @@ export function CourseClaimForm({ course }: CourseClaimFormProps) {
           firstName: fn,
           lastName: ln,
           email: em,
+          phone: ph,
         }),
       });
       if (!res.ok) {
@@ -78,17 +88,17 @@ export function CourseClaimForm({ course }: CourseClaimFormProps) {
         <h1 className="font-heading text-2xl leading-tight font-black tracking-tight text-brand-black md:text-[34px]">
           Get instant access to your FREE{' '}
           <span className="rounded-md bg-brand-yellow px-2">
-            &ldquo;{course.title}&rdquo;
-          </span>{' '}
-          course in under 30 seconds!
+            {course.formHighlight}
+          </span>
+          {course.formHighlightSuffix} in under 30 seconds!
         </h1>
 
         <div className="mt-8 flex justify-center">
           <Image
-            src="/images/2 books.png"
-            alt="The 10K Rule of Marketing and The 10K Rule of Advertising"
-            width={1200}
-            height={900}
+            src={course.heroImage.src}
+            alt={course.heroImage.alt}
+            width={course.heroImage.width}
+            height={course.heroImage.height}
             priority
             sizes="(min-width: 768px) 480px, 80vw"
             className="block h-auto w-[320px] md:w-[420px] lg:w-[480px]"
@@ -142,6 +152,20 @@ export function CourseClaimForm({ course }: CourseClaimFormProps) {
           />
         </label>
 
+        <label className="mt-3 block">
+          <span className="sr-only">Contact number</span>
+          <input
+            type="tel"
+            inputMode="tel"
+            autoComplete="tel"
+            placeholder="CONTACT NUMBER"
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
+            maxLength={30}
+            className="block w-full rounded-md border border-neutral-300 bg-white px-4 py-3 font-heading text-sm tracking-wide text-brand-black uppercase placeholder:text-neutral-400 focus:border-brand-yellow focus:outline-none focus:ring-2 focus:ring-brand-yellow/30"
+          />
+        </label>
+
         {error ? (
           <p
             role="alert"
@@ -162,10 +186,10 @@ export function CourseClaimForm({ course }: CourseClaimFormProps) {
         </div>
 
         <p className="mt-6 text-center font-heading text-sm font-bold text-brand-black">
-          Get Your FREE Course in Less than 30 Seconds.
+          {course.subCopyLine1}
         </p>
         <p className="text-center font-heading text-sm font-bold text-brand-black">
-          Requested by over 2,000 Business Owners.
+          {course.subCopyLine2}
         </p>
       </form>
 

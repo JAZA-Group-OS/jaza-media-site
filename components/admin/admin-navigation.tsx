@@ -5,6 +5,9 @@ import {
   LayoutDashboard,
   TrendingUp,
   Briefcase,
+  BookOpen,
+  Target,
+  FileBox,
   ChevronDown,
   Menu,
   X,
@@ -22,6 +25,9 @@ const MENU_ITEMS = [
   { id: 'overview', label: 'Dashboard', icon: LayoutDashboard },
   { id: 'leads', label: 'Partner Leads', icon: TrendingUp },
   { id: 'applications', label: 'Career Applications', icon: Briefcase },
+  { id: 'course-marketing', label: 'Marketing Course', icon: BookOpen },
+  { id: 'course-lead-generation', label: 'Lead Generation Course', icon: Target },
+  { id: 'course-marketing-templates', label: 'Marketing Templates', icon: FileBox },
 ] as const;
 
 export default function AdminNavigation({

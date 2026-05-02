@@ -2,8 +2,9 @@
 
 import { motion } from 'framer-motion';
 import { Mail, Phone, MapPin, Calendar, Briefcase, ChevronDown, ChevronUp } from 'lucide-react';
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { supabase } from '@/lib/supabase/client';
+import { useRealtimeTable } from '@/lib/admin/use-realtime-table';
 import type { PartnerInquiry, FollowUpStatus } from '@/lib/types/database';
 
 type FilterTab = 'all' | 'qualified' | 'not_qualified';
@@ -37,46 +38,15 @@ function formatDate(iso: string): string {
 }
 
 export default function PartnerLeadsManager() {
-  const [inquiries, setInquiries] = useState<PartnerInquiry[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const {
+    rows: inquiries,
+    setRows: setInquiries,
+    loading,
+    error,
+  } = useRealtimeTable<PartnerInquiry>('partner_inquiries');
   const [filter, setFilter] = useState<FilterTab>('all');
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [updatingId, setUpdatingId] = useState<string | null>(null);
-
-  useEffect(() => {
-    let cancelled = false;
-    setLoading(true);
-    setError(null);
-
-    // Cast: Supabase v2.105 generic chain doesn't infer hand-written Database types.
-    (
-      supabase.from('partner_inquiries') as unknown as {
-        select: (cols: string) => {
-          order: (col: string, opts: { ascending: boolean }) => Promise<{
-            data: PartnerInquiry[] | null;
-            error: { message: string } | null;
-          }>;
-        };
-      }
-    )
-      .select('*')
-      .order('created_at', { ascending: false })
-      .then(({ data, error: fetchError }) => {
-        if (cancelled) return;
-        if (fetchError) {
-          setError(fetchError.message);
-          setLoading(false);
-          return;
-        }
-        setInquiries(data ?? []);
-        setLoading(false);
-      });
-
-    return () => {
-      cancelled = true;
-    };
-  }, []);
 
   const filtered = useMemo(() => {
     if (filter === 'all') return inquiries;
@@ -137,23 +107,31 @@ export default function PartnerLeadsManager() {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <h2 className="text-2xl font-bold">Partner Leads</h2>
-        <div className="flex gap-2">
-          {(['all', 'qualified', 'not_qualified'] as FilterTab[]).map((tab) => (
-            <button
-              key={tab}
-              onClick={() => setFilter(tab)}
-              className={`px-4 py-2 rounded-full text-xs font-semibold transition-colors ${
-                filter === tab
-                  ? 'bg-[#FFB829] text-black'
-                  : 'bg-[#0a0a0a] text-gray-400 border border-[#1a1a1a] hover:border-[#FFB829]/30'
-              }`}
-            >
-              {tab === 'all' ? 'All' : tab === 'qualified' ? 'Qualified' : 'Not Qualified'}{' '}
-              <span className="opacity-70">({counts[tab]})</span>
-            </button>
-          ))}
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
+        <h2 className="text-xl font-bold sm:text-2xl">Partner Leads</h2>
+        <div className="-mx-4 overflow-x-auto px-4 scrollbar-hide sm:mx-0 sm:overflow-visible sm:px-0">
+          <div className="flex gap-1.5 sm:flex-wrap">
+            {(['all', 'qualified', 'not_qualified'] as FilterTab[]).map((tab) => {
+              const active = filter === tab;
+              const muted = !active && counts[tab] === 0;
+              return (
+                <button
+                  key={tab}
+                  onClick={() => setFilter(tab)}
+                  className={`shrink-0 rounded-full px-3 py-1.5 text-[11px] font-semibold tracking-wide transition-all ${
+                    active
+                      ? 'bg-[#FFB829] text-black'
+                      : 'text-gray-400 hover:bg-white/5 hover:text-white'
+                  } ${muted ? 'opacity-40' : ''}`}
+                >
+                  {tab === 'all' ? 'All' : tab === 'qualified' ? 'Qualified' : 'Not Qualified'}
+                  <span className={`ml-1 ${active ? 'opacity-70' : 'opacity-50'}`}>
+                    ({counts[tab]})
+                  </span>
+                </button>
+              );
+            })}
+          </div>
         </div>
       </div>
 
@@ -179,9 +157,55 @@ export default function PartnerLeadsManager() {
                 {/* Summary row */}
                 <button
                   onClick={() => setExpandedId(isExpanded ? null : lead.id)}
-                  className="w-full p-5 text-left"
+                  className="w-full p-4 sm:p-5 text-left"
                 >
-                  <div className="grid grid-cols-1 sm:grid-cols-12 gap-3 items-center">
+                  {/* Mobile */}
+                  <div className="space-y-3.5 sm:hidden">
+                    <div className="flex items-start justify-between gap-3">
+                      <div className="min-w-0 flex-1">
+                        <p className="font-semibold leading-tight truncate">{lead.full_name}</p>
+                        <p className="text-xs text-gray-400 truncate mt-0.5">{lead.email}</p>
+                      </div>
+                      <ChevronDown
+                        className={`w-4 h-4 text-gray-400 shrink-0 mt-1 transition-transform duration-200 ${isExpanded ? 'rotate-180' : ''}`}
+                      />
+                    </div>
+                    <div className="grid grid-cols-2 gap-x-4 gap-y-3">
+                      <div className="min-w-0">
+                        <p className="text-[10px] uppercase tracking-[0.12em] text-gray-500">Budget</p>
+                        <p className="mt-0.5 text-sm font-semibold text-[#FFB829] truncate">
+                          {formatLabel(lead.budget)}
+                        </p>
+                      </div>
+                      <div className="min-w-0">
+                        <p className="text-[10px] uppercase tracking-[0.12em] text-gray-500">Timeline</p>
+                        <p className="mt-0.5 text-sm font-semibold truncate">{formatLabel(lead.timeline)}</p>
+                      </div>
+                      <div>
+                        <p className="text-[10px] uppercase tracking-[0.12em] text-gray-500">Outcome</p>
+                        <span
+                          className={`mt-1 inline-block px-2 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wide ${
+                            lead.outcome === 'qualified'
+                              ? 'bg-green-500/20 text-green-300 border border-green-500/30'
+                              : 'bg-red-500/10 text-red-300 border border-red-500/20'
+                          }`}
+                        >
+                          {lead.outcome === 'qualified' ? 'Qualified' : 'Not qualified'}
+                        </span>
+                      </div>
+                      <div>
+                        <p className="text-[10px] uppercase tracking-[0.12em] text-gray-500">Status</p>
+                        <span
+                          className={`mt-1 inline-block px-2 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wide border ${followUpColors[lead.follow_up_status]}`}
+                        >
+                          {followUpLabels[lead.follow_up_status]}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Desktop */}
+                  <div className="hidden sm:grid sm:grid-cols-12 gap-3 items-center">
                     <div className="sm:col-span-3">
                       <p className="font-semibold truncate">{lead.full_name}</p>
                       <p className="text-xs text-gray-400 truncate">{lead.email}</p>

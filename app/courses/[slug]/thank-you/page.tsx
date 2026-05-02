@@ -21,6 +21,7 @@ export async function generateMetadata({
     title: course
       ? `Check your inbox — ${course.title} | JAZA Media`
       : 'Thank you — JAZA Media',
+    robots: { index: false, follow: false },
   };
 }
 

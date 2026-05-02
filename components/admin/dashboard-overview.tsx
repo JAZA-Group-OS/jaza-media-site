@@ -1,7 +1,17 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { TrendingUp, Inbox, Bell, Calendar } from 'lucide-react';
+import {
+  TrendingUp,
+  Inbox,
+  Bell,
+  Calendar,
+  BookOpen,
+  Target,
+  FileBox,
+  Briefcase,
+} from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
 import {
   BarChart,
   Bar,
@@ -13,9 +23,12 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from 'recharts';
-import { useEffect, useState } from 'react';
-import { supabase } from '@/lib/supabase/client';
-import type { PartnerInquiry } from '@/lib/types/database';
+import { useRealtimeTable } from '@/lib/admin/use-realtime-table';
+import type {
+  PartnerInquiry,
+  CareerApplication,
+  CourseRequest,
+} from '@/lib/types/database';
 
 type DailyPoint = { date: string; submissions: number };
 
@@ -52,44 +65,38 @@ function buildDailySeries(rows: PartnerInquiry[]): DailyPoint[] {
 }
 
 export default function DashboardOverview() {
-  const [inquiries, setInquiries] = useState<PartnerInquiry[] | null>(null);
-  const [error, setError] = useState<string | null>(null);
+  const { rows: inquiries, loading, error } =
+    useRealtimeTable<PartnerInquiry>('partner_inquiries');
+  const { rows: careerApps } =
+    useRealtimeTable<CareerApplication>('career_applications');
+  const { rows: courseRequests } =
+    useRealtimeTable<CourseRequest>('course_requests');
 
-  useEffect(() => {
-    let cancelled = false;
-    (
-      supabase.from('partner_inquiries') as unknown as {
-        select: (cols: string) => {
-          order: (col: string, opts: { ascending: boolean }) => Promise<{
-            data: PartnerInquiry[] | null;
-            error: { message: string } | null;
-          }>;
-        };
-      }
-    )
-      .select('*')
-      .order('created_at', { ascending: false })
-      .then(({ data, error: fetchError }) => {
-        if (cancelled) return;
-        if (fetchError) {
-          setError(fetchError.message);
-          return;
-        }
-        setInquiries(data ?? []);
-      });
-    return () => {
-      cancelled = true;
-    };
-  }, []);
+  // Treat first paint as null-equivalent so the metric tiles render "—" until
+  // the initial fetch completes (matches prior UX).
+  const data = loading ? null : inquiries;
 
-  const total = inquiries?.length ?? 0;
-  const qualified = inquiries?.filter((i) => i.outcome === 'qualified').length ?? 0;
-  const pending = inquiries?.filter((i) => i.follow_up_status === 'new').length ?? 0;
+  // Per-funnel counts. Course requests come from one table sliced by slug
+  // so we don't fan out into three Realtime channels for the same data.
+  const marketingCount = courseRequests.filter(
+    (r) => r.course_slug === 'marketing',
+  ).length;
+  const leadGenCount = courseRequests.filter(
+    (r) => r.course_slug === 'lead-generation',
+  ).length;
+  const templatesCount = courseRequests.filter(
+    (r) => r.course_slug === 'marketing-templates',
+  ).length;
+  const careerCount = careerApps.length;
+
+  const total = data?.length ?? 0;
+  const qualified = data?.filter((i) => i.outcome === 'qualified').length ?? 0;
+  const pending = data?.filter((i) => i.follow_up_status === 'new').length ?? 0;
   const weekMs = 7 * 24 * 60 * 60 * 1000;
   const thisWeek =
-    inquiries?.filter((i) => Date.now() - new Date(i.created_at).getTime() < weekMs).length ?? 0;
+    data?.filter((i) => Date.now() - new Date(i.created_at).getTime() < weekMs).length ?? 0;
 
-  const dailySeries = inquiries ? buildDailySeries(inquiries) : [];
+  const dailySeries = data ? buildDailySeries(data) : [];
   const outcomeData = [
     { stage: 'Qualified', value: qualified },
     { stage: 'Not Qualified', value: total - qualified },
@@ -157,7 +164,7 @@ export default function DashboardOverview() {
                 <div>
                   <p className="text-gray-400 text-xs sm:text-sm font-medium mb-1">{metric.label}</p>
                   <h3 className="text-2xl sm:text-3xl font-bold">
-                    {inquiries === null ? '—' : metric.value}
+                    {data === null ? '—' : metric.value}
                   </h3>
                 </div>
                 <div className={`p-2 rounded-lg ${metric.bgColor}`}>
@@ -168,6 +175,42 @@ export default function DashboardOverview() {
             </motion.div>
           );
         })}
+      </div>
+
+      {/* Lead-magnet funnels — live counts per source. Sits between the
+          partner-leads metrics above and the charts below so an admin
+          glancing at the page sees both partner KPIs and lead-magnet
+          activity without scrolling on desktop. */}
+      <div>
+        <p className="mb-3 text-[10px] uppercase tracking-[0.18em] text-gray-500 sm:text-xs">
+          Lead Magnet Funnels
+        </p>
+        <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
+          <FunnelTile
+            label="Marketing Course"
+            count={marketingCount}
+            icon={BookOpen}
+            delay={0.05}
+          />
+          <FunnelTile
+            label="Lead Gen Course"
+            count={leadGenCount}
+            icon={Target}
+            delay={0.1}
+          />
+          <FunnelTile
+            label="Marketing Templates"
+            count={templatesCount}
+            icon={FileBox}
+            delay={0.15}
+          />
+          <FunnelTile
+            label="Career Applications"
+            count={careerCount}
+            icon={Briefcase}
+            delay={0.2}
+          />
+        </div>
       </div>
 
       {/* Charts */}
@@ -239,13 +282,13 @@ export default function DashboardOverview() {
         className="p-4 sm:p-6 rounded-xl bg-gradient-to-br from-[#0a0a0a] to-black border border-[#1a1a1a]"
       >
         <h3 className="text-base sm:text-lg font-bold mb-4 sm:mb-6">Recent inquiries</h3>
-        {inquiries === null ? (
+        {data === null ? (
           <div className="text-sm text-gray-500">Loading...</div>
-        ) : inquiries.length === 0 ? (
+        ) : data.length === 0 ? (
           <div className="text-sm text-gray-500">No inquiries yet.</div>
         ) : (
           <div className="space-y-2 sm:space-y-3">
-            {inquiries.slice(0, 5).map((i) => (
+            {data.slice(0, 5).map((i) => (
               <div
                 key={i.id}
                 className="flex items-center justify-between gap-3 p-3 sm:p-4 rounded-lg bg-[#1a1a1a]"
@@ -272,5 +315,36 @@ export default function DashboardOverview() {
         )}
       </motion.div>
     </div>
+  );
+}
+
+function FunnelTile({
+  label,
+  count,
+  icon: Icon,
+  delay,
+}: {
+  label: string;
+  count: number;
+  icon: LucideIcon;
+  delay: number;
+}) {
+  // Subdued tile — purposely lighter than the partner-lead KPI tiles above
+  // so the visual hierarchy reads "primary KPIs / secondary funnel counts".
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 12 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay }}
+      className="rounded-xl border border-[#1a1a1a] bg-gradient-to-br from-[#0a0a0a] to-black p-3 sm:p-4 hover:border-[#FFB829]/30 transition-colors"
+    >
+      <div className="flex items-center gap-2 mb-1.5">
+        <Icon className="w-3.5 h-3.5 text-[#FFB829]/80 shrink-0" />
+        <p className="text-[10px] uppercase tracking-[0.12em] text-gray-500 truncate">
+          {label}
+        </p>
+      </div>
+      <p className="text-2xl font-bold text-white sm:text-3xl">{count}</p>
+    </motion.div>
   );
 }

@@ -44,14 +44,14 @@ export function buildCourseDeliveryEmail({
   course: CourseDetails;
   assetUrl: string;
 }) {
-  const subject = `Your free ${course.title} is here`;
+  const subject = course.emailSubject;
 
   const text = [
     `Hi ${toName},`,
     '',
-    `Thanks for claiming "${course.title}" from JAZA Media.`,
+    course.emailIntro,
     '',
-    `You can access your course here:`,
+    'Open it here:',
     assetUrl,
     '',
     'If the link does not open, copy and paste it into your browser.',
@@ -62,7 +62,9 @@ export function buildCourseDeliveryEmail({
   ].join('\n');
 
   const safeName = escapeHtml(toName);
-  const safeTitle = escapeHtml(course.title);
+  const safeIntro = escapeHtml(course.emailIntro);
+  const safeHeading = escapeHtml(course.emailHeading);
+  const safeButtonLabel = escapeHtml(course.emailButtonLabel);
   const safeUrl = escapeHtml(assetUrl);
 
   // Inline-styled HTML — most major email clients strip <style> blocks and
@@ -88,7 +90,7 @@ export function buildCourseDeliveryEmail({
             <tr>
               <td style="padding:0 32px 8px 32px;">
                 <h1 style="margin:0;font-size:28px;font-weight:900;line-height:1.2;color:#181818;text-align:center;">
-                  Your free <span style="color:#FFC400;">course</span> is ready
+                  ${safeHeading}
                 </h1>
               </td>
             </tr>
@@ -98,12 +100,12 @@ export function buildCourseDeliveryEmail({
                   Hi ${safeName},
                 </p>
                 <p style="margin:0 0 16px 0;font-size:16px;line-height:1.6;color:#333333;">
-                  Thanks for claiming <strong>${safeTitle}</strong>. You can open your course using the button below.
+                  ${safeIntro}
                 </p>
                 <p style="margin:24px 0;text-align:center;">
                   <a href="${safeUrl}"
                      style="display:inline-block;background:#FFC400;color:#181818;font-weight:700;text-decoration:none;padding:14px 32px;border-radius:999px;font-size:16px;">
-                    Open my course
+                    ${safeButtonLabel}
                   </a>
                 </p>
                 <p style="margin:0 0 16px 0;font-size:13px;line-height:1.6;color:#666666;">
@@ -122,7 +124,7 @@ export function buildCourseDeliveryEmail({
             </tr>
           </table>
           <p style="margin:16px 0 0 0;font-size:12px;color:#999999;text-align:center;max-width:600px;">
-            You received this email because you requested a course at JAZA Media. If this wasn&rsquo;t you, please disregard.
+            You received this email because you requested this from JAZA Media. If this wasn&rsquo;t you, please disregard.
           </p>
         </td>
       </tr>

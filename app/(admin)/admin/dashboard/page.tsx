@@ -10,8 +10,16 @@ import AdminNavigation from '@/components/admin/admin-navigation';
 import DashboardOverview from '@/components/admin/dashboard-overview';
 import PartnerLeadsManager from '@/components/admin/partner-leads-manager';
 import CareerApplicationsManager from '@/components/admin/career-applications-manager';
+import CourseRequestsManager from '@/components/admin/course-requests-manager';
+import { COURSE_CATALOG } from '@/lib/courses/catalog';
 
-type DashboardTab = 'overview' | 'leads' | 'applications';
+type DashboardTab =
+  | 'overview'
+  | 'leads'
+  | 'applications'
+  | 'course-marketing'
+  | 'course-lead-generation'
+  | 'course-marketing-templates';
 
 export default function AdminDashboardPage() {
   const router = useRouter();
@@ -52,6 +60,24 @@ export default function AdminDashboardPage() {
             {activeTab === 'overview' && <DashboardOverview />}
             {activeTab === 'leads' && <PartnerLeadsManager />}
             {activeTab === 'applications' && <CareerApplicationsManager />}
+            {activeTab === 'course-marketing' && (
+              <CourseRequestsManager
+                courseSlug="marketing"
+                courseTitle={COURSE_CATALOG.marketing.shortName}
+              />
+            )}
+            {activeTab === 'course-lead-generation' && (
+              <CourseRequestsManager
+                courseSlug="lead-generation"
+                courseTitle={COURSE_CATALOG['lead-generation'].shortName}
+              />
+            )}
+            {activeTab === 'course-marketing-templates' && (
+              <CourseRequestsManager
+                courseSlug="marketing-templates"
+                courseTitle={COURSE_CATALOG['marketing-templates'].shortName}
+              />
+            )}
           </div>
         </div>
       </div>

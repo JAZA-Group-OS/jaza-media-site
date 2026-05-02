@@ -70,6 +70,7 @@ export async function POST(request: Request) {
         first_name: data.firstName,
         last_name: data.lastName,
         email: data.email,
+        phone: data.phone,
         source: 'courses_site',
       })
       .select('id')

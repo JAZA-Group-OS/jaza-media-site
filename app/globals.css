@@ -189,4 +189,15 @@
       animation: none;
     }
   }
+
+  /* Hide native scrollbars while preserving scroll functionality. Used by
+     the admin filter rail so a horizontal-scroll container looks like a
+     clean text strip. */
+  .scrollbar-hide {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
 }

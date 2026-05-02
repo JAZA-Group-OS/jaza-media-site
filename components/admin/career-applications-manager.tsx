@@ -14,8 +14,9 @@ import {
   Folder,
   Link as LinkIcon,
 } from 'lucide-react';
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { supabase } from '@/lib/supabase/client';
+import { useRealtimeTable } from '@/lib/admin/use-realtime-table';
 import type {
   CareerApplication,
   CareerPosition,
@@ -61,6 +62,24 @@ function formatDate(iso: string): string {
   });
 }
 
+// Compact form for narrow mobile cells: "May 2 · 12:48 PM" (no year, no comma).
+// Year is rarely needed at-a-glance; admins can expand the row for the full
+// date.
+function formatDateShort(iso: string): string {
+  const d = new Date(iso);
+  const datePart = d.toLocaleDateString('en-PH', {
+    timeZone: 'Asia/Manila',
+    month: 'short',
+    day: 'numeric',
+  });
+  const timePart = d.toLocaleTimeString('en-PH', {
+    timeZone: 'Asia/Manila',
+    hour: 'numeric',
+    minute: '2-digit',
+  });
+  return `${datePart} · ${timePart}`;
+}
+
 function formatBytes(n: number): string {
   if (n < 1024) return `${n} B`;
   if (n < 1024 * 1024) return `${(n / 1024).toFixed(0)} KB`;
@@ -68,45 +87,15 @@ function formatBytes(n: number): string {
 }
 
 export default function CareerApplicationsManager() {
-  const [applications, setApplications] = useState<CareerApplication[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const {
+    rows: applications,
+    setRows: setApplications,
+    loading,
+    error,
+  } = useRealtimeTable<CareerApplication>('career_applications');
   const [filter, setFilter] = useState<FilterTab>('all');
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [updatingId, setUpdatingId] = useState<string | null>(null);
-
-  useEffect(() => {
-    let cancelled = false;
-    setLoading(true);
-    setError(null);
-
-    (
-      supabase.from('career_applications') as unknown as {
-        select: (cols: string) => {
-          order: (col: string, opts: { ascending: boolean }) => Promise<{
-            data: CareerApplication[] | null;
-            error: { message: string } | null;
-          }>;
-        };
-      }
-    )
-      .select('*')
-      .order('created_at', { ascending: false })
-      .then(({ data, error: fetchError }) => {
-        if (cancelled) return;
-        if (fetchError) {
-          setError(fetchError.message);
-          setLoading(false);
-          return;
-        }
-        setApplications(data ?? []);
-        setLoading(false);
-      });
-
-    return () => {
-      cancelled = true;
-    };
-  }, []);
 
   const filtered = useMemo(() => {
     if (filter === 'all') return applications;
@@ -181,24 +170,26 @@ export default function CareerApplicationsManager() {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <h2 className="text-2xl font-bold">Career Applications</h2>
-        <div className="flex flex-wrap gap-2">
-          <FilterPill
-            active={filter === 'all'}
-            onClick={() => setFilter('all')}
-            label="All"
-            count={counts.all}
-          />
-          {POSITION_OPTIONS.map((p) => (
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
+        <h2 className="text-xl font-bold sm:text-2xl">Career Applications</h2>
+        <div className="-mx-4 overflow-x-auto px-4 scrollbar-hide sm:mx-0 sm:overflow-visible sm:px-0">
+          <div className="flex gap-1.5 sm:flex-wrap">
             <FilterPill
-              key={p}
-              active={filter === p}
-              onClick={() => setFilter(p)}
-              label={formatLabel(p)}
-              count={counts[p]}
+              active={filter === 'all'}
+              onClick={() => setFilter('all')}
+              label="All"
+              count={counts.all}
             />
-          ))}
+            {POSITION_OPTIONS.map((p) => (
+              <FilterPill
+                key={p}
+                active={filter === p}
+                onClick={() => setFilter(p)}
+                label={formatLabel(p)}
+                count={counts[p]}
+              />
+            ))}
+          </div>
         </div>
       </div>
 
@@ -223,9 +214,53 @@ export default function CareerApplicationsManager() {
               >
                 <button
                   onClick={() => setExpandedId(isExpanded ? null : app.id)}
-                  className="w-full p-5 text-left"
+                  className="w-full p-4 sm:p-5 text-left"
                 >
-                  <div className="grid grid-cols-1 sm:grid-cols-12 gap-3 items-center">
+                  {/* Mobile: header row + 2-col metadata grid. Drops the
+                      stair-step layout caused by 12-col grid on narrow screens. */}
+                  <div className="space-y-3.5 sm:hidden">
+                    <div className="flex items-start justify-between gap-3">
+                      <div className="min-w-0 flex-1">
+                        <p className="font-semibold leading-tight truncate">
+                          {app.full_name}
+                        </p>
+                        <p className="text-xs text-gray-400 truncate mt-0.5">
+                          {app.email}
+                        </p>
+                      </div>
+                      <ChevronDown
+                        className={`w-4 h-4 text-gray-400 shrink-0 mt-1 transition-transform duration-200 ${isExpanded ? 'rotate-180' : ''}`}
+                      />
+                    </div>
+                    <div className="grid grid-cols-2 gap-x-4 gap-y-3">
+                      <MobileField
+                        label="Position"
+                        value={formatLabel(app.position)}
+                        accent
+                      />
+                      <MobileField
+                        label="Location"
+                        value={formatLabel(app.location)}
+                      />
+                      <MobileField
+                        label="Submitted"
+                        value={formatDateShort(app.created_at)}
+                      />
+                      <div>
+                        <p className="text-[10px] uppercase tracking-[0.12em] text-gray-500">
+                          Status
+                        </p>
+                        <span
+                          className={`mt-1 inline-block px-2 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wide border ${followUpColors[app.follow_up_status]}`}
+                        >
+                          {followUpLabels[app.follow_up_status]}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Desktop: original 12-col grid */}
+                  <div className="hidden sm:grid sm:grid-cols-12 gap-3 items-center">
                     <div className="sm:col-span-3">
                       <p className="font-semibold truncate">{app.full_name}</p>
                       <p className="text-xs text-gray-400 truncate">
@@ -372,6 +407,31 @@ export default function CareerApplicationsManager() {
   );
 }
 
+function MobileField({
+  label,
+  value,
+  accent,
+}: {
+  label: string;
+  value: string;
+  accent?: boolean;
+}) {
+  return (
+    <div className="min-w-0">
+      <p className="text-[10px] uppercase tracking-[0.12em] text-gray-500">
+        {label}
+      </p>
+      <p
+        className={`mt-0.5 text-sm font-semibold truncate ${
+          accent ? 'text-[#FFB829]' : 'text-white'
+        }`}
+      >
+        {value}
+      </p>
+    </div>
+  );
+}
+
 function FilterPill({
   active,
   onClick,
@@ -383,16 +443,22 @@ function FilterPill({
   label: string;
   count: number;
 }) {
+  // Inactive pills with no items dim so the eye lands on what matters; the
+  // active pill always stays at full weight to reinforce the current filter.
+  const muted = !active && count === 0;
   return (
     <button
       onClick={onClick}
-      className={`px-4 py-2 rounded-full text-xs font-semibold transition-colors ${
+      className={`shrink-0 rounded-full px-3 py-1.5 text-[11px] font-semibold tracking-wide transition-all ${
         active
           ? 'bg-[#FFB829] text-black'
-          : 'bg-[#0a0a0a] text-gray-400 border border-[#1a1a1a] hover:border-[#FFB829]/30'
-      }`}
+          : 'text-gray-400 hover:bg-white/5 hover:text-white'
+      } ${muted ? 'opacity-40' : ''}`}
     >
-      {label} <span className="opacity-70">({count})</span>
+      {label}
+      <span className={`ml-1 ${active ? 'opacity-70' : 'opacity-50'}`}>
+        ({count})
+      </span>
     </button>
   );
 }

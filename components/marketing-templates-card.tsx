@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 
 export function MarketingTemplatesCard() {
   return (
@@ -27,12 +28,12 @@ export function MarketingTemplatesCard() {
                 <br />
                 MARKETING TEMPLATES
               </h3>
-              <a
-                href="#"
+              <Link
+                href="/courses/marketing-templates"
                 className="mt-5 inline-flex items-center rounded-full bg-brand-yellow px-8 py-3 text-base font-bold text-brand-black transition-transform hover:scale-[1.02] md:text-lg"
               >
                 Download Now
-              </a>
+              </Link>
             </div>
           </div>
         </div>

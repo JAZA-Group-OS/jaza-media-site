@@ -293,7 +293,7 @@ export interface CareerApplicationUpdate {
 // course_requests — claim submissions from /courses/[slug]
 // ============================================================================
 
-export type CourseSlug = 'marketing' | 'lead-generation';
+export type CourseSlug = 'marketing' | 'lead-generation' | 'marketing-templates';
 
 export interface CourseRequest {
   id: string; // UUID
@@ -301,8 +301,13 @@ export interface CourseRequest {
   first_name: string;
   last_name: string;
   email: string;
+  // Nullable because rows captured before the phone column was added do not
+  // have a value. The form requires it for new submissions.
+  phone: string | null;
   email_sent_at: string | null;
   email_error: string | null;
+  follow_up_status: FollowUpStatus;
+  admin_notes: string | null;
   source: string;
   created_at: string;
   updated_at: string;
@@ -313,14 +318,19 @@ export interface CourseRequestInsert {
   first_name: string;
   last_name: string;
   email: string;
+  phone: string;
   email_sent_at?: string | null;
   email_error?: string | null;
+  follow_up_status?: FollowUpStatus;
+  admin_notes?: string | null;
   source?: string;
 }
 
 export interface CourseRequestUpdate {
   email_sent_at?: string | null;
   email_error?: string | null;
+  follow_up_status?: FollowUpStatus;
+  admin_notes?: string | null;
 }
 
 // ============================================================================
