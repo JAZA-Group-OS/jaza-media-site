@@ -11,6 +11,7 @@ import DashboardOverview from '@/components/admin/dashboard-overview';
 import PartnerLeadsManager from '@/components/admin/partner-leads-manager';
 import CareerApplicationsManager from '@/components/admin/career-applications-manager';
 import CourseRequestsManager from '@/components/admin/course-requests-manager';
+import SupportTicketsManager from '@/components/admin/support-tickets-manager';
 import { COURSE_CATALOG } from '@/lib/courses/catalog';
 
 type DashboardTab =
@@ -18,7 +19,8 @@ type DashboardTab =
   | 'leads'
   | 'applications'
   | 'course-rule-of-10x'
-  | 'course-marketing-templates';
+  | 'course-marketing-templates'
+  | 'support';
 
 export default function AdminDashboardPage() {
   const router = useRouter();
@@ -71,6 +73,7 @@ export default function AdminDashboardPage() {
                 courseTitle={COURSE_CATALOG['marketing-templates'].shortName}
               />
             )}
+            {activeTab === 'support' && <SupportTicketsManager />}
           </div>
         </div>
       </div>

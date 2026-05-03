@@ -90,6 +90,13 @@ export const TEAM: Member[] = [
     role: "SALES MANAGER",
     image: "/about-the-form/Crisia-Manzanilla.png",
     bioImage: "/about-the-firm/Crisia-Manzanilla-removebg-preview.png",
+    bio: [
+      "Crisia Manzanilla is a Filipino Sales Manager specializing in revenue generation, client relations, and digital sales solutions. She brings a strong foundation in sales strategy, partner management, and customer communication, helping businesses convert opportunities into measurable growth.",
+      "With hands-on experience managing end-to-end sales campaigns, Crisia plays a key role in building and maintaining relationships with clients and partners while supporting brands in expanding their online presence through strategic outreach and performance-driven marketing initiatives.",
+      "Before stepping into leadership in sales, she built her professional foundation in the BPO industry as a Collection Specialist, where she developed advanced skills in negotiation, communication, and customer relationship management. This experience shaped her results-oriented and client-first approach, allowing her to handle complex client situations while maintaining long-term trust and retention.",
+      "Today, Crisia focuses on helping businesses strengthen their sales systems, improve campaign execution, and adopt digital solutions that increase efficiency, enhance customer experience, and drive sustainable revenue growth.",
+      "Her mission is clear: turn conversations into conversions, build lasting client relationships, and help businesses scale through disciplined sales execution.",
+    ],
   },
   {
     slug: "jallah",
@@ -125,6 +132,13 @@ export const TEAM: Member[] = [
     role: "TECH MANAGER",
     image: "/about-the-form/Omhar-Regidor.png",
     bioImage: "/about-the-firm/Omhar-Regidor-removebg-preview.png",
+    bio: [
+      "Omhar Regidor is a Filipino software developer, systems architect, and technology builder with over five years of experience in web and mobile application development. Combining technical precision with practical problem-solving, he specializes in transforming complex business challenges into clean, scalable digital solutions. His core belief is simple: great technology should solve real-world problems.",
+      "His journey into the startup ecosystem began in December 2024 when entrepreneur and business builder Jaza Sarmiento invited him to become the first technical leader of Noxa Loyalty, a digital loyalty platform under the JAZA Group of Companies. Built to help businesses strengthen customer retention, Noxa Loyalty delivers an integrated Points and Stamp Card system designed to simplify how companies reward, engage, and retain their customers.",
+      "As the founding technical builder of Noxa Loyalty, Omhar leads the platform's entire technical development — from system architecture and infrastructure planning to hands-on coding and product execution. In the early stage of the company, he carries multiple roles, laying the technological foundation that will scale into a full engineering organization.",
+      "More than building applications, Omhar focuses on creating technology that removes friction for entrepreneurs. His mission is to design systems that are reliable, intuitive, and operationally efficient — empowering business owners with tools that work seamlessly so they can focus on growth instead of complexity.",
+      "Now serving as Tech Manager, Omhar stands at the forefront of JAZA Group's expansion into the technology sector, representing the bridge between vision and execution — and proving that one committed technologist can become the catalyst for building scalable innovation.",
+    ],
   },
   {
     slug: "sofhia",

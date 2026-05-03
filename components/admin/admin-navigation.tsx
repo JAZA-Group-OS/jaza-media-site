@@ -7,6 +7,7 @@ import {
   Briefcase,
   BookOpen,
   FileBox,
+  LifeBuoy,
   ChevronDown,
   Menu,
   X,
@@ -26,6 +27,7 @@ const MENU_ITEMS = [
   { id: 'applications', label: 'Career Applications', icon: Briefcase },
   { id: 'course-rule-of-10x', label: 'Rule of 10X', icon: BookOpen },
   { id: 'course-marketing-templates', label: 'Marketing Templates', icon: FileBox },
+  { id: 'support', label: 'Support Tickets', icon: LifeBuoy },
 ] as const;
 
 export default function AdminNavigation({
