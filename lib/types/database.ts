@@ -299,9 +299,7 @@ export type SelectedAsset =
   | 'rule_of_10x_marketing'
   | 'rule_of_10x_advertising'
   | 'sales_call_script'
-  | 'ai_prompt'
-  | 'content_calendar'
-  | 'text';
+  | 'ai_prompt';
 
 export interface CourseRequest {
   id: string; // UUID

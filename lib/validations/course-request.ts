@@ -19,8 +19,6 @@ export const CourseRequestSchema = z.object({
     'rule_of_10x_advertising',
     'sales_call_script',
     'ai_prompt',
-    'content_calendar',
-    'text',
   ]),
 });
 

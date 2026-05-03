@@ -32,9 +32,7 @@ export type SelectedAsset =
   | 'rule_of_10x_marketing'
   | 'rule_of_10x_advertising'
   | 'sales_call_script'
-  | 'ai_prompt'
-  | 'content_calendar'
-  | 'text';
+  | 'ai_prompt';
 
 export type AssetOption = {
   value: SelectedAsset;
@@ -95,8 +93,7 @@ export const COURSE_CATALOG: Record<CourseSlug, CourseDetails> = {
         value: 'rule_of_10x_advertising',
         label: 'The Rule of 10X Advertising',
         envKey: 'COURSE_RULE_OF_10X_ADVERTISING_URL',
-        defaultAssetUrl:
-          'https://jaza-media.com/courses/placeholder-rule-of-10x-advertising',
+        defaultAssetUrl: '/ebooks/the-rule-of-10x-advertising.pdf',
       },
     ],
   },
@@ -130,19 +127,6 @@ export const COURSE_CATALOG: Record<CourseSlug, CourseDetails> = {
         label: 'AI Prompt',
         envKey: 'TEMPLATE_AI_PROMPT_URL',
         defaultAssetUrl: 'https://jaza-media.com/templates/placeholder-ai-prompt',
-      },
-      {
-        value: 'content_calendar',
-        label: 'Content Calendar',
-        envKey: 'TEMPLATE_CONTENT_CALENDAR_URL',
-        defaultAssetUrl:
-          'https://jaza-media.com/templates/placeholder-content-calendar',
-      },
-      {
-        value: 'text',
-        label: 'Text',
-        envKey: 'TEMPLATE_TEXT_URL',
-        defaultAssetUrl: 'https://jaza-media.com/templates/placeholder-text',
       },
     ],
   },
