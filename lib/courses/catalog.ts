@@ -1,3 +1,5 @@
+import { toAbsoluteUrl } from '@/lib/site-url';
+
 // Lead-magnet catalog — single source of truth for the two free funnels:
 //
 //   "rule-of-10x"          — entered from either course card on the home
@@ -14,6 +16,13 @@
 // Asset URLs are per-selected-asset (the thing they actually chose at step 5),
 // not per-funnel-slug. Set the corresponding env keys in production to
 // override the placeholder defaults.
+//
+// `defaultAssetUrl` may be either:
+//   - an absolute URL (https://example.com/asset.pdf) for off-site links
+//   - a path-relative URL (/ebooks/foo.pdf) for self-hosted assets in /public;
+//     `resolveAssetUrl` expands these with the current deployment's base URL,
+//     so they work in local dev, Vercel previews, and production without
+//     hardcoding a domain.
 
 export type CourseSlug = 'rule-of-10x' | 'marketing-templates';
 
@@ -80,8 +89,7 @@ export const COURSE_CATALOG: Record<CourseSlug, CourseDetails> = {
         value: 'rule_of_10x_marketing',
         label: 'The Rule of 10X Marketing',
         envKey: 'COURSE_RULE_OF_10X_MARKETING_URL',
-        defaultAssetUrl:
-          'https://jaza-media.com/courses/placeholder-rule-of-10x-marketing',
+        defaultAssetUrl: '/ebooks/the-rule-of-10x-marketing.pdf',
       },
       {
         value: 'rule_of_10x_advertising',
@@ -165,9 +173,11 @@ export function findAssetOption(value: string): AssetOption | null {
 
 // Resolve the asset URL the user receives in the email. Reads the env override
 // at call time so a deployment can swap in real PDF/landing links without
-// code changes.
+// code changes. Path-relative defaults (e.g. "/ebooks/foo.pdf") are expanded
+// to absolute URLs against the current deployment's base URL.
 export function resolveAssetUrl(value: string): string | null {
   const opt = findAssetOption(value);
   if (!opt) return null;
-  return process.env[opt.envKey] ?? opt.defaultAssetUrl;
+  const raw = process.env[opt.envKey] ?? opt.defaultAssetUrl;
+  return toAbsoluteUrl(raw);
 }
