@@ -88,6 +88,8 @@ export function Footer() {
                 key={label}
                 href={href}
                 aria-label={label}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="text-white transition-colors hover:text-brand-yellow"
               >
                 <Icon className="size-5" />

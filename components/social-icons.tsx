@@ -50,12 +50,14 @@ export type SocialLink = {
 
 // Hrefs are placeholders — replace with real URLs when the channels are
 // publicly published. Using `#` keeps the icons visible without misleading.
+// Per-platform bare-domain landing pages. Swap for JAZA's specific channel
+// handles (e.g. https://facebook.com/<page>) once those are published.
 export const SOCIAL_LINKS: SocialLink[] = [
-  { label: 'Gmail', href: '#', Icon: GmailIcon },
-  { label: 'Messenger', href: '#', Icon: MessengerIcon },
-  { label: 'Facebook', href: '#', Icon: FacebookIcon },
-  { label: 'TikTok', href: '#', Icon: TikTokIcon },
-  { label: 'Instagram', href: '#', Icon: InstagramIcon },
+  { label: 'Gmail', href: 'https://gmail.com', Icon: GmailIcon },
+  { label: 'Messenger', href: 'https://messenger.com', Icon: MessengerIcon },
+  { label: 'Facebook', href: 'https://facebook.com', Icon: FacebookIcon },
+  { label: 'TikTok', href: 'https://tiktok.com', Icon: TikTokIcon },
+  { label: 'Instagram', href: 'https://instagram.com', Icon: InstagramIcon },
 ];
 
 export type { IconProps as SocialIconProps, SVGProps };

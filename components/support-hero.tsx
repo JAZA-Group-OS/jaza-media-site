@@ -31,6 +31,8 @@ export function SupportHero() {
                 <a
                   href={href}
                   aria-label={label}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="inline-flex items-center justify-center p-1.5 text-white/70 transition-colors hover:text-brand-yellow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-yellow focus-visible:ring-offset-2 focus-visible:ring-offset-brand-black rounded-full"
                 >
                   <Icon className="size-5" />
