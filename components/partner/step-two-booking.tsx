@@ -15,7 +15,7 @@ import {
 // query strings, or user input — that would turn the booking page into
 // an open-redirect to an attacker-controlled Calendly clone.
 const FALLBACK_CALENDLY_URL =
-  'https://calendly.com/jazamediaph/discovery-call';
+  'https://calendly.com/jazamediaph/discovery-call?utm_id=97757_v0_s00_e0_tv0';
 
 function resolveCalendlyBase(): string {
   const envUrl = process.env.NEXT_PUBLIC_CALENDLY_URL;
