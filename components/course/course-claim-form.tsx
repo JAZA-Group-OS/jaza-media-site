@@ -121,7 +121,7 @@ export function CourseClaimForm({ course }: CourseClaimFormProps) {
               value={firstName}
               onChange={(e) => setFirstName(e.target.value)}
               maxLength={100}
-              className="block w-full rounded-md border border-neutral-300 bg-white px-4 py-3 font-heading text-sm tracking-wide text-brand-black uppercase placeholder:text-neutral-400 focus:border-brand-yellow focus:outline-none focus:ring-2 focus:ring-brand-yellow/30"
+              className="block w-full rounded-md border border-neutral-300 bg-white px-4 py-3 font-heading text-sm tracking-wide text-brand-black placeholder:text-neutral-400 focus:border-brand-yellow focus:outline-none focus:ring-2 focus:ring-brand-yellow/30"
             />
           </label>
           <label className="block">
@@ -133,7 +133,7 @@ export function CourseClaimForm({ course }: CourseClaimFormProps) {
               value={lastName}
               onChange={(e) => setLastName(e.target.value)}
               maxLength={100}
-              className="block w-full rounded-md border border-neutral-300 bg-white px-4 py-3 font-heading text-sm tracking-wide text-brand-black uppercase placeholder:text-neutral-400 focus:border-brand-yellow focus:outline-none focus:ring-2 focus:ring-brand-yellow/30"
+              className="block w-full rounded-md border border-neutral-300 bg-white px-4 py-3 font-heading text-sm tracking-wide text-brand-black placeholder:text-neutral-400 focus:border-brand-yellow focus:outline-none focus:ring-2 focus:ring-brand-yellow/30"
             />
           </label>
         </div>
@@ -148,7 +148,7 @@ export function CourseClaimForm({ course }: CourseClaimFormProps) {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             maxLength={254}
-            className="block w-full rounded-md border border-neutral-300 bg-white px-4 py-3 font-heading text-sm tracking-wide text-brand-black uppercase placeholder:text-neutral-400 focus:border-brand-yellow focus:outline-none focus:ring-2 focus:ring-brand-yellow/30"
+            className="block w-full rounded-md border border-neutral-300 bg-white px-4 py-3 font-heading text-sm tracking-wide text-brand-black placeholder:text-neutral-400 focus:border-brand-yellow focus:outline-none focus:ring-2 focus:ring-brand-yellow/30"
           />
         </label>
 
@@ -162,7 +162,7 @@ export function CourseClaimForm({ course }: CourseClaimFormProps) {
             value={phone}
             onChange={(e) => setPhone(e.target.value)}
             maxLength={30}
-            className="block w-full rounded-md border border-neutral-300 bg-white px-4 py-3 font-heading text-sm tracking-wide text-brand-black uppercase placeholder:text-neutral-400 focus:border-brand-yellow focus:outline-none focus:ring-2 focus:ring-brand-yellow/30"
+            className="block w-full rounded-md border border-neutral-300 bg-white px-4 py-3 font-heading text-sm tracking-wide text-brand-black placeholder:text-neutral-400 focus:border-brand-yellow focus:outline-none focus:ring-2 focus:ring-brand-yellow/30"
           />
         </label>
 
