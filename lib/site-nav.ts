@@ -12,7 +12,7 @@ export const NAV_LINKS: NavLink[] = [
   { label: "About the Firm", href: "/about-the-firm" },
   { label: "Partner With Us", href: "/partner-with-us" },
   { label: "Careers", href: "/careers" },
-  { label: "Support", href: "#" },
+  { label: "Support", href: "/support" },
 ];
 
 export function isInternalRoute(href: string): boolean {

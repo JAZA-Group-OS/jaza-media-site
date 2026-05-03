@@ -67,12 +67,20 @@ export function Footer() {
         </p>
 
         <div className="mt-8 flex flex-col items-start justify-between gap-4 md:flex-row md:items-center">
-          <Link
-            href="/partner-with-us"
-            className="inline-flex items-center rounded-full bg-brand-yellow px-6 py-2.5 font-heading text-sm font-bold text-brand-black transition-transform hover:scale-[1.02]"
-          >
-            Send Us Message
-          </Link>
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+            <Link
+              href="/partner-with-us"
+              className="inline-flex items-center justify-center rounded-full bg-brand-yellow px-6 py-2.5 font-heading text-sm font-bold text-brand-black transition-transform hover:scale-[1.02] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-yellow focus-visible:ring-offset-2 focus-visible:ring-offset-brand-black"
+            >
+              Partner With Us
+            </Link>
+            <Link
+              href="/support"
+              className="inline-flex items-center justify-center rounded-full border border-brand-yellow/60 px-6 py-2.5 font-heading text-sm font-bold text-brand-yellow transition-colors hover:bg-brand-yellow hover:text-brand-black focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-yellow focus-visible:ring-offset-2 focus-visible:ring-offset-brand-black"
+            >
+              Contact Us
+            </Link>
+          </div>
 
           <div className="flex items-center gap-3">
             {SOCIAL_LINKS.map(({ label, href, Icon }) => (
