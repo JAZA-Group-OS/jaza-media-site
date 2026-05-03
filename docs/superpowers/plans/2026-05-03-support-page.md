@@ -8,7 +8,28 @@
 
 **Tech Stack:** Next.js 16.2.4 + React 19.2.4, TypeScript, Tailwind v4, Radix Accordion, Framer Motion, Zod, Supabase JS + Supabase realtime, Upstash rate limiter, Vitest + jsdom, Playwright via the Playwright MCP.
 
-**Reference spec:** `docs/superpowers/specs/2026-05-03-support-page-design.md`
+**Reference spec:** `docs/superpowers/specs/2026-05-03-support-page-design.md` (revised v2 after Noxa Dev Team review).
+
+**Revisions applied from team review (vs. v1 of this plan):**
+- Migration: `ALTER PUBLICATION` wrapped in `IF NOT EXISTS` guard for re-run safety (Omhar P0).
+- Migration + types + schema + admin labels: topic enum `application_status` split into `career_application_status` + `partnership_followup` (Manny P1).
+- Rate limit raised from `max: 3` to `max: 8` per 10 min — actually looser than partner's 5 (Omhar/Custodio P1).
+- Zod schema: phone regex format constraint added (Custodio P1).
+- Form: focus rings replaced with `focus-visible:ring-2 ring-brand-yellow ring-offset-2` across all inputs (Gemini P0 — WCAG 2.4.7).
+- Form: 5xx error message renders mailto as `<a>` JSX, not interpolated string (Gemini P0).
+- Form: thank-you success state focuses heading via `useRef` + `useEffect` (Jazelei P1 — WCAG 2.4.3).
+- Form: topic `<select>` gets disabled `<option value="">Select a topic</option>` placeholder (Gemini/Manny).
+- Form: live `(n / 2000)` character counter under message textarea (Manny/Gemini).
+- Form: `aria-busy="true"` and inline spinner during submit (Gemini).
+- Form: `autoComplete="name"` and `autoComplete="email"` on relevant fields (Jazelei).
+- Form: honeypot wrapped in `aria-hidden` div (Jazelei — defense vs. iOS VoiceOver discovery).
+- FAQ: `font-heading` added to `AccordionContent` (Jazelei — Poppins discipline).
+- Footer: keep `/partner-with-us` CTA, add a second `/support` "Contact Us" CTA (Manny P1 — don't kill the partner funnel).
+- Tests: Vitest schema tests expand to off-by-one boundaries, whitespace-only, phone regex, Unicode, `_hp` not enforced empty (Franco P1).
+- Tests: new Vitest integration tests for the API route handler — honeypot, 400, 403, 429, success (Franco P1).
+- E2E: `browser_wait_for` for marker text in admin tab (Franco P0); footer regression snapshot step added (Franco P1); exact-marker cleanup verification (Franco P2).
+- Env: `.env.test.local.example` uses generic var names `E2E_AUTH_EMAIL` / `E2E_AUTH_PASSWORD` (Custodio P2).
+- New launch-checklist task at the end of the plan (operational, not code) covering Supabase webhook config, real `support@` address, and Slack/Discord URL.
 
 ---
 
@@ -65,7 +86,8 @@ CREATE TABLE IF NOT EXISTS public.support_tickets (
     'general',
     'course_rule_of_10x',
     'course_marketing_templates',
-    'application_status',
+    'career_application_status',
+    'partnership_followup',
     'billing',
     'other'
   )),
@@ -107,10 +129,21 @@ CREATE TRIGGER support_tickets_set_updated_at
   FOR EACH ROW
   EXECUTE FUNCTION public.set_updated_at();
 
-ALTER PUBLICATION supabase_realtime ADD TABLE public.support_tickets;
+-- Idempotent: avoid "relation already member of publication" on re-apply.
+DO $$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_publication_tables
+    WHERE pubname = 'supabase_realtime'
+      AND schemaname = 'public'
+      AND tablename = 'support_tickets'
+  ) THEN
+    ALTER PUBLICATION supabase_realtime ADD TABLE public.support_tickets;
+  END IF;
+END $$;
 ```
 
-The `set_updated_at()` function already exists from the partner_inquiries migration — we reuse it.
+The `set_updated_at()` function already exists from the partner_inquiries migration — we reuse it. The `DO $$` guard around `ALTER PUBLICATION` mirrors the pattern from `20260502160000_enable_realtime_on_lead_tables.sql` and is required so the migration is safe to re-apply (e.g. after a `supabase db reset`).
 
 - [ ] **Step 2: Push the migration to Supabase**
 
@@ -162,7 +195,8 @@ export type SupportTopic =
   | 'general'
   | 'course_rule_of_10x'
   | 'course_marketing_templates'
-  | 'application_status'
+  | 'career_application_status'
+  | 'partnership_followup'
   | 'billing'
   | 'other';
 
@@ -277,6 +311,11 @@ describe('SupportTicketSchema', () => {
     expect(result.success).toBe(true);
   });
 
+  it('does NOT reject when _hp has a non-empty value (handler enforces honeypot, not schema)', () => {
+    const result = SupportTicketSchema.safeParse({ ...VALID, _hp: 'spam' });
+    expect(result.success).toBe(true);
+  });
+
   it('rejects an invalid email', () => {
     const result = SupportTicketSchema.safeParse({ ...VALID, email: 'not-an-email' });
     expect(result.success).toBe(false);
@@ -287,9 +326,76 @@ describe('SupportTicketSchema', () => {
     expect(result.success).toBe(false);
   });
 
-  it('rejects a name that is too long', () => {
+  it('rejects whitespace-only full name (trim then min)', () => {
+    const result = SupportTicketSchema.safeParse({ ...VALID, fullName: '    ' });
+    expect(result.success).toBe(false);
+  });
+
+  it('rejects a name 1 char (boundary)', () => {
+    const result = SupportTicketSchema.safeParse({ ...VALID, fullName: 'X' });
+    expect(result.success).toBe(false);
+  });
+
+  it('accepts a name exactly 2 chars (boundary)', () => {
+    const result = SupportTicketSchema.safeParse({ ...VALID, fullName: 'Xy' });
+    expect(result.success).toBe(true);
+  });
+
+  it('accepts a name exactly 80 chars (boundary)', () => {
+    const result = SupportTicketSchema.safeParse({ ...VALID, fullName: 'a'.repeat(80) });
+    expect(result.success).toBe(true);
+  });
+
+  it('rejects a name 81 chars (boundary)', () => {
     const result = SupportTicketSchema.safeParse({ ...VALID, fullName: 'a'.repeat(81) });
     expect(result.success).toBe(false);
+  });
+
+  it('accepts an email exactly 254 chars (boundary)', () => {
+    // 254 = 1 + "@" + 252 ("a" * 240 + ".com" subdomain construction kept simple)
+    const local = 'a';
+    const domain = 'b'.repeat(248) + '.com'; // 252 chars after @
+    const email = `${local}@${domain}`;
+    expect(email.length).toBe(254);
+    const result = SupportTicketSchema.safeParse({ ...VALID, email });
+    expect(result.success).toBe(true);
+  });
+
+  it('rejects an email 255 chars (boundary)', () => {
+    const email = 'a@' + 'b'.repeat(249) + '.com';
+    expect(email.length).toBe(255);
+    const result = SupportTicketSchema.safeParse({ ...VALID, email });
+    expect(result.success).toBe(false);
+  });
+
+  it('rejects a phone 6 chars (boundary)', () => {
+    const result = SupportTicketSchema.safeParse({ ...VALID, phone: '123456' });
+    expect(result.success).toBe(false);
+  });
+
+  it('accepts a phone 7 chars (boundary)', () => {
+    const result = SupportTicketSchema.safeParse({ ...VALID, phone: '1234567' });
+    expect(result.success).toBe(true);
+  });
+
+  it('accepts a phone 20 chars (boundary)', () => {
+    const result = SupportTicketSchema.safeParse({ ...VALID, phone: '+1 234 567 890 12345' });
+    expect(result.success).toBe(true);
+  });
+
+  it('rejects a phone 21 chars (boundary)', () => {
+    const result = SupportTicketSchema.safeParse({ ...VALID, phone: '12345678901234567890X' });
+    expect(result.success).toBe(false);
+  });
+
+  it('rejects a phone with HTML/JS chars (regex format)', () => {
+    const result = SupportTicketSchema.safeParse({ ...VALID, phone: '<script>1234567' });
+    expect(result.success).toBe(false);
+  });
+
+  it('accepts a phone with brackets, plus, dashes (regex format)', () => {
+    const result = SupportTicketSchema.safeParse({ ...VALID, phone: '+1 (555) 010-0100' });
+    expect(result.success).toBe(true);
   });
 
   it('rejects an unknown topic value', () => {
@@ -297,12 +403,18 @@ describe('SupportTicketSchema', () => {
     expect(result.success).toBe(false);
   });
 
-  it('accepts every defined topic value', () => {
+  it('rejects the deprecated application_status topic value (post-revision)', () => {
+    const result = SupportTicketSchema.safeParse({ ...VALID, topic: 'application_status' });
+    expect(result.success).toBe(false);
+  });
+
+  it('accepts every defined topic value (incl. split career/partnership)', () => {
     const topics = [
       'general',
       'course_rule_of_10x',
       'course_marketing_templates',
-      'application_status',
+      'career_application_status',
+      'partnership_followup',
       'billing',
       'other',
     ];
@@ -312,24 +424,54 @@ describe('SupportTicketSchema', () => {
     }
   });
 
-  it('rejects a subject shorter than 4 chars', () => {
-    const result = SupportTicketSchema.safeParse({ ...VALID, subject: 'hi' });
+  it('rejects a subject 3 chars (boundary)', () => {
+    const result = SupportTicketSchema.safeParse({ ...VALID, subject: 'hi!' });
     expect(result.success).toBe(false);
   });
 
-  it('rejects a subject longer than 120 chars', () => {
+  it('accepts a subject 4 chars (boundary)', () => {
+    const result = SupportTicketSchema.safeParse({ ...VALID, subject: 'help' });
+    expect(result.success).toBe(true);
+  });
+
+  it('accepts a subject 120 chars (boundary)', () => {
+    const result = SupportTicketSchema.safeParse({ ...VALID, subject: 'a'.repeat(120) });
+    expect(result.success).toBe(true);
+  });
+
+  it('rejects a subject 121 chars (boundary)', () => {
     const result = SupportTicketSchema.safeParse({ ...VALID, subject: 'a'.repeat(121) });
     expect(result.success).toBe(false);
   });
 
-  it('rejects a message shorter than 10 chars', () => {
-    const result = SupportTicketSchema.safeParse({ ...VALID, message: 'too short' });
+  it('rejects a message 9 chars (boundary)', () => {
+    const result = SupportTicketSchema.safeParse({ ...VALID, message: 'a'.repeat(9) });
     expect(result.success).toBe(false);
   });
 
-  it('rejects a message longer than 2000 chars', () => {
+  it('accepts a message 10 chars (boundary)', () => {
+    const result = SupportTicketSchema.safeParse({ ...VALID, message: 'a'.repeat(10) });
+    expect(result.success).toBe(true);
+  });
+
+  it('accepts a message 2000 chars (boundary)', () => {
+    const result = SupportTicketSchema.safeParse({ ...VALID, message: 'a'.repeat(2000) });
+    expect(result.success).toBe(true);
+  });
+
+  it('rejects a message 2001 chars (boundary)', () => {
     const result = SupportTicketSchema.safeParse({ ...VALID, message: 'a'.repeat(2001) });
     expect(result.success).toBe(false);
+  });
+
+  it('accepts Unicode characters in name, subject, message', () => {
+    const result = SupportTicketSchema.safeParse({
+      ...VALID,
+      fullName: 'José Rizal — Nación',
+      subject: '紧急：Course access issue 🆘',
+      message: 'Cannot log in to the portal. — JR ✉️',
+    });
+    expect(result.success).toBe(true);
   });
 
   it('trims whitespace on string fields', () => {
@@ -366,9 +508,13 @@ import { z } from 'zod';
  * Server-side schema for /support form submissions.
  * Mirrors the shape of lib/validations/partner-inquiry.ts.
  *
- * `_hp` is the honeypot. It must be either absent or empty; the API route
- * silently accepts and discards submissions where it's filled.
+ * `_hp` is the honeypot. The schema accepts any value (including non-empty);
+ * the API route handler enforces the policy by silently 200ing without writing
+ * when `_hp` is non-empty. Keep the schema policy-free so that test assertions
+ * stay clean.
  */
+const PHONE_REGEX = /^\+?[\d\s\-().]{7,20}$/;
+
 export const SupportTicketSchema = z.object({
   fullName: z
     .string()
@@ -380,12 +526,18 @@ export const SupportTicketSchema = z.object({
     .trim()
     .email('Invalid email')
     .max(254),
-  phone: z.string().trim().min(7).max(20).optional().or(z.literal('').transform(() => undefined)),
+  phone: z
+    .string()
+    .trim()
+    .regex(PHONE_REGEX, 'Invalid phone number')
+    .optional()
+    .or(z.literal('').transform(() => undefined)),
   topic: z.enum([
     'general',
     'course_rule_of_10x',
     'course_marketing_templates',
-    'application_status',
+    'career_application_status',
+    'partnership_followup',
     'billing',
     'other',
   ]),
@@ -411,7 +563,7 @@ export type SupportTicketPayload = z.infer<typeof SupportTicketSchema>;
 npm test -- lib/validations/support-ticket.test.ts
 ```
 
-Expected: all tests PASS (13/13).
+Expected: all schema tests PASS (29 cases — happy path, optional fields, all boundary off-by-one cases, phone regex, every topic value incl. split, deprecated topic rejection, Unicode, whitespace trim).
 
 - [ ] **Step 5: Commit**
 
@@ -445,9 +597,10 @@ import type { SupportTicketInsert } from '@/lib/types/database';
 
 export const runtime = 'nodejs';
 
-// 3 submissions per IP per 10 minutes — looser than partner's 5/10 because
-// support legitimately gets repeat submitters; tight enough to block spam.
-const RATE_LIMIT = { windowMs: 10 * 60 * 1000, max: 3 };
+// 8 submissions per IP per 10 minutes — looser than partner's 5/10 because
+// support sees legitimate repeat submitters (typo correction, follow-up,
+// clarification). Tight enough to deny floods.
+const RATE_LIMIT = { windowMs: 10 * 60 * 1000, max: 8 };
 
 export async function OPTIONS(request: Request) {
   return handlePreflight(request) ?? new Response(null, { status: 204 });
@@ -560,6 +713,155 @@ Expected: `{"success":true}` and a row visible in the Supabase Studio for `suppo
 ```powershell
 git add app/api/support/route.ts
 git commit -m "feat(support): add POST /api/support with rate limit and validation"
+```
+
+---
+
+## Task 4b: API route integration tests (Vitest)
+
+**Files:**
+- Create: `app/api/support/route.test.ts`
+
+- [ ] **Step 1: Write the integration tests**
+
+Create `app/api/support/route.test.ts`:
+
+```ts
+import { describe, it, expect, vi, beforeEach } from 'vitest';
+
+vi.mock('@/lib/supabase/admin', () => ({
+  createAdminClient: vi.fn(),
+}));
+vi.mock('@/lib/rate-limit', () => ({
+  rateLimit: vi.fn(),
+  getClientIp: vi.fn(() => '127.0.0.1'),
+}));
+
+import { POST } from './route';
+import { createAdminClient } from '@/lib/supabase/admin';
+import { rateLimit } from '@/lib/rate-limit';
+
+const ALLOWED_ORIGIN = 'http://localhost:3000';
+
+const VALID_BODY = {
+  fullName: 'Test User',
+  email: 'test@example.com',
+  topic: 'general',
+  subject: 'A real subject',
+  message: 'A message that is long enough to pass the schema.',
+};
+
+function buildRequest(body: unknown, originHeader: string | null = ALLOWED_ORIGIN) {
+  const headers = new Headers({ 'Content-Type': 'application/json' });
+  if (originHeader) headers.set('origin', originHeader);
+  return new Request('https://localhost/api/support', {
+    method: 'POST',
+    headers,
+    body: typeof body === 'string' ? body : JSON.stringify(body),
+  });
+}
+
+describe('POST /api/support', () => {
+  let insert: ReturnType<typeof vi.fn>;
+
+  beforeEach(() => {
+    vi.clearAllMocks();
+    insert = vi.fn().mockResolvedValue({ error: null });
+    (createAdminClient as ReturnType<typeof vi.fn>).mockReturnValue({
+      from: () => ({ insert }),
+    });
+    (rateLimit as ReturnType<typeof vi.fn>).mockResolvedValue({
+      allowed: true,
+      remaining: 7,
+      resetMs: 600_000,
+    });
+  });
+
+  it('rejects disallowed origin with 403', async () => {
+    const res = await POST(buildRequest(VALID_BODY, 'https://evil.example.com'));
+    expect(res.status).toBe(403);
+    expect(insert).not.toHaveBeenCalled();
+  });
+
+  it('returns 429 when rate-limited and includes Retry-After header', async () => {
+    (rateLimit as ReturnType<typeof vi.fn>).mockResolvedValue({
+      allowed: false,
+      remaining: 0,
+      resetMs: 60_000,
+    });
+    const res = await POST(buildRequest(VALID_BODY));
+    expect(res.status).toBe(429);
+    expect(res.headers.get('Retry-After')).toBe('60');
+    expect(insert).not.toHaveBeenCalled();
+  });
+
+  it('returns 400 on malformed JSON body', async () => {
+    const res = await POST(buildRequest('{not-json'));
+    expect(res.status).toBe(400);
+    const body = (await res.json()) as { error: string };
+    expect(body.error).toBe('Invalid JSON');
+    expect(insert).not.toHaveBeenCalled();
+  });
+
+  it('returns 400 with Zod issues on invalid payload', async () => {
+    const res = await POST(buildRequest({ ...VALID_BODY, email: 'not-an-email' }));
+    expect(res.status).toBe(400);
+    const body = (await res.json()) as { error: string; issues: { path: unknown[] }[] };
+    expect(body.error).toBe('Invalid input');
+    expect(body.issues.length).toBeGreaterThan(0);
+    expect(insert).not.toHaveBeenCalled();
+  });
+
+  it('honeypot non-empty: 200 success with NO insert call', async () => {
+    const res = await POST(buildRequest({ ...VALID_BODY, _hp: 'spam-bot-was-here' }));
+    expect(res.status).toBe(200);
+    const body = (await res.json()) as { success: boolean };
+    expect(body.success).toBe(true);
+    expect(insert).not.toHaveBeenCalled();
+  });
+
+  it('valid payload: 200 success with one insert carrying the right shape', async () => {
+    const res = await POST(buildRequest(VALID_BODY));
+    expect(res.status).toBe(200);
+    const body = (await res.json()) as { success: boolean };
+    expect(body.success).toBe(true);
+    expect(insert).toHaveBeenCalledTimes(1);
+    expect(insert).toHaveBeenCalledWith(
+      expect.objectContaining({
+        full_name: 'Test User',
+        email: 'test@example.com',
+        topic: 'general',
+        subject: 'A real subject',
+        source: 'marketing_site',
+      }),
+    );
+  });
+
+  it('returns 500 when Supabase insert errors, never echoing the body', async () => {
+    insert.mockResolvedValue({ error: { code: '42P01', message: 'relation not found' } });
+    const res = await POST(buildRequest(VALID_BODY));
+    expect(res.status).toBe(500);
+    const body = (await res.json()) as { error: string };
+    // Generic error — no PII echo
+    expect(body.error).toBe('Failed to save your message');
+    expect(JSON.stringify(body)).not.toContain('Test User');
+  });
+});
+```
+
+- [ ] **Step 2: Run, verify they pass**
+
+```powershell
+npm test -- app/api/support/route.test.ts
+```
+
+Expected: all 7 tests PASS.
+
+- [ ] **Step 3: Commit**
+
+```powershell
+git add app/api/support/route.test.ts
+git commit -m "test(support): add Vitest integration tests for POST /api/support"
 ```
 
 ---
@@ -705,13 +1007,13 @@ export function SupportHero() {
             {SUPPORT_EMAIL}
           </a>
 
-          <ul className="flex items-center gap-4">
+          <ul className="flex items-center gap-3">
             {SOCIAL_LINKS.map(({ label, href, Icon }) => (
               <li key={label}>
                 <a
                   href={href}
                   aria-label={label}
-                  className="text-white/70 transition-colors hover:text-brand-yellow"
+                  className="inline-flex items-center justify-center p-1.5 text-white/70 transition-colors hover:text-brand-yellow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-yellow focus-visible:ring-offset-2 focus-visible:ring-offset-brand-black rounded-full"
                 >
                   <Icon className="size-5" />
                 </a>
@@ -812,7 +1114,7 @@ export function SupportFaqs() {
               <AccordionTrigger className="py-4 text-left font-heading text-lg font-bold text-brand-black hover:no-underline md:text-[22px]">
                 {item.q}
               </AccordionTrigger>
-              <AccordionContent className="text-base text-neutral-700 md:text-lg">
+              <AccordionContent className="font-heading text-base text-neutral-700 md:text-lg">
                 {item.a}
               </AccordionContent>
             </AccordionItem>
@@ -854,14 +1156,15 @@ Create `components/support-contact-card.tsx`:
 ```tsx
 "use client";
 
-import { useState } from "react";
-import type { FormEvent } from "react";
+import { useEffect, useRef, useState } from "react";
+import type { FormEvent, ReactNode } from "react";
 
 type Topic =
   | "general"
   | "course_rule_of_10x"
   | "course_marketing_templates"
-  | "application_status"
+  | "career_application_status"
+  | "partnership_followup"
   | "billing"
   | "other";
 
@@ -869,22 +1172,38 @@ const TOPIC_OPTIONS: { value: Topic; label: string }[] = [
   { value: "general", label: "General Inquiry" },
   { value: "course_rule_of_10x", label: "Course Help — Rule of 10X" },
   { value: "course_marketing_templates", label: "Course Help — Marketing Templates" },
-  { value: "application_status", label: "Application / Partnership Status" },
+  { value: "career_application_status", label: "Career Application Status" },
+  { value: "partnership_followup", label: "Partnership Follow-Up" },
   { value: "billing", label: "Billing / Payment" },
   { value: "other", label: "Other" },
 ];
 
 const SUPPORT_EMAIL = "support@jazamedia.com";
+const MAX_MESSAGE_CHARS = 2000;
+
+const INPUT_CLASS =
+  "w-full rounded-md border border-white/15 bg-black/40 px-3 py-2.5 font-heading text-sm text-white " +
+  "focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-yellow focus-visible:ring-offset-2 focus-visible:ring-offset-brand-black";
 
 type SubmitState =
   | { kind: "idle" }
   | { kind: "submitting" }
   | { kind: "success" }
-  | { kind: "error"; message: string };
+  | { kind: "error"; message: ReactNode };
 
 export function SupportContactCard() {
   const [state, setState] = useState<SubmitState>({ kind: "idle" });
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
+  const [messageChars, setMessageChars] = useState(0);
+  const successHeadingRef = useRef<HTMLHeadingElement | null>(null);
+
+  // WCAG 2.4.3 — when the form swaps to the thank-you state, move keyboard
+  // focus to the success heading so the user has a discoverable position.
+  useEffect(() => {
+    if (state.kind === "success") {
+      successHeadingRef.current?.focus();
+    }
+  }, [state.kind]);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -925,7 +1244,7 @@ export function SupportContactCard() {
           if (key) errs[key] = issue.message;
         }
         setFieldErrors(errs);
-        setState({ kind: "error", message: "Please fix the highlighted fields." });
+        setState({ kind: "error", message: "Check the fields marked in red." });
         return;
       }
 
@@ -939,14 +1258,36 @@ export function SupportContactCard() {
 
       setState({
         kind: "error",
-        message: `Couldn't send your message right now. Please try again, or email us directly at ${SUPPORT_EMAIL}.`,
+        message: (
+          <>
+            Couldn&apos;t send your message right now. Please try again, or email us directly at{" "}
+            <a className="underline hover:text-red-300" href={`mailto:${SUPPORT_EMAIL}`}>
+              {SUPPORT_EMAIL}
+            </a>
+            .
+          </>
+        ),
       });
     } catch {
       setState({
         kind: "error",
-        message: `Couldn't reach our servers. Please try again, or email us directly at ${SUPPORT_EMAIL}.`,
+        message: (
+          <>
+            Couldn&apos;t reach our servers. Please try again, or email us directly at{" "}
+            <a className="underline hover:text-red-300" href={`mailto:${SUPPORT_EMAIL}`}>
+              {SUPPORT_EMAIL}
+            </a>
+            .
+          </>
+        ),
       });
     }
+  }
+
+  function resetForm() {
+    setFieldErrors({});
+    setMessageChars(0);
+    setState({ kind: "idle" });
   }
 
   if (state.kind === "success") {
@@ -957,16 +1298,20 @@ export function SupportContactCard() {
             <p className="font-heading text-xs font-bold uppercase tracking-[0.3em] text-brand-yellow">
               Message received
             </p>
-            <h2 className="mt-4 font-heading text-2xl font-extrabold text-white md:text-3xl">
+            <h2
+              ref={successHeadingRef}
+              tabIndex={-1}
+              className="mt-4 font-heading text-2xl font-extrabold text-white md:text-3xl focus:outline-none"
+            >
               We&apos;ve got your message.
             </h2>
             <p className="mt-3 font-heading text-base text-white/70 md:text-lg">
-              Our team will reply within 2 business days. Keep an eye on the inbox you used.
+              We&apos;ll reply to the email you provided within 2 business days.
             </p>
             <button
               type="button"
-              onClick={() => setState({ kind: "idle" })}
-              className="mt-8 inline-flex items-center rounded-full bg-brand-yellow px-6 py-2.5 font-heading text-sm font-bold text-brand-black transition-transform hover:scale-[1.02]"
+              onClick={resetForm}
+              className="mt-8 inline-flex items-center rounded-full bg-brand-yellow px-6 py-2.5 font-heading text-sm font-bold text-brand-black transition-transform hover:scale-[1.02] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-yellow focus-visible:ring-offset-2 focus-visible:ring-offset-brand-black"
             >
               Send another message
             </button>
@@ -975,6 +1320,8 @@ export function SupportContactCard() {
       </section>
     );
   }
+
+  const isSubmitting = state.kind === "submitting";
 
   return (
     <section className="bg-brand-black py-16 md:py-20">
@@ -991,9 +1338,27 @@ export function SupportContactCard() {
           className="mt-10 space-y-5 rounded-2xl border border-white/10 bg-white/[0.03] p-6 md:p-8"
           noValidate
         >
-          <Field label="Full name" name="fullName" required error={fieldErrors.fullName} />
-          <Field label="Email" name="email" type="email" required error={fieldErrors.email} />
-          <Field label="Phone (optional)" name="phone" error={fieldErrors.phone} />
+          <Field
+            label="Full name"
+            name="fullName"
+            required
+            autoComplete="name"
+            error={fieldErrors.fullName}
+          />
+          <Field
+            label="Email"
+            name="email"
+            type="email"
+            required
+            autoComplete="email"
+            error={fieldErrors.email}
+          />
+          <Field
+            label="Phone (optional)"
+            name="phone"
+            autoComplete="tel"
+            error={fieldErrors.phone}
+          />
 
           <div>
             <label
@@ -1006,9 +1371,12 @@ export function SupportContactCard() {
               id="topic"
               name="topic"
               required
-              defaultValue="general"
-              className="w-full rounded-md border border-white/15 bg-black/40 px-3 py-2.5 font-heading text-sm text-white outline-none focus:border-brand-yellow"
+              defaultValue=""
+              className={INPUT_CLASS}
             >
+              <option value="" disabled>
+                Select a topic
+              </option>
               {TOPIC_OPTIONS.map((opt) => (
                 <option key={opt.value} value={opt.value}>
                   {opt.label}
@@ -1034,23 +1402,34 @@ export function SupportContactCard() {
               name="message"
               required
               rows={6}
-              maxLength={2000}
-              className="w-full resize-y rounded-md border border-white/15 bg-black/40 px-3 py-2.5 font-heading text-sm text-white outline-none focus:border-brand-yellow"
+              maxLength={MAX_MESSAGE_CHARS}
+              onChange={(e) => setMessageChars(e.currentTarget.value.length)}
+              className={`${INPUT_CLASS} resize-y`}
+              aria-describedby="message-counter"
             />
-            {fieldErrors.message && (
-              <p className="mt-1 text-xs text-red-400">{fieldErrors.message}</p>
-            )}
+            <div className="mt-1 flex items-center justify-between gap-3">
+              {fieldErrors.message ? (
+                <p className="text-xs text-red-400">{fieldErrors.message}</p>
+              ) : (
+                <span aria-hidden="true" />
+              )}
+              <p
+                id="message-counter"
+                className="font-heading text-xs text-white/50"
+                aria-live="polite"
+              >
+                {messageChars} / {MAX_MESSAGE_CHARS}
+              </p>
+            </div>
           </div>
 
-          {/* Honeypot — visually hidden, but tab-accessible bots will still fill it */}
-          <input
-            type="text"
-            name="_hp"
-            tabIndex={-1}
-            autoComplete="off"
-            className="absolute left-[-9999px] h-0 w-0 opacity-0"
-            aria-hidden="true"
-          />
+          {/* Honeypot — wrapped in aria-hidden div so iOS VoiceOver swipe never finds it */}
+          <div aria-hidden="true" className="absolute left-[-9999px] h-0 w-0 overflow-hidden">
+            <label>
+              Leave this field empty
+              <input type="text" name="_hp" tabIndex={-1} autoComplete="off" />
+            </label>
+          </div>
 
           {state.kind === "error" && (
             <p className="text-sm text-red-400" role="alert">
@@ -1060,10 +1439,22 @@ export function SupportContactCard() {
 
           <button
             type="submit"
-            disabled={state.kind === "submitting"}
-            className="inline-flex w-full items-center justify-center rounded-full bg-brand-yellow px-6 py-3 font-heading text-sm font-bold text-brand-black transition-transform hover:scale-[1.01] disabled:cursor-not-allowed disabled:opacity-60"
+            disabled={isSubmitting}
+            aria-busy={isSubmitting}
+            className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-brand-yellow px-6 py-3 font-heading text-sm font-bold text-brand-black transition-transform hover:scale-[1.02] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-yellow focus-visible:ring-offset-2 focus-visible:ring-offset-brand-black disabled:cursor-not-allowed disabled:opacity-60"
           >
-            {state.kind === "submitting" ? "Sending..." : "Send message"}
+            {isSubmitting && (
+              <svg
+                className="size-4 animate-spin"
+                viewBox="0 0 24 24"
+                fill="none"
+                aria-hidden
+              >
+                <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="3" opacity="0.25" />
+                <path d="M12 2a10 10 0 0 1 10 10" stroke="currentColor" strokeWidth="3" strokeLinecap="round" />
+              </svg>
+            )}
+            {isSubmitting ? "Sending..." : "Send message"}
           </button>
         </form>
       </div>
@@ -1076,12 +1467,14 @@ function Field({
   name,
   type = "text",
   required = false,
+  autoComplete,
   error,
 }: {
   label: string;
   name: string;
   type?: string;
   required?: boolean;
+  autoComplete?: string;
   error?: string;
 }) {
   return (
@@ -1095,7 +1488,8 @@ function Field({
         name={name}
         type={type}
         required={required}
-        className="w-full rounded-md border border-white/15 bg-black/40 px-3 py-2.5 font-heading text-sm text-white outline-none focus:border-brand-yellow"
+        autoComplete={autoComplete}
+        className={INPUT_CLASS}
       />
       {error && <p className="mt-1 text-xs text-red-400">{error}</p>}
     </div>
@@ -1207,9 +1601,9 @@ to:
 { label: "Support", href: "/support" },
 ```
 
-- [ ] **Step 2: Repoint footer "Send Us Message" CTA**
+- [ ] **Step 2: Update footer CTAs — keep partner, add second support button**
 
-In `components/footer.tsx`, find the Link:
+In `components/footer.tsx`, find the existing single Link:
 
 ```tsx
 <Link
@@ -1220,7 +1614,24 @@ In `components/footer.tsx`, find the Link:
 </Link>
 ```
 
-Change `href="/partner-with-us"` to `href="/support"`.
+Replace it with a flex group of two CTAs (primary partner + secondary support). The wrapping `<div>` containing this Link sits inside `flex flex-col items-start justify-between gap-4 md:flex-row md:items-center` (around line 116) — the new structure keeps the same outer flex slot but contains two buttons:
+
+```tsx
+<div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+  <Link
+    href="/partner-with-us"
+    className="inline-flex items-center justify-center rounded-full bg-brand-yellow px-6 py-2.5 font-heading text-sm font-bold text-brand-black transition-transform hover:scale-[1.02] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-yellow focus-visible:ring-offset-2 focus-visible:ring-offset-brand-black"
+  >
+    Partner With Us
+  </Link>
+  <Link
+    href="/support"
+    className="inline-flex items-center justify-center rounded-full border border-brand-yellow/60 px-6 py-2.5 font-heading text-sm font-bold text-brand-yellow transition-colors hover:bg-brand-yellow hover:text-brand-black focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-yellow focus-visible:ring-offset-2 focus-visible:ring-offset-brand-black"
+  >
+    Contact Us
+  </Link>
+</div>
+```
 
 - [ ] **Step 3: Verify**
 
@@ -1229,13 +1640,17 @@ npm run lint
 npx tsc --noEmit
 ```
 
-Expected: clean. Manually open `http://localhost:3000` and click "Support" in the nav and "Send Us Message" in the footer — both should land on `/support`.
+Expected: clean. Manually open `http://localhost:3000` and check:
+- Click "Support" in the nav → lands on `/support`
+- Click "Partner With Us" in the footer → lands on `/partner-with-us`
+- Click "Contact Us" in the footer → lands on `/support`
+- On a narrow viewport, the two CTAs stack vertically; on `sm:` and up they sit side-by-side
 
 - [ ] **Step 4: Commit**
 
 ```powershell
 git add lib/site-nav.ts components/footer.tsx
-git commit -m "feat(support): wire Support nav link and footer CTA to /support"
+git commit -m "feat(support): add /support nav link and footer Contact Us CTA"
 ```
 
 ---
@@ -1279,7 +1694,8 @@ const TOPIC_LABELS: Record<SupportTopic, string> = {
   general: 'General Inquiry',
   course_rule_of_10x: 'Course — Rule of 10X',
   course_marketing_templates: 'Course — Marketing Templates',
-  application_status: 'Application Status',
+  career_application_status: 'Career Application',
+  partnership_followup: 'Partnership Follow-Up',
   billing: 'Billing / Payment',
   other: 'Other',
 };
@@ -1712,8 +2128,9 @@ Create `.env.test.local.example`:
 ```env
 # Local-only credentials for the manual Playwright verification of /support.
 # Copy to `.env.test.local` (gitignored) and fill in real values.
-PLAYWRIGHT_ADMIN_EMAIL=
-PLAYWRIGHT_ADMIN_PASSWORD=
+# Generic env-var names so this committed example file is not an enumeration roadmap.
+E2E_AUTH_EMAIL=
+E2E_AUTH_PASSWORD=
 SUPABASE_SERVICE_ROLE_KEY=
 NEXT_PUBLIC_SUPABASE_URL=
 ```
@@ -1730,7 +2147,7 @@ Run in a background terminal. Wait until "Ready" appears.
 
 - [ ] **Step 3: Drive the E2E flow via Playwright MCP**
 
-Generate a unique marker for this run: `PLAYWRIGHT_E2E_<timestamp>`. Then via the Playwright MCP browser tools:
+Generate a unique marker for this run: `const MARKER = 'PLAYWRIGHT_E2E_' + Date.now()`. Save it as a variable used across both the test and the cleanup verification (do NOT hardcode in two places). Then via the Playwright MCP browser tools:
 
 1. `browser_navigate` → `http://localhost:3000/support`
 2. `browser_snapshot` — confirm hero, FAQ accordion, contact form are present
@@ -1738,23 +2155,22 @@ Generate a unique marker for this run: `PLAYWRIGHT_E2E_<timestamp>`. Then via th
    - Full name: `Playwright Test`
    - Email: `playwright-e2e@jazamedia.test`
    - Phone: leave blank
-   - Topic: `general`
-   - Subject: the unique marker (e.g. `PLAYWRIGHT_E2E_1714723200000`)
+   - Topic: select `General Inquiry`
+   - Subject: the `MARKER` value
    - Message: `Automated end-to-end test — safe to delete.`
 4. `browser_click` on "Send message"
-5. `browser_snapshot` — confirm "We've got your message." thank-you state appears
+5. `browser_wait_for` text `"We've got your message."` (do not rely on snapshot timing)
 6. `browser_navigate` → `http://localhost:3000/admin/login`
-7. `browser_fill_form` with email + password from env vars (the developer types these directly into the MCP call from `.env.test.local` — never hardcoded in this plan)
+7. `browser_fill_form` with email + password from env vars `E2E_AUTH_EMAIL` / `E2E_AUTH_PASSWORD` (the developer types these directly into the MCP call from `.env.test.local` — never hardcoded in this plan)
 8. After login, `browser_click` on the "Support Tickets" sidebar link
-9. `browser_snapshot` — confirm a row exists where the visible subject matches the unique marker
+9. **`browser_wait_for` text matching `MARKER`** — this is the critical realtime delivery wait. Do NOT proceed until the marker text is visible on the page. Without this wait, the test is flaky against realtime delivery latency.
 10. Expand the row by clicking it. Verify:
     - Email matches `playwright-e2e@jazamedia.test`
     - Topic shows `General Inquiry`
-    - Subject matches the unique marker
+    - Subject matches `MARKER`
     - Message matches what was submitted
-11. Click "Mark In Progress". Wait 500ms. Confirm the status pill updates to In Progress.
-12. Click "Mark Resolved". Wait 500ms. Confirm pill updates to Resolved.
-13. `browser_navigate` to a different tab (Partner Leads) and back to Support. Confirm the row's status persisted as Resolved (not reverted).
+11. Click "Mark In Progress". `browser_wait_for` the In Progress badge text on this row. Then click "Mark Resolved". `browser_wait_for` the Resolved badge text.
+12. `browser_navigate` to a different tab (Partner Leads) and back to Support. `browser_wait_for` text `MARKER` again, and confirm the visible status is still Resolved (not reverted).
 
 - [ ] **Step 4: Write the cleanup script**
 
@@ -1764,7 +2180,9 @@ Create `scripts/playwright-cleanup.ts`:
 /**
  * One-shot deletion of Playwright E2E test rows from support_tickets.
  * Uses the service role to bypass RLS. Deletes rows whose subject starts
- * with the marker prefix. Run with `npx tsx scripts/playwright-cleanup.ts`
+ * with the marker prefix and prints the deleted subjects so the caller can
+ * verify the exact run's marker was removed. Run with:
+ *   npx --yes dotenv-cli -e .env.test.local -- npx --yes tsx scripts/playwright-cleanup.ts
  * after a Playwright run, then DELETE THIS FILE before committing.
  */
 import 'dotenv/config';
@@ -1785,14 +2203,18 @@ async function main() {
     .from('support_tickets')
     .delete()
     .like('subject', 'PLAYWRIGHT_E2E_%')
-    .select('id');
+    .select('id, subject');
 
   if (error) {
     console.error('Cleanup failed:', error.message);
     process.exit(1);
   }
 
-  console.log(`Deleted ${data?.length ?? 0} Playwright test row(s).`);
+  const rows = data ?? [];
+  console.log(`Deleted ${rows.length} Playwright test row(s):`);
+  for (const row of rows) {
+    console.log(`  - ${row.subject}`);
+  }
 }
 
 main();
@@ -1808,11 +2230,29 @@ npx --yes dotenv-cli -e .env.test.local -- npx --yes tsx scripts/playwright-clea
 
 (`dotenv-cli` and `tsx` are downloaded ad-hoc via `npx --yes` so the dev does not need to add them as deps for a one-time script.)
 
-Expected output: `Deleted 1 Playwright test row(s).` (or more if multiple test runs accumulated).
+Expected output:
+```
+Deleted N Playwright test row(s):
+  - PLAYWRIGHT_E2E_<this-run's-marker>
+  - PLAYWRIGHT_E2E_<any-stale-prior-marker>
+```
 
-- [ ] **Step 6: Re-verify the row is gone**
+**Critical:** scan the printed list and confirm the EXACT `MARKER` value from Step 3 appears. `Deleted ≥1` is not sufficient on its own — there could be stale rows from prior crashed runs. Only the exact-marker presence proves this run cleaned up correctly.
 
-In the Playwright browser session, refresh the Support Tickets tab. Confirm the marker row is no longer visible.
+- [ ] **Step 6: Re-verify the row is gone in the admin UI**
+
+In the Playwright browser session:
+1. Refresh the Support Tickets tab (`browser_navigate` to the dashboard URL again)
+2. `browser_snapshot`
+3. Verify the snapshot does NOT contain the `MARKER` text — the row must be gone
+
+- [ ] **Step 6b: Footer regression smoke check**
+
+Task 5 extracted social icons from the footer. Verify the existing footer still renders all 5 icons by navigating back to the home page and snapshotting:
+1. `browser_navigate` → `http://localhost:3000/`
+2. `browser_snapshot`
+3. Verify the snapshot contains `aria-label` text for all 5 socials: `Gmail`, `Messenger`, `Facebook`, `TikTok`, `Instagram`
+4. If any are missing, the footer refactor broke and Task 5 needs re-implementation before commit
 
 - [ ] **Step 7: Stop the dev server and clean up the cleanup script**
 
@@ -1834,7 +2274,7 @@ git add .gitignore .env.test.local.example
 git commit -m "chore: document Playwright E2E env vars (.env.test.local)"
 ```
 
-**Pass criteria for Task 14:** Steps 1–7 all green; cleanup deleted ≥1 row; row no longer visible in admin tab; `scripts/playwright-cleanup.ts` no longer exists in working tree.
+**Pass criteria for Task 14:** Steps 1–8 all green; cleanup output shows the EXACT `MARKER` from Step 3 in the deleted list; the marker is no longer visible in the admin tab snapshot (Step 6); the footer regression snapshot shows all 5 social icons (Step 6b); `scripts/playwright-cleanup.ts` no longer exists in the working tree.
 
 If any step fails: fix the underlying issue (likely in earlier tasks), re-run Task 14 from Step 3. Do not proceed to Task 15 until everything is green and the test row is cleaned up.
 
@@ -1883,29 +2323,76 @@ git push origin main
 
 ---
 
+## Task 16: Launch checklist (operational, not code)
+
+**Files:** none
+
+These items must be done in operational tooling (Supabase dashboard, DNS, Vercel) before promoting `/support` publicly. They are not code changes and are not blocking implementation.
+
+- [ ] **Step 1: Configure Supabase Database Webhook for new tickets**
+
+In the Supabase project dashboard:
+1. Navigate to Database → Webhooks
+2. Create a new webhook on `INSERT` of `public.support_tickets`
+3. Set the destination URL to a Slack (or Discord) incoming webhook URL provisioned for the support channel
+4. Send a manual test row (`INSERT INTO public.support_tickets (...) VALUES (...)`); confirm the message lands in Slack
+5. Delete the test row
+
+This is the operational replacement for outbound email — it ensures the team is alerted within seconds of every new ticket so the public 2-business-day SLA is enforceable.
+
+- [ ] **Step 2: Replace placeholder support email**
+
+If `support@jazamedia.com` is not a working address, replace it across:
+- `components/support-hero.tsx` (`SUPPORT_EMAIL` constant)
+- `components/support-contact-card.tsx` (`SUPPORT_EMAIL` constant)
+
+with the real address. Verify the inbox is monitored.
+
+- [ ] **Step 3: Verify production env vars**
+
+In the Vercel project settings, confirm:
+- `UPSTASH_REDIS_REST_URL` is set
+- `UPSTASH_REDIS_REST_TOKEN` is set
+- `CORS_ALLOWED_ORIGINS` is either unset (relying on STATIC_ALLOWLIST) or includes the canonical production hostname
+
+- [ ] **Step 4: Manually validate SLA copy**
+
+Read the FAQ entries and the hero subheadline. Confirm "2 business days," "3–5 business days," and "2 weeks" reflect actual capacity. Adjust copy if not realistic.
+
+- [ ] **Step 5: Mobile + desktop visual sanity**
+
+Open the production preview on a real phone and a real desktop. Verify:
+- Both footer CTAs ("Partner With Us" + "Contact Us") render side-by-side on desktop and stack on mobile
+- The Support Tickets admin tab loads and shows the newest tickets first
+- The thank-you state is the focused element after submitting
+
+---
+
 ## Self-review notes (run after writing the plan, before handing off)
 
 Spec coverage check (each spec section → which task implements it):
+- §2a admin notification (Supabase webhook) — Task 16 (operational)
 - §3.1 route — Task 9
 - §3.2 page composition — Tasks 6/7/8/9
-- §3.3 form fields — Task 8
-- §3.4 topic enum — Tasks 1/2/3
-- §3.5 nav + footer wiring — Task 10
-- §4.1 endpoint — Task 4
+- §3.3 form fields (incl. phone regex, char counter, disabled placeholder) — Tasks 3 + 8
+- §3.4 topic enum (split career/partnership) — Tasks 1/2/3/8/11
+- §3.5 nav + footer wiring (dual CTA) — Task 10
+- §4.1 endpoint (rate limit max 8) — Task 4
 - §4.2 validation schema — Task 3
-- §4.3 form failure UX — Task 8
-- §5.1 table + RLS + realtime — Task 1
+- §4.3 form failure UX (mailto JSX, focus management, aria-busy) — Task 8
+- §5.1 table + RLS + realtime (idempotent ALTER PUBLICATION) — Task 1
 - §5.2 TS types — Task 2
 - §6.1 admin nav — Task 12
 - §6.2 dashboard branch — Task 12
-- §6.3 manager component — Task 11
-- §7 security/error handling — Task 4
-- §8.1 Vitest unit — Task 3
-- §8.2 Playwright E2E + cleanup — Task 14
+- §6.3 manager component (split topic labels) — Task 11
+- §7 security/error handling — Task 4 + Task 4b
+- §8.1 Vitest unit (29 schema cases + 7 route integration cases) — Task 3 + Task 4b
+- §8.2 Playwright E2E (browser_wait_for, footer regression, exact-marker cleanup) — Task 14
 - §8.3 build/lint/test gates — Task 13
 - §9 files list — covered across tasks
 - §10 decisions — informational; embedded in task choices
+- §11 launch checklist — Task 16
 
-Type consistency check: `SupportTicket`, `SupportTopic`, `SupportTicketStatus`, `SupportTicketInsert`, `SupportTicketUpdate`, `SupportTicketSchema`, `SupportTicketPayload` — all defined in Tasks 2/3 and consumed identically in Tasks 4 and 11. The component prop name `tickets` and table name `support_tickets` are consistent throughout.
+Type consistency check: `SupportTicket`, `SupportTopic` (with split values), `SupportTicketStatus`, `SupportTicketInsert`, `SupportTicketUpdate`, `SupportTicketSchema`, `SupportTicketPayload` — all defined in Tasks 2/3 and consumed identically in Tasks 4, 4b, 8, 11. The split topic values `career_application_status` and `partnership_followup` flow through migration, types, schema, form options, and admin labels with no drift.
 
-Placeholder scan: no TODO / TBD / "implement later" / "similar to" references; every code-modifying step shows the full code or full diff snippet.
+Placeholder scan: no TODO / TBD / "implement later" / "similar to" references; every code-modifying step shows the full code or full diff snippet. The two `SUPPORT_EMAIL` placeholders in components are explicitly flagged in Task 16 as a launch checklist item.
