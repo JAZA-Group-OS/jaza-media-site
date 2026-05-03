@@ -18,12 +18,9 @@ export function SupportHero() {
         </p>
 
         <div className="mx-auto mt-10 flex max-w-xl flex-col items-center gap-5">
-          <a
-            href={`mailto:${SUPPORT_EMAIL}`}
-            className="inline-flex items-center rounded-full border border-brand-yellow/40 px-5 py-2 font-heading text-sm font-semibold text-brand-yellow transition-colors hover:bg-brand-yellow hover:text-brand-black focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-yellow focus-visible:ring-offset-2 focus-visible:ring-offset-brand-black"
-          >
+          <span className="inline-flex items-center rounded-full border border-brand-yellow/40 px-5 py-2 font-heading text-sm font-semibold text-brand-yellow">
             {SUPPORT_EMAIL}
-          </a>
+          </span>
 
           <ul className="flex items-center gap-3">
             {SOCIAL_LINKS.map(({ label, href, Icon }) => (
