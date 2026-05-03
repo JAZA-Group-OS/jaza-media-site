@@ -52,6 +52,9 @@ CREATE POLICY "Only admin email can update support tickets"
   USING ((auth.jwt() ->> 'email') = 'jaza.intern@gmail.com')
   WITH CHECK ((auth.jwt() ->> 'email') = 'jaza.intern@gmail.com');
 
+-- Reuse public.set_updated_at() created by the partner_inquiries migration.
+-- That migration must be applied before this one. Running in isolation will
+-- fail with "function public.set_updated_at() does not exist".
 DROP TRIGGER IF EXISTS support_tickets_set_updated_at ON public.support_tickets;
 CREATE TRIGGER support_tickets_set_updated_at
   BEFORE UPDATE ON public.support_tickets
