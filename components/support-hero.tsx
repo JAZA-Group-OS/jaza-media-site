@@ -1,0 +1,45 @@
+import { SOCIAL_LINKS } from '@/components/social-icons';
+
+const SUPPORT_EMAIL = 'support@jazamedia.com';
+
+export function SupportHero() {
+  return (
+    <section className="bg-brand-black pt-12 pb-16 md:pt-20 md:pb-24">
+      <div className="mx-auto max-w-4xl px-4 text-center">
+        <p className="font-heading text-xs font-bold uppercase tracking-[0.3em] text-brand-yellow">
+          Support
+        </p>
+        <h1 className="mt-4 font-heading text-3xl font-extrabold leading-tight text-white md:text-5xl">
+          How can we help?
+        </h1>
+        <p className="mx-auto mt-5 max-w-2xl font-heading text-base leading-relaxed text-white/70 md:text-lg">
+          Browse common answers below, or send us a message and our team will get
+          back to you within 2 business days.
+        </p>
+
+        <div className="mx-auto mt-10 flex max-w-xl flex-col items-center gap-5">
+          <a
+            href={`mailto:${SUPPORT_EMAIL}`}
+            className="inline-flex items-center rounded-full border border-brand-yellow/40 px-5 py-2 font-heading text-sm font-semibold text-brand-yellow transition-colors hover:bg-brand-yellow hover:text-brand-black focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-yellow focus-visible:ring-offset-2 focus-visible:ring-offset-brand-black"
+          >
+            {SUPPORT_EMAIL}
+          </a>
+
+          <ul className="flex items-center gap-3">
+            {SOCIAL_LINKS.map(({ label, href, Icon }) => (
+              <li key={label}>
+                <a
+                  href={href}
+                  aria-label={label}
+                  className="inline-flex items-center justify-center p-1.5 text-white/70 transition-colors hover:text-brand-yellow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-yellow focus-visible:ring-offset-2 focus-visible:ring-offset-brand-black rounded-full"
+                >
+                  <Icon className="size-5" />
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </section>
+  );
+}
