@@ -6,23 +6,26 @@ import Image from 'next/image';
 import type { CourseDetails, SelectedAsset } from '@/lib/courses/catalog';
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-// Country-prefixed phones look like "+63 9171234567" — at least 7 digits
-// after the country code is enough to catch obvious junk.
-const PHONE_LOCAL_RE = /^\d[\d\s-]{5,}$/;
 
 const DISCLAIMER =
   'By providing your information you consent to JAZA Media contacting you by phone, text, or email using automated telephone dialing systems and AI to the information provided, even if the phone number is present on a state or national Do Not Call List. We do not sell your personal information. By providing this information you agree to our Privacy Policy and Terms of Service.';
 
 // Tiny country picker — covers the markets JAZA Media actually serves;
 // users in unsupported regions can still pick a generic dial-code if needed
-// (extend this list when the audience grows).
+// (extend this list when the audience grows). `digits` is the exact local-
+// number length we expect for that country (mobile-first); the input cap and
+// validator both key off it so callers can't over-type or under-fill.
 const COUNTRY_OPTIONS = [
-  { code: '+63', flag: '🇵🇭', name: 'Philippines' },
-  { code: '+1', flag: '🇺🇸', name: 'United States' },
-  { code: '+61', flag: '🇦🇺', name: 'Australia' },
-  { code: '+44', flag: '🇬🇧', name: 'United Kingdom' },
-  { code: '+65', flag: '🇸🇬', name: 'Singapore' },
+  { code: '+63', flag: '🇵🇭', name: 'Philippines', digits: 10 },
+  { code: '+1', flag: '🇺🇸', name: 'United States', digits: 10 },
+  { code: '+61', flag: '🇦🇺', name: 'Australia', digits: 9 },
+  { code: '+44', flag: '🇬🇧', name: 'United Kingdom', digits: 10 },
+  { code: '+65', flag: '🇸🇬', name: 'Singapore', digits: 8 },
 ];
+
+function getCountry(code: string) {
+  return COUNTRY_OPTIONS.find((c) => c.code === code) ?? COUNTRY_OPTIONS[0];
+}
 
 type FunnelData = {
   firstName: string;
@@ -78,10 +81,12 @@ export function CourseFunnel({ course }: CourseFunnelProps) {
         if (!EMAIL_RE.test(data.email.trim()))
           return 'Please enter a valid email address.';
         return null;
-      case 3:
-        if (!PHONE_LOCAL_RE.test(data.phoneLocal.trim()))
-          return 'Please enter a valid phone number.';
+      case 3: {
+        const country = getCountry(data.phoneCountry);
+        if (data.phoneLocal.length !== country.digits)
+          return `Please enter a ${country.digits}-digit ${country.name} phone number.`;
         return null;
+      }
       case 4:
         if (!data.shippingStreet.trim()) return 'Please enter your street address.';
         if (!data.shippingCity.trim()) return 'Please enter your city.';
@@ -257,33 +262,58 @@ export function CourseFunnel({ course }: CourseFunnelProps) {
               </>
             }
           >
-            <div className="flex items-stretch gap-2 rounded-md border border-neutral-300 bg-white focus-within:border-brand-yellow focus-within:ring-2 focus-within:ring-brand-yellow/30">
-              <label className="flex items-center pl-3 pr-1 border-r border-neutral-300">
-                <span className="sr-only">Country code</span>
-                <select
-                  className="bg-transparent py-3 pr-2 font-heading text-sm font-bold tracking-wide text-brand-black focus:outline-none"
-                  value={data.phoneCountry}
-                  onChange={(e) => set('phoneCountry', e.target.value)}
-                >
-                  {COUNTRY_OPTIONS.map((c) => (
-                    <option key={c.code} value={c.code}>
-                      {c.flag} {c.code} ({c.name})
-                    </option>
-                  ))}
-                </select>
-              </label>
-              <input
-                type="tel"
-                inputMode="tel"
-                autoComplete="tel-national"
-                aria-label="Phone number"
-                placeholder="9171234567"
-                value={data.phoneLocal}
-                onChange={(e) => set('phoneLocal', e.target.value)}
-                maxLength={20}
-                className="block w-full bg-transparent px-3 py-3 font-heading text-sm tracking-wide text-brand-black placeholder:text-neutral-400 focus:outline-none"
-              />
-            </div>
+            {(() => {
+              const country = getCountry(data.phoneCountry);
+              return (
+                <div className="flex items-stretch gap-2 rounded-md border border-neutral-300 bg-white focus-within:border-brand-yellow focus-within:ring-2 focus-within:ring-brand-yellow/30">
+                  <label className="flex items-center pl-3 pr-1 border-r border-neutral-300">
+                    <span className="sr-only">Country code</span>
+                    <select
+                      className="bg-transparent py-3 pr-2 font-heading text-sm font-bold tracking-wide text-brand-black focus:outline-none"
+                      value={data.phoneCountry}
+                      onChange={(e) => {
+                        const next = getCountry(e.target.value);
+                        // Switching country can shorten the allowed length;
+                        // clamp the existing input so we never carry over a
+                        // value longer than the new country's max.
+                        setData((prev) => ({
+                          ...prev,
+                          phoneCountry: e.target.value,
+                          phoneLocal: prev.phoneLocal.slice(0, next.digits),
+                        }));
+                      }}
+                    >
+                      {COUNTRY_OPTIONS.map((c) => (
+                        <option key={c.code} value={c.code}>
+                          {c.flag} {c.code} ({c.name})
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+                  <input
+                    type="tel"
+                    inputMode="numeric"
+                    autoComplete="tel-national"
+                    aria-label="Phone number"
+                    placeholder={'9'.repeat(country.digits)}
+                    value={data.phoneLocal}
+                    onChange={(e) =>
+                      // Strip everything that isn't a digit, then cap at the
+                      // selected country's length so the user literally can't
+                      // over-type. `inputMode="numeric"` already discourages
+                      // letters on mobile keyboards, but desktop paste needs
+                      // this filter as a backstop.
+                      set(
+                        'phoneLocal',
+                        e.target.value.replace(/\D/g, '').slice(0, country.digits),
+                      )
+                    }
+                    maxLength={country.digits}
+                    className="block w-full bg-transparent px-3 py-3 font-heading text-sm tracking-wide text-brand-black placeholder:text-neutral-400 focus:outline-none"
+                  />
+                </div>
+              );
+            })()}
           </Step>
         )}
 

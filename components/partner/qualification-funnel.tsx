@@ -294,7 +294,14 @@ export function QualificationFunnel() {
         multiline={isMultiline}
         ariaLabel={question.label}
         value={(currentValue as string | undefined) ?? ''}
-        onChange={(v) => setAnswer(question.id, v)}
+        onChange={(v) => {
+          // Phone field: keep digits + common separators (+, space, hyphen,
+          // parens), drop anything else, and hard-cap length.
+          const next = isPhone
+            ? v.replace(/[^\d+()\-\s]/g, '').slice(0, 18)
+            : v;
+          setAnswer(question.id, next);
+        }}
         placeholder={question.placeholder}
         type={isEmail ? 'email' : isPhone ? 'tel' : 'text'}
         inputMode={isEmail ? 'email' : isPhone ? 'tel' : 'text'}
@@ -309,7 +316,7 @@ export function QualificationFunnel() {
         }
         // Phone gets a hard cap to bound any ReDoS exposure on the regex.
         // Description has its own 500-char content rule but cap input too.
-        maxLength={isPhone ? 20 : isDescription ? 500 : undefined}
+        maxLength={isPhone ? 18 : isDescription ? 500 : undefined}
       />
     );
   }, [question, currentValue, setAnswer, handleRadioChange]);

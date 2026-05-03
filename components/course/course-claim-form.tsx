@@ -160,8 +160,13 @@ export function CourseClaimForm({ course }: CourseClaimFormProps) {
             autoComplete="tel"
             placeholder="CONTACT NUMBER"
             value={phone}
-            onChange={(e) => setPhone(e.target.value)}
-            maxLength={30}
+            onChange={(e) =>
+              // Keep digits + the common separators users type (+, space,
+              // hyphen, parens); drop letters and stray punctuation. The
+              // hard 18-char cap matches the funnel forms across the site.
+              setPhone(e.target.value.replace(/[^\d+()\-\s]/g, '').slice(0, 18))
+            }
+            maxLength={18}
             className="block w-full rounded-md border border-neutral-300 bg-white px-4 py-3 font-heading text-sm tracking-wide text-brand-black placeholder:text-neutral-400 focus:border-brand-yellow focus:outline-none focus:ring-2 focus:ring-brand-yellow/30"
           />
         </label>

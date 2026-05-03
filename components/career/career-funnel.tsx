@@ -293,9 +293,15 @@ export function CareerFunnel() {
         multiline={isMultiline}
         ariaLabel={question.label}
         value={(currentValue as string | undefined) ?? ''}
-        onChange={(v) =>
-          setAnswer(question.id, v as Answers[typeof question.id])
-        }
+        onChange={(v) => {
+          // Phone field: keep digits + the handful of separators users
+          // commonly type (+, space, hyphen, parens), drop anything else,
+          // and hard-cap length so the input can't grow unbounded.
+          const next = isPhone
+            ? v.replace(/[^\d+()\-\s]/g, '').slice(0, 18)
+            : v;
+          setAnswer(question.id, next as Answers[typeof question.id]);
+        }}
         placeholder={question.placeholder}
         type={isEmail ? 'email' : isPhone ? 'tel' : 'text'}
         inputMode={isEmail ? 'email' : isPhone ? 'tel' : 'text'}
@@ -308,7 +314,7 @@ export function CareerFunnel() {
                 ? 'name'
                 : undefined
         }
-        maxLength={isPhone ? 20 : isDescription ? 1000 : undefined}
+        maxLength={isPhone ? 18 : isDescription ? 1000 : undefined}
       />
     );
   }, [question, currentValue, setAnswer, handleRadioChange]);
