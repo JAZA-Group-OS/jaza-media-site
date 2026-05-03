@@ -22,12 +22,12 @@ const TOPIC_OPTIONS: { value: Topic; label: string }[] = [
   { value: "other", label: "Other" },
 ];
 
-const SUPPORT_EMAIL = "support@jazamedia.com";
+const SUPPORT_EMAIL = "admin@jazamedia.com";
 const MAX_MESSAGE_CHARS = 2000;
 
 const INPUT_CLASS =
-  "w-full rounded-md border border-white/15 bg-black/40 px-3 py-2.5 font-heading text-sm text-white " +
-  "focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-yellow focus-visible:ring-offset-2 focus-visible:ring-offset-brand-black";
+  "w-full rounded-md border border-white/15 bg-neutral-900 px-3 py-2.5 font-heading text-sm text-white placeholder:text-white/30 " +
+  "focus:outline-none focus-visible:border-brand-yellow/60 focus-visible:ring-2 focus-visible:ring-brand-yellow focus-visible:ring-offset-2 focus-visible:ring-offset-neutral-800";
 
 type SubmitState =
   | { kind: "idle" }
@@ -136,9 +136,13 @@ export function SupportContactCard() {
 
   if (state.kind === "success") {
     return (
-      <section className="bg-brand-black py-16 md:py-20">
+      <section className="bg-neutral-800 py-16 md:py-20">
         <div className="mx-auto max-w-2xl px-4 text-center">
-          <div className="rounded-2xl border border-brand-yellow/30 bg-white/5 p-10">
+          <div className="relative overflow-hidden rounded-2xl border border-brand-yellow/40 bg-white/[0.04] p-10">
+            <span
+              aria-hidden="true"
+              className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-brand-yellow to-transparent"
+            />
             <p className="font-heading text-xs font-bold uppercase tracking-[0.3em] text-brand-yellow">
               Message received
             </p>
@@ -155,7 +159,7 @@ export function SupportContactCard() {
             <button
               type="button"
               onClick={resetForm}
-              className="mt-8 inline-flex items-center rounded-full bg-brand-yellow px-6 py-2.5 font-heading text-sm font-bold text-brand-black transition-transform hover:scale-[1.02] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-yellow focus-visible:ring-offset-2 focus-visible:ring-offset-brand-black"
+              className="mt-8 inline-flex items-center rounded-full bg-brand-yellow px-6 py-2.5 font-heading text-sm font-bold text-brand-black transition-transform hover:scale-[1.02] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-yellow focus-visible:ring-offset-2 focus-visible:ring-offset-neutral-800"
             >
               Send another message
             </button>
@@ -168,7 +172,7 @@ export function SupportContactCard() {
   const isSubmitting = state.kind === "submitting";
 
   return (
-    <section className="bg-brand-black py-16 md:py-20">
+    <section className="bg-neutral-800 py-16 md:py-20">
       <div className="mx-auto max-w-2xl px-4">
         <h2 className="text-center font-heading text-2xl font-extrabold text-white md:text-3xl">
           Still need help?
@@ -179,9 +183,13 @@ export function SupportContactCard() {
 
         <form
           onSubmit={handleSubmit}
-          className="mt-10 space-y-5 rounded-2xl border border-white/10 bg-white/[0.03] p-6 md:p-8"
+          className="relative mt-10 space-y-5 overflow-hidden rounded-2xl border border-brand-yellow/25 bg-white/[0.04] p-6 md:p-8"
           noValidate
         >
+          <span
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-brand-yellow to-transparent"
+          />
           <Field
             label="Full name"
             name="fullName"
@@ -285,7 +293,7 @@ export function SupportContactCard() {
             type="submit"
             disabled={isSubmitting}
             aria-busy={isSubmitting}
-            className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-brand-yellow px-6 py-3 font-heading text-sm font-bold text-brand-black transition-transform hover:scale-[1.02] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-yellow focus-visible:ring-offset-2 focus-visible:ring-offset-brand-black disabled:cursor-not-allowed disabled:opacity-60"
+            className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-brand-yellow px-6 py-3 font-heading text-sm font-bold text-brand-black transition-transform hover:scale-[1.02] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-yellow focus-visible:ring-offset-2 focus-visible:ring-offset-neutral-800 disabled:cursor-not-allowed disabled:opacity-60"
           >
             {isSubmitting && (
               <svg

@@ -1,15 +1,12 @@
 import { SOCIAL_LINKS } from '@/components/social-icons';
 
-const SUPPORT_EMAIL = 'support@jazamedia.com';
+const SUPPORT_EMAIL = 'admin@jazamedia.com';
 
 export function SupportHero() {
   return (
-    <section className="bg-brand-black pt-12 pb-16 md:pt-20 md:pb-24">
+    <section className="bg-neutral-800 pt-12 pb-16 md:pt-20 md:pb-24">
       <div className="mx-auto max-w-4xl px-4 text-center">
-        <p className="font-heading text-xs font-bold uppercase tracking-[0.3em] text-brand-yellow">
-          Support
-        </p>
-        <h1 className="mt-4 font-heading text-3xl font-extrabold leading-tight text-white md:text-5xl">
+        <h1 className="font-heading text-3xl font-extrabold leading-tight text-white md:text-5xl">
           How can we help?
         </h1>
         <p className="mx-auto mt-5 max-w-2xl font-heading text-base leading-relaxed text-white/70 md:text-lg">
@@ -30,7 +27,7 @@ export function SupportHero() {
                   aria-label={label}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center justify-center p-1.5 text-white/70 transition-colors hover:text-brand-yellow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-yellow focus-visible:ring-offset-2 focus-visible:ring-offset-brand-black rounded-full"
+                  className="inline-flex items-center justify-center p-1.5 text-white/70 transition-colors hover:text-brand-yellow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-yellow focus-visible:ring-offset-2 focus-visible:ring-offset-neutral-800 rounded-full"
                 >
                   <Icon className="size-5" />
                 </a>
