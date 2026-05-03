@@ -353,6 +353,57 @@ export interface CourseRequestUpdate {
 }
 
 // ============================================================================
+// support_tickets — submissions from /support
+// ============================================================================
+
+export type SupportTopic =
+  | 'general'
+  | 'course_rule_of_10x'
+  | 'course_marketing_templates'
+  | 'career_application_status'
+  | 'partnership_followup'
+  | 'billing'
+  | 'other';
+
+export type SupportTicketStatus =
+  | 'new'
+  | 'in_progress'
+  | 'resolved'
+  | 'closed';
+
+export interface SupportTicket {
+  id: string;
+  full_name: string;
+  email: string;
+  phone: string | null;
+  topic: SupportTopic;
+  subject: string;
+  message: string;
+  status: SupportTicketStatus;
+  admin_notes: string | null;
+  source: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface SupportTicketInsert {
+  full_name: string;
+  email: string;
+  phone?: string | null;
+  topic: SupportTopic;
+  subject: string;
+  message: string;
+  status?: SupportTicketStatus;
+  admin_notes?: string | null;
+  source?: string;
+}
+
+export interface SupportTicketUpdate {
+  status?: SupportTicketStatus;
+  admin_notes?: string | null;
+}
+
+// ============================================================================
 // INSERT TYPES (for creating new records)
 // ============================================================================
 
@@ -546,6 +597,12 @@ export type Database = {
         Row: CourseRequest;
         Insert: CourseRequestInsert;
         Update: CourseRequestUpdate;
+        Relationships: [];
+      };
+      support_tickets: {
+        Row: SupportTicket;
+        Insert: SupportTicketInsert;
+        Update: SupportTicketUpdate;
         Relationships: [];
       };
     };
