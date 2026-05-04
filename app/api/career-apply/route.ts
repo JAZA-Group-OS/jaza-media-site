@@ -12,8 +12,10 @@ import { POSITION_LABELS } from '@/lib/career/questions';
 
 export const runtime = 'nodejs';
 
-// 5 applications per IP per 10 minutes is plenty for legit submitters.
-const RATE_LIMIT = { windowMs: 10 * 60 * 1000, max: 5 };
+// 15 applications per IP per 10 minutes — generous enough that legit
+// resubmits (typo fixes, nervous double-clicks) and QA passes don't trip
+// the limit while still throttling drive-by spam.
+const RATE_LIMIT = { windowMs: 10 * 60 * 1000, max: 15 };
 
 export async function OPTIONS(request: Request) {
   return handlePreflight(request) ?? new Response(null, { status: 204 });
