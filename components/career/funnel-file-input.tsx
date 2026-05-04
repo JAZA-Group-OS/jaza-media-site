@@ -44,19 +44,52 @@ export function FunnelFileInput({
 
     setUploading(true);
     try {
-      const fd = new FormData();
-      fd.append('file', file);
-      fd.append('bucket', bucket);
-      const res = await fetch('/api/career-upload', {
+      // Two-step upload: ask our API to mint a one-time signed URL, then PUT
+      // the bytes directly to Supabase Storage. Going browser → Supabase
+      // sidesteps Vercel's ~4.5 MB function body cap so files up to the
+      // bucket's file_size_limit can flow through.
+      const urlRes = await fetch('/api/career-upload-url', {
         method: 'POST',
-        body: fd,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          filename: file.name,
+          type: file.type,
+          size: file.size,
+          bucket,
+        }),
       });
-      if (!res.ok) {
-        const body = (await res.json().catch(() => ({}))) as { error?: string };
-        throw new Error(body.error ?? `Upload failed (${res.status})`);
+      if (!urlRes.ok) {
+        const body = (await urlRes.json().catch(() => ({}))) as {
+          error?: string;
+        };
+        throw new Error(body.error ?? `Upload failed (${urlRes.status})`);
       }
-      const json = (await res.json()) as { data: UploadedFile };
-      onChange(json.data);
+      const urlJson = (await urlRes.json()) as {
+        data: { path: string; token: string; signedUrl: string };
+      };
+
+      const putRes = await fetch(urlJson.data.signedUrl, {
+        method: 'PUT',
+        headers: { 'Content-Type': file.type },
+        body: file,
+      });
+      if (!putRes.ok) {
+        // Supabase responds 413 for over-plan-limit files (50 MB on Free,
+        // higher on Pro). Surface a clear message rather than the raw status.
+        if (putRes.status === 413) {
+          throw new Error(
+            'File exceeds the storage plan limit. Try a smaller file.',
+          );
+        }
+        throw new Error(`Upload failed (${putRes.status})`);
+      }
+
+      onChange({
+        url: urlJson.data.path,
+        filename: file.name,
+        size: file.size,
+        type: file.type,
+      });
     } catch (err) {
       const message =
         err instanceof Error ? err.message : 'Upload failed. Please try again.';
