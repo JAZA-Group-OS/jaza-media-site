@@ -45,13 +45,13 @@ const SLIDES: Client[] = [...CLIENTS, ...CLIENTS];
 
 function ClientLogo({ name, src, boost }: Client) {
   return (
-    <div className="relative h-24 w-48 shrink-0 md:h-32 md:w-64">
+    <div className="relative h-24 w-40 shrink-0 md:h-32 md:w-56">
       <Image
         src={src}
         alt={`${name} logo`}
         fill
-        sizes="(min-width: 768px) 256px, 192px"
-        className={`object-contain ${boost ? "scale-[2.1]" : ""}`}
+        sizes="(min-width: 768px) 224px, 160px"
+        className={`object-contain ${boost ? "scale-[2.1]" : "scale-[1.1]"}`}
       />
     </div>
   );
@@ -68,7 +68,7 @@ export function ValuedClients() {
     [
       AutoScroll({
         playOnInit: true,
-        speed: 1,
+        speed: 2.2,
         startDelay: 0,
         stopOnInteraction: false,
         stopOnMouseEnter: true,
@@ -100,12 +100,12 @@ export function ValuedClients() {
           stripIn ? "animate-about-fade-in" : "opacity-0"
         }`}
       >
-        <div className="overflow-hidden" ref={emblaRef}>
+        <div className="overflow-x-clip" ref={emblaRef}>
           <div className="flex items-center">
             {SLIDES.map((client, index) => (
               <div
                 key={`${client.name}-${index}`}
-                className="shrink-0 pl-2 md:pl-4"
+                className="shrink-0 pl-0.5 md:pl-1"
               >
                 <ClientLogo {...client} />
               </div>
