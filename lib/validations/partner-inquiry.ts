@@ -6,7 +6,7 @@ import { z } from 'zod';
  * required/optional fields and length caps for safety against bad input.
  */
 export const PartnerInquirySchema = z.object({
-  location: z.enum(['philippines', 'australia', 'others']).optional(),
+  location: z.enum(['philippines', 'canada', 'others']).optional(),
   fullName: z.string().trim().min(1, 'Full name is required').max(100),
   businessType: z
     .enum(['service', 'brick_and_mortar', 'ecommerce', 'software', 'e_learning', 'other'])

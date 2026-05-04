@@ -13,7 +13,7 @@ export type AnswerKey =
   | 'email';
 
 export type Answers = Partial<{
-  location: 'philippines' | 'australia' | 'others';
+  location: 'philippines' | 'canada' | 'others';
   fullName: string;
   businessType: 'service' | 'brick_and_mortar' | 'ecommerce' | 'software' | 'e_learning' | 'other';
   description: string;
@@ -48,7 +48,7 @@ type TextQuestion<K extends AnswerKey> = {
 };
 
 export type Question =
-  | RadioQuestion<'location', 'philippines' | 'australia' | 'others'>
+  | RadioQuestion<'location', 'philippines' | 'canada' | 'others'>
   | TextQuestion<'fullName'>
   | RadioQuestion<'businessType', NonNullable<Answers['businessType']>>
   | TextQuestion<'description'>
@@ -70,7 +70,7 @@ export const QUESTIONS: Question[] = [
     cols: 3,
     options: [
       { value: 'philippines', label: 'PHILIPPINES' },
-      { value: 'australia', label: 'AUSTRALIA' },
+      { value: 'canada', label: 'CANADA' },
       { value: 'others', label: 'OTHERS' },
     ],
   },

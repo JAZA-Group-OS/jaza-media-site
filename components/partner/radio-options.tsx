@@ -117,7 +117,7 @@ function RowOption({ option }: { option: Option }) {
 
 const FLAGS: Record<string, ReactNode> = {
   philippines: <PhilippinesFlag />,
-  australia: <AustraliaFlag />,
+  canada: <CanadaFlag />,
   others: <OthersFlag />,
 };
 
@@ -181,22 +181,18 @@ function PhilippinesFlag() {
   );
 }
 
-function AustraliaFlag() {
+function CanadaFlag() {
   return (
     <FlagFrame>
-      {/* navy field */}
-      <rect x="12" y="8" width="40" height="22" fill="#012169" />
-      {/* simplified union jack quadrant */}
-      <line x1="12" y1="8" x2="26" y2="19" stroke="#ffffff" strokeWidth="1.5" />
-      <line x1="26" y1="8" x2="12" y2="19" stroke="#ffffff" strokeWidth="1.5" />
-      <line x1="19" y1="8" x2="19" y2="19" stroke="#ffffff" strokeWidth="1.5" />
-      <line x1="12" y1="13.5" x2="26" y2="13.5" stroke="#ffffff" strokeWidth="1.5" />
-      {/* commonwealth/southern-cross stars */}
-      <circle cx="19" cy="25" r="1.4" fill="#ffffff" />
-      <circle cx="40" cy="13" r="1" fill="#ffffff" />
-      <circle cx="44" cy="18" r="1" fill="#ffffff" />
-      <circle cx="37" cy="22" r="1" fill="#ffffff" />
-      <circle cx="42" cy="25" r="1" fill="#ffffff" />
+      {/* 1:2:1 vertical bands — red, white, red */}
+      <rect x="12" y="8" width="10" height="22" fill="#D52B1E" />
+      <rect x="22" y="8" width="20" height="22" fill="#ffffff" />
+      <rect x="42" y="8" width="10" height="22" fill="#D52B1E" />
+      {/* stylized 11-point maple leaf, centered in the white panel */}
+      <path
+        d="M32 11 L33 15 L37 13 L35.5 17 L38.5 18.5 L34.5 19.5 L37 23 L33 21.5 L32.5 26 L31.5 26 L31 21.5 L27 23 L29.5 19.5 L25.5 18.5 L28.5 17 L27 13 L31 15 Z"
+        fill="#D52B1E"
+      />
     </FlagFrame>
   );
 }
