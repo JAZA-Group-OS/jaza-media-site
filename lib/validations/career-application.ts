@@ -1,9 +1,12 @@
 import { z } from 'zod';
 
 const UploadedFileSchema = z.object({
-  url: z.string().url('Invalid file URL').max(2048),
+  // Stores a Supabase Storage object key (e.g. "1715000000-resume.pdf"), not
+  // an RFC URL — files are uploaded via a signed PUT and downloaded later by
+  // path. Don't tighten this back to .url().
+  url: z.string().trim().min(1, 'Missing file path').max(2048),
   filename: z.string().trim().min(1).max(256),
-  size: z.number().int().nonnegative().max(50 * 1024 * 1024),
+  size: z.number().int().nonnegative().max(100 * 1024 * 1024),
   type: z.string().trim().min(1).max(128),
 });
 
