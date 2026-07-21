@@ -2,12 +2,12 @@ import { CourseCard } from "./course-card";
 
 export function FreeMarketingSection() {
   return (
-    <section className="bg-white py-[70px]">
+    <section id="free-advance-marketing" className="bg-white py-[70px]">
       <div className="mx-auto max-w-6xl px-4">
         <div className="text-center">
           <h2 className="font-heading text-3xl font-black tracking-tight md:text-4xl lg:text-[36px]">
             <span className="text-brand-yellow">FREE</span>{" "}
-            <span className="text-brand-black">ADVANCE MARKETING</span>
+            <span className="text-brand-black">ADVANCED MARKETING</span>
           </h2>
           <p className="mx-auto mt-4 max-w-lg text-base text-neutral-700 md:text-lg">
             Videos, eBooks, Guides, Templates, Downloads &amp; more to help you succeed:

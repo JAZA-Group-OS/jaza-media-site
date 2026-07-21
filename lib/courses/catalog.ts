@@ -38,7 +38,7 @@ export type AssetOption = {
   value: SelectedAsset;
   label: string; // shown next to the radio button
   envKey: string; // env var that overrides defaultAssetUrl
-  defaultAssetUrl: string; // placeholder until the client provides the real link
+  defaultAssetUrl: string; // '' means "not configured" — email delivery is skipped
 };
 
 export type CourseDetails = {
@@ -119,14 +119,17 @@ export const COURSE_CATALOG: Record<CourseSlug, CourseDetails> = {
         value: 'sales_call_script',
         label: 'Sales Call Script',
         envKey: 'TEMPLATE_SALES_CALL_SCRIPT_URL',
-        defaultAssetUrl:
-          'https://jaza-media.com/templates/placeholder-sales-call-script',
+        // No public link exists yet. Empty = "not configured": the delivery
+        // email is skipped and recorded as missing_config instead of sending
+        // users a dead placeholder URL. Set the env key to go live.
+        defaultAssetUrl: '',
       },
       {
         value: 'ai_prompt',
         label: 'AI Prompt',
         envKey: 'TEMPLATE_AI_PROMPT_URL',
-        defaultAssetUrl: 'https://jaza-media.com/templates/placeholder-ai-prompt',
+        // See sales_call_script note above.
+        defaultAssetUrl: '',
       },
     ],
   },
@@ -158,10 +161,14 @@ export function findAssetOption(value: string): AssetOption | null {
 // Resolve the asset URL the user receives in the email. Reads the env override
 // at call time so a deployment can swap in real PDF/landing links without
 // code changes. Path-relative defaults (e.g. "/ebooks/foo.pdf") are expanded
-// to absolute URLs against the current deployment's base URL.
+// to absolute URLs against the current deployment's base URL. Returns null
+// when neither the env key nor a default is configured — callers must treat
+// that as "do not send a delivery link".
 export function resolveAssetUrl(value: string): string | null {
   const opt = findAssetOption(value);
   if (!opt) return null;
-  const raw = process.env[opt.envKey] ?? opt.defaultAssetUrl;
+  // `||` (not `??`) so an empty-string env var also falls through.
+  const raw = process.env[opt.envKey] || opt.defaultAssetUrl;
+  if (!raw) return null;
   return toAbsoluteUrl(raw);
 }

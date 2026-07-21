@@ -114,13 +114,13 @@ export const QUESTIONS: Question[] = [
   {
     id: 'facebook',
     type: 'text',
-    label: 'What is your Facebook Link',
-    helper: 'Provide Active Facebook Account',
+    label: 'What is your Facebook link?',
+    helper: 'Provide an active Facebook account.',
   },
   {
     id: 'position',
     type: 'radio',
-    label: 'What position you are eyeing for?',
+    label: 'Which position are you applying for?',
     layout: 'card-grid',
     cols: 2,
     options: [
@@ -135,14 +135,14 @@ export const QUESTIONS: Question[] = [
   {
     id: 'description',
     type: 'textarea',
-    label: 'Please describe yourself in 1-3 sentences MAX?',
+    label: 'Please describe yourself in 1–3 sentences (max).',
     helper:
       'Ex: I have the knowledge when it comes to sales because I used to be a Customer Service in my past work.',
   },
   {
     id: 'resume',
     type: 'file',
-    label: 'Please provide your Resume/ CV?',
+    label: 'Please provide your resume / CV.',
     helper: 'Upload 1 supported file. Max 100 MB.',
     accept: '.pdf,.doc,.docx',
     maxSizeBytes: 100 * 1024 * 1024,
@@ -153,7 +153,7 @@ export const QUESTIONS: Question[] = [
     type: 'file',
     label: 'Please provide your Portfolio?',
     helper: 'Upload 1 supported file. Max 100 MB.',
-    accept: '.pdf,.zip,.jpg,.jpeg,.png',
+    accept: '.pdf,.zip,.jpg,.jpeg,.png,.webp',
     maxSizeBytes: 100 * 1024 * 1024,
     bucket: 'career_portfolios',
   },

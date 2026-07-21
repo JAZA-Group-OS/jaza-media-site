@@ -98,8 +98,8 @@ export const QUESTIONS: Question[] = [
   {
     id: 'description',
     type: 'textarea',
-    label: 'Please describe your business in 1-3 sentences MAX?',
-    helper: 'Ex: I help dentists get more patients using facebook ads for ₱2000 per month.',
+    label: 'Please describe your business in 1–3 sentences (max).',
+    helper: 'Ex: I help dentists get more patients using Facebook ads for ₱2000 per month.',
   },
   {
     id: 'helpType',

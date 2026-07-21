@@ -26,7 +26,7 @@ export function Founders() {
               ₱150M in annual revenue.
             </p>
             <p>
-              Jaza began his career as a freelance Video editor and Facebook
+              Jaza began his career as a freelance video editor and Facebook
               advertiser before building one of the Philippines&apos; most recognized
               business communities, now with over 66,000 business-owner members. He
               is also the author of two bestselling ebooks, Marketing Course and

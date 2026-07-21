@@ -2,7 +2,7 @@ import Link from "next/link";
 
 import { MobileMenu } from "@/components/mobile-menu";
 import { NAV_LINKS, isInternalRoute } from "@/lib/site-nav";
-import { SOCIAL_LINKS } from '@/components/social-icons';
+import { PUBLISHED_SOCIAL_LINKS } from '@/components/social-icons';
 
 export function Footer() {
   return (
@@ -83,7 +83,7 @@ export function Footer() {
           </div>
 
           <div className="flex items-center gap-3">
-            {SOCIAL_LINKS.map(({ label, href, Icon }) => (
+            {PUBLISHED_SOCIAL_LINKS.map(({ label, href, Icon }) => (
               <a
                 key={label}
                 href={href}

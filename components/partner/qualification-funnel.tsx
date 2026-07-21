@@ -11,6 +11,16 @@ import { FunnelTextInput } from './funnel-text-input';
 
 const STORAGE_KEY = 'partner-with-us:answers';
 
+// Input caps for the free-text steps. Must stay at or below the caps in
+// PartnerInquirySchema (lib/validations/partner-inquiry.ts).
+const FIELD_MAX_LENGTH: Partial<Record<keyof Answers, number>> = {
+  fullName: 100,
+  email: 254,
+  phone: 18,
+  description: 500,
+  challenge: 2000,
+};
+
 const DISCLAIMER =
   'By providing your information today, you are giving consent for us or our partners, to contact you by mail, phone, text, or email using automated telephone dialing systems to the data provided, even if the phone number is present on a state or national Do Not Call list. You further consent to receiving AI-generated autodialed and/or artificial or prerecorded voice calls or texts. We do not sell your personal information to other companies, and you can withdraw consent at any time. Consent is not a condition of any purchase. By submitting this form, you agree to our Privacy Policy and Terms of Service.';
 
@@ -113,6 +123,10 @@ export function QualificationFunnel() {
   // refresh: fresh entries clear stale answers, mid-funnel refreshes
   // restore them so the user doesn't lose progress.
   const [answers, setAnswers] = useState<Answers>(() => readInitialAnswers());
+
+  // Final-step submit guard: blocks double submits and drives the button's
+  // busy state while the inquiry is being persisted.
+  const [submitting, setSubmitting] = useState(false);
 
   // Validation is keyed to the step it ran on. When stepFromUrl changes,
   // the derived `error` below becomes null automatically — no effect needed.
@@ -227,7 +241,7 @@ export function QualificationFunnel() {
     router.push(`/partner-with-us?step=${stepFromUrl - 1}`);
   }, [router, stepFromUrl]);
 
-  const goNext = useCallback(() => {
+  const goNext = useCallback(async () => {
     const value = answers[question.id];
     const err = validate(question, value);
     if (err) {
@@ -240,34 +254,56 @@ export function QualificationFunnel() {
       router.push(`/partner-with-us?step=${stepFromUrl + 1}`);
       return;
     }
-    // Final step → qualify and route.
+    // Final step → persist the inquiry, then qualify and route. The user is
+    // NOT navigated until the API confirms the lead was saved — otherwise a
+    // 4xx/5xx here would silently lose the inquiry.
+    if (submitting) return;
     const outcome = qualify(answers);
     // Gate the dev log so production DevTools never sees PII (phone, email, name).
     if (process.env.NODE_ENV !== 'production') {
       console.log('partner-with-us submission', { outcome, answers });
     }
-    // Persist the inquiry. keepalive lets the request complete even after we navigate.
-    fetch('/api/partner', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(answers),
-      keepalive: true,
-    }).catch((err) => {
-      // Don't block the user on a logging failure.
-      console.error('Failed to persist partner inquiry:', err);
-    });
-    if (outcome === 'qualified') {
-      // Mirror name/email/phone/description into the prefill blob so the
-      // Calendly form on /book pre-populates without the user retyping.
-      writePrefill(answers);
+    setSubmitting(true);
+    const failWith = (message: string) => {
+      setSubmitting(false);
+      setValidation({ step: stepFromUrl, message });
+      setShakeKey((k) => k + 1);
+    };
+    try {
+      const res = await fetch('/api/partner', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(answers),
+      });
+      if (!res.ok) {
+        failWith(
+          res.status === 429
+            ? 'Too many submissions from your network right now. Please wait a few minutes and press Submit again — your answers are saved on this page.'
+            : res.status === 400
+              ? 'Some of your answers could not be accepted. Please go back, review them, and submit again.'
+              : 'Something went wrong on our end and your submission was not received. Please press Submit to try again.',
+        );
+        return;
+      }
+      if (outcome === 'qualified') {
+        // Mirror name/email/phone/description into the prefill blob so the
+        // Calendly form on /book pre-populates without the user retyping.
+        writePrefill(answers);
+      }
+      clearAnswers();
+      // Deliberately leave `submitting` true on success so the button stays
+      // disabled during the route transition.
+      router.push(
+        outcome === 'qualified'
+          ? '/partner-with-us/book'
+          : '/partner-with-us/not-qualified',
+      );
+    } catch {
+      failWith(
+        "We couldn't reach the server. Please check your connection and press Submit again — your answers are saved on this page.",
+      );
     }
-    clearAnswers();
-    router.push(
-      outcome === 'qualified'
-        ? '/partner-with-us/book'
-        : '/partner-with-us/not-qualified',
-    );
-  }, [answers, question, router, stepFromUrl]);
+  }, [answers, question, router, stepFromUrl, submitting]);
 
   // Dep on `currentValue` (not the whole `answers` object) so this memo doesn't
   // bust on every keystroke of an unrelated text field.
@@ -288,7 +324,6 @@ export function QualificationFunnel() {
     const isMultiline = question.type === 'textarea';
     const isPhone = question.id === 'phone';
     const isEmail = question.id === 'email';
-    const isDescription = question.id === 'description';
     return (
       <FunnelTextInput
         multiline={isMultiline}
@@ -314,9 +349,10 @@ export function QualificationFunnel() {
                 ? 'name'
                 : undefined
         }
-        // Phone gets a hard cap to bound any ReDoS exposure on the regex.
-        // Description has its own 500-char content rule but cap input too.
-        maxLength={isPhone ? 18 : isDescription ? 500 : undefined}
+        // Hard caps mirror the server-side Zod schema (partner-inquiry.ts) so
+        // a long paste can never pass client validation yet 400 at submit.
+        // Phone's cap also bounds any ReDoS exposure on the regex.
+        maxLength={FIELD_MAX_LENGTH[question.id]}
       />
     );
   }, [question, currentValue, setAnswer, handleRadioChange]);
@@ -391,6 +427,7 @@ export function QualificationFunnel() {
               isLast={stepFromUrl === TOTAL_STEPS}
               titleRef={titleRef}
               shakeKey={shakeKey}
+              submitting={submitting}
             />
           </div>
         </div>

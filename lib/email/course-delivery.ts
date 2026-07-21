@@ -8,8 +8,8 @@
  *                            (COURSES_FROM_EMAIL also accepted as override)
  *
  * The asset URL is resolved from the catalog (per selected_asset, with env
- * overrides). Until the client provides real download links, placeholders
- * are used — the email still sends so the funnel can be tested end-to-end.
+ * overrides). If no real URL is configured for the selected asset, the send
+ * is skipped and reported as missing_config — we never email a dead link.
  *
  * The send is best-effort: API route callers should `await` this but treat
  * a thrown error as non-fatal (we'd rather save the request than block on
@@ -158,7 +158,17 @@ export async function sendCourseDeliveryEmail({
     return { sent: false, reason: 'missing_config' };
   }
 
-  const assetUrl = resolveAssetUrl(asset.value) ?? asset.defaultAssetUrl;
+  const assetUrl = resolveAssetUrl(asset.value);
+  if (!assetUrl) {
+    console.warn(
+      `[email/course-delivery] no asset URL configured for "${asset.value}" (set ${asset.envKey}); skipping email send.`,
+    );
+    return {
+      sent: false,
+      reason: 'missing_config',
+      detail: `no asset URL for ${asset.value} (${asset.envKey} unset)`,
+    };
+  }
   const { subject, html, text } = buildCourseDeliveryEmail({
     toName,
     course,

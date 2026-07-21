@@ -2,6 +2,8 @@ import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'Thank You for Applying — JAZA Media',
+  // Transient post-submission page — keep it out of search results.
+  robots: { index: false, follow: false },
 };
 
 export default function ApplyThankYouPage() {

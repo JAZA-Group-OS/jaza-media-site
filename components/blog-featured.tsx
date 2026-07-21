@@ -39,7 +39,7 @@ export function BlogFeatured() {
             </h3>
             <div className="mt-4 space-y-4 font-heading text-sm leading-relaxed text-brand-black/85 md:text-base">
               <p>
-                Every time JAZA Media launch a major campaign for their
+                Every time JAZA Media launches a major campaign for our
                 clients, we collaborate with a diverse group of creators to
                 produce engaging content and endorse their products across
                 social media platforms. Depending on the scope and

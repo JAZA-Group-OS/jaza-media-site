@@ -157,8 +157,14 @@ export function CourseFunnel({ course }: CourseFunnelProps) {
         };
         throw new Error(body.error ?? 'Failed to submit request');
       }
+      // The API reports whether the delivery email actually went out; the
+      // thank-you page softens its "check your inbox" copy when it didn't.
+      const body = (await res.json().catch(() => ({}))) as {
+        emailStatus?: string;
+      };
+      const emailPending = body.emailStatus && body.emailStatus !== 'sent';
       router.push(
-        `/courses/${course.slug}/thank-you?e=${encodeURIComponent(data.email.trim())}&a=${encodeURIComponent(data.selectedAsset)}`,
+        `/courses/${course.slug}/thank-you?a=${encodeURIComponent(data.selectedAsset)}${emailPending ? '&es=pending' : ''}`,
       );
     } catch (err) {
       const message =

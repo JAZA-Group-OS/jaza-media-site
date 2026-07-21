@@ -4,12 +4,10 @@ import type React from 'react';
 
 import { motion } from 'framer-motion';
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { Eye, EyeOff } from 'lucide-react';
 import { supabase } from '@/lib/supabase/client';
 
 export default function AdminLoginPage() {
-  const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -32,7 +30,12 @@ export default function AdminLoginPage() {
       return;
     }
 
-    router.push('/dashboard');
+    // Hard navigation (not router.push) so the just-written session cookie is
+    // guaranteed to accompany the next request. A client-side push can race
+    // the async cookie write and land back on /login until cookies settle.
+    // `replace` keeps the login page out of history. Stays loading until the
+    // browser tears down this document.
+    window.location.replace('/dashboard');
   };
 
   return (

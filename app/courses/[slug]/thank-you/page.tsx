@@ -9,7 +9,9 @@ import {
 } from '@/lib/courses/catalog';
 
 type Params = Promise<{ slug: string }>;
-type Search = Promise<{ e?: string; a?: string }>;
+// `a` = selected asset; `es` = email status ("pending" when the delivery
+// email could not be sent, so the copy shouldn't promise an inbox).
+type Search = Promise<{ a?: string; es?: string }>;
 
 export function generateStaticParams() {
   return COURSE_SLUGS.map((slug) => ({ slug }));
@@ -38,7 +40,7 @@ export default async function CourseThankYouPage({
   searchParams: Search;
 }) {
   const { slug } = await params;
-  const { a: assetParam } = await searchParams;
+  const { a: assetParam, es } = await searchParams;
   const course = getCourse(slug);
   if (!course) notFound();
 
@@ -47,6 +49,7 @@ export default async function CourseThankYouPage({
   const asset = assetParam ? findAssetOption(assetParam) : null;
   const assetLabel = asset?.label ?? course.shortName;
   const isTemplates = course.slug === 'marketing-templates';
+  const emailPending = es === 'pending';
 
   return (
     <div className="mx-auto w-full max-w-2xl px-4 py-16 text-center md:py-20">
@@ -60,16 +63,40 @@ export default async function CourseThankYouPage({
       </div>
 
       <h1 className="mt-10 font-heading text-3xl font-black leading-tight tracking-tight text-brand-black md:text-4xl">
-        Check Your Email for Your{' '}
-        <em className="font-black text-brand-yellow not-italic">
-          FREE {isTemplates ? 'Template' : 'Course'}!
-        </em>
+        {emailPending ? (
+          <>
+            Your{' '}
+            <em className="font-black text-brand-yellow not-italic">
+              FREE {isTemplates ? 'Template' : 'Course'}
+            </em>{' '}
+            Request Is Confirmed!
+          </>
+        ) : (
+          <>
+            Check Your Email for Your{' '}
+            <em className="font-black text-brand-yellow not-italic">
+              FREE {isTemplates ? 'Template' : 'Course'}!
+            </em>
+          </>
+        )}
       </h1>
 
       <p className="mx-auto mt-6 max-w-xl text-sm leading-relaxed text-neutral-700 md:text-base">
         Thank you for your interest in studying{' '}
         <strong>{assetLabel}</strong> by JAZA Media.
       </p>
+
+      {emailPending ? (
+        <p className="mx-auto mt-6 max-w-xl text-sm leading-relaxed text-neutral-700 md:text-base">
+          We&rsquo;re preparing your delivery email. If it doesn&rsquo;t reach
+          your inbox (or spam folder) within a few minutes, please reach out
+          via our{' '}
+          <Link href="/support" className="font-semibold underline">
+            support page
+          </Link>{' '}
+          and we&rsquo;ll send it to you directly.
+        </p>
+      ) : null}
 
       <p className="mx-auto mt-6 max-w-xl text-sm leading-relaxed text-neutral-700 md:text-base">
         We truly appreciate your enthusiasm and commitment to growth, and we

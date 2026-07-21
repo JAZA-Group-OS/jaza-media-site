@@ -67,6 +67,29 @@ export async function POST(request: Request) {
 
   try {
     const supabase = createAdminClient();
+
+    // Verify the referenced objects actually exist in our buckets before
+    // recording them. A submitted path that was never uploaded (or targets
+    // the wrong bucket) must fail here — not later, when an admin clicks a
+    // dead "Resume / CV" link.
+    const [resumeCheck, portfolioCheck] = await Promise.all([
+      supabase.storage
+        .from('career_resumes')
+        .createSignedUrl(data.resume.url, 60),
+      supabase.storage
+        .from('career_portfolios')
+        .createSignedUrl(data.portfolio.url, 60),
+    ]);
+    if (resumeCheck.error || portfolioCheck.error) {
+      return NextResponse.json(
+        {
+          error:
+            'Your uploaded files could not be verified. Please re-upload your resume and portfolio, then submit again.',
+        },
+        { status: 400, headers: cors },
+      );
+    }
+
     const { error } = await (
       supabase.from('career_applications') as unknown as {
         insert: (row: Record<string, unknown>) => Promise<{ error: Error | null }>;

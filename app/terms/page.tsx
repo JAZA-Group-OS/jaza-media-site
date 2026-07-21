@@ -31,10 +31,14 @@ export default function TermsPage() {
 
           {/*
             TODO (legal): the substantive terms below mirror industry-standard
-            language. Have counsel confirm governing-law jurisdiction,
-            arbitration venue, statute-of-limitations period, and any
-            region-specific clauses before launch. Replace any
-            "[Governing jurisdiction]" placeholders with the chosen venue.
+            (largely US-template) language. Governing law/venue is now set to
+            the Republic of the Philippines (§29) as the engineering default —
+            counsel must still confirm: (a) that choice of law/venue, (b) the
+            arbitration clause (§28) and arbitral body, (c) the US-dollar fee
+            and liability-cap references (§18, §25, §27), (d) the class-action/
+            jury-trial waiver's enforceability in the PH (§30), and (e) the
+            statute-of-limitations period — before treating this page as
+            reviewed.
           */}
           <div className="prose prose-neutral mt-8 max-w-none text-base leading-relaxed text-brand-black">
             <p>
@@ -307,10 +311,10 @@ export default function TermsPage() {
             <h2>29. Choice of law, jurisdiction, and venue</h2>
             <p>
               This Agreement is governed by and construed in accordance with
-              the laws of <strong>[Governing jurisdiction]</strong>, without
-              regard to conflict-of-laws principles. Legal actions will proceed
-              in the state or federal courts located in{" "}
-              <strong>[Governing jurisdiction]</strong>, and you and we
+              the laws of <strong>the Republic of the Philippines</strong>,
+              without regard to conflict-of-laws principles. Legal actions
+              will proceed in the competent courts of{" "}
+              <strong>the Republic of the Philippines</strong>, and you and we
               irrevocably consent to the jurisdiction and venue of such courts.
             </p>
 

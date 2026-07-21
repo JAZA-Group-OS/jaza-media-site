@@ -3,6 +3,8 @@ import { MarketingTemplatesCard } from '@/components/marketing-templates-card';
 
 export const metadata: Metadata = {
   title: 'Application Update — JAZA Media',
+  // Transient outcome page — shouldn't surface in search.
+  robots: { index: false, follow: false },
 };
 
 export default function NotQualifiedPage() {
@@ -38,10 +40,10 @@ export default function NotQualifiedPage() {
 
       <p className="mx-auto mt-8 max-w-xl text-sm text-neutral-700 md:text-base">
         We appreciate your interest in JAZA Media and wish you continued success
-        on your journey. While you work toward meeting the requirements above,
-        you may download the JAZA Media Marketing Template for FREE. This
-        template will help you stay updated on market trends and serve as a
-        practical guide to improving and growing your business.
+        on your journey. In the meantime, you may download the JAZA Media
+        Marketing Template for FREE. This template will help you stay updated on
+        market trends and serve as a practical guide to improving and growing
+        your business.
       </p>
     </div>
   );

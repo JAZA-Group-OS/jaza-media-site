@@ -1,4 +1,4 @@
-import { SOCIAL_LINKS } from '@/components/social-icons';
+import { PUBLISHED_SOCIAL_LINKS } from '@/components/social-icons';
 
 const SUPPORT_EMAIL = 'admin@jazamedia.com';
 
@@ -20,7 +20,7 @@ export function SupportHero() {
           </span>
 
           <ul className="flex items-center gap-3">
-            {SOCIAL_LINKS.map(({ label, href, Icon }) => (
+            {PUBLISHED_SOCIAL_LINKS.map(({ label, href, Icon }) => (
               <li key={label}>
                 <a
                   href={href}

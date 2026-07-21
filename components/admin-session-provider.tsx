@@ -5,9 +5,22 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabase/client';
 
-const ADMIN_EMAIL = 'jaza.intern@gmail.com';
-
-export default function AdminSessionProvider({ children }: { children: React.ReactNode }) {
+/**
+ * Client-side BACKUP gate. Its only job is to avoid a flash of dashboard UI
+ * before the authoritative server checks have run, and to bounce the user to
+ * /login the moment their session ends (e.g. logout in another tab).
+ *
+ * The authoritative admin checks live server-side: the proxy gates the
+ * subdomain on the admin email, the dashboard Server Component re-verifies
+ * the session, and Supabase RLS scopes every row to the admin. This component
+ * therefore checks only for a VALID SESSION — it deliberately does not know
+ * the admin email, so that address never ships in the public JS bundle.
+ */
+export default function AdminSessionProvider({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   const router = useRouter();
   const [checked, setChecked] = useState(false);
 
@@ -16,7 +29,7 @@ export default function AdminSessionProvider({ children }: { children: React.Rea
 
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (!active) return;
-      if (!session || session.user.email !== ADMIN_EMAIL) {
+      if (!session) {
         router.replace('/login');
         return;
       }
@@ -26,7 +39,7 @@ export default function AdminSessionProvider({ children }: { children: React.Rea
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {
-      if (!session || session.user.email !== ADMIN_EMAIL) {
+      if (!session) {
         router.replace('/login');
       }
     });

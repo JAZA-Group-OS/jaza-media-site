@@ -16,6 +16,8 @@ type Props = {
   titleRef?: Ref<HTMLHeadingElement>;
   /** Increments on each validation failure to retrigger the shake animation. */
   shakeKey?: number;
+  /** Disables the submit button while the final step is being persisted. */
+  submitting?: boolean;
 };
 
 export function FunnelStepCard({
@@ -28,6 +30,7 @@ export function FunnelStepCard({
   isLast,
   titleRef,
   shakeKey = 0,
+  submitting = false,
 }: Props) {
   return (
     <div
@@ -77,10 +80,12 @@ export function FunnelStepCard({
 
         <button
           type="submit"
+          disabled={submitting}
+          aria-busy={submitting || undefined}
           aria-label={isLast ? 'Submit application' : 'Next step'}
-          className="inline-flex min-h-[44px] items-center gap-2 text-sm font-bold tracking-wider text-brand-black uppercase transition-opacity hover:opacity-70"
+          className="inline-flex min-h-[44px] items-center gap-2 text-sm font-bold tracking-wider text-brand-black uppercase transition-opacity hover:opacity-70 disabled:cursor-not-allowed disabled:opacity-50"
         >
-          {isLast ? 'Submit' : 'Next'}
+          {isLast ? (submitting ? 'Submitting…' : 'Submit') : 'Next'}
           <ArrowRight className="size-4" strokeWidth={2.5} />
         </button>
       </div>

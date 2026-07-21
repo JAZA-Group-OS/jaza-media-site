@@ -6,6 +6,19 @@ const nextConfig: NextConfig = {
   },
 
   async headers() {
+    // 'unsafe-eval' is only needed by the dev bundler (eval source maps).
+    // Production build output doesn't use eval, so we drop it there to
+    // tighten XSS protection. Verify interactive pages in a preview browser
+    // after changing this.
+    const isDev = process.env.NODE_ENV !== 'production';
+    const scriptSrc = [
+      "script-src 'self' 'unsafe-inline'",
+      isDev ? "'unsafe-eval'" : '',
+      'https://assets.calendly.com',
+    ]
+      .filter(Boolean)
+      .join(' ');
+
     const securityHeaders = [
       // Click-jacking: deny framing entirely.
       { key: 'X-Frame-Options', value: 'DENY' },
@@ -29,7 +42,7 @@ const nextConfig: NextConfig = {
         key: 'Content-Security-Policy',
         value: [
           "default-src 'self'",
-          "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://assets.calendly.com",
+          scriptSrc,
           "style-src 'self' 'unsafe-inline' https://assets.calendly.com https://fonts.googleapis.com",
           "img-src 'self' data: blob: https:",
           "font-src 'self' data: https://fonts.gstatic.com",

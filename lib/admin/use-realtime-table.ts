@@ -20,7 +20,7 @@
  * a row disappeared unexpectedly.
  */
 
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useId, useState } from 'react';
 import type { Dispatch, SetStateAction } from 'react';
 import { supabase } from '@/lib/supabase/client';
 
@@ -60,17 +60,46 @@ export function useRealtimeTable<T extends RowWithId>(
   table: string,
   options?: { filter?: RealtimeFilter },
 ): UseRealtimeTableResult<T> {
-  const [rows, setRows] = useState<T[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
   const filterCol = options?.filter?.column;
   const filterVal = options?.filter?.value;
 
+  // Unique per hook instance. Without it, two mounted components subscribing
+  // the same table+filter (e.g. DashboardOverview and a manager tab both on
+  // partner_inquiries) would build identical channel names, and supabase-js
+  // dedupes same-named channels — dropping one subscriber's updates.
+  const instanceId = useId();
+
+  // Identity of the current query. `loading` is DERIVED from whether the
+  // loaded slice matches this key, so the effect never has to call setState
+  // synchronously in its body (which triggers a cascading render and the
+  // react-hooks/set-state-in-effect lint error). setState happens only in the
+  // async fetch resolution and realtime callbacks, which is allowed.
+  const queryKey = `${table}|${filterCol ?? ''}|${filterVal ?? ''}`;
+
+  const [state, setState] = useState<{
+    key: string | null;
+    rows: T[];
+    error: string | null;
+  }>({ key: null, rows: [], error: null });
+
+  const loading = state.key !== queryKey;
+  // Suppress stale rows/errors from a previous query while the new one loads.
+  const rows = state.key === queryKey ? state.rows : [];
+  const error = state.key === queryKey ? state.error : null;
+
+  // Stable setter for consumers that mutate rows after an admin action.
+  const setRows = useCallback<Dispatch<SetStateAction<T[]>>>((action) => {
+    setState((s) => ({
+      ...s,
+      rows:
+        typeof action === 'function'
+          ? (action as (prev: T[]) => T[])(s.rows)
+          : action,
+    }));
+  }, []);
+
   useEffect(() => {
     let cancelled = false;
-    setLoading(true);
-    setError(null);
 
     const from = supabase.from(table) as unknown as FromBuilder<T>;
     const select = from.select('*');
@@ -81,18 +110,16 @@ export function useRealtimeTable<T extends RowWithId>(
       .order('created_at', { ascending: false })
       .then(({ data, error: fetchError }) => {
         if (cancelled) return;
-        if (fetchError) {
-          setError(fetchError.message);
-          setLoading(false);
-          return;
-        }
-        setRows(data ?? []);
-        setLoading(false);
+        setState({
+          key: queryKey,
+          rows: fetchError ? [] : data ?? [],
+          error: fetchError ? fetchError.message : null,
+        });
       });
 
     const channelName = `realtime:${table}${
       filterCol && filterVal ? `:${filterCol}=${filterVal}` : ''
-    }`;
+    }:${instanceId}`;
     const realtimeFilter =
       filterCol && filterVal ? `${filterCol}=eq.${filterVal}` : undefined;
 
@@ -110,11 +137,11 @@ export function useRealtimeTable<T extends RowWithId>(
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (payload: any) => {
           const row = payload.new as T;
-          setRows((prev) => {
+          setState((s) => {
             // Defensive: dedupe by id in case the initial fetch raced with
             // the subscription and we already have the row.
-            if (prev.some((r) => r.id === row.id)) return prev;
-            return [row, ...prev];
+            if (s.rows.some((r) => r.id === row.id)) return s;
+            return { ...s, rows: [row, ...s.rows] };
           });
         },
       )
@@ -130,7 +157,10 @@ export function useRealtimeTable<T extends RowWithId>(
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (payload: any) => {
           const row = payload.new as T;
-          setRows((prev) => prev.map((r) => (r.id === row.id ? row : r)));
+          setState((s) => ({
+            ...s,
+            rows: s.rows.map((r) => (r.id === row.id ? row : r)),
+          }));
         },
       )
       .subscribe();
@@ -139,7 +169,7 @@ export function useRealtimeTable<T extends RowWithId>(
       cancelled = true;
       void supabase.removeChannel(channel);
     };
-  }, [table, filterCol, filterVal]);
+  }, [table, filterCol, filterVal, queryKey, instanceId]);
 
   return { rows, loading, error, setRows };
 }

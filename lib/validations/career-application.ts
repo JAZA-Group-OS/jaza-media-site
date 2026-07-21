@@ -1,14 +1,49 @@
 import { z } from 'zod';
 
-const UploadedFileSchema = z.object({
-  // Stores a Supabase Storage object key (e.g. "1715000000-resume.pdf"), not
-  // an RFC URL — files are uploaded via a signed PUT and downloaded later by
-  // path. Don't tighten this back to .url().
-  url: z.string().trim().min(1, 'Missing file path').max(2048),
-  filename: z.string().trim().min(1).max(256),
-  size: z.number().int().nonnegative().max(100 * 1024 * 1024),
-  type: z.string().trim().min(1).max(128),
-});
+// Object keys minted by /api/career-upload-url look like
+// `${Date.now()}-${sanitized}` where sanitized is the original filename
+// reduced to [A-Za-z0-9._-] and capped at 128 chars. Submissions must
+// reference exactly that shape — free-form strings and external URLs are
+// rejected so the admin dashboard only ever links files our own mint route
+// could have produced.
+const OBJECT_KEY_RE = /^\d{10,16}-[A-Za-z0-9._-]{1,128}$/;
+
+// MIME allowlists must stay in sync with ALLOWED_MIME in
+// app/api/career-upload-url/route.ts (and the storage bucket config).
+export const RESUME_MIME_TYPES = [
+  'application/pdf',
+  'application/msword',
+  'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+] as const;
+
+export const PORTFOLIO_MIME_TYPES = [
+  'application/pdf',
+  'application/zip',
+  'application/x-zip-compressed',
+  'image/jpeg',
+  'image/png',
+  'image/webp',
+] as const;
+
+function uploadedFileSchema(allowedTypes: readonly string[]) {
+  return z.object({
+    // A Supabase Storage object key (e.g. "1715000000000-resume.pdf"), not an
+    // RFC URL — files are uploaded via a signed PUT and downloaded later by
+    // path, so don't tighten this to .url(). The regex pin is load-bearing;
+    // see OBJECT_KEY_RE above.
+    url: z.string().trim().regex(OBJECT_KEY_RE, 'Invalid file path'),
+    filename: z.string().trim().min(1).max(256),
+    size: z
+      .number()
+      .int()
+      .positive('File is empty')
+      .max(100 * 1024 * 1024),
+    type: z
+      .string()
+      .trim()
+      .refine((v) => allowedTypes.includes(v), 'Unsupported file type'),
+  });
+}
 
 export const CareerApplicationSchema = z.object({
   location: z.enum(['luzon', 'visayas', 'mindanao']),
@@ -33,8 +68,8 @@ export const CareerApplicationSchema = z.object({
     .trim()
     .min(10, 'Please write at least one short sentence')
     .max(1000),
-  resume: UploadedFileSchema,
-  portfolio: UploadedFileSchema,
+  resume: uploadedFileSchema(RESUME_MIME_TYPES),
+  portfolio: uploadedFileSchema(PORTFOLIO_MIME_TYPES),
 });
 
 export type CareerApplicationPayload = z.infer<typeof CareerApplicationSchema>;

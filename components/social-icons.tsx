@@ -44,20 +44,25 @@ export function InstagramIcon({ className }: IconProps) {
 
 export type SocialLink = {
   label: string;
-  href: string;
+  /** Real channel URL, or null while the channel isn't published yet —
+   *  consumers hide null entries so users are never sent to a bare
+   *  platform homepage (gmail.com, facebook.com, …). */
+  href: string | null;
   Icon: ComponentType<IconProps>;
 };
 
-// Hrefs are placeholders — replace with real URLs when the channels are
-// publicly published. Using `#` keeps the icons visible without misleading.
-// Per-platform bare-domain landing pages. Swap for JAZA's specific channel
-// handles (e.g. https://facebook.com/<page>) once those are published.
+// Fill in JAZA's actual channel URLs (e.g. https://facebook.com/<page>) as
+// they go live; each icon reappears in the footer/support hero automatically.
 export const SOCIAL_LINKS: SocialLink[] = [
-  { label: 'Gmail', href: 'https://gmail.com', Icon: GmailIcon },
-  { label: 'Messenger', href: 'https://messenger.com', Icon: MessengerIcon },
-  { label: 'Facebook', href: 'https://facebook.com', Icon: FacebookIcon },
-  { label: 'TikTok', href: 'https://tiktok.com', Icon: TikTokIcon },
-  { label: 'Instagram', href: 'https://instagram.com', Icon: InstagramIcon },
+  { label: 'Gmail', href: null, Icon: GmailIcon },
+  { label: 'Messenger', href: null, Icon: MessengerIcon },
+  { label: 'Facebook', href: null, Icon: FacebookIcon },
+  { label: 'TikTok', href: null, Icon: TikTokIcon },
+  { label: 'Instagram', href: null, Icon: InstagramIcon },
 ];
+
+/** Only the links that have a real destination. */
+export const PUBLISHED_SOCIAL_LINKS: (SocialLink & { href: string })[] =
+  SOCIAL_LINKS.filter((l): l is SocialLink & { href: string } => l.href !== null);
 
 export type { IconProps as SocialIconProps, SVGProps };

@@ -1,23 +1,42 @@
 import { createServerClient } from '@supabase/ssr';
 import { NextResponse, type NextRequest } from 'next/server';
+import { ADMIN_EMAIL } from '@/lib/admin/config';
 
 /**
- * Combined middleware for:
+ * Combined proxy (formerly middleware.ts — renamed per Next.js 16) for:
  *   1. Supabase session refresh (cookies stay current across requests)
  *   2. Subdomain routing — admin.<host> serves /admin/*
  *   3. Server-side auth gate — unauthenticated requests to admin pages are
  *      redirected to /login BEFORE any HTML is sent
  *
- * Defense-in-depth: AdminSessionProvider still runs client-side as a backup.
+ * Defense-in-depth: the admin dashboard also re-verifies the session in a
+ * Server Component, and AdminSessionProvider runs client-side as a backup.
+ *
+ * The `proxy` runtime is always nodejs (the edge runtime is not supported),
+ * which suits the Supabase cookie handling here.
  */
-export async function middleware(request: NextRequest) {
+
+/**
+ * Carry any refreshed Supabase auth cookies from the base response onto a
+ * redirect/rewrite response. Without this, a token rotation performed by
+ * getUser() below is silently dropped on those branches, intermittently
+ * logging the admin out. This is the documented @supabase/ssr pitfall.
+ */
+function copyAuthCookies(from: NextResponse, to: NextResponse): void {
+  for (const cookie of from.cookies.getAll()) {
+    to.cookies.set(cookie);
+  }
+}
+
+export async function proxy(request: NextRequest) {
   const host = request.headers.get('host') ?? '';
   const hostname = host.split(':')[0];
   const port = host.includes(':') ? `:${host.split(':')[1]}` : '';
   const isAdminSubdomain = hostname.startsWith('admin.');
   const url = request.nextUrl.clone();
 
-  // Step 1: Force /admin/* on the main host onto the subdomain.
+  // Step 1: Force /admin/* on the main host onto the subdomain. This runs
+  // before any session work, so there are no refreshed cookies to preserve.
   if (!isAdminSubdomain && url.pathname.startsWith('/admin')) {
     const newPath = url.pathname.replace(/^\/admin/, '') || '/dashboard';
     const adminHost = `admin.${hostname}${port}`;
@@ -56,26 +75,32 @@ export async function middleware(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
-  const ADMIN_EMAIL = 'jaza.intern@gmail.com';
   const isAdmin = user?.email === ADMIN_EMAIL;
 
   // Step 4: On the admin subdomain, gate non-login traffic on a real session
   // AND on the admin email — RLS protects data, but the dashboard bundle is
   // sensitive enough to deny non-admin authenticated users at the edge.
   if (isAdminSubdomain) {
-    const isLoginPath = url.pathname === '/login' || url.pathname === '/admin/login';
+    const isLoginPath =
+      url.pathname === '/login' || url.pathname === '/admin/login';
 
     if (!isAdmin && !isLoginPath) {
       const loginUrl = url.clone();
       loginUrl.pathname = '/admin/login';
-      return NextResponse.redirect(loginUrl);
+      const redirect = NextResponse.redirect(loginUrl);
+      // Preserve refreshed cookies so the login page sees current session
+      // state instead of a stale/rotated token.
+      copyAuthCookies(response, redirect);
+      return redirect;
     }
 
     // Rewrite shallow paths (e.g. /dashboard) to /admin/dashboard internally.
     if (!url.pathname.startsWith('/admin')) {
       url.pathname =
         url.pathname === '/' ? '/admin/dashboard' : `/admin${url.pathname}`;
-      return NextResponse.rewrite(url, { request });
+      const rewrite = NextResponse.rewrite(url, { request });
+      copyAuthCookies(response, rewrite);
+      return rewrite;
     }
   }
 

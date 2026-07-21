@@ -21,16 +21,19 @@ type SendArgs = {
 export function buildThankYouEmail({ toName, positionLabel }: { toName: string; positionLabel: string }) {
   const subject = 'Thank you for applying to JAZA Media';
 
+  // Copy must mirror app/careers/apply/thank-you: we confirm RECEIPT only.
+  // This email goes to every submitter pre-review, so it must never claim
+  // the applicant "moved forward" or promise an interview.
   const text = [
     `Hi ${toName},`,
     '',
     'Thank you for your interest in becoming part of JAZA Media.',
     '',
-    `We've received your application for the ${positionLabel} role. After reviewing your submission, we're pleased to inform you that you have successfully moved forward to the next step of the process.`,
+    `We've received your application for the ${positionLabel} role and our team will review it carefully.`,
     '',
-    'Please allow up to 24 hours for one of our team members to reach out and schedule your final interview call with the assigned JAZA Media specialist.',
+    'If your background looks like a strong match, one of our team members will reach out within a few business days to schedule the next step.',
     '',
-    'We look forward to speaking with you soon!',
+    'We appreciate the time you took to apply!',
     '',
     '— The JAZA Media Team',
   ].join('\n');
@@ -71,13 +74,13 @@ export function buildThankYouEmail({ toName, positionLabel }: { toName: string; 
                   Thank you for your interest in becoming part of JAZA Media.
                 </p>
                 <p style="margin:0 0 16px 0;font-size:16px;line-height:1.6;color:#333333;">
-                  We&rsquo;ve received your application for the <strong>${escapeHtml(positionLabel)}</strong> role. After reviewing your submission, we&rsquo;re pleased to inform you that you have successfully moved forward to the next step of the process.
+                  We&rsquo;ve received your application for the <strong>${escapeHtml(positionLabel)}</strong> role and our team will review it carefully.
                 </p>
                 <p style="margin:0 0 24px 0;font-size:16px;line-height:1.6;color:#333333;">
-                  Please allow up to <strong>24 hours</strong> for one of our team members to reach out and schedule your final interview call with the assigned JAZA Media specialist.
+                  If your background looks like a strong match, one of our team members will reach out within <strong>a few business days</strong> to schedule the next step.
                 </p>
                 <p style="margin:0 0 8px 0;font-size:18px;font-weight:700;color:#181818;text-align:center;">
-                  We look forward to speaking with you soon!
+                  We appreciate the time you took to apply!
                 </p>
               </td>
             </tr>

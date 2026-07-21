@@ -38,9 +38,11 @@ export function TeamCard({ member }: { member: Member }) {
         </div>
       )}
 
-      <h3 className="mt-5 font-heading text-xl font-black uppercase tracking-wide text-brand-yellow md:text-2xl">
+      {/* h2: member cards sit directly under the TeamGrid h1, so h3 skipped a
+          level. Each card is a top-level subsection of the leadership grid. */}
+      <h2 className="mt-5 font-heading text-xl font-black uppercase tracking-wide text-brand-yellow md:text-2xl">
         {displayName}
-      </h3>
+      </h2>
       <p className="mt-1 text-base font-bold uppercase tracking-wide text-brand-black md:text-lg">
         {member.role.split(",").map((part, i, arr) => (
           <span key={i} className="block">

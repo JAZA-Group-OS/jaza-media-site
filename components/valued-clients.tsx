@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import AutoScroll from "embla-carousel-auto-scroll";
 import useEmblaCarousel from "embla-carousel-react";
@@ -58,6 +59,23 @@ function ClientLogo({ name, src, boost }: Client) {
 }
 
 export function ValuedClients() {
+  // Respect prefers-reduced-motion: the auto-scroll is a JS-driven transform,
+  // so the global CSS reduced-motion overrides don't cover it. Lazy-init reads
+  // the media query on the client without a synchronous setState in an effect;
+  // the listener below keeps it live if the OS setting changes.
+  const [reducedMotion, setReducedMotion] = useState(
+    () =>
+      typeof window !== "undefined" &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches,
+  );
+
+  useEffect(() => {
+    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const onChange = (e: MediaQueryListEvent) => setReducedMotion(e.matches);
+    mq.addEventListener("change", onChange);
+    return () => mq.removeEventListener("change", onChange);
+  }, []);
+
   const [emblaRef] = useEmblaCarousel(
     {
       loop: true,
@@ -65,16 +83,18 @@ export function ValuedClients() {
       dragFree: true,
       containScroll: false,
     },
-    [
-      AutoScroll({
-        playOnInit: true,
-        speed: 2.2,
-        startDelay: 0,
-        stopOnInteraction: false,
-        stopOnMouseEnter: true,
-        stopOnFocusIn: true,
-      }),
-    ],
+    reducedMotion
+      ? []
+      : [
+          AutoScroll({
+            playOnInit: true,
+            speed: 2.2,
+            startDelay: 0,
+            stopOnInteraction: false,
+            stopOnMouseEnter: true,
+            stopOnFocusIn: true,
+          }),
+        ],
   );
 
   const { ref: headingRef, inView: headingIn } =

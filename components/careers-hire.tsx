@@ -56,7 +56,7 @@ export function CareersHire() {
             headIn ? "animate-about-fade-up" : "opacity-0"
           }`}
         >
-          How we <span className="text-brand-yellow">HIRE?</span>
+          How We <span className="text-brand-yellow">Hire</span>
         </h2>
 
         <div

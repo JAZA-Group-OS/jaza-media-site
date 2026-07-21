@@ -25,7 +25,7 @@ export function BlogHero() {
           }`}
         >
           A weekly article featuring real business stories, CEO insights, and
-          proven scaling campaigns strategies. Discover powerful campaign ideas
+          proven scaling campaign strategies. Discover powerful campaign ideas
           and cost-effective, high-impact ways to grow your business —
           consistently and strategically.
         </p>

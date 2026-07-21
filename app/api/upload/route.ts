@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createServerClient } from '@/lib/supabase/server';
+import { ADMIN_EMAIL } from '@/lib/admin/config';
 
 export const runtime = 'nodejs';
 
@@ -19,8 +20,6 @@ const MAX_FILE_SIZE = {
 
 // Whitelist of buckets the API may write to / delete from.
 const ALLOWED_BUCKETS = new Set(['resumes', 'images']);
-
-const ADMIN_EMAIL = 'jaza.intern@gmail.com';
 
 async function requireAdmin(): Promise<{ ok: boolean }> {
   const supabase = await createServerClient();

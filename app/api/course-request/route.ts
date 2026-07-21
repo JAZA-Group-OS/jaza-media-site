@@ -154,6 +154,25 @@ export async function POST(request: Request) {
     } catch (err) {
       const message = err instanceof Error ? err.message : 'unknown';
       console.error('[api/course-request] email send error:', message);
+      // A thrown send must not masquerade as 'sent' — report it and try to
+      // record it on the row so the admin dashboard surfaces the failure.
+      emailDetail = 'send_failed';
+      try {
+        await (
+          supabase.from('course_requests') as unknown as {
+            update: (row: Record<string, unknown>) => {
+              eq: (
+                col: string,
+                val: string,
+              ) => Promise<{ error: Error | null }>;
+            };
+          }
+        )
+          .update({ email_error: `send_failed: ${message}`.slice(0, 500) })
+          .eq('id', inserted.id);
+      } catch {
+        // Best-effort only; the console.error above is the fallback trail.
+      }
     }
 
     return NextResponse.json(

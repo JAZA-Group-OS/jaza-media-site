@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { GFS_Didot, Poppins, Inter } from "next/font/google";
+import { getSiteBaseUrl } from "@/lib/site-url";
 import "./globals.css";
 
 const gfsDidot = GFS_Didot({
@@ -23,10 +24,34 @@ const inter = Inter({
   display: "swap",
 });
 
+const SITE_NAME = "JAZA Media";
+const DEFAULT_TITLE = "JAZA Media — Scale Your Business";
+const DEFAULT_DESCRIPTION =
+  "Learn from the team that has scaled a portfolio to over ₱150m+ in annual revenue. Free marketing, lead generation, and business scaling resources from JAZA Media.";
+
 export const metadata: Metadata = {
-  title: "JAZA Media — Scale Your Business",
-  description:
-    "Learn from the team that has scaled a portfolio to over ₱150m+ in annual revenue. Free marketing, lead generation, and business scaling resources from JAZA Media.",
+  // Resolves relative OG/canonical URLs against the deployment's real origin
+  // (SITE_URL / Vercel envs / localhost). Without this, social-share and
+  // canonical URLs would be malformed.
+  metadataBase: new URL(getSiteBaseUrl()),
+  // NOTE: individual pages set their own full titles (e.g. "About Us — JAZA
+  // Media"), so no title template is applied here to avoid double suffixes.
+  title: DEFAULT_TITLE,
+  description: DEFAULT_DESCRIPTION,
+  applicationName: SITE_NAME,
+  openGraph: {
+    type: "website",
+    siteName: SITE_NAME,
+    title: DEFAULT_TITLE,
+    description: DEFAULT_DESCRIPTION,
+    url: "/",
+    locale: "en_US",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: DEFAULT_TITLE,
+    description: DEFAULT_DESCRIPTION,
+  },
 };
 
 export default function RootLayout({

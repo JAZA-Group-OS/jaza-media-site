@@ -40,9 +40,11 @@ function InfoCard({
         inView ? "animate-about-fade-up" : "opacity-0"
       }`}
     >
-      <h3 className="font-heading text-lg font-bold tracking-wide text-brand-black md:text-xl">
+      {/* h2: these sit directly under the page h1 with no intervening heading,
+          so h3 here skipped a level (and preceded the ValuedClients h2). */}
+      <h2 className="font-heading text-lg font-bold tracking-wide text-brand-black md:text-xl">
         {title}
-      </h3>
+      </h2>
       <p className="mt-3 font-heading text-base font-semibold leading-relaxed text-brand-black md:text-lg">
         {body}
       </p>

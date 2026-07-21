@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import { motion } from 'framer-motion';
 import {
   TrendingUp,
@@ -31,8 +32,8 @@ import type {
 
 type DailyPoint = { date: string; submissions: number };
 
-function formatTimeAgo(iso: string): string {
-  const diff = Date.now() - new Date(iso).getTime();
+function formatTimeAgo(iso: string, now: number): string {
+  const diff = now - new Date(iso).getTime();
   const mins = Math.floor(diff / 60000);
   if (mins < 1) return 'just now';
   if (mins < 60) return `${mins}m ago`;
@@ -42,11 +43,11 @@ function formatTimeAgo(iso: string): string {
   return `${days}d ago`;
 }
 
-function buildDailySeries(rows: PartnerInquiry[]): DailyPoint[] {
+function buildDailySeries(rows: PartnerInquiry[], now: number): DailyPoint[] {
   const days: DailyPoint[] = [];
-  const now = new Date();
+  const today = new Date(now);
   for (let i = 6; i >= 0; i--) {
-    const d = new Date(now);
+    const d = new Date(today);
     d.setDate(d.getDate() - i);
     days.push({
       date: d.toLocaleDateString('en-US', { weekday: 'short' }),
@@ -54,7 +55,9 @@ function buildDailySeries(rows: PartnerInquiry[]): DailyPoint[] {
     });
   }
   rows.forEach((r) => {
-    const ageDays = Math.floor((Date.now() - new Date(r.created_at).getTime()) / (24 * 60 * 60 * 1000));
+    const ageDays = Math.floor(
+      (now - new Date(r.created_at).getTime()) / (24 * 60 * 60 * 1000),
+    );
     if (ageDays >= 0 && ageDays <= 6) {
       const idx = 6 - ageDays;
       days[idx].submissions += 1;
@@ -64,6 +67,10 @@ function buildDailySeries(rows: PartnerInquiry[]): DailyPoint[] {
 }
 
 export default function DashboardOverview() {
+  // Capture "now" once at mount so render stays pure (no Date.now() in the
+  // render path) and every relative calc below shares one consistent clock.
+  const [now] = useState(() => Date.now());
+
   const { rows: inquiries, loading, error } =
     useRealtimeTable<PartnerInquiry>('partner_inquiries');
   const { rows: careerApps } =
@@ -90,9 +97,10 @@ export default function DashboardOverview() {
   const pending = data?.filter((i) => i.follow_up_status === 'new').length ?? 0;
   const weekMs = 7 * 24 * 60 * 60 * 1000;
   const thisWeek =
-    data?.filter((i) => Date.now() - new Date(i.created_at).getTime() < weekMs).length ?? 0;
+    data?.filter((i) => now - new Date(i.created_at).getTime() < weekMs)
+      .length ?? 0;
 
-  const dailySeries = data ? buildDailySeries(data) : [];
+  const dailySeries = data ? buildDailySeries(data, now) : [];
   const outcomeData = [
     { stage: 'Qualified', value: qualified },
     { stage: 'Not Qualified', value: total - qualified },
@@ -297,7 +305,7 @@ export default function DashboardOverview() {
                   {i.outcome === 'qualified' ? 'Qualified' : 'Not'}
                 </span>
                 <span className="shrink-0 text-xs text-gray-500 whitespace-nowrap">
-                  {formatTimeAgo(i.created_at)}
+                  {formatTimeAgo(i.created_at, now)}
                 </span>
               </div>
             ))}
