@@ -15,8 +15,10 @@ export const metadata = {
 export default function SupportPage() {
   return (
     <>
-      <AnnouncementBanner />
-      <Navbar />
+      <div className="sticky top-0 z-50">
+        <AnnouncementBanner />
+        <Navbar />
+      </div>
       <main>
         <SupportHero />
         <SupportFaqs />

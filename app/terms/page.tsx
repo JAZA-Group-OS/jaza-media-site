@@ -18,8 +18,10 @@ const CONTACT_EMAIL = "admin@jazamedia.com";
 export default function TermsPage() {
   return (
     <>
-      <AnnouncementBanner />
-      <Navbar />
+      <div className="sticky top-0 z-50">
+        <AnnouncementBanner />
+        <Navbar />
+      </div>
       <main className="bg-white py-16 md:py-24">
         <div className="mx-auto max-w-3xl px-4 font-heading">
           <h1 className="font-display text-3xl text-brand-black md:text-4xl">

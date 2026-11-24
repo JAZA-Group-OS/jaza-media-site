@@ -17,8 +17,10 @@ export const metadata: Metadata = {
 export default function AboutUsPage() {
   return (
     <>
-      <AnnouncementBanner />
-      <Navbar />
+      <div className="sticky top-0 z-50">
+        <AnnouncementBanner />
+        <Navbar />
+      </div>
       <main>
         <AboutHero />
         <ValuedClients />

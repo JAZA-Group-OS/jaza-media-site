@@ -12,8 +12,10 @@ import { Navbar } from "@/components/navbar";
 export default function Home() {
   return (
     <>
-      <AnnouncementBanner />
-      <Navbar />
+      <div className="sticky top-0 z-50">
+        <AnnouncementBanner />
+        <Navbar />
+      </div>
       <main>
         <Hero />
         <ValuedClients variant="dark" />

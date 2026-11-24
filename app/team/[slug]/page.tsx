@@ -38,8 +38,10 @@ export default async function TeamMemberPage({ params }: { params: Params }) {
 
   return (
     <>
-      <AnnouncementBanner />
-      <Navbar />
+      <div className="sticky top-0 z-50">
+        <AnnouncementBanner />
+        <Navbar />
+      </div>
       <main>
         <TeamBioHero member={member} />
         <section className="bg-white py-6 md:py-8">

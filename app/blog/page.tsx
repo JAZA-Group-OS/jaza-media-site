@@ -17,8 +17,10 @@ export const metadata: Metadata = {
 export default function BlogPage() {
   return (
     <>
-      <AnnouncementBanner />
-      <Navbar />
+      <div className="sticky top-0 z-50">
+        <AnnouncementBanner />
+        <Navbar />
+      </div>
       <main>
         <BlogHero />
         <BlogArticles />
