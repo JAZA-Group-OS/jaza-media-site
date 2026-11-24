@@ -28,34 +28,41 @@ export function Hero() {
 
       <div className="relative z-10 mx-auto flex max-w-3xl flex-col items-center px-4 pt-16 text-center md:px-6 md:pt-24">
         <Reveal>
-          <p className="text-xs font-semibold tracking-[0.3em] text-gold">
-            MARKETING · ADVERTISING · BUSINESS SCALING
+          <p className="flex items-center gap-4 text-[11px] font-medium tracking-[0.42em] text-gold/90">
+            <span aria-hidden className="h-px w-10 bg-gradient-to-r from-transparent to-gold/70" />
+            MARKETING · ADVERTISING · SCALING
+            <span aria-hidden className="h-px w-10 bg-gradient-to-l from-transparent to-gold/70" />
           </p>
         </Reveal>
         <Reveal delay={0.08}>
-          <h1 className="mt-6 font-serif text-[48px] leading-[0.98] tracking-[-0.01em] sm:text-6xl lg:text-[80px]">
-            Do you want to <em className="text-gold">scale</em> your business?
+          <h1 className="mt-7 font-serif text-[46px] leading-[1.02] tracking-[-0.025em] text-balance text-white/95 sm:text-6xl lg:text-[84px]">
+            Do you want to{" "}
+            <em className="bg-gradient-to-br from-[#f7dc8a] via-gold to-[#b8892a] bg-clip-text pr-1 text-transparent">
+              scale
+            </em>{" "}
+            your business?
           </h1>
         </Reveal>
         <Reveal delay={0.16}>
-          <p className="mx-auto mt-6 max-w-xl text-lg leading-relaxed text-white/70 md:text-xl">
-            Learn from the team that has scaled a portfolio to over ₱150M+ in annual revenue.
+          <p className="mx-auto mt-7 max-w-lg text-base leading-relaxed font-light text-white/60 md:text-lg">
+            Learn from the team that has scaled a portfolio to over{" "}
+            <span className="font-medium text-white">₱150M+</span> in annual revenue.
           </p>
         </Reveal>
         <Reveal delay={0.24}>
           <div className="mt-10 flex flex-wrap items-center justify-center gap-4 pb-16 md:pb-28">
             <Link
               href="/partner-with-us"
-              className="group inline-flex items-center gap-2 rounded-full bg-gold px-7 py-4 text-sm font-semibold tracking-wide text-ink transition hover:bg-white"
+              className="group inline-flex items-center gap-2.5 rounded-full bg-gold px-8 py-4 text-[13px] font-semibold tracking-[0.12em] text-ink shadow-[0_10px_40px_-10px_rgba(234,179,8,0.55)] transition hover:bg-white"
             >
               LEARN TO SCALE
               <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" />
             </Link>
             <a
               href="#free-advance-marketing"
-              className="inline-flex items-center rounded-full border border-white/25 px-7 py-4 text-sm font-semibold tracking-wide transition hover:border-white hover:bg-white/5"
+              className="inline-flex items-center rounded-full border border-white/15 bg-white/[0.03] px-8 py-4 text-[13px] font-medium tracking-[0.12em] text-white/85 backdrop-blur transition hover:border-white/40 hover:text-white"
             >
-              Free Resources
+              FREE RESOURCES
             </a>
           </div>
         </Reveal>
