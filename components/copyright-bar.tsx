@@ -7,8 +7,8 @@ export function CopyrightBar() {
   const buildYear = new Date().getFullYear();
 
   return (
-    <div className="w-full border-t border-white/[0.06] bg-ink py-5">
-      <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-2 px-4 md:px-6 text-xs text-white/50 md:flex-row md:text-sm">
+    <div className="w-full border-t border-white/[0.06] bg-ink py-3">
+      <div className="mx-auto flex max-w-[1600px] flex-col items-center justify-between gap-2 px-4 text-xs text-white/50 md:flex-row md:px-10">
         <p>
           JAZA Media © <CurrentYear fallback={buildYear} />. All rights
           reserved.
