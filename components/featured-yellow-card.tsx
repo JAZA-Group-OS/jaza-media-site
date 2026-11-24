@@ -25,8 +25,9 @@ export function FeaturedYellowCard() {
 
               {/* Photo with effects */}
               <div className="group relative">
-                <div aria-hidden className="anim-glow-breathe absolute inset-8 rounded-3xl bg-gold/30 blur-[70px]" />
-                <div className="relative aspect-[4/3] overflow-hidden rounded-[26px] ring-1 ring-white/15 shadow-[0_40px_80px_-30px_rgba(0,0,0,0.95)]">
+                {/* offset gold frame behind the photo (editorial print look) */}
+                <div aria-hidden className="absolute inset-0 translate-x-4 translate-y-4 rounded-[26px] border border-gold/40 transition duration-700 group-hover:translate-x-2 group-hover:translate-y-2 md:translate-x-5 md:translate-y-5" />
+                <div className="relative aspect-[4/3] overflow-hidden rounded-[26px] ring-1 ring-white/15 shadow-[0_40px_80px_-30px_rgba(0,0,0,0.95)] transition duration-700 group-hover:translate-x-1 group-hover:translate-y-1">
                   <div className="anim-ken-burns absolute inset-0">
                     <Image
                       src="/images/Blog.png"
@@ -36,10 +37,12 @@ export function FeaturedYellowCard() {
                       className="object-cover transition duration-700 group-hover:scale-[1.04]"
                     />
                   </div>
-                  {/* light streak + cinematic vignette */}
-                  <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
-                    <div className="anim-card-streak absolute -inset-y-1/2 left-0 w-1/4 rotate-[20deg] bg-gradient-to-r from-transparent via-white/[0.16] to-transparent" />
+                  {/* viewfinder corner marks */}
+                  <div aria-hidden className="pointer-events-none absolute inset-4 md:inset-5">
+                    <span className="absolute left-0 top-0 size-6 rounded-tl-lg border-l-2 border-t-2 border-gold/80" />
+                    <span className="absolute right-0 top-0 size-6 rounded-tr-lg border-r-2 border-t-2 border-gold/80" />
                   </div>
+                  {/* cinematic vignette */}
                   <div aria-hidden className="pointer-events-none absolute inset-0 bg-gradient-to-t from-ink/85 via-ink/10 to-transparent" />
                   <div aria-hidden className="pointer-events-none absolute inset-0 rounded-[26px] ring-1 ring-inset ring-gold/20" />
 
