@@ -18,9 +18,34 @@ export function Footer() {
               <span className="mt-1 pl-[0.35em] text-[9px] font-semibold tracking-[0.35em] text-gold">MEDIA</span>
             </Link>
             <span aria-hidden className="hidden h-8 w-px bg-white/10 lg:block" />
-            <p className="max-w-xs text-[13px] leading-snug text-white/50">
-              Marketing, advertising &amp; business scaling — built by operators, for operators.
+            <div className="max-w-xs">
+              <p className="text-[13px] leading-snug text-white/50">
+                Marketing, advertising &amp; business scaling — built by operators, for operators.
+              </p>
+              {/* legal disclaimer — kept in full, collapsed by default */}
+            <details className="group mt-1.5 text-white/40">
+              <summary className="inline-flex cursor-pointer list-none items-center gap-1.5 text-[11px] tracking-wide transition hover:text-white/70 [&::-webkit-details-marker]:hidden">
+                Earnings disclaimer
+                <ChevronDown className="size-3.5 transition-transform group-open:rotate-180" />
+              </summary>
+              <p className="mt-2 max-w-md text-[11px] leading-relaxed">
+              Jaza and Bela&apos;s results are not typical and are not a guarantee of your
+              success. Jaza and Bela are experienced business owners and investors, and
+              your results will vary depending on education, effort, application,
+              experience, and background. Jaza and Bela do not personally invest in every
+              business they work with through JAZA Media. Due to the sensitivity of
+              financial information, we do not know or track the typical results of our
+              students. We cannot guarantee that you will make money or that you will be
+              successful if you employ their business strategies specifically or
+              generally. Consequently, your results may significantly vary from theirs.
+              We do not give investment, tax, or other professional advice. Specific
+              transactions and experiences are mentioned for informational purposes only.
+              The information contained within this website is the property of JAZA
+              Media. Any use of the images, content, or ideas expressed herein without
+              the express written consent of JAZA Media is prohibited.
             </p>
+            </details>
+            </div>
           </div>
 
           <nav aria-label="Footer">
@@ -53,29 +78,6 @@ export function Footer() {
           </div>
         </div>
 
-        {/* legal disclaimer — kept in full, collapsed by default */}
-        <details className="group border-t border-white/10 py-3 text-white/40">
-          <summary className="flex cursor-pointer list-none items-center gap-2 text-xs tracking-wide transition hover:text-white/70 [&::-webkit-details-marker]:hidden">
-            Earnings disclaimer
-            <ChevronDown className="size-3.5 transition-transform group-open:rotate-180" />
-          </summary>
-          <p className="mt-3 text-[11px] leading-relaxed">
-          Jaza and Bela&apos;s results are not typical and are not a guarantee of your
-          success. Jaza and Bela are experienced business owners and investors, and
-          your results will vary depending on education, effort, application,
-          experience, and background. Jaza and Bela do not personally invest in every
-          business they work with through JAZA Media. Due to the sensitivity of
-          financial information, we do not know or track the typical results of our
-          students. We cannot guarantee that you will make money or that you will be
-          successful if you employ their business strategies specifically or
-          generally. Consequently, your results may significantly vary from theirs.
-          We do not give investment, tax, or other professional advice. Specific
-          transactions and experiences are mentioned for informational purposes only.
-          The information contained within this website is the property of JAZA
-          Media. Any use of the images, content, or ideas expressed herein without
-          the express written consent of JAZA Media is prohibited.
-        </p>
-        </details>
       </div>
     </footer>
   );
