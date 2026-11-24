@@ -46,7 +46,7 @@ const SLIDES: Client[] = [...CLIENTS, ...CLIENTS];
 
 function ClientLogo({ name, src, boost, dark }: Client & { dark?: boolean }) {
   return (
-    <div className={`relative shrink-0 ${dark ? "h-20 w-36 overflow-hidden rounded-2xl bg-white shadow-[0_4px_24px_rgba(0,0,0,0.4)] ring-1 ring-white/10 md:h-24 md:w-48" : "h-24 w-40 md:h-32 md:w-56"}`}>
+    <div className={`relative shrink-0 ${dark ? "h-20 w-36 overflow-hidden rounded-2xl bg-white ring-1 ring-white/10 md:h-24 md:w-48" : "h-24 w-40 md:h-32 md:w-56"}`}>
       <Image
         src={src}
         alt={`${name} logo`}
@@ -106,10 +106,13 @@ export function ValuedClients({ variant = "light" }: { variant?: "light" | "dark
     return (
       <section className="bg-ink py-12 md:py-16" aria-label="Our clients">
         <p className="text-center text-sm text-white/55">Our clients:</p>
-        <div className="mt-8 overflow-x-clip [mask-image:linear-gradient(to_right,transparent,black_30%,black_70%,transparent)]" ref={emblaRef}>
-          <div className="flex items-center">
+        <div className="group mt-8 overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_30%,black_70%,transparent)]">
+          {/* Pure-CSS marquee: two identical halves, translate -50% on a loop.
+              GPU-composited, so it stays smooth at slow speeds where the JS
+              auto-scroll stuttered. */}
+          <div className="flex w-max animate-[clients-marquee_140s_linear_infinite] will-change-transform group-hover:[animation-play-state:paused] motion-reduce:animate-none">
             {SLIDES.map((client, index) => (
-              <div key={`${client.name}-${index}`} className="shrink-0 px-3 md:px-4">
+              <div key={`${client.name}-${index}`} className="shrink-0 px-3 md:px-4" aria-hidden={index >= CLIENTS.length}>
                 <ClientLogo {...client} dark />
               </div>
             ))}
