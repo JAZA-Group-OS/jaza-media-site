@@ -1,15 +1,7 @@
-"use client";
-
 import { ArrowRight, Check } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
 
 const PERKS = ["Sales Call Script", "AI Prompt Template", "Sent to your inbox in under 30 seconds"];
 
@@ -40,9 +32,36 @@ export function Faqs() {
         aria-hidden
         className="pointer-events-none absolute left-1/2 top-0 size-[640px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-gold/10 blur-[140px]"
       />
-      <div className="relative mx-auto grid max-w-7xl gap-10 px-4 md:px-6 lg:grid-cols-[0.9fr_1.1fr] lg:gap-14">
+      <div className="relative mx-auto grid max-w-7xl gap-10 px-4 md:px-6 lg:grid-cols-[1.25fr_1fr] lg:gap-12">
+        {/* FAQs */}
+        <div>
+          <p className="inline-flex w-fit items-center gap-2.5 rounded-full border border-white/10 bg-white/[0.03] px-4 py-1.5 text-[10.5px] font-medium tracking-[0.32em] text-white/70 backdrop-blur">
+            <span aria-hidden className="size-1.5 rounded-full bg-gold shadow-[0_0_10px_2px_rgba(234,179,8,0.6)]" />
+            FAQS
+          </p>
+          <h2 className="mt-6 font-serif text-5xl leading-[1.02] tracking-[-0.03em] md:text-[60px]">
+            <span className="bg-gradient-to-b from-white via-white to-white/60 bg-clip-text text-transparent">Questions,</span>{" "}
+            <em className="bg-gradient-to-br from-[#fbe7a1] via-gold to-[#a97a1f] bg-clip-text pr-2 text-transparent">answered</em>
+          </h2>
+          <div className="mt-8 grid gap-4 sm:grid-cols-2">
+            {FAQS.map((item, i) => (
+              <article
+                key={i}
+                className="flex flex-col rounded-3xl border border-white/10 bg-white/[0.03] p-6 transition duration-300 hover:-translate-y-0.5 hover:border-gold/40 hover:bg-white/[0.05]"
+              >
+                <div className="flex items-center justify-between">
+                  <span className="font-serif text-2xl italic text-gold">0{i + 1}</span>
+                  <span aria-hidden className="h-px w-12 bg-gradient-to-r from-gold/60 to-transparent" />
+                </div>
+                <h3 className="mt-4 font-sans text-[17px] font-semibold leading-snug tracking-[-0.01em] text-white">{item.q}</h3>
+                <p className="mt-3 text-[13.5px] font-light leading-6 tracking-wide text-white/55">{item.a}</p>
+              </article>
+            ))}
+          </div>
+        </div>
+
         {/* Free templates promo */}
-        <div className="rounded-[32px] bg-gradient-to-br from-gold/50 via-white/10 to-white/[0.04] p-px shadow-[0_40px_120px_-40px_rgba(0,0,0,0.9)]">
+        <div className="self-center rounded-[32px] bg-gradient-to-br from-gold/50 via-white/10 to-white/[0.04] p-px shadow-[0_40px_120px_-40px_rgba(0,0,0,0.9)]">
           <div className="relative flex h-full flex-col overflow-hidden rounded-[31px] bg-[radial-gradient(120%_120%_at_0%_0%,#2a2210_0%,#121212_45%,#0c0c0d_100%)] p-7 md:p-9">
             <div aria-hidden className="pointer-events-none absolute -top-32 -left-32 size-[380px] rounded-full bg-gold/20 blur-[120px]" />
             <div className="relative overflow-hidden rounded-2xl ring-1 ring-white/15 shadow-[0_30px_60px_-30px_rgba(0,0,0,0.95)]">
@@ -83,37 +102,6 @@ export function Faqs() {
           </div>
         </div>
 
-        {/* FAQs */}
-        <div className="flex flex-col justify-center">
-          <p className="inline-flex w-fit items-center gap-2.5 rounded-full border border-white/10 bg-white/[0.03] px-4 py-1.5 text-[10.5px] font-medium tracking-[0.32em] text-white/70 backdrop-blur">
-            <span aria-hidden className="size-1.5 rounded-full bg-gold shadow-[0_0_10px_2px_rgba(234,179,8,0.6)]" />
-            FAQS
-          </p>
-          <h2 className="mt-6 font-serif text-5xl leading-[1.02] tracking-[-0.03em] md:text-[60px]">
-            <span className="bg-gradient-to-b from-white via-white to-white/60 bg-clip-text text-transparent">Questions,</span>{" "}
-            <em className="bg-gradient-to-br from-[#fbe7a1] via-gold to-[#a97a1f] bg-clip-text pr-2 text-transparent">answered</em>
-          </h2>
-
-          <Accordion className="mt-8 space-y-3">
-            {FAQS.map((item, i) => (
-              <AccordionItem
-                key={i}
-                value={`faq-${i}`}
-                className="!rounded-2xl !border !border-white/10 bg-white/[0.03] px-5 transition-colors hover:!border-gold/30 data-[open]:!border-gold/40 data-[open]:bg-white/[0.05] md:px-7"
-              >
-                <AccordionTrigger className="items-center py-5 text-left font-sans text-base font-medium tracking-[-0.01em] text-white hover:no-underline md:text-lg **:data-[slot=accordion-trigger-icon]:text-gold">
-                  <span className="flex items-baseline gap-4">
-                    <span className="w-6 shrink-0 font-serif text-lg italic text-gold/80">0{i + 1}</span>
-                    <span>{item.q}</span>
-                  </span>
-                </AccordionTrigger>
-                <AccordionContent className="pb-6 pl-10 text-[15px] font-light leading-7 tracking-wide text-white/60">
-                  {item.a}
-                </AccordionContent>
-              </AccordionItem>
-            ))}
-          </Accordion>
-        </div>
       </div>
     </section>
   );
