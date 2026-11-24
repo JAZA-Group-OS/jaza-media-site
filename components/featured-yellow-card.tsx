@@ -21,14 +21,14 @@ export function FeaturedYellowCard() {
           {/* gold hairline border */}
           <div className="rounded-[36px] bg-gradient-to-br from-gold/50 via-white/10 to-white/[0.04] p-px shadow-[0_40px_120px_-40px_rgba(0,0,0,0.9)]">
             <div className="relative grid items-center gap-10 overflow-hidden rounded-[35px] bg-[radial-gradient(120%_120%_at_100%_0%,#2a2210_0%,#121212_45%,#0c0c0d_100%)] p-5 md:grid-cols-[1.1fr_1fr] md:gap-14 md:p-8 lg:p-10">
-              <div aria-hidden className="anim-glow-breathe pointer-events-none absolute -right-32 -top-32 size-[420px] rounded-full bg-gold/20 blur-[130px]" />
+              <div aria-hidden className="pointer-events-none absolute -right-32 -top-32 size-[420px] rounded-full bg-gold/20 blur-[130px]" />
 
               {/* Photo with effects */}
               <div className="group relative">
                 {/* offset gold frame behind the photo (editorial print look) */}
                 <div aria-hidden className="absolute inset-0 translate-x-4 translate-y-4 rounded-[26px] border border-gold/40 transition duration-700 group-hover:translate-x-2 group-hover:translate-y-2 md:translate-x-5 md:translate-y-5" />
                 <div className="relative aspect-[4/3] overflow-hidden rounded-[26px] ring-1 ring-white/15 shadow-[0_40px_80px_-30px_rgba(0,0,0,0.95)] transition duration-700 group-hover:translate-x-1 group-hover:translate-y-1">
-                  <div className="anim-ken-burns absolute inset-0">
+                  <div className="absolute inset-0">
                     <Image
                       src="/images/Blog.png"
                       alt="JAZA Media team celebrating Yaki-Yaki's 2nd anniversary"

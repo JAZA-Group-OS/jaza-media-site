@@ -1,3 +1,4 @@
+import { ArrowUpRight, UserRound } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -12,51 +13,72 @@ function firstName(member: Member): string {
   return first.charAt(0) + first.slice(1).toLowerCase();
 }
 
+function titleCase(s: string) {
+  return s
+    .toLowerCase()
+    .replace(/\b([a-z])/g, (c) => c.toUpperCase())
+    .replace(/\bJm\b/, "JM");
+}
+
 export function TeamCard({ member }: { member: Member }) {
-  const displayName = member.name ?? "NAME";
-  const altText = member.name
-    ? `${member.name} — ${member.role}`
-    : "Team member placeholder";
+  const altText = member.name ? `${member.name} — ${member.role}` : "Team member placeholder";
+  const roles = member.role.split(",").map((r) => r.trim());
+
+  if (!member.image || !member.name) {
+    return (
+      <article className="h-full rounded-[28px] bg-gradient-to-b from-white/[0.12] to-white/[0.02] p-px">
+        <div className="relative flex aspect-[4/5] h-full flex-col items-center justify-center overflow-hidden rounded-[27px] bg-[linear-gradient(160deg,#161616_0%,#0e0e0f_100%)] p-8 text-center">
+          <span className="sr-only">{altText}</span>
+          <span className="grid size-16 place-items-center rounded-full bg-white/[0.04] text-white/25 ring-1 ring-white/10">
+            <UserRound className="size-7" />
+          </span>
+          <p className="mt-6 text-[10.5px] font-medium tracking-[0.32em] text-gold/80">NOW HIRING</p>
+          <h2 className="mt-3 text-lg font-semibold text-white/90">{titleCase(roles[roles.length - 1])}</h2>
+          <p className="mt-1 text-sm text-white/40">{titleCase(roles.slice(0, -1).join(", "))}</p>
+          <Link
+            href="/careers"
+            className="mt-6 inline-flex items-center gap-1.5 rounded-full border border-white/15 px-4 py-2 text-xs tracking-wide text-white/70 transition hover:border-gold/60 hover:text-gold"
+          >
+            View careers <ArrowUpRight className="size-3.5" />
+          </Link>
+        </div>
+      </article>
+    );
+  }
 
   return (
-    <article className="flex flex-col items-center text-center">
-      {member.image ? (
-        <div className="relative aspect-square w-full max-w-[250px] md:max-w-none">
+    <Link
+      href={`/team/${member.slug}`}
+      className="group block h-full rounded-[28px] bg-gradient-to-b from-gold/45 via-white/10 to-white/[0.03] p-px shadow-[0_30px_80px_-40px_rgba(0,0,0,0.9)] transition duration-500 hover:from-gold hover:via-gold/30"
+    >
+      <article className="relative aspect-[4/5] overflow-hidden rounded-[27px] bg-[#0e0e0f]">
+        {/* source PNGs carry a baked black frame + yellow corner bars — scale from the bottom to crop them out */}
+        <div className="absolute inset-0 origin-bottom scale-[1.07] transition duration-700 group-hover:scale-[1.11]">
           <Image
             src={member.image}
             alt={altText}
             fill
-            sizes="(min-width: 1024px) 320px, (min-width: 640px) 50vw, 250px"
-            className="object-contain"
+            sizes="(min-width: 1024px) 400px, (min-width: 640px) 50vw, 100vw"
+            className="object-cover object-top grayscale transition duration-700 group-hover:grayscale-0"
           />
         </div>
-      ) : (
-        <div className="relative flex aspect-square w-full max-w-[250px] flex-col border-x-[10px] border-t-[10px] border-brand-black md:max-w-none">
-          <span className="sr-only">{altText}</span>
-          <div className="flex-1 bg-neutral-200" aria-hidden />
-          <div className="h-[40px] w-full bg-brand-yellow" aria-hidden />
+        <div aria-hidden className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
+        <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
+          <div className="anim-card-streak absolute -inset-y-1/2 left-0 w-1/4 rotate-[20deg] bg-gradient-to-r from-transparent via-white/[0.08] to-transparent" />
         </div>
-      )}
 
-      {/* h2: member cards sit directly under the TeamGrid h1, so h3 skipped a
-          level. Each card is a top-level subsection of the leadership grid. */}
-      <h2 className="mt-5 font-heading text-xl font-black uppercase tracking-wide text-brand-yellow md:text-2xl">
-        {displayName}
-      </h2>
-      <p className="mt-1 text-base font-bold uppercase tracking-wide text-brand-black md:text-lg">
-        {member.role.split(",").map((part, i, arr) => (
-          <span key={i} className="block">
-            {part.trim()}
-            {i < arr.length - 1 ? "," : ""}
-          </span>
-        ))}
-      </p>
-      <Link
-        href={`/team/${member.slug}`}
-        className="mt-4 inline-flex items-center rounded-full bg-brand-yellow px-5 py-2 text-sm font-bold text-brand-black transition-transform hover:scale-[1.02] md:text-base"
-      >
-        About {firstName(member)}
-      </Link>
-    </article>
+        <div className="absolute inset-x-0 bottom-0 p-6 md:p-7">
+          <p className="text-[10px] font-medium tracking-[0.28em] text-gold/90 uppercase">{roles[0]}</p>
+          <h2 className="mt-2 font-serif text-[30px] leading-tight tracking-[-0.02em] text-white">{titleCase(member.name)}</h2>
+          <div className="mt-1 flex items-end justify-between gap-4">
+            <p className="text-sm text-white/60">{roles.slice(1).join(", ")}</p>
+            <span className="grid size-10 shrink-0 place-items-center rounded-full border border-white/20 bg-black/30 text-white/80 backdrop-blur transition duration-500 group-hover:rotate-45 group-hover:border-gold group-hover:bg-gold group-hover:text-ink">
+              <ArrowUpRight className="size-4" />
+              <span className="sr-only">About {firstName(member)}</span>
+            </span>
+          </div>
+        </div>
+      </article>
+    </Link>
   );
 }
