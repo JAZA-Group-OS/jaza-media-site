@@ -18,11 +18,11 @@ export function Founders() {
           <div className="relative rounded-[36px] bg-gradient-to-b from-gold/40 via-white/10 to-white/5 p-px shadow-[0_40px_120px_-40px_rgba(0,0,0,0.9)]">
             <div className="relative aspect-[4/5] overflow-hidden rounded-[35px] bg-ink-soft">
               <Image
-                src="/about-the-form/bela-jaza.png"
+                src="/about-the-form/founders-studio.jpg"
                 alt="Jaza Sarmiento and Bela Capistrano, founders of JAZA Media"
                 fill
                 sizes="(min-width: 768px) 45vw, 100vw"
-                className="object-cover saturate-[0.95]"
+                className="object-cover object-top transition duration-700 hover:scale-[1.02]"
               />
               {/* bottom vignette so the badge and card edge sit in the dark palette */}
               <div aria-hidden className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-ink/80 via-ink/20 to-transparent" />
