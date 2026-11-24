@@ -32,15 +32,9 @@ export function TeamCard({ member }: { member: Member }) {
           <span className="grid size-16 place-items-center rounded-full bg-white/[0.04] text-white/25 ring-1 ring-white/10">
             <UserRound className="size-7" />
           </span>
-          <p className="mt-6 text-[10.5px] font-medium tracking-[0.32em] text-gold/80">NOW HIRING</p>
+          <p className="mt-6 text-[10.5px] font-medium tracking-[0.32em] text-gold/80">ANNOUNCING SOON</p>
           <h2 className="mt-3 text-lg font-semibold text-white/90">{titleCase(roles[roles.length - 1])}</h2>
           <p className="mt-1 text-sm text-white/40">{titleCase(roles.slice(0, -1).join(", "))}</p>
-          <Link
-            href="/careers"
-            className="mt-6 inline-flex items-center gap-1.5 rounded-full border border-white/15 px-4 py-2 text-xs tracking-wide text-white/70 transition hover:border-gold/60 hover:text-gold"
-          >
-            View careers <ArrowUpRight className="size-3.5" />
-          </Link>
         </div>
       </article>
     );
@@ -71,7 +65,7 @@ export function TeamCard({ member }: { member: Member }) {
           <p className="text-[10px] font-medium tracking-[0.28em] text-gold/90 uppercase">{roles[0]}</p>
           <h2 className="mt-2 font-serif text-[30px] leading-tight tracking-[-0.02em] text-white">{titleCase(member.name)}</h2>
           <div className="mt-1 flex items-end justify-between gap-4">
-            <p className="text-sm text-white/60">{roles.slice(1).join(", ")}</p>
+            <p className="text-xs tracking-[0.12em] text-white/60">{roles.slice(1).join(", ")}</p>
             <span className="grid size-10 shrink-0 place-items-center rounded-full border border-white/20 bg-black/30 text-white/80 backdrop-blur transition duration-500 group-hover:rotate-45 group-hover:border-gold group-hover:bg-gold group-hover:text-ink">
               <ArrowUpRight className="size-4" />
               <span className="sr-only">About {firstName(member)}</span>
