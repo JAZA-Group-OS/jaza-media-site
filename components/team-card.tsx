@@ -39,8 +39,8 @@ export function TeamCard({ member }: { member: Member }) {
           >
             {initials}
           </span>
-          <p className="relative text-[10px] font-medium tracking-[0.28em] text-gold/90 uppercase">{roles[0]}</p>
-          <h2 className="relative mt-2 font-serif text-[30px] leading-tight tracking-[-0.02em] text-white">{titleCase(member.name)}</h2>
+          <p className="relative text-[13px] font-medium text-gold">{roles[0]}</p>
+          <h2 className="relative mt-2 text-2xl font-semibold leading-tight tracking-[-0.01em] text-white">{titleCase(member.name)}</h2>
           <p className="relative mt-1 text-xs tracking-[0.12em] text-white/50">JAZA MEDIA</p>
         </div>
       </article>
@@ -82,8 +82,8 @@ export function TeamCard({ member }: { member: Member }) {
         <div aria-hidden className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
 
         <div className="absolute inset-x-0 bottom-0 p-6 md:p-7">
-          <p className="text-[10px] font-medium tracking-[0.28em] text-gold/90 uppercase">{roles[0]}</p>
-          <h2 className="mt-2 font-serif text-[30px] leading-tight tracking-[-0.02em] text-white">{titleCase(member.name)}</h2>
+          <p className="text-[13px] font-medium text-gold">{roles[0]}</p>
+          <h2 className="mt-2 text-2xl font-semibold leading-tight tracking-[-0.01em] text-white">{titleCase(member.name)}</h2>
           <div className="mt-1 flex items-end justify-between gap-4">
             <p className="text-xs tracking-[0.12em] text-white/60">{roles.slice(1).join(", ")}</p>
             <span className="grid size-10 shrink-0 place-items-center rounded-full border border-white/20 bg-black/30 text-white/80 backdrop-blur transition duration-500 group-hover:rotate-45 group-hover:border-gold group-hover:bg-gold group-hover:text-ink">
