@@ -1,6 +1,4 @@
-import { ArrowRight } from "lucide-react";
 import Image from "next/image";
-import Link from "next/link";
 
 import { Reveal } from "@/components/reveal";
 
@@ -38,38 +36,21 @@ export function AboutHero() {
             <Eyebrow>ABOUT JAZA MEDIA</Eyebrow>
           </Reveal>
           <Reveal delay={0.08}>
-            <h1 className="mt-8 font-serif text-[42px] leading-[1.04] tracking-[-0.03em] text-balance sm:text-6xl lg:text-[80px]">
+            <h1 className="mt-7 font-serif text-[34px] leading-[1.06] tracking-[-0.025em] text-balance sm:text-5xl lg:text-[56px]">
               <span className={WHITE_TEXT}>Build your</span>{" "}
               <em className={`${GOLD_TEXT} pr-2`}>predictable revenue system</em>{" "}
               <span className={WHITE_TEXT}>and profit driver in 90 days — without guesswork.</span>
             </h1>
-          </Reveal>
-          <Reveal delay={0.16}>
-            <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
-              <Link
-                href="/partner-with-us"
-                className="group inline-flex items-center gap-2.5 rounded-full bg-gold px-8 py-4 text-[13px] font-semibold tracking-[0.12em] text-ink shadow-[0_10px_40px_-10px_rgba(234,179,8,0.55)] transition hover:bg-white"
-              >
-                PARTNER WITH US
-                <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" />
-              </Link>
-              <Link
-                href="/about-the-firm"
-                className="inline-flex items-center rounded-full border border-white/15 bg-white/[0.03] px-8 py-4 text-[13px] font-semibold tracking-[0.12em] text-white transition hover:border-white/40 hover:bg-white/[0.06]"
-              >
-                ABOUT THE FIRM
-              </Link>
-            </div>
           </Reveal>
         </div>
 
         {/* Lead + image */}
         <div className="mt-20 grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
           <Reveal>
-            <p className="font-serif text-3xl leading-[1.2] tracking-[-0.02em] text-white/90 md:text-[40px]">
+            <p className="font-serif text-2xl leading-[1.25] tracking-[-0.02em] text-white/90 md:text-[30px]">
               The country&apos;s <em className={GOLD_TEXT}>first</em> fully integrated marketing agency powered by its own platform.
             </p>
-            <p className="mt-6 max-w-xl text-[15px] font-light leading-7 tracking-wide text-white/60 md:text-[17px] md:leading-8">
+            <p className="mt-6 max-w-xl text-[14px] font-light leading-7 tracking-wide text-white/60 md:text-[15px]">
               JAZA Media makes professional marketing and advertising accessible to businesses anytime,
               anywhere — a fully integrated platform built to help businesses scale faster and compete
               globally. Headquartered in the Philippines.
@@ -114,7 +95,7 @@ export function AboutHero() {
           <Reveal>
             <article className="relative h-full overflow-hidden rounded-3xl border border-gold/30 bg-[radial-gradient(120%_120%_at_0%_0%,#2a2210_0%,#121212_50%,#0c0c0d_100%)] p-8 md:p-10">
               <Eyebrow>OUR MISSION</Eyebrow>
-              <p className="mt-6 font-serif text-2xl leading-snug text-white/90 md:text-[28px]">
+              <p className="mt-6 font-serif text-xl leading-snug text-white/90 md:text-[22px]">
                 To make world-class marketing and advertising accessible to Filipinos here and abroad through a
                 fully integrated, sustainable, and future-proof digital platform that scales their business{" "}
                 <em className={GOLD_TEXT}>up to 10x.</em>
@@ -124,7 +105,7 @@ export function AboutHero() {
           <Reveal delay={0.08}>
             <article className="relative h-full overflow-hidden rounded-3xl border border-white/10 bg-white/[0.03] p-8 md:p-10">
               <Eyebrow>OUR VISION</Eyebrow>
-              <p className="mt-6 font-serif text-2xl leading-snug text-white/90 md:text-[28px]">
+              <p className="mt-6 font-serif text-xl leading-snug text-white/90 md:text-[22px]">
                 To become the Philippines&apos; leading integrated marketing and advertising ecosystem, showcasing{" "}
                 <em className={GOLD_TEXT}>Filipino excellence</em> and innovation on the global stage.
               </p>
