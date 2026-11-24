@@ -6,7 +6,6 @@ import { CopyrightBar } from "@/components/copyright-bar";
 import { FeaturedYellowCard } from "@/components/featured-yellow-card";
 import { Footer } from "@/components/footer";
 import { Navbar } from "@/components/navbar";
-import { ValuedClients } from "@/components/valued-clients";
 
 export const metadata: Metadata = {
   title: "About Us — JAZA Media",
@@ -23,7 +22,6 @@ export default function AboutUsPage() {
       </div>
       <main>
         <AboutHero />
-        <ValuedClients />
         <FeaturedYellowCard />
       </main>
       <Footer />
