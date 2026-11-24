@@ -44,21 +44,22 @@ const CLIENTS: Client[] = [
 // to exceed viewport width for a seamless loop.
 const SLIDES: Client[] = [...CLIENTS, ...CLIENTS];
 
-function ClientLogo({ name, src, boost }: Client) {
+function ClientLogo({ name, src, boost, dark }: Client & { dark?: boolean }) {
   return (
-    <div className="relative h-24 w-40 shrink-0 md:h-32 md:w-56">
+    <div className={`relative shrink-0 ${dark ? "h-16 w-32 md:h-20 md:w-44" : "h-24 w-40 md:h-32 md:w-56"}`}>
       <Image
         src={src}
         alt={`${name} logo`}
         fill
         sizes="(min-width: 768px) 224px, 160px"
-        className={`object-contain ${boost ? "scale-[2.1]" : "scale-[1.1]"}`}
+        className={`object-contain ${boost ? "scale-[2.1]" : "scale-[1.1]"} ${dark ? "opacity-80 grayscale brightness-125 transition duration-300 hover:opacity-100 hover:grayscale-0" : ""}`}
       />
     </div>
   );
 }
 
-export function ValuedClients() {
+export function ValuedClients({ variant = "light" }: { variant?: "light" | "dark" }) {
+  const dark = variant === "dark";
   // Respect prefers-reduced-motion: the auto-scroll is a JS-driven transform,
   // so the global CSS reduced-motion overrides don't cover it. Lazy-init reads
   // the media query on the client without a synchronous setState in an effect;
@@ -100,6 +101,23 @@ export function ValuedClients() {
   const { ref: headingRef, inView: headingIn } =
     useInView<HTMLHeadingElement>();
   const { ref: stripRef, inView: stripIn } = useInView<HTMLDivElement>();
+
+  if (dark) {
+    return (
+      <section className="bg-ink py-12 md:py-16" aria-label="Our clients">
+        <p className="text-center text-sm text-white/55">Our clients:</p>
+        <div className="mt-8 overflow-x-clip [mask-image:linear-gradient(to_right,transparent,black_12%,black_88%,transparent)]" ref={emblaRef}>
+          <div className="flex items-center">
+            {SLIDES.map((client, index) => (
+              <div key={`${client.name}-${index}`} className="shrink-0 px-4 md:px-8">
+                <ClientLogo {...client} dark />
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className="bg-white pb-10">
