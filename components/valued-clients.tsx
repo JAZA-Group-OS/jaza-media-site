@@ -46,13 +46,13 @@ const SLIDES: Client[] = [...CLIENTS, ...CLIENTS];
 
 function ClientLogo({ name, src, boost, dark }: Client & { dark?: boolean }) {
   return (
-    <div className={`relative shrink-0 ${dark ? "h-16 w-32 md:h-20 md:w-44" : "h-24 w-40 md:h-32 md:w-56"}`}>
+    <div className={`relative shrink-0 ${dark ? "h-20 w-36 overflow-hidden rounded-2xl bg-white shadow-[0_4px_24px_rgba(0,0,0,0.4)] ring-1 ring-white/10 md:h-24 md:w-48" : "h-24 w-40 md:h-32 md:w-56"}`}>
       <Image
         src={src}
         alt={`${name} logo`}
         fill
         sizes="(min-width: 768px) 224px, 160px"
-        className={`object-contain ${boost ? "scale-[2.1]" : "scale-[1.1]"} ${dark ? "opacity-80 grayscale brightness-125 transition duration-300 hover:opacity-100 hover:grayscale-0" : ""}`}
+        className={`object-contain ${boost ? "scale-[2.1]" : "scale-[1.1]"} ${dark ? "p-2" : ""}`}
       />
     </div>
   );
@@ -89,7 +89,7 @@ export function ValuedClients({ variant = "light" }: { variant?: "light" | "dark
       : [
           AutoScroll({
             playOnInit: true,
-            speed: 2.2,
+            speed: dark ? 0.5 : 2.2,
             startDelay: 0,
             stopOnInteraction: false,
             stopOnMouseEnter: true,
@@ -106,10 +106,10 @@ export function ValuedClients({ variant = "light" }: { variant?: "light" | "dark
     return (
       <section className="bg-ink py-12 md:py-16" aria-label="Our clients">
         <p className="text-center text-sm text-white/55">Our clients:</p>
-        <div className="mt-8 overflow-x-clip [mask-image:linear-gradient(to_right,transparent,black_12%,black_88%,transparent)]" ref={emblaRef}>
+        <div className="mt-8 overflow-x-clip [mask-image:linear-gradient(to_right,transparent,black_30%,black_70%,transparent)]" ref={emblaRef}>
           <div className="flex items-center">
             {SLIDES.map((client, index) => (
-              <div key={`${client.name}-${index}`} className="shrink-0 px-4 md:px-8">
+              <div key={`${client.name}-${index}`} className="shrink-0 px-3 md:px-4">
                 <ClientLogo {...client} dark />
               </div>
             ))}
