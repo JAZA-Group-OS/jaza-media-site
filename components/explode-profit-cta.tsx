@@ -1,62 +1,71 @@
 import { ArrowRight } from "lucide-react";
-import Image from "next/image";
 import Link from "next/link";
 
-const GOLD_TEXT = "bg-gradient-to-br from-[#fbe7a1] via-gold to-[#a97a1f] bg-clip-text text-transparent";
-const WHITE_TEXT = "bg-gradient-to-b from-white via-white to-white/60 bg-clip-text text-transparent";
+import { Reveal } from "@/components/reveal";
 
+/**
+ * "Explode profit" call to action: no card, no photo — the JAZA Media mark at the
+ * centre with gold shockwave rings bursting out of it, so the section reads as
+ * an explosion of growth before the headline lands.
+ */
 export function ExplodeProfitCta() {
   return (
-    <section className="relative overflow-hidden bg-ink py-12 text-white md:py-16">
-      <div className="mx-auto max-w-7xl px-4 md:px-6">
-        {/* gold hairline border */}
-        <div className="rounded-[36px] bg-gradient-to-br from-gold/50 via-white/10 to-white/[0.04] p-px shadow-[0_40px_120px_-40px_rgba(0,0,0,0.9)]">
-          <div className="relative grid items-end overflow-hidden rounded-[35px] bg-[radial-gradient(120%_120%_at_0%_100%,#2a2210_0%,#121212_45%,#0c0c0d_100%)] md:grid-cols-[1fr_1.1fr]">
-            <div aria-hidden className="pointer-events-none absolute -bottom-40 -left-24 size-[520px] rounded-full bg-gold/20 blur-[140px]" />
-            <div
-              aria-hidden
-              className="pointer-events-none absolute inset-0 opacity-[0.05] [background-image:linear-gradient(to_right,white_1px,transparent_1px),linear-gradient(to_bottom,white_1px,transparent_1px)] [background-size:56px_56px] [mask-image:radial-gradient(ellipse_at_bottom_left,black,transparent_65%)]"
-            />
+    <section className="relative overflow-hidden bg-ink py-24 text-center text-white md:py-32">
+      {/* slow-rotating light rays */}
+      <div
+        aria-hidden
+        className="anim-slow-spin pointer-events-none absolute left-1/2 top-[38%] size-[900px] -translate-x-1/2 -translate-y-1/2 opacity-[0.07] [background:repeating-conic-gradient(from_0deg,#eab308_0deg_2deg,transparent_2deg_15deg)] [mask-image:radial-gradient(circle,black_0%,transparent_60%)]"
+      />
+      <div aria-hidden className="pointer-events-none absolute left-1/2 top-[38%] size-[520px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-gold/15 blur-[120px]" />
 
-            {/* founders */}
-            <div className="relative order-2 h-[320px] sm:h-[380px] md:order-1 md:h-[460px]">
-              <Image
-                src="/about-the-form/JazaBela no bg trimmed.png"
-                alt="Jaza Sarmiento and Bela Capistrano, founders of JAZA Media"
-                fill
-                sizes="(min-width: 768px) 45vw, 100vw"
-                className="object-contain object-bottom brightness-[0.95] [mask-image:linear-gradient(to_top,transparent_0%,black_22%)]"
+      <div className="relative mx-auto flex max-w-3xl flex-col items-center px-4">
+        {/* logo + shockwaves */}
+        <Reveal>
+          <div className="relative grid size-40 place-items-center md:size-48">
+            {[0, 1.5, 3].map((delay) => (
+              <span
+                key={delay}
+                aria-hidden
+                style={{ animationDelay: `${delay}s` }}
+                className="anim-profit-burst absolute left-1/2 top-1/2 size-full rounded-full border border-gold/60 opacity-0"
               />
-            </div>
-
-            {/* copy */}
-            <div className="relative order-1 px-7 pt-10 md:order-2 md:py-16 md:pr-14 md:pl-0">
-              <p className="inline-flex items-center gap-2.5 rounded-full border border-white/10 bg-white/[0.03] px-4 py-1.5 text-[10.5px] font-medium tracking-[0.32em] text-white/70 backdrop-blur">
-                <span aria-hidden className="size-1.5 rounded-full bg-gold shadow-[0_0_10px_2px_rgba(234,179,8,0.6)]" />
-                WORK WITH US
-              </p>
-              <h2 className="mt-6 font-serif text-[40px] leading-[1.02] tracking-[-0.03em] text-balance sm:text-5xl md:text-[60px]">
-                <span className={WHITE_TEXT}>Want us to help you</span>{" "}
-                <em className={`${GOLD_TEXT} pr-2`}>explode profit?</em>
-              </h2>
-              <p className="mt-5 max-w-md text-[15px] font-light leading-7 tracking-wide text-white/60 md:text-base">
-                Partner with the team that scaled a portfolio to over{" "}
-                <span className="font-serif text-lg font-normal italic tracking-normal text-gold">₱150M+</span> in annual
-                revenue — and see how JAZA Media can help you grow.
-              </p>
-              <div className="mt-8 flex flex-wrap items-center gap-5">
-                <Link
-                  href="/partner-with-us"
-                  className="group inline-flex items-center gap-2.5 rounded-full bg-gold px-8 py-4 text-[13px] font-semibold tracking-[0.12em] text-ink shadow-[0_10px_40px_-10px_rgba(234,179,8,0.55)] transition hover:bg-white"
-                >
-                  LEARN MORE
-                  <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" />
-                </Link>
-                <span className="text-xs tracking-wide text-white/40">Limited partnerships · Apply to qualify</span>
-              </div>
+            ))}
+            <div className="relative grid size-32 place-items-center rounded-full border border-gold/50 bg-ink shadow-[0_0_80px_-10px_rgba(234,179,8,0.7)] md:size-36">
+              <span aria-hidden className="absolute -inset-3 rounded-full border border-dashed border-gold/25" />
+              <span className="flex flex-col items-center leading-none">
+                <span className="font-display text-[30px] tracking-[0.18em] text-white md:text-[34px]">JAZA</span>
+                <span className="mt-1.5 pl-[0.35em] text-[10px] font-semibold tracking-[0.35em] text-gold">MEDIA</span>
+              </span>
             </div>
           </div>
-        </div>
+        </Reveal>
+
+        <Reveal delay={0.1}>
+          <h2 className="mt-12 font-serif text-[44px] leading-[1.02] tracking-[-0.03em] text-balance sm:text-6xl md:text-[76px]">
+            <span className="bg-gradient-to-b from-white via-white to-white/60 bg-clip-text text-transparent">
+              Want us to help you
+            </span>{" "}
+            <em className="anim-gold-shimmer bg-[linear-gradient(110deg,#a97a1f_0%,#eab308_30%,#fff4c2_50%,#eab308_70%,#a97a1f_100%)] bg-clip-text pr-2 text-transparent">
+              explode profit?
+            </em>
+          </h2>
+        </Reveal>
+
+        <Reveal delay={0.18}>
+          <p className="mt-6 text-[15px] font-light tracking-wide text-white/60 md:text-lg">
+            See how JAZA Media can help.
+          </p>
+        </Reveal>
+
+        <Reveal delay={0.26}>
+          <Link
+            href="/partner-with-us"
+            className="group mt-10 inline-flex items-center gap-2.5 rounded-full bg-gold px-9 py-4 text-[13px] font-semibold tracking-[0.12em] text-ink shadow-[0_10px_40px_-10px_rgba(234,179,8,0.7)] transition hover:scale-[1.03] hover:bg-white"
+          >
+            LEARN MORE
+            <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" />
+          </Link>
+        </Reveal>
       </div>
     </section>
   );

@@ -247,6 +247,23 @@
 .anim-screen-scroll { animation: screen-scroll 16s cubic-bezier(0.65, 0, 0.35, 1) infinite; will-change: transform; }
 .anim-ken-burns { animation: ken-burns 12s ease-in-out infinite; }
 .anim-card-streak { animation: card-streak 6s ease-in-out infinite; }
+@keyframes profit-burst {
+  0% { transform: translate(-50%, -50%) scale(0.4); opacity: 0; }
+  15% { opacity: 0.8; }
+  100% { transform: translate(-50%, -50%) scale(3.2); opacity: 0; }
+}
+@keyframes gold-shimmer {
+  0% { background-position: 200% 50%; }
+  100% { background-position: -200% 50%; }
+}
+@keyframes slow-spin {
+  to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+.anim-profit-burst { animation: profit-burst 4.5s cubic-bezier(0.16, 1, 0.3, 1) infinite; }
+.anim-gold-shimmer { background-size: 200% 100%; animation: gold-shimmer 5s linear infinite; }
+.anim-slow-spin { animation: slow-spin 40s linear infinite; }
 @media (prefers-reduced-motion: reduce) {
+  .anim-profit-burst, .anim-gold-shimmer, .anim-slow-spin { animation: none !important; }
+  .anim-profit-burst { opacity: 0; }
   .anim-book-float, .anim-book-sheen, .anim-glow-breathe, .anim-screen-scroll, .anim-ken-burns, .anim-card-streak { animation: none !important; }
 }
