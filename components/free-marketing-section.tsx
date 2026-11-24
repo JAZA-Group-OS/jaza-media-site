@@ -72,15 +72,20 @@ export function FreeMarketingSection() {
                 >
                   {/* glossy sheen */}
                   <div aria-hidden className="pointer-events-none absolute inset-0 bg-[linear-gradient(115deg,transparent_35%,rgba(255,255,255,0.06)_50%,transparent_65%)]" />
-                  <div aria-hidden className="absolute size-56 rounded-full bg-gold/20 blur-[70px] transition duration-500 group-hover:bg-gold/30" />
-                  <Image
-                    src={c.image}
-                    alt={c.alt}
-                    width={1600}
-                    height={2500}
-                    sizes="220px"
-                    className="relative h-[78%] w-auto rounded-sm shadow-[0_30px_60px_-15px_rgba(0,0,0,0.8)] transition duration-700 group-hover:scale-[1.05]"
-                  />
+                  <div aria-hidden className="anim-glow-breathe absolute size-56 rounded-full bg-gold/20 blur-[70px] transition-colors duration-500 group-hover:bg-gold/30" style={{ animationDelay: `${i * -1.6}s` }} />
+                  <div className="anim-book-float relative h-[78%]" style={{ animationDelay: `${i * -2}s` }}>
+                    <Image
+                      src={c.image}
+                      alt={c.alt}
+                      width={1600}
+                      height={2500}
+                      sizes="220px"
+                      className="h-full w-auto rounded-sm shadow-[0_30px_60px_-15px_rgba(0,0,0,0.8)] transition duration-700 group-hover:scale-[1.05]"
+                    />
+                    <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden rounded-sm">
+                      <div className="anim-book-sheen absolute inset-y-0 left-0 w-1/3 bg-gradient-to-r from-transparent via-white/35 to-transparent" style={{ animationDelay: `${i * 1.2}s` }} />
+                    </div>
+                  </div>
                   <span className="absolute top-4 left-4 rounded-full border border-white/10 bg-black/40 px-3 py-1 text-[10px] font-medium tracking-[0.22em] text-gold uppercase backdrop-blur">
                     {c.tag}
                   </span>

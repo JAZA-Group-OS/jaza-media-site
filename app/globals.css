@@ -215,3 +215,22 @@
   from { transform: translate3d(0, 0, 0); }
   to { transform: translate3d(-50%, 0, 0); }
 }
+
+@keyframes book-float {
+  0%, 100% { transform: translateY(0) rotate(-1.5deg); }
+  50% { transform: translateY(-10px) rotate(1deg); }
+}
+@keyframes book-sheen {
+  0%, 60% { transform: translateX(-160%) skewX(-20deg); }
+  100% { transform: translateX(260%) skewX(-20deg); }
+}
+@keyframes glow-breathe {
+  0%, 100% { opacity: 0.55; transform: scale(0.92); }
+  50% { opacity: 1; transform: scale(1.08); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .anim-book-float, .anim-book-sheen, .anim-glow-breathe { animation: none !important; }
+}
+.anim-book-float { animation: book-float 6s ease-in-out infinite; }
+.anim-book-sheen { animation: book-sheen 4.5s ease-in-out infinite; }
+.anim-glow-breathe { animation: glow-breathe 5s ease-in-out infinite; }
