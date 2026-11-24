@@ -7,6 +7,7 @@ import { ExplodeProfitCta } from "@/components/explode-profit-cta";
 import { Footer } from "@/components/footer";
 import { Navbar } from "@/components/navbar";
 import { TeamBioHero } from "@/components/team-bio-hero";
+import { TeamBioStory } from "@/components/team-bio-story";
 import { getAllSlugs, getMember } from "@/lib/team";
 
 type Params = Promise<{ slug: string }>;
@@ -34,7 +35,6 @@ export default async function TeamMemberPage({ params }: { params: Params }) {
   const member = getMember(slug);
   if (!member) notFound();
 
-  const paragraphs = member.bio ?? [];
 
   return (
     <>
@@ -44,15 +44,7 @@ export default async function TeamMemberPage({ params }: { params: Params }) {
       </div>
       <main>
         <TeamBioHero member={member} />
-        <section className="bg-white py-6 md:py-8">
-          <div className="mx-auto max-w-3xl space-y-6 px-4 text-center font-heading text-sm leading-relaxed text-brand-black">
-            {paragraphs.length > 0 ? (
-              paragraphs.map((paragraph, i) => <p key={i}>{paragraph}</p>)
-            ) : (
-              <p className="text-text-muted">Bio coming soon.</p>
-            )}
-          </div>
-        </section>
+        <TeamBioStory member={member} />
         <ExplodeProfitCta />
       </main>
       <Footer />
