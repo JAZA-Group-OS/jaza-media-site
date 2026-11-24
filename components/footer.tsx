@@ -6,7 +6,7 @@ import { PUBLISHED_SOCIAL_LINKS } from '@/components/social-icons';
 
 export function Footer() {
   return (
-    <footer className="bg-brand-black pt-12 pb-10 text-white">
+    <footer className="border-t border-white/10 bg-ink pt-16 pb-12 text-white">
       <div className="mx-auto max-w-7xl px-4">
         <div className="flex items-center justify-between gap-6 md:flex-row">
           <Link
@@ -14,21 +14,17 @@ export function Footer() {
             className="flex flex-col items-center leading-none"
             aria-label="JAZA Media home"
           >
-            <span className="font-display text-3xl tracking-[0.15em] text-white md:text-4xl">
-              JAZA
-            </span>
-            <span className="-mt-1 font-heading text-xs font-bold tracking-[0.2em] text-brand-yellow">
-              MEDIA
-            </span>
+            <span className="font-display text-3xl tracking-[0.18em] text-white">JAZA</span>
+            <span className="mt-1 text-[11px] font-semibold tracking-[0.35em] text-gold">MEDIA</span>
           </Link>
           <nav className="hidden md:block">
-            <ul className="flex flex-wrap gap-x-6 gap-y-2 text-sm font-medium">
+            <ul className="flex flex-wrap gap-x-6 gap-y-2 text-sm text-white/70">
               {NAV_LINKS.map((link) =>
                 isInternalRoute(link.href) ? (
                   <li key={link.label}>
                     <Link
                       href={link.href}
-                      className="transition-colors hover:text-brand-yellow"
+                      className="transition-colors hover:text-gold"
                     >
                       {link.label}
                     </Link>
@@ -37,7 +33,7 @@ export function Footer() {
                   <li key={link.label}>
                     <a
                       href={link.href}
-                      className="transition-colors hover:text-brand-yellow"
+                      className="transition-colors hover:text-gold"
                     >
                       {link.label}
                     </a>
@@ -49,7 +45,7 @@ export function Footer() {
           <MobileMenu className="md:hidden" />
         </div>
 
-        <p className="mt-8 text-[11px] leading-relaxed text-text-muted md:text-xs">
+        <p className="mt-8 text-[11px] leading-relaxed text-white/40 md:text-xs">
           Jaza and Bela&apos;s results are not typical and are not a guarantee of your
           success. Jaza and Bela are experienced business owners and investors, and
           your results will vary depending on education, effort, application,
@@ -70,13 +66,13 @@ export function Footer() {
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
             <Link
               href="/partner-with-us"
-              className="inline-flex items-center justify-center rounded-full bg-brand-yellow px-6 py-2.5 font-heading text-sm font-bold text-brand-black transition-transform hover:scale-[1.02] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-yellow focus-visible:ring-offset-2 focus-visible:ring-offset-brand-black"
+              className="inline-flex items-center justify-center rounded-full bg-gold px-6 py-2.5 text-sm font-semibold text-brand-black transition-transform hover:scale-[1.02] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-yellow focus-visible:ring-offset-2 focus-visible:ring-offset-brand-black"
             >
               Partner With Us
             </Link>
             <Link
               href="/support"
-              className="inline-flex items-center justify-center rounded-full border border-brand-yellow/60 px-6 py-2.5 font-heading text-sm font-bold text-brand-yellow transition-colors hover:bg-brand-yellow hover:text-brand-black focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-yellow focus-visible:ring-offset-2 focus-visible:ring-offset-brand-black"
+              className="inline-flex items-center justify-center rounded-full border border-white/25 px-6 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-white hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-yellow focus-visible:ring-offset-2 focus-visible:ring-offset-brand-black"
             >
               Contact Us
             </Link>
@@ -90,7 +86,7 @@ export function Footer() {
                 aria-label={label}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-white transition-colors hover:text-brand-yellow"
+                className="text-white transition-colors hover:text-gold"
               >
                 <Icon className="size-5" />
               </a>

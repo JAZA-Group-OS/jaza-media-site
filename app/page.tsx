@@ -5,6 +5,7 @@ import { Footer } from "@/components/footer";
 import { Founders } from "@/components/founders";
 import { FreeMarketingSection } from "@/components/free-marketing-section";
 import { Hero } from "@/components/hero";
+import { StatsStrip } from "@/components/stats-strip";
 import { MarketingTemplatesCard } from "@/components/marketing-templates-card";
 import { Navbar } from "@/components/navbar";
 
@@ -15,9 +16,10 @@ export default function Home() {
       <Navbar />
       <main>
         <Hero />
+        <StatsStrip />
         <FreeMarketingSection />
-        <Faqs />
         <Founders />
+        <Faqs />
         <MarketingTemplatesCard />
       </main>
       <Footer />

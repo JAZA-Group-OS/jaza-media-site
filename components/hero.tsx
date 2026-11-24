@@ -1,73 +1,69 @@
+import { ArrowRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
+import { Reveal } from "@/components/reveal";
+
 export function Hero() {
   return (
-    <section className="relative isolate w-full overflow-hidden bg-brand-black">
-      {/* Jaza — left flank, md+ (iPad and up). Smaller footprint at md, grows at lg/xl. */}
+    <section className="relative overflow-hidden bg-ink text-white">
+      {/* soft gold glow + fine grid texture */}
       <div
         aria-hidden
-        className="pointer-events-none absolute bottom-0 left-0 hidden aspect-square w-[20%] max-w-[340px] md:block lg:w-[21%] xl:w-[22%]"
-      >
-        <Image
-          src="/about-the-form/Jaza%20no%20bg%20trimmed.png"
-          alt=""
-          fill
-          className="object-contain object-bottom object-left"
-          sizes="(min-width: 1280px) 22vw, (min-width: 1024px) 21vw, (min-width: 768px) 20vw, 0px"
-          priority
-        />
-      </div>
-
-      {/* Bela — right flank, md+ (iPad and up). object-cover so her image fills
-          the wrapper edge-to-edge (eliminates the small residual gap between
-          her body and the section line). */}
+        className="pointer-events-none absolute -top-40 right-[-10%] size-[720px] rounded-full bg-gold/15 blur-[140px]"
+      />
       <div
         aria-hidden
-        className="pointer-events-none absolute right-0 bottom-0 hidden aspect-square w-[20%] max-w-[340px] md:block lg:w-[21%] xl:w-[22%]"
-      >
-        <Image
-          src="/about-the-form/Bela%20no%20bg%20trimmed.png"
-          alt=""
-          fill
-          className="object-cover object-bottom object-right"
-          sizes="(min-width: 1280px) 22vw, (min-width: 1024px) 21vw, (min-width: 768px) 20vw, 0px"
-          priority
-        />
-      </div>
+        className="pointer-events-none absolute inset-0 opacity-[0.07] [background-image:linear-gradient(to_right,white_1px,transparent_1px),linear-gradient(to_bottom,white_1px,transparent_1px)] [background-size:72px_72px] [mask-image:radial-gradient(ellipse_at_top,black,transparent_70%)]"
+      />
 
-      <div className="relative z-10 mx-auto flex max-w-md flex-col items-center px-6 py-8 text-center md:py-10 lg:max-w-4xl lg:py-12">
-        <h1 className="font-heading text-[44px] leading-[1.05] font-black tracking-tight text-white md:text-5xl lg:text-[50px]">
-          DO YOU WANT TO
-          <br />
-          SCALE YOUR BUSINESS?
-        </h1>
-        <p className="font-heading mt-6 max-w-lg text-lg text-neutral-300 md:text-xl">
-          Learn from the team that has scaled a portfolio to over ₱150m+ in annual revenue
-        </p>
-        <Link
-          href="/partner-with-us"
-          className="mt-8 inline-flex items-center rounded-full bg-brand-yellow px-10 py-4 text-base font-black tracking-wider text-brand-black transition-transform hover:scale-[1.02] md:text-lg"
-        >
-          LEARN TO SCALE
-        </Link>
+      <div className="relative mx-auto grid max-w-7xl items-end gap-10 px-4 pt-16 md:grid-cols-[1.15fr_1fr] md:px-6 md:pt-24">
+        <div className="pb-16 md:pb-28">
+          <Reveal>
+            <p className="text-xs font-semibold tracking-[0.3em] text-gold">
+              MARKETING · ADVERTISING · BUSINESS SCALING
+            </p>
+          </Reveal>
+          <Reveal delay={0.08}>
+            <h1 className="mt-6 font-serif text-[52px] leading-[0.98] tracking-[-0.01em] sm:text-7xl lg:text-[96px]">
+              Do you want to <em className="text-gold">scale</em> your business?
+            </h1>
+          </Reveal>
+          <Reveal delay={0.16}>
+            <p className="mt-6 max-w-xl text-lg leading-relaxed text-white/70 md:text-xl">
+              Learn from the team that has scaled a portfolio to over ₱150M+ in annual revenue.
+            </p>
+          </Reveal>
+          <Reveal delay={0.24}>
+            <div className="mt-10 flex flex-wrap items-center gap-4">
+              <Link
+                href="/partner-with-us"
+                className="group inline-flex items-center gap-2 rounded-full bg-gold px-7 py-4 text-sm font-semibold tracking-wide text-ink transition hover:bg-white"
+              >
+                LEARN TO SCALE
+                <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" />
+              </Link>
+              <a
+                href="#free-advance-marketing"
+                className="inline-flex items-center rounded-full border border-white/25 px-7 py-4 text-sm font-semibold tracking-wide transition hover:border-white hover:bg-white/5"
+              >
+                Free Resources
+              </a>
+            </div>
+          </Reveal>
+        </div>
 
-        {/* Combined Jaza + Bela cutout — mobile only (below md). Negative bottom
-            margin absorbs the content div's bottom padding so the photo sits
-            flush against the section line. */}
-        <div
-          aria-hidden
-          className="relative mt-8 -mb-8 aspect-[7331/6191] w-full max-w-md md:hidden"
-        >
+        <Reveal delay={0.1} className="relative mx-auto h-[380px] w-full max-w-[560px] sm:h-[480px] md:h-[600px]">
+          <div aria-hidden className="absolute inset-x-6 bottom-0 top-16 rounded-t-[999px] bg-gradient-to-b from-white/10 to-white/0 ring-1 ring-white/10" />
           <Image
             src="/about-the-form/JazaBela%20no%20bg%20trimmed.png"
-            alt=""
+            alt="Jaza Sarmiento and Bela Capistrano, founders of JAZA Media"
             fill
-            className="object-contain object-bottom"
-            sizes="(max-width: 768px) 100vw, 0px"
             priority
+            sizes="(min-width: 768px) 45vw, 100vw"
+            className="object-contain object-bottom"
           />
-        </div>
+        </Reveal>
       </div>
     </section>
   );

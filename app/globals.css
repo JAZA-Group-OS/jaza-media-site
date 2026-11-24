@@ -19,6 +19,15 @@
   --font-sans: var(--font-sans);
   --font-display: var(--font-display);
   --font-heading: var(--font-heading);
+  --font-serif: var(--font-serif);
+
+  /* Premium palette */
+  --color-ink: #0c0c0e;
+  --color-ink-soft: #17171b;
+  --color-ivory: #f6f3ec;
+  --color-line: #e6e1d6;
+  --color-gold: #ffca26;
+  --color-gold-deep: #c9971a;
 
   /* Shadcn tokens */
   --color-sidebar-ring: var(--sidebar-ring);

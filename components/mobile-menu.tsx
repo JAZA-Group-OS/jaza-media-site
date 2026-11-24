@@ -110,7 +110,7 @@ export function MobileMenu({ className = "" }: { className?: string }) {
         <div
           ref={dialogRef}
           id={panelId}
-          className="fixed inset-0 z-50 flex flex-col bg-brand-black md:hidden"
+          className="fixed inset-0 z-50 flex flex-col bg-ink md:hidden"
           role="dialog"
           aria-modal="true"
           aria-label="Site navigation"
@@ -140,7 +140,7 @@ export function MobileMenu({ className = "" }: { className?: string }) {
                   <Link
                     href={link.href}
                     onClick={close}
-                    className="block bg-brand-yellow px-[15px] py-5 font-heading text-base font-medium text-brand-black"
+                    className="block border-b border-white/10 py-5 font-serif text-3xl text-white"
                   >
                     {link.label}
                   </Link>

@@ -1,42 +1,43 @@
+import { ArrowRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
+import { Reveal } from "@/components/reveal";
+
 export function MarketingTemplatesCard() {
   return (
-    <section className="bg-white pb-16 md:pb-20">
-      <div className="mx-auto max-w-5xl px-4">
-        <div className="relative overflow-hidden rounded-2xl bg-white shadow-[0_4px_40px_rgba(0,0,0,0.08)] ring-1 ring-neutral-100">
-          <span className="absolute top-4 right-4 z-10 inline-block rounded-md bg-tag-red px-3 py-1 text-[10px] font-bold tracking-wide text-white uppercase">
-            BRAND NEW
-          </span>
-
-          <div className="grid items-center gap-0 md:grid-cols-2">
+    <section className="bg-white py-24 md:py-32">
+      <div className="mx-auto max-w-7xl px-4 md:px-6">
+        <Reveal>
+          <div className="relative grid items-center gap-10 overflow-hidden rounded-[36px] bg-ink p-8 text-white md:grid-cols-2 md:p-14">
+            <div aria-hidden className="pointer-events-none absolute -left-24 -top-24 size-96 rounded-full bg-gold/20 blur-[120px]" />
             <div className="relative">
+              <span className="rounded-full border border-gold/50 px-3 py-1 text-[11px] font-semibold tracking-[0.25em] text-gold">
+                BRAND NEW
+              </span>
+              <h3 className="mt-6 font-serif text-5xl leading-[1.02] md:text-6xl">
+                JAZA Media <em className="text-gold">Marketing Templates</em>
+              </h3>
+              <Link
+                href="/courses/marketing-templates"
+                className="group mt-10 inline-flex items-center gap-2 rounded-full bg-gold px-7 py-4 text-sm font-semibold text-ink transition hover:bg-white"
+              >
+                Download Now
+                <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" />
+              </Link>
+            </div>
+            <div className="relative overflow-hidden rounded-2xl ring-1 ring-white/10">
               <Image
                 src="/about-the-form/Marketing Templates.png"
                 alt="JAZA Media marketing templates preview"
                 width={4000}
                 height={2250}
                 sizes="(min-width: 768px) 50vw, 100vw"
-                className="block h-auto w-full"
+                className="h-auto w-full"
               />
             </div>
-
-            <div className="p-8 md:p-10">
-              <h3 className="font-heading text-2xl leading-tight font-black text-brand-black md:text-3xl">
-                JAZA MEDIA
-                <br />
-                MARKETING TEMPLATES
-              </h3>
-              <Link
-                href="/courses/marketing-templates"
-                className="mt-5 inline-flex items-center rounded-full bg-brand-yellow px-8 py-3 text-base font-bold text-brand-black transition-transform hover:scale-[1.02] md:text-lg"
-              >
-                Download Now
-              </Link>
-            </div>
           </div>
-        </div>
+        </Reveal>
       </div>
     </section>
   );

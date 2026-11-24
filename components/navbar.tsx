@@ -4,47 +4,40 @@ import { MobileMenu } from "@/components/mobile-menu";
 import { NAV_LINKS, isInternalRoute } from "@/lib/site-nav";
 
 export function Navbar() {
+  const links = NAV_LINKS.filter((l) => l.href !== "/partner-with-us");
   return (
-    <header className="w-full bg-brand-black">
-      <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-3">
-        <Link
-          href="/"
-          className="flex flex-col items-center leading-none"
-          aria-label="JAZA Media home"
-        >
-          <span className="font-display text-3xl tracking-[0.15em] text-white md:text-4xl">
-            JAZA
-          </span>
-          <span className="-mt-1 font-heading text-xs font-bold tracking-[0.2em] text-brand-yellow">
-            MEDIA
-          </span>
+    <header className="sticky top-0 z-40 border-b border-white/10 bg-ink/85 text-white backdrop-blur-xl supports-[backdrop-filter]:bg-ink/70">
+      <div className="mx-auto flex h-[72px] max-w-7xl items-center justify-between gap-6 px-4 md:px-6">
+        <Link href="/" aria-label="JAZA Media home" className="flex items-baseline gap-2 leading-none">
+          <span className="font-display text-[28px] tracking-[0.18em]">JAZA</span>
+          <span className="text-[11px] font-semibold tracking-[0.35em] text-gold">MEDIA</span>
         </Link>
-        <nav className="hidden md:block">
-          <ul className="flex items-center gap-x-8 font-heading text-base font-medium text-white">
-            {NAV_LINKS.map((link) =>
-              isInternalRoute(link.href) ? (
-                <li key={link.label}>
-                  <Link
-                    href={link.href}
-                    className="transition-colors hover:text-brand-yellow"
-                  >
+        <nav className="hidden md:block" aria-label="Main">
+          <ul className="flex items-center gap-8 text-sm text-white/75">
+            {links.map((link) => (
+              <li key={link.label}>
+                {isInternalRoute(link.href) ? (
+                  <Link href={link.href} className="transition-colors hover:text-white">
                     {link.label}
                   </Link>
-                </li>
-              ) : (
-                <li key={link.label}>
-                  <a
-                    href={link.href}
-                    className="transition-colors hover:text-brand-yellow"
-                  >
+                ) : (
+                  <a href={link.href} className="transition-colors hover:text-white">
                     {link.label}
                   </a>
-                </li>
-              )
-            )}
+                )}
+              </li>
+            ))}
           </ul>
         </nav>
-        <MobileMenu className="md:hidden" />
+        <div className="flex items-center gap-3">
+          <Link
+            href="/partner-with-us"
+            className="hidden rounded-full bg-gold px-5 py-2.5 text-sm font-semibold text-ink transition hover:bg-white md:inline-flex"
+          >
+            Partner With Us
+          </Link>
+          <MobileMenu className="md:hidden" />
+        </div>
       </div>
     </header>
   );

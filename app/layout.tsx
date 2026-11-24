@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { GFS_Didot, Poppins, Inter } from "next/font/google";
+import { GFS_Didot, Poppins, Inter, Instrument_Serif } from "next/font/google";
 import { getSiteBaseUrl } from "@/lib/site-url";
 import "./globals.css";
 
@@ -14,6 +14,14 @@ const poppins = Poppins({
   variable: "--font-heading",
   subsets: ["latin"],
   weight: ["400", "600", "700", "800", "900"],
+  display: "swap",
+});
+
+const instrumentSerif = Instrument_Serif({
+  variable: "--font-serif",
+  subsets: ["latin"],
+  weight: ["400"],
+  style: ["normal", "italic"],
   display: "swap",
 });
 
@@ -62,7 +70,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${gfsDidot.variable} ${poppins.variable} ${inter.variable} antialiased`}
+      className={`${gfsDidot.variable} ${poppins.variable} ${inter.variable} ${instrumentSerif.variable} antialiased`}
     >
       <body
         className="min-h-screen bg-white text-brand-black font-sans"
