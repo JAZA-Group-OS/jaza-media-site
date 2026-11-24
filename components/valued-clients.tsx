@@ -46,13 +46,13 @@ const SLIDES: Client[] = [...CLIENTS, ...CLIENTS];
 
 function ClientLogo({ name, src, boost, dark }: Client & { dark?: boolean }) {
   return (
-    <div className={`relative shrink-0 ${dark ? "h-20 w-36 overflow-hidden rounded-2xl bg-white ring-1 ring-white/10 md:h-24 md:w-48" : "h-24 w-40 md:h-32 md:w-56"}`}>
+    <div className={`relative shrink-0 ${dark ? "group/logo h-20 w-36 overflow-hidden rounded-[20px] bg-gradient-to-b from-[#faf8f3] to-[#ece7da] shadow-[0_1px_0_rgba(255,255,255,0.6)_inset,0_12px_32px_-12px_rgba(0,0,0,0.8)] ring-1 ring-gold/20 transition duration-500 hover:-translate-y-1 hover:ring-gold/60 md:h-24 md:w-48" : "h-24 w-40 md:h-32 md:w-56"}`}>
       <Image
         src={src}
         alt={`${name} logo`}
         fill
         sizes="(min-width: 768px) 224px, 160px"
-        className={`object-contain ${boost ? "scale-[2.1]" : "scale-[1.1]"} ${dark ? "p-2" : ""}`}
+        className={`object-contain ${boost ? "scale-[2.1]" : "scale-[1.1]"} ${dark ? "p-2 opacity-80 grayscale transition duration-500 group-hover/logo:opacity-100 group-hover/logo:grayscale-0" : ""}`}
       />
     </div>
   );
@@ -104,9 +104,15 @@ export function ValuedClients({ variant = "light" }: { variant?: "light" | "dark
 
   if (dark) {
     return (
-      <section className="bg-ink py-12 md:py-16" aria-label="Our clients">
-        <p className="text-center text-sm text-white/55">Our clients:</p>
-        <div className="group mt-8 overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_30%,black_70%,transparent)]">
+      <section className="bg-ink py-14 md:py-20" aria-label="Our clients">
+        <div className="mx-auto flex max-w-3xl items-center justify-center gap-5 px-4">
+          <span aria-hidden className="h-px flex-1 bg-gradient-to-r from-transparent to-gold/50" />
+          <p className="text-[11px] font-semibold uppercase tracking-[0.35em] text-gold">
+            Trusted by {CLIENTS.length}+ brands
+          </p>
+          <span aria-hidden className="h-px flex-1 bg-gradient-to-l from-transparent to-gold/50" />
+        </div>
+        <div className="group mt-10 overflow-hidden py-2 [mask-image:linear-gradient(to_right,transparent,black_30%,black_70%,transparent)]">
           {/* Pure-CSS marquee: two identical halves, translate -50% on a loop.
               GPU-composited, so it stays smooth at slow speeds where the JS
               auto-scroll stuttered. */}
