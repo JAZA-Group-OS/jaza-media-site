@@ -45,16 +45,32 @@ export function AboutHero() {
         </div>
 
         {/* Lead + image */}
-        <div className="mt-20 grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
+        <div className="mt-8 grid md:mt-10 items-center gap-12 lg:grid-cols-2 lg:gap-16">
           <Reveal>
-            <p className="font-serif text-2xl leading-[1.25] tracking-[-0.02em] text-white/90 md:text-[30px]">
-              The country&apos;s <em className={GOLD_TEXT}>first</em> fully integrated marketing agency powered by its own platform.
+            <Eyebrow>WHO WE ARE</Eyebrow>
+            <h2 className="mt-7 font-serif text-[36px] leading-[1.08] tracking-[-0.025em] text-balance md:text-[48px] xl:text-[54px]">
+              <span className={WHITE_TEXT}>The country&apos;s</span>{" "}
+              <em className={`${GOLD_TEXT} pr-1`}>first</em>{" "}
+              <span className={WHITE_TEXT}>fully integrated marketing agency powered by its own platform.</span>
+            </h2>
+            <div aria-hidden className="mt-8 h-px w-24 bg-gradient-to-r from-gold/70 to-transparent" />
+            <p className="mt-8 max-w-xl text-[16px] font-light leading-8 tracking-wide text-white/60 md:text-[18px] md:leading-9">
+              JAZA Media makes professional marketing and advertising accessible to businesses{" "}
+              <span className="font-normal text-white">anytime, anywhere</span> — a fully integrated platform built to
+              help businesses <span className="font-normal text-white">scale faster</span> and{" "}
+              <span className="font-normal text-white">compete globally</span>.
             </p>
-            <p className="mt-6 max-w-xl text-[14px] font-light leading-7 tracking-wide text-white/60 md:text-[15px]">
-              JAZA Media makes professional marketing and advertising accessible to businesses anytime,
-              anywhere — a fully integrated platform built to help businesses scale faster and compete
-              globally. Headquartered in the Philippines.
-            </p>
+            <ul className="mt-9 flex flex-wrap gap-3">
+              {["Headquartered in the Philippines", "Marketing + advertising, one platform", "Built for global growth"].map((t) => (
+                <li
+                  key={t}
+                  className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-4 py-2 text-[13px] text-white/75 backdrop-blur"
+                >
+                  <span aria-hidden className="size-1.5 rounded-full bg-gold" />
+                  {t}
+                </li>
+              ))}
+            </ul>
           </Reveal>
 
           <Reveal delay={0.1}>
