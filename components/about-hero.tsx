@@ -85,11 +85,8 @@ export function AboutHero() {
             <Reveal key={p.k} delay={0.06 * i}>
               <div className="group h-full rounded-3xl bg-gradient-to-b from-white/[0.14] via-white/[0.05] to-white/[0.02] p-px transition duration-500 hover:from-gold/60 hover:via-gold/15">
                 <article className="relative h-full overflow-hidden rounded-[23px] bg-[linear-gradient(160deg,#171717_0%,#0f0f10_100%)] p-7 transition duration-500 group-hover:-translate-y-0.5">
-                  {/* hover glow + periodic light streak */}
+                  {/* hover glow */}
                   <div aria-hidden className="pointer-events-none absolute -top-20 -right-20 size-56 rounded-full bg-gold/0 blur-[70px] transition duration-700 group-hover:bg-gold/20" />
-                  <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
-                    <div className="anim-card-streak absolute -inset-y-1/2 left-0 w-1/4 rotate-[20deg] bg-gradient-to-r from-transparent via-white/[0.06] to-transparent" style={{ animationDelay: `${i * 1.8}s` }} />
-                  </div>
                   <div className="relative flex items-center justify-between">
                     <span className="grid size-11 place-items-center rounded-2xl bg-gold/10 text-gold ring-1 ring-gold/25 shadow-[0_0_24px_-6px_rgba(234,179,8,0.5)] transition duration-500 group-hover:bg-gold group-hover:text-ink">
                       <p.Icon className="size-5" />
@@ -109,10 +106,7 @@ export function AboutHero() {
         <div className="mt-5 grid gap-4 md:grid-cols-2 md:gap-5">
           <Reveal>
             <article className="group relative h-full overflow-hidden rounded-3xl border border-gold/30 bg-[radial-gradient(120%_120%_at_0%_0%,#2a2210_0%,#121212_50%,#0c0c0d_100%)] p-8 transition duration-500 hover:border-gold/60 md:p-10">
-              <div aria-hidden className="anim-glow-breathe pointer-events-none absolute -top-24 -left-24 size-72 rounded-full bg-gold/20 blur-[90px]" />
-              <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
-                <div className="anim-card-streak absolute -inset-y-1/2 left-0 w-1/4 rotate-[20deg] bg-gradient-to-r from-transparent via-white/[0.07] to-transparent" />
-              </div>
+              <div aria-hidden className="pointer-events-none absolute -top-24 -left-24 size-72 rounded-full bg-gold/20 blur-[90px]" />
               <Quote aria-hidden className="absolute top-8 right-8 size-16 text-gold/10 transition duration-500 group-hover:text-gold/20" />
               <Eyebrow>OUR MISSION</Eyebrow>
               <p className="relative mt-6 font-serif text-xl leading-snug text-white/90 md:text-[24px]">
@@ -125,9 +119,6 @@ export function AboutHero() {
           <Reveal delay={0.08}>
             <article className="group relative h-full overflow-hidden rounded-3xl border border-white/10 bg-[linear-gradient(160deg,#171717_0%,#0f0f10_100%)] p-8 transition duration-500 hover:border-gold/40 md:p-10">
               <div aria-hidden className="pointer-events-none absolute -right-24 -bottom-24 size-72 rounded-full bg-gold/0 blur-[90px] transition duration-700 group-hover:bg-gold/15" />
-              <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
-                <div className="anim-card-streak absolute -inset-y-1/2 left-0 w-1/4 rotate-[20deg] bg-gradient-to-r from-transparent via-white/[0.06] to-transparent" style={{ animationDelay: "3s" }} />
-              </div>
               <Quote aria-hidden className="absolute top-8 right-8 size-16 text-white/[0.05] transition duration-500 group-hover:text-gold/15" />
               <Eyebrow>OUR VISION</Eyebrow>
               <p className="relative mt-6 font-serif text-xl leading-snug text-white/90 md:text-[24px]">
