@@ -1,4 +1,4 @@
-import { ArrowRight, ChevronDown } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 import Link from "next/link";
 
 import { NAV_LINKS, isInternalRoute } from "@/lib/site-nav";
@@ -10,33 +10,8 @@ export function Footer() {
       <div aria-hidden className="pointer-events-none absolute -top-40 left-1/2 size-[640px] -translate-x-1/2 rounded-full bg-gold/10 blur-[140px]" />
 
       <div className="relative mx-auto max-w-7xl px-4 md:px-6">
-        {/* closing CTA */}
-        <div className="flex flex-col items-start justify-between gap-8 border-b border-white/10 py-16 md:flex-row md:items-end md:py-20">
-          <div>
-            <p className="text-[10.5px] font-medium tracking-[0.32em] text-gold/90">READY WHEN YOU ARE</p>
-            <h2 className="mt-4 max-w-xl font-serif text-4xl leading-[1.05] tracking-[-0.02em] md:text-[56px]">
-              Let&apos;s <em className="bg-gradient-to-br from-[#fbe7a1] via-gold to-[#a97a1f] bg-clip-text pr-1 text-transparent">scale</em>{" "}what you&apos;ve built.
-            </h2>
-          </div>
-          <div className="flex flex-wrap items-center gap-3">
-            <Link
-              href="/partner-with-us"
-              className="group inline-flex items-center gap-2 rounded-full bg-gold px-7 py-3.5 text-[13px] font-semibold tracking-[0.1em] text-ink shadow-[0_10px_40px_-10px_rgba(234,179,8,0.55)] transition hover:bg-white"
-            >
-              PARTNER WITH US
-              <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" />
-            </Link>
-            <Link
-              href="/support"
-              className="inline-flex items-center rounded-full border border-white/15 bg-white/[0.03] px-7 py-3.5 text-[13px] font-medium tracking-[0.1em] text-white/85 transition hover:border-white/40 hover:text-white"
-            >
-              CONTACT US
-            </Link>
-          </div>
-        </div>
-
         {/* brand + links */}
-        <div className="flex flex-col justify-between gap-10 py-12 md:flex-row md:items-start">
+        <div className="flex flex-col justify-between gap-10 py-14 md:flex-row md:items-start">
           <div className="max-w-xs">
             <Link href="/" aria-label="JAZA Media home" className="inline-flex flex-col items-center leading-none">
               <span className="font-display text-3xl tracking-[0.18em] text-white">JAZA</span>
