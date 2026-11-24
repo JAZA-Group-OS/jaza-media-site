@@ -28,6 +28,8 @@ export function Hero() {
         <Image src="/about-the-form/Bela%20soft.png" alt="" fill priority sizes="24vw" className="object-cover object-bottom object-right brightness-[0.92] contrast-[1.05] saturate-[0.9] [mask-image:linear-gradient(to_top,transparent_0%,black_28%),linear-gradient(to_right,transparent_0%,black_22%),linear-gradient(to_bottom,transparent_0%,black_15%)] [mask-composite:intersect]" />
       </div>
 
+      {/* top fade — no hard line where the navbar ends and the glow/grid begin */}
+      <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 z-[5] h-40 bg-gradient-to-b from-ink via-ink/70 to-transparent" />
       {/* bottom fade — melts the hero (photos, glow, grid) into the next section, no seam */}
       <div aria-hidden className="pointer-events-none absolute inset-x-0 bottom-0 z-[5] h-48 bg-gradient-to-b from-transparent via-ink/70 to-ink" />
 
