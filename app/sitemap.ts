@@ -47,7 +47,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   // slots (cfo/cso/…) whose pages read "Bio coming soon" — skip those so we
   // don't hand crawlers thin/placeholder content.
   for (const slug of getAllSlugs()) {
-    if (!getMember(slug)?.name) continue;
+    if (!getMember(slug)?.bio?.length) continue;
     entries.push({
       url: `${base}/team/${slug}`,
       lastModified,

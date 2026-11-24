@@ -24,6 +24,29 @@ export function TeamCard({ member }: { member: Member }) {
   const altText = member.name ? `${member.name} — ${member.role}` : "Team member placeholder";
   const roles = member.role.split(",").map((r) => r.trim());
 
+  if (!member.image && member.name) {
+    const initials = member.name
+      .split(" ")
+      .map((w) => w[0])
+      .slice(0, 2)
+      .join("");
+    return (
+      <article className="h-full rounded-[28px] bg-gradient-to-b from-gold/35 via-white/10 to-white/[0.03] p-px">
+        <div className="relative flex aspect-[4/5] h-full flex-col justify-end overflow-hidden rounded-[27px] bg-[radial-gradient(120%_90%_at_50%_0%,#2a2210_0%,#141414_55%,#0e0e0f_100%)] p-6 md:p-7">
+          <span
+            aria-hidden
+            className="absolute top-[38%] left-1/2 -translate-x-1/2 -translate-y-1/2 bg-gradient-to-br from-[#fbe7a1] via-gold to-[#a97a1f] bg-clip-text font-serif text-[120px] leading-none tracking-[-0.04em] text-transparent italic opacity-80"
+          >
+            {initials}
+          </span>
+          <p className="relative text-[10px] font-medium tracking-[0.28em] text-gold/90 uppercase">{roles[0]}</p>
+          <h2 className="relative mt-2 font-serif text-[30px] leading-tight tracking-[-0.02em] text-white">{titleCase(member.name)}</h2>
+          <p className="relative mt-1 text-xs tracking-[0.12em] text-white/50">JAZA MEDIA</p>
+        </div>
+      </article>
+    );
+  }
+
   if (!member.image || !member.name) {
     return (
       <article className="h-full rounded-[28px] bg-gradient-to-b from-white/[0.12] to-white/[0.02] p-px">
@@ -57,9 +80,6 @@ export function TeamCard({ member }: { member: Member }) {
           />
         </div>
         <div aria-hidden className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
-        <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
-          <div className="anim-card-streak absolute -inset-y-1/2 left-0 w-1/4 rotate-[20deg] bg-gradient-to-r from-transparent via-white/[0.08] to-transparent" />
-        </div>
 
         <div className="absolute inset-x-0 bottom-0 p-6 md:p-7">
           <p className="text-[10px] font-medium tracking-[0.28em] text-gold/90 uppercase">{roles[0]}</p>
