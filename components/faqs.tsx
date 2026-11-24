@@ -32,7 +32,7 @@ export function Faqs() {
         aria-hidden
         className="pointer-events-none absolute left-1/2 top-0 size-[640px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-gold/10 blur-[140px]"
       />
-      <div className="relative mx-auto grid max-w-7xl gap-10 px-4 md:px-6 lg:grid-cols-[1.25fr_1fr] lg:gap-12">
+      <div className="relative mx-auto grid max-w-[1560px] gap-10 px-4 md:px-8 lg:grid-cols-[1.3fr_1fr] lg:gap-14 xl:px-12">
         {/* FAQs */}
         <div>
           <p className="inline-flex w-fit items-center gap-2.5 rounded-full border border-white/10 bg-white/[0.03] px-4 py-1.5 text-[10.5px] font-medium tracking-[0.32em] text-white/70 backdrop-blur">
@@ -47,22 +47,22 @@ export function Faqs() {
             {FAQS.map((item, i) => (
               <article
                 key={i}
-                className="flex flex-col rounded-3xl border border-white/10 bg-white/[0.03] p-6 transition duration-300 hover:-translate-y-0.5 hover:border-gold/40 hover:bg-white/[0.05]"
+                className="flex flex-col rounded-3xl border border-white/10 bg-white/[0.03] p-7 transition duration-300 hover:-translate-y-0.5 hover:border-gold/40 hover:bg-white/[0.05]"
               >
                 <div className="flex items-center justify-between">
                   <span className="font-serif text-2xl italic text-gold">0{i + 1}</span>
                   <span aria-hidden className="h-px w-12 bg-gradient-to-r from-gold/60 to-transparent" />
                 </div>
                 <h3 className="mt-4 font-sans text-[17px] font-semibold leading-snug tracking-[-0.01em] text-white">{item.q}</h3>
-                <p className="mt-3 text-[13.5px] font-light leading-6 tracking-wide text-white/55">{item.a}</p>
+                <p className="mt-3 text-[14px] font-light leading-6 tracking-wide text-white/55">{item.a}</p>
               </article>
             ))}
           </div>
         </div>
 
         {/* Free templates promo */}
-        <div className="self-center rounded-[32px] bg-gradient-to-br from-gold/50 via-white/10 to-white/[0.04] p-px shadow-[0_40px_120px_-40px_rgba(0,0,0,0.9)]">
-          <div className="relative flex h-full flex-col overflow-hidden rounded-[31px] bg-[radial-gradient(120%_120%_at_0%_0%,#2a2210_0%,#121212_45%,#0c0c0d_100%)] p-7 md:p-9">
+        <div className="flex rounded-[32px] lg:mt-[118px] bg-gradient-to-br from-gold/50 via-white/10 to-white/[0.04] p-px shadow-[0_40px_120px_-40px_rgba(0,0,0,0.9)]">
+          <div className="relative flex w-full flex-col justify-center overflow-hidden rounded-[31px] bg-[radial-gradient(120%_120%_at_0%_0%,#2a2210_0%,#121212_45%,#0c0c0d_100%)] p-7 md:p-10 xl:p-12">
             <div aria-hidden className="pointer-events-none absolute -top-32 -left-32 size-[380px] rounded-full bg-gold/20 blur-[120px]" />
             <div className="relative overflow-hidden rounded-2xl ring-1 ring-white/15 shadow-[0_30px_60px_-30px_rgba(0,0,0,0.95)]">
               <Image
@@ -78,13 +78,13 @@ export function Faqs() {
               <span aria-hidden className="size-1.5 rounded-full bg-gold shadow-[0_0_10px_2px_rgba(234,179,8,0.6)]" />
               BRAND NEW · FREE
             </p>
-            <h3 className="relative mt-5 font-serif text-4xl leading-[1.04] tracking-[-0.03em] md:text-[44px]">
+            <h3 className="relative mt-6 font-serif text-4xl leading-[1.04] tracking-[-0.03em] md:text-[52px]">
               <span className="bg-gradient-to-b from-white via-white to-white/60 bg-clip-text text-transparent">JAZA Media</span>{" "}
               <em className="bg-gradient-to-br from-[#fbe7a1] via-gold to-[#a97a1f] bg-clip-text pr-1 text-transparent">Marketing Templates</em>
             </h3>
-            <ul className="relative mt-5 space-y-2.5">
+            <ul className="relative mt-6 space-y-3">
               {PERKS.map((p) => (
-                <li key={p} className="flex items-center gap-3 text-sm text-white/75">
+                <li key={p} className="flex items-center gap-3 text-[15px] text-white/75">
                   <span className="grid size-5 place-items-center rounded-full bg-gold/15 text-gold ring-1 ring-gold/30">
                     <Check className="size-3" />
                   </span>
