@@ -23,6 +23,14 @@ const LOGO_DIR = "/images/client-logo/Clients%20Logo";
 // graphic overflow the strip vertically.
 const BOOSTED_LOGOS = new Set([2, 4, 12, 14, 16, 18, 22, 24, 26]);
 
+// Mostly-transparent wordmarks (dark text) — rendered white on the dark strip.
+// Badge logos keep their own colors since they carry their own backdrop.
+const WORDMARK_NUMS = [2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26];
+const WORDMARKS = new Set([
+  ...WORDMARK_NUMS.map((n) => `${LOGO_DIR}/${n}.png`),
+  `${LOGO_DIR}/Client%20Logo%20(30).png`,
+]);
+
 const CLIENTS: Client[] = [
   ...Array.from({ length: 27 }, (_, i) => {
     const num = i + 1;
@@ -46,13 +54,13 @@ const SLIDES: Client[] = [...CLIENTS, ...CLIENTS];
 
 function ClientLogo({ name, src, boost, dark }: Client & { dark?: boolean }) {
   return (
-    <div className={`relative shrink-0 ${dark ? "group/logo h-20 w-36 overflow-hidden rounded-[20px] bg-gradient-to-b from-[#faf8f3] to-[#ece7da] shadow-[0_1px_0_rgba(255,255,255,0.6)_inset,0_12px_32px_-12px_rgba(0,0,0,0.8)] ring-1 ring-gold/20 transition duration-500 hover:-translate-y-1 hover:ring-gold/60 md:h-24 md:w-48" : "h-24 w-40 md:h-32 md:w-56"}`}>
+    <div className={`relative shrink-0 ${dark ? "group/logo h-24 w-44 md:h-28 md:w-56" : "h-24 w-40 md:h-32 md:w-56"}`}>
       <Image
         src={src}
         alt={`${name} logo`}
         fill
         sizes="(min-width: 768px) 224px, 160px"
-        className={`object-contain ${boost ? "scale-[2.1]" : "scale-[1.1]"} ${dark ? "p-2 opacity-80 grayscale transition duration-500 group-hover/logo:opacity-100 group-hover/logo:grayscale-0" : ""}`}
+        className={`object-contain ${boost ? "scale-[2.1]" : "scale-[1.1]"} ${dark ? (WORDMARKS.has(src) ? "grayscale invert brightness-125 opacity-85 transition duration-500 group-hover/logo:opacity-100" : "opacity-90 transition duration-500 group-hover/logo:opacity-100") : ""}`}
       />
     </div>
   );
