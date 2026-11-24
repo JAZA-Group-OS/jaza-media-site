@@ -6,7 +6,6 @@ import { Founders } from "@/components/founders";
 import { FreeMarketingSection } from "@/components/free-marketing-section";
 import { Hero } from "@/components/hero";
 import { ValuedClients } from "@/components/valued-clients";
-import { MarketingTemplatesCard } from "@/components/marketing-templates-card";
 import { Navbar } from "@/components/navbar";
 
 export default function Home() {
@@ -22,7 +21,6 @@ export default function Home() {
         <FreeMarketingSection />
         <Founders />
         <Faqs />
-        <MarketingTemplatesCard />
       </main>
       <Footer />
       <CopyrightBar />
