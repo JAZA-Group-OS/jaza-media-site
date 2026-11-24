@@ -15,7 +15,7 @@ const HIGHLIGHTS = [
 
 export function FeaturedYellowCard() {
   return (
-    <section className="relative overflow-hidden bg-ink pb-24 text-white md:pb-32">
+    <section className="relative overflow-hidden bg-ink pb-12 text-white md:pb-16">
       <div className="relative mx-auto max-w-7xl px-4 md:px-6">
         <Reveal>
           {/* gold hairline border */}
