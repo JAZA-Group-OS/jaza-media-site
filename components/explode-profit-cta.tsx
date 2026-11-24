@@ -1,4 +1,5 @@
 import { ArrowRight } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 
 import { Reveal } from "@/components/reveal";
@@ -30,12 +31,19 @@ export function ExplodeProfitCta() {
                 className="anim-profit-burst absolute left-1/2 top-1/2 size-full rounded-full border border-gold/60 opacity-0"
               />
             ))}
-            <div className="relative grid size-32 place-items-center rounded-full border border-gold/50 bg-ink shadow-[0_0_80px_-10px_rgba(234,179,8,0.7)] md:size-36">
+            <div className="relative size-32 rounded-full bg-gradient-to-br from-[#fbe7a1] via-gold/60 to-[#a97a1f] p-[1.5px] shadow-[0_0_80px_-10px_rgba(234,179,8,0.75)] md:size-36">
               <span aria-hidden className="absolute -inset-3 rounded-full border border-dashed border-gold/25" />
-              <span className="flex flex-col items-center leading-none">
-                <span className="font-display text-[30px] tracking-[0.18em] text-white md:text-[34px]">JAZA</span>
-                <span className="mt-1.5 pl-[0.35em] text-[10px] font-semibold tracking-[0.35em] text-gold">MEDIA</span>
-              </span>
+              <div className="relative size-full overflow-hidden rounded-full bg-black">
+                <Image
+                  src="/images/jaza-media-icon.png"
+                  alt="JAZA Media"
+                  fill
+                  sizes="144px"
+                  className="scale-[1.12] object-cover"
+                />
+                {/* glass highlight */}
+                <span aria-hidden className="pointer-events-none absolute inset-0 rounded-full bg-[radial-gradient(120%_80%_at_30%_0%,rgba(255,255,255,0.18),transparent_55%)]" />
+              </div>
             </div>
           </div>
         </Reveal>
