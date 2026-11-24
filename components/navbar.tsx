@@ -8,9 +8,9 @@ export function Navbar() {
   return (
     <header className="sticky top-0 z-40 bg-ink px-3 py-3 text-white md:px-6">
       <div className="mx-auto flex h-14 max-w-4xl items-center justify-between gap-4 rounded-full border border-white/10 bg-white/[0.04] pl-6 pr-2 shadow-[0_8px_32px_rgba(0,0,0,0.35)] backdrop-blur-xl md:pl-7">
-        <Link href="/" aria-label="JAZA Media home" className="flex items-baseline gap-2 leading-none">
+        <Link href="/" aria-label="JAZA Media home" className="flex flex-col items-center leading-none">
           <span className="font-display text-[28px] tracking-[0.18em]">JAZA</span>
-          <span className="text-[11px] font-semibold tracking-[0.35em] text-gold">MEDIA</span>
+          <span className="mt-0.5 pl-[0.35em] text-[10px] font-semibold tracking-[0.35em] text-gold">MEDIA</span>
         </Link>
         <nav className="hidden md:block" aria-label="Main">
           <ul className="flex items-center gap-1 text-sm text-white/80">
