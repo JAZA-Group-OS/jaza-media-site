@@ -23,13 +23,19 @@ const LOGO_DIR = "/images/client-logo/Clients%20Logo";
 // graphic overflow the strip vertically.
 const BOOSTED_LOGOS = new Set([2, 4, 12, 14, 16, 18, 22, 24, 26]);
 
-// Mostly-transparent wordmarks (dark text) — rendered white on the dark strip.
+// Mostly-transparent wordmarks — on the dark strip they use pre-rendered white
+// versions (public/images/client-logo/white, inner highlights cut out).
 // Badge logos keep their own colors since they carry their own backdrop.
-const WORDMARK_NUMS = [2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26];
+const WORDMARK_NUMS = [2, 4, 6, 8, 10, 12, 14, 16, 18, 22, 24, 26];
 const WORDMARKS = new Set([
   ...WORDMARK_NUMS.map((n) => `${LOGO_DIR}/${n}.png`),
   `${LOGO_DIR}/Client%20Logo%20(30).png`,
 ]);
+
+const toWhite = (src: string) =>
+  src
+    .replace(LOGO_DIR, "/images/client-logo/white")
+    .replace("Client%20Logo%20(30).png", "Client-Logo-30.png");
 
 const CLIENTS: Client[] = [
   ...Array.from({ length: 27 }, (_, i) => {
@@ -56,11 +62,11 @@ function ClientLogo({ name, src, boost, dark }: Client & { dark?: boolean }) {
   return (
     <div className={`relative shrink-0 ${dark ? "group/logo h-24 w-44 md:h-28 md:w-56" : "h-24 w-40 md:h-32 md:w-56"}`}>
       <Image
-        src={src}
+        src={dark && WORDMARKS.has(src) ? toWhite(src) : src}
         alt={`${name} logo`}
         fill
         sizes="(min-width: 768px) 224px, 160px"
-        className={`object-contain ${boost ? "scale-[2.1]" : "scale-[1.1]"} ${dark ? (WORDMARKS.has(src) ? "grayscale invert brightness-125 opacity-85 transition duration-500 group-hover/logo:opacity-100" : "opacity-90 transition duration-500 group-hover/logo:opacity-100") : ""}`}
+        className={`object-contain ${boost ? "scale-[2.1]" : "scale-[1.1]"} ${dark ? "opacity-90 transition duration-500 group-hover/logo:opacity-100" : ""}`}
       />
     </div>
   );
