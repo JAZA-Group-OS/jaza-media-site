@@ -7,17 +7,17 @@ import { Reveal } from "@/components/reveal";
 /** "Explode profit" call to action: the JAZA Media mark, headline and one button. */
 export function ExplodeProfitCta() {
   return (
-    <section className="relative overflow-hidden bg-ink py-24 text-center text-white md:py-32">
+    <section className="relative overflow-hidden bg-ink py-16 text-center text-white md:py-20">
       <div className="relative mx-auto flex max-w-3xl flex-col items-center px-4">
         {/* logo + shockwaves */}
         <Reveal>
-          <div className="relative size-28 rounded-full p-px ring-1 ring-gold/50 md:size-32">
+          <div className="relative size-20 rounded-full p-px ring-1 ring-gold/50 md:size-24">
             <div className="relative size-full overflow-hidden rounded-full bg-black">
               <Image
                 src="/images/jaza-media-icon.png"
                 alt="JAZA Media"
                 fill
-                sizes="128px"
+                sizes="96px"
                 className="scale-[1.12] object-cover"
               />
             </div>
@@ -25,7 +25,7 @@ export function ExplodeProfitCta() {
         </Reveal>
 
         <Reveal delay={0.1}>
-          <h2 className="mt-10 font-serif text-[44px] leading-[1.02] tracking-[-0.03em] text-balance sm:text-6xl md:text-[76px]">
+          <h2 className="mt-7 font-serif text-[34px] leading-[1.05] tracking-[-0.025em] text-balance sm:text-5xl md:text-[52px]">
             <span className="bg-gradient-to-b from-white via-white to-white/60 bg-clip-text text-transparent">
               Want us to help you
             </span>{" "}
@@ -36,7 +36,7 @@ export function ExplodeProfitCta() {
         </Reveal>
 
         <Reveal delay={0.18}>
-          <p className="mt-6 text-[15px] font-light tracking-wide text-white/60 md:text-lg">
+          <p className="mt-4 text-[14px] font-light tracking-wide text-white/60 md:text-base">
             See how JAZA Media can help.
           </p>
         </Reveal>
@@ -44,7 +44,7 @@ export function ExplodeProfitCta() {
         <Reveal delay={0.26}>
           <Link
             href="/partner-with-us"
-            className="group mt-10 inline-flex items-center gap-2.5 rounded-full bg-gold px-9 py-4 text-[13px] font-semibold tracking-[0.12em] text-ink transition hover:bg-white"
+            className="group mt-7 inline-flex items-center gap-2.5 rounded-full bg-gold px-7 py-3 text-[12px] font-semibold tracking-[0.12em] text-ink transition hover:bg-white"
           >
             LEARN MORE
             <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" />
