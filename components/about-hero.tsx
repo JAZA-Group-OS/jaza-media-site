@@ -1,149 +1,135 @@
-"use client";
-
+import { ArrowRight } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 
-import { useInView } from "@/lib/use-in-view";
+import { Reveal } from "@/components/reveal";
 
-function TeamImage() {
+const GOLD_TEXT = "bg-gradient-to-br from-[#fbe7a1] via-gold to-[#a97a1f] bg-clip-text text-transparent";
+const WHITE_TEXT = "bg-gradient-to-b from-white via-white to-white/60 bg-clip-text text-transparent";
+
+function Eyebrow({ children }: { children: React.ReactNode }) {
   return (
-    <div className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl bg-neutral-200 shadow-md ring-1 ring-black/5 lg:aspect-auto lg:h-full">
-      <Image
-        src="/images/About us.png"
-        alt="JAZA Media team"
-        fill
-        sizes="(min-width: 1024px) 50vw, 100vw"
-        className="object-cover"
-        priority
-      />
-    </div>
+    <p className="inline-flex items-center gap-2.5 rounded-full border border-white/10 bg-white/[0.03] px-4 py-1.5 text-[10.5px] font-medium tracking-[0.32em] text-white/70 backdrop-blur">
+      <span aria-hidden className="size-1.5 rounded-full bg-gold shadow-[0_0_10px_2px_rgba(234,179,8,0.6)]" />
+      {children}
+    </p>
   );
 }
 
-function InfoCard({
-  title,
-  body,
-  delay,
-  shade,
-}: {
-  title: string;
-  body: string;
-  delay: number;
-  shade: "light" | "dark";
-}) {
-  const { ref, inView } = useInView<HTMLDivElement>();
-  const bg = shade === "light" ? "bg-neutral-200" : "bg-neutral-300";
-  return (
-    <div
-      ref={ref}
-      style={{ animationDelay: inView ? `${delay}ms` : undefined }}
-      className={`rounded-md ${bg} p-5 text-center text-brand-black shadow-sm md:p-6 ${
-        inView ? "animate-about-fade-up" : "opacity-0"
-      }`}
-    >
-      {/* h2: these sit directly under the page h1 with no intervening heading,
-          so h3 here skipped a level (and preceded the ValuedClients h2). */}
-      <h2 className="font-heading text-lg font-bold tracking-wide text-brand-black md:text-xl">
-        {title}
-      </h2>
-      <p className="mt-3 font-heading text-base font-semibold leading-relaxed text-brand-black md:text-lg">
-        {body}
-      </p>
-    </div>
-  );
-}
+const PILLARS = [
+  { k: "01", title: "Strategy to execution", body: "End-to-end growth solutions supporting companies at every stage of their business scaling journey." },
+  { k: "02", title: "One unified platform", body: "World-class marketing, advertising, and growth infrastructure — accessible anytime, anywhere." },
+  { k: "03", title: "AI-driven, Filipino-built", body: "Part of the JAZA Group: elite talent and artificial intelligence-driven marketing designed for global growth." },
+];
 
 export function AboutHero() {
-  const { ref: headlineRef, inView: headlineIn } =
-    useInView<HTMLHeadingElement>();
-  const { ref: leadRef, inView: leadIn } = useInView<HTMLDivElement>();
-  const { ref: imageRef, inView: imageIn } = useInView<HTMLDivElement>();
-  const { ref: bodyRef, inView: bodyIn } = useInView<HTMLDivElement>();
-
   return (
-    <section className="bg-white pt-12 pb-16 md:pt-16 md:pb-20">
-      <div className="mx-auto max-w-5xl px-4">
-        <h1
-          ref={headlineRef}
-          className={`mx-auto max-w-4xl text-center font-heading text-[32px] font-bold uppercase leading-[1.2] tracking-tight text-brand-black md:text-[40px] md:leading-[1.25] lg:text-5xl xl:text-[56px] ${
-            headlineIn ? "animate-about-fade-up" : "opacity-0"
-          }`}
-        >
-          BUILD YOUR
-          <br />
-          <mark className="box-decoration-clone rounded-md bg-brand-yellow px-2 py-0.5 text-brand-black md:whitespace-nowrap md:rounded-xl md:px-4 md:py-1.5">
-            PREDICTABLE REVENUE SYSTEM
-          </mark>{" "}
-          AND PROFIT DRIVER IN 90 DAYS WITHOUT GUESSWORK!
-        </h1>
+    <section className="relative overflow-hidden bg-ink text-white">
+      <div aria-hidden className="pointer-events-none absolute -top-40 left-1/2 size-[760px] -translate-x-1/2 rounded-full bg-gold/15 blur-[150px]" />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 opacity-[0.06] [background-image:linear-gradient(to_right,white_1px,transparent_1px),linear-gradient(to_bottom,white_1px,transparent_1px)] [background-size:72px_72px] [mask-image:radial-gradient(ellipse_at_top,black,transparent_70%)]"
+      />
 
-        {/* Section 1 — Bold lead paragraph paired with the team image
-            (two columns on desktop, stacked on mobile). */}
-        <div className="mt-12 grid gap-6 lg:grid-cols-2 lg:gap-10">
-          <div
-            ref={leadRef}
-            style={{ animationDelay: leadIn ? "120ms" : undefined }}
-            className={leadIn ? "animate-about-fade-up" : "opacity-0"}
-          >
-            <p className="font-heading text-lg font-bold leading-snug text-brand-black md:text-xl lg:text-[28px]">
-              JAZA Media is the country&apos;s first fully integrated marketing
-              agency powered by its own platform, making professional marketing
-              and advertising accessible to businesses anytime, anywhere.
+      <div className="relative mx-auto max-w-7xl px-4 pt-16 pb-24 md:px-6 md:pt-24 md:pb-32">
+        {/* Headline */}
+        <div className="mx-auto flex max-w-4xl flex-col items-center text-center">
+          <Reveal>
+            <Eyebrow>ABOUT JAZA MEDIA</Eyebrow>
+          </Reveal>
+          <Reveal delay={0.08}>
+            <h1 className="mt-8 font-serif text-[42px] leading-[1.04] tracking-[-0.03em] text-balance sm:text-6xl lg:text-[80px]">
+              <span className={WHITE_TEXT}>Build your</span>{" "}
+              <em className={`${GOLD_TEXT} pr-2`}>predictable revenue system</em>{" "}
+              <span className={WHITE_TEXT}>and profit driver in 90 days — without guesswork.</span>
+            </h1>
+          </Reveal>
+          <Reveal delay={0.16}>
+            <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
+              <Link
+                href="/partner-with-us"
+                className="group inline-flex items-center gap-2.5 rounded-full bg-gold px-8 py-4 text-[13px] font-semibold tracking-[0.12em] text-ink shadow-[0_10px_40px_-10px_rgba(234,179,8,0.55)] transition hover:bg-white"
+              >
+                PARTNER WITH US
+                <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" />
+              </Link>
+              <Link
+                href="/about-the-firm"
+                className="inline-flex items-center rounded-full border border-white/15 bg-white/[0.03] px-8 py-4 text-[13px] font-semibold tracking-[0.12em] text-white transition hover:border-white/40 hover:bg-white/[0.06]"
+              >
+                ABOUT THE FIRM
+              </Link>
+            </div>
+          </Reveal>
+        </div>
+
+        {/* Lead + image */}
+        <div className="mt-20 grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
+          <Reveal>
+            <p className="font-serif text-3xl leading-[1.2] tracking-[-0.02em] text-white/90 md:text-[40px]">
+              The country&apos;s <em className={GOLD_TEXT}>first</em> fully integrated marketing agency powered by its own platform.
             </p>
-          </div>
+            <p className="mt-6 max-w-xl text-[15px] font-light leading-7 tracking-wide text-white/60 md:text-[17px] md:leading-8">
+              JAZA Media makes professional marketing and advertising accessible to businesses anytime,
+              anywhere — a fully integrated platform built to help businesses scale faster and compete
+              globally. Headquartered in the Philippines.
+            </p>
+          </Reveal>
 
-          <div
-            ref={imageRef}
-            style={{ animationDelay: imageIn ? "180ms" : undefined }}
-            className={`lg:h-full ${
-              imageIn ? "animate-about-pop-in" : "opacity-0"
-            }`}
-          >
-            <TeamImage />
-          </div>
+          <Reveal delay={0.1}>
+            <div className="rounded-[32px] bg-gradient-to-br from-gold/50 via-white/10 to-white/[0.04] p-px shadow-[0_40px_120px_-40px_rgba(0,0,0,0.9)]">
+              <div className="relative aspect-[4/3] overflow-hidden rounded-[31px]">
+                <Image
+                  src="/images/About us.png"
+                  alt="JAZA Media team"
+                  fill
+                  priority
+                  sizes="(min-width: 1024px) 50vw, 100vw"
+                  className="object-cover"
+                />
+                <div aria-hidden className="absolute inset-0 bg-gradient-to-t from-ink/50 via-transparent to-transparent" />
+              </div>
+            </div>
+          </Reveal>
         </div>
 
-        {/* Section 2 — Essay-form supporting copy spanning the full width. */}
-        <div
-          ref={bodyRef}
-          style={{ animationDelay: bodyIn ? "240ms" : undefined }}
-          className={`mt-10 space-y-4 text-base leading-relaxed text-brand-black/90 md:text-lg ${
-            bodyIn ? "animate-about-fade-up" : "opacity-0"
-          }`}
-        >
-          <p>
-            JAZA Media is a fully integrated marketing and advertising platform
-            built to help businesses scale faster and compete globally. We
-            provide end-to-end growth solutions — from strategy to execution —
-            supporting companies at every stage of their business scaling
-            journey.
-          </p>
-          <p>
-            Headquartered in the Philippines, JAZA Media makes world-class
-            marketing, advertising, and growth infrastructure accessible
-            anytime, anywhere through a unified digital platform.
-          </p>
-          <p>
-            As part of the JAZA Group, JAZA Media is committed to elevating
-            Filipino businesses through innovation, elite talent, and
-            artificial intelligence-driven marketing solutions designed for
-            global growth.
-          </p>
+        {/* Pillars */}
+        <div className="mt-20 grid gap-4 md:grid-cols-3 md:gap-5">
+          {PILLARS.map((p, i) => (
+            <Reveal key={p.k} delay={0.06 * i}>
+              <article className="h-full rounded-3xl border border-white/10 bg-white/[0.03] p-7 transition duration-300 hover:-translate-y-1 hover:border-gold/40 hover:bg-white/[0.05]">
+                <div className="flex items-center justify-between">
+                  <span className="font-serif text-2xl italic text-gold">{p.k}</span>
+                  <span aria-hidden className="h-px w-12 bg-gradient-to-r from-gold/60 to-transparent" />
+                </div>
+                <h2 className="mt-5 text-lg font-semibold tracking-[-0.01em] text-white">{p.title}</h2>
+                <p className="mt-3 text-[14px] font-light leading-6 tracking-wide text-white/55">{p.body}</p>
+              </article>
+            </Reveal>
+          ))}
         </div>
 
-        {/* Section 3 — Mission + Vision cards side-by-side on desktop. */}
-        <div className="mt-10 grid gap-5 md:grid-cols-2 md:gap-6">
-          <InfoCard
-            title="Our Mission"
-            body="To make world-class marketing and advertising accessible to Filipinos here and abroad through a fully integrated, sustainable, and future-proof digital platform that scales their business up to 10x."
-            delay={300}
-            shade="light"
-          />
-          <InfoCard
-            title="Our Vision"
-            body="To become the Philippines' leading integrated marketing and advertising ecosystem, showcasing Filipino excellence and innovation on the global stage."
-            delay={420}
-            shade="dark"
-          />
+        {/* Mission + Vision */}
+        <div className="mt-5 grid gap-4 md:grid-cols-2 md:gap-5">
+          <Reveal>
+            <article className="relative h-full overflow-hidden rounded-3xl border border-gold/30 bg-[radial-gradient(120%_120%_at_0%_0%,#2a2210_0%,#121212_50%,#0c0c0d_100%)] p-8 md:p-10">
+              <Eyebrow>OUR MISSION</Eyebrow>
+              <p className="mt-6 font-serif text-2xl leading-snug text-white/90 md:text-[28px]">
+                To make world-class marketing and advertising accessible to Filipinos here and abroad through a
+                fully integrated, sustainable, and future-proof digital platform that scales their business{" "}
+                <em className={GOLD_TEXT}>up to 10x.</em>
+              </p>
+            </article>
+          </Reveal>
+          <Reveal delay={0.08}>
+            <article className="relative h-full overflow-hidden rounded-3xl border border-white/10 bg-white/[0.03] p-8 md:p-10">
+              <Eyebrow>OUR VISION</Eyebrow>
+              <p className="mt-6 font-serif text-2xl leading-snug text-white/90 md:text-[28px]">
+                To become the Philippines&apos; leading integrated marketing and advertising ecosystem, showcasing{" "}
+                <em className={GOLD_TEXT}>Filipino excellence</em> and innovation on the global stage.
+              </p>
+            </article>
+          </Reveal>
         </div>
       </div>
     </section>
