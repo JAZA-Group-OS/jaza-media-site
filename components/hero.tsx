@@ -18,9 +18,9 @@ export function Hero() {
       />
 
       {/* Jaza — far left, md+ */}
-      <div aria-hidden className="pointer-events-none absolute bottom-0 left-0 hidden aspect-square w-[24%] max-w-[420px] md:block">
+      <div aria-hidden className="pointer-events-none absolute bottom-0 left-0 hidden aspect-square w-[30%] max-w-[540px] md:block">
         <div className="absolute inset-x-[10%] bottom-[10%] top-[25%] rounded-full bg-gold/15 blur-[80px]" />
-        <Image src="/about-the-form/Jaza%20soft.png" alt="" fill priority sizes="24vw" className="object-contain object-bottom object-left brightness-[0.92] contrast-[1.05] saturate-[0.9] [mask-image:linear-gradient(to_top,transparent_0%,black_28%),linear-gradient(to_left,transparent_0%,black_18%)] [mask-composite:intersect]" />
+        <Image src="/about-the-form/Jaza-portrait-cut.png" alt="" fill priority sizes="30vw" className="object-contain object-bottom object-left brightness-[0.9] contrast-[1.04] saturate-[0.92] [mask-image:linear-gradient(to_top,transparent_0%,black_28%),linear-gradient(to_left,transparent_0%,black_18%)] [mask-composite:intersect]" />
       </div>
       {/* Bela — far right, md+ */}
       <div aria-hidden className="pointer-events-none absolute right-0 bottom-0 hidden aspect-square w-[24%] max-w-[420px] md:block">
