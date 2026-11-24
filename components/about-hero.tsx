@@ -1,5 +1,5 @@
-import Image from "next/image";
 
+import { AboutEcosystem } from "@/components/about-ecosystem";
 import { Reveal } from "@/components/reveal";
 
 const GOLD_TEXT = "bg-gradient-to-br from-[#fbe7a1] via-gold to-[#a97a1f] bg-clip-text text-transparent";
@@ -29,7 +29,7 @@ export function AboutHero() {
         className="pointer-events-none absolute inset-0 opacity-[0.06] [background-image:linear-gradient(to_right,white_1px,transparent_1px),linear-gradient(to_bottom,white_1px,transparent_1px)] [background-size:72px_72px] [mask-image:radial-gradient(ellipse_at_top,black,transparent_70%)]"
       />
 
-      <div className="relative mx-auto max-w-7xl px-4 pt-16 pb-24 md:px-6 md:pt-24 md:pb-32">
+      <div className="relative mx-auto max-w-7xl px-4 pt-8 pb-24 md:px-6 md:pt-10 md:pb-32">
         {/* Headline */}
         <div className="mx-auto flex max-w-4xl flex-col items-center text-center">
           <Reveal>
@@ -58,19 +58,7 @@ export function AboutHero() {
           </Reveal>
 
           <Reveal delay={0.1}>
-            <div className="rounded-[32px] bg-gradient-to-br from-gold/50 via-white/10 to-white/[0.04] p-px shadow-[0_40px_120px_-40px_rgba(0,0,0,0.9)]">
-              <div className="relative aspect-[4/3] overflow-hidden rounded-[31px]">
-                <Image
-                  src="/images/About us.png"
-                  alt="JAZA Media team"
-                  fill
-                  priority
-                  sizes="(min-width: 1024px) 50vw, 100vw"
-                  className="object-cover"
-                />
-                <div aria-hidden className="absolute inset-0 bg-gradient-to-t from-ink/50 via-transparent to-transparent" />
-              </div>
-            </div>
+            <AboutEcosystem />
           </Reveal>
         </div>
 
