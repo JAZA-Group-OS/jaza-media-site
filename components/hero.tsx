@@ -28,27 +28,37 @@ export function Hero() {
         <Image src="/about-the-form/Bela%20soft.png" alt="" fill priority sizes="24vw" className="object-cover object-bottom object-right brightness-[0.92] contrast-[1.05] saturate-[0.9] [mask-image:linear-gradient(to_top,transparent_0%,black_28%),linear-gradient(to_right,transparent_0%,black_22%),linear-gradient(to_bottom,transparent_0%,black_15%)] [mask-composite:intersect]" />
       </div>
 
+      {/* bottom fade — melts the hero (photos, glow, grid) into the next section, no seam */}
+      <div aria-hidden className="pointer-events-none absolute inset-x-0 bottom-0 z-[5] h-48 bg-gradient-to-b from-transparent via-ink/70 to-ink" />
+
       <div className="relative z-10 mx-auto flex max-w-3xl flex-col items-center px-4 pt-16 text-center md:px-6 md:pt-24">
         <Reveal>
-          <p className="flex items-center gap-4 text-[11px] font-medium tracking-[0.42em] text-gold/90">
-            <span aria-hidden className="h-px w-10 bg-gradient-to-r from-transparent to-gold/70" />
+          <p className="inline-flex items-center gap-2.5 rounded-full border border-white/10 bg-white/[0.03] px-4 py-1.5 text-[10.5px] font-medium tracking-[0.32em] text-white/70 backdrop-blur">
+            <span aria-hidden className="size-1.5 rounded-full bg-gold shadow-[0_0_10px_2px_rgba(234,179,8,0.6)]" />
             MARKETING · ADVERTISING · SCALING
-            <span aria-hidden className="h-px w-10 bg-gradient-to-l from-transparent to-gold/70" />
           </p>
         </Reveal>
         <Reveal delay={0.08}>
-          <h1 className="mt-7 font-serif text-[46px] leading-[1.02] tracking-[-0.025em] text-balance text-white/95 sm:text-6xl lg:text-[84px]">
-            Do you want to{" "}
-            <em className="bg-gradient-to-br from-[#f7dc8a] via-gold to-[#b8892a] bg-clip-text pr-1 text-transparent">
+          <h1 className="mt-8 font-serif text-[46px] leading-[1.02] tracking-[-0.03em] text-balance sm:text-6xl lg:text-[86px]">
+            <span className="bg-gradient-to-b from-white via-white to-white/60 bg-clip-text text-transparent">
+              Do you want to
+            </span>{" "}
+            <em className="relative inline-block bg-gradient-to-br from-[#fbe7a1] via-gold to-[#a97a1f] bg-clip-text pr-2 text-transparent [text-shadow:0_0_40px_rgba(234,179,8,0.25)]">
               scale
+              <svg aria-hidden viewBox="0 0 200 12" preserveAspectRatio="none" className="absolute -bottom-1 left-0 h-2.5 w-[95%] text-gold/70">
+                <path d="M2 9 C 50 2, 120 2, 198 7" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+              </svg>
             </em>{" "}
-            your business?
+            <span className="bg-gradient-to-b from-white via-white to-white/60 bg-clip-text text-transparent">
+              your business?
+            </span>
           </h1>
         </Reveal>
         <Reveal delay={0.16}>
-          <p className="mx-auto mt-7 max-w-lg text-base leading-relaxed font-light text-white/60 md:text-lg">
+          <p className="mx-auto mt-8 max-w-md text-[15px] leading-7 font-light tracking-wide text-white/55 md:text-[17px]">
             Learn from the team that has scaled a portfolio to over{" "}
-            <span className="font-medium text-white">₱150M+</span> in annual revenue.
+            <span className="font-serif text-xl font-normal tracking-normal text-gold italic md:text-2xl">₱150M+</span>{" "}
+            in annual revenue.
           </p>
         </Reveal>
         <Reveal delay={0.24}>

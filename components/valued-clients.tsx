@@ -104,7 +104,7 @@ export function ValuedClients({ variant = "light" }: { variant?: "light" | "dark
 
   if (dark) {
     return (
-      <section className="bg-ink py-14 md:py-20" aria-label="Our clients">
+      <section className="relative -mt-px bg-ink pt-6 pb-14 md:pt-8 md:pb-20" aria-label="Our clients">
         <div className="mx-auto flex max-w-3xl items-center justify-center gap-5 px-4">
           <span aria-hidden className="h-px flex-1 bg-gradient-to-r from-transparent to-gold/50" />
           <p className="text-[11px] font-semibold uppercase tracking-[0.35em] text-gold">
