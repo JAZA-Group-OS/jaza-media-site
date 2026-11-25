@@ -1,12 +1,7 @@
 import type { Metadata } from "next";
 
 import { AnnouncementBanner } from "@/components/announcement-banner";
-import { CareersHero } from "@/components/careers-hero";
-import { CareersHire } from "@/components/careers-hire";
-import { CareersInvesting } from "@/components/careers-investing";
-import { CareersTestimonials } from "@/components/careers-testimonials";
-import { CareersTogether } from "@/components/careers-together";
-import { CareersValues } from "@/components/careers-values";
+import { CareersPremium } from "@/components/careers-premium";
 import { CopyrightBar } from "@/components/copyright-bar";
 import { Footer } from "@/components/footer";
 import { Navbar } from "@/components/navbar";
@@ -25,12 +20,7 @@ export default function CareersPage() {
         <Navbar />
       </div>
       <main>
-        <CareersHero />
-        <CareersValues />
-        <CareersTogether />
-        <CareersHire />
-        <CareersInvesting />
-        <CareersTestimonials />
+        <CareersPremium />
       </main>
       <Footer />
       <CopyrightBar />

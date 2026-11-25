@@ -1,10 +1,4 @@
-"use client";
-
-import Image from "next/image";
-
-import { useInView } from "@/lib/use-in-view";
-
-type Testimonial = {
+export type Testimonial = {
   name: string;
   role: string;
   photo: string;
@@ -13,7 +7,7 @@ type Testimonial = {
   placement?: string;
 };
 
-const TESTIMONIALS: Testimonial[] = [
+export const TESTIMONIALS: Testimonial[] = [
   {
     name: "Ron D.",
     role: "from Video Editor to Creative Agency Owner",
@@ -60,86 +54,3 @@ const TESTIMONIALS: Testimonial[] = [
     ],
   },
 ];
-
-const BG_CLASSES: Record<Testimonial["bg"], string> = {
-  yellow: "border border-gold/40 bg-[linear-gradient(180deg,#221d10_0%,#101011_80%)]",
-  gray: "border border-white/10 bg-[linear-gradient(180deg,#1a1a17_0%,#101011_75%)]",
-};
-
-function TestimonialCard({ t, delay }: { t: Testimonial; delay: number }) {
-  const { ref, inView } = useInView<HTMLDivElement>();
-
-  return (
-    <div
-      ref={ref}
-      style={{ animationDelay: inView ? `${delay}ms` : undefined }}
-      className={`flex flex-col rounded-2xl p-6 md:p-8 ${BG_CLASSES[t.bg]} ${
-        t.placement ?? ""
-      } ${inView ? "animate-about-fade-up" : "opacity-0"}`}
-    >
-      <div className="space-y-3 text-[15px] font-light leading-relaxed text-white/65">
-        {t.body.map((p, i) => (
-          <p key={i}>{p}</p>
-        ))}
-      </div>
-
-      <div className="mt-auto flex items-center gap-3 pt-6">
-        <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-full ring-1 ring-gold/50 md:h-14 md:w-14">
-          <Image
-            src={t.photo}
-            alt={t.name}
-            fill
-            className="object-cover"
-            sizes="56px"
-          />
-        </div>
-        <div className="font-heading text-white">
-          <div className="text-base font-bold md:text-lg">{t.name}</div>
-          <div className="text-sm leading-snug text-white/50">
-            {t.role}
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-export function CareersTestimonials() {
-  const { ref: headRef, inView: headIn } = useInView<HTMLDivElement>();
-  const { ref: ctaRef, inView: ctaIn } = useInView<HTMLDivElement>();
-
-  return (
-    <section className="relative bg-ink py-16 text-white md:py-24">
-      <div className="mx-auto max-w-5xl px-4">
-        <h2
-          ref={headRef}
-          className={`text-center font-serif text-[28px] font-normal leading-[1.08] tracking-[-0.025em] text-white md:text-[40px] lg:text-[48px] ${
-            headIn ? "animate-about-fade-up" : "opacity-0"
-          }`}
-        >
-          Why our people <em className="bg-gradient-to-br from-[#fbe7a1] via-gold to-[#a97a1f] bg-clip-text pr-1 text-transparent italic">love</em> working here
-        </h2>
-
-        <div className="mt-10 grid gap-5 md:grid-cols-[2fr_3fr] md:gap-6">
-          {TESTIMONIALS.map((t, i) => (
-            <TestimonialCard key={t.name} t={t} delay={i * 80} />
-          ))}
-        </div>
-
-        <div
-          ref={ctaRef}
-          className={`mt-10 text-center ${
-            ctaIn ? "animate-about-fade-up" : "opacity-0"
-          }`}
-        >
-          <a
-            href="/careers/apply"
-            className="inline-flex items-center gap-2 rounded-full bg-gold px-7 py-3 text-[12px] font-semibold tracking-[0.14em] text-ink uppercase transition hover:bg-white"
-          >
-            View Job Openings
-          </a>
-        </div>
-      </div>
-    </section>
-  );
-}
