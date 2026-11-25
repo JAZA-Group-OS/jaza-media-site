@@ -78,7 +78,7 @@ function PillarCard({ pillar, delay }: { pillar: Pillar; delay: number }) {
         inView ? "animate-about-fade-up" : "opacity-0"
       }`}
     >
-      <h3 className="font-heading text-xl font-bold leading-[1.25] text-brand-black md:text-2xl lg:min-h-[2lh] lg:text-xl xl:text-2xl">
+      <h3 className="font-serif text-[26px] leading-[1.15] text-white md:text-2xl lg:min-h-[2lh] lg:text-xl xl:text-2xl">
         {pillar.title}
       </h3>
       <div className="relative mx-auto mt-5 aspect-square w-40 sm:w-48 md:w-60 lg:w-72">
@@ -90,7 +90,7 @@ function PillarCard({ pillar, delay }: { pillar: Pillar; delay: number }) {
           sizes="(min-width: 1024px) 288px, (min-width: 768px) 240px, (min-width: 640px) 192px, 160px"
         />
       </div>
-      <div className="mt-6 space-y-4 font-heading text-base leading-relaxed text-brand-black/90 md:text-[17px]">
+      <div className="mt-6 space-y-4 text-base font-light leading-relaxed text-white/65 md:text-[17px]">
         {pillar.body}
       </div>
     </div>
@@ -102,15 +102,15 @@ export function CareersInvesting() {
   const { ref: ctaRef, inView: ctaIn } = useInView<HTMLDivElement>();
 
   return (
-    <section className="bg-white py-12 md:py-16">
+    <section className="relative bg-[#0b0d0c] py-16 text-white md:py-24">
       <div className="mx-auto max-w-6xl px-4">
         <h2
           ref={headRef}
-          className={`text-center font-heading text-[30px] font-black leading-[1.1] tracking-tight text-brand-black md:text-[42px] lg:text-[54px] xl:text-[64px] ${
+          className={`text-center font-serif text-[30px] font-normal leading-[1.08] tracking-[-0.025em] text-white md:text-[42px] lg:text-[54px] xl:text-[64px] ${
             headIn ? "animate-about-fade-up" : "opacity-0"
           }`}
         >
-          <span className="text-brand-yellow">INVESTING</span> in High Performers
+          <em className="bg-gradient-to-br from-[#fbe7a1] via-gold to-[#a97a1f] bg-clip-text pr-1 text-transparent italic">Investing</em> in high performers
         </h2>
 
         <div className="mt-10 grid gap-10 lg:grid-cols-3 lg:gap-8">
@@ -127,7 +127,7 @@ export function CareersInvesting() {
         >
           <a
             href="/careers/apply"
-            className="inline-block rounded-full bg-brand-yellow px-6 py-3 font-heading text-base font-bold text-brand-black shadow-sm transition-colors hover:bg-yellow-400 md:text-lg"
+            className="inline-flex items-center gap-2 rounded-full bg-gold px-7 py-3 text-[12px] font-semibold tracking-[0.14em] text-ink uppercase transition hover:bg-white"
           >
             View Job Openings
           </a>

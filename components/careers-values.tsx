@@ -85,7 +85,7 @@ function CellImagePlaceholder() {
   return (
     <div
       aria-hidden
-      className="relative aspect-[572/377] w-full overflow-hidden rounded-md border-4 border-white bg-white/90 shadow-inner"
+      className="relative aspect-[572/377] w-full overflow-hidden rounded-2xl border border-white/10 bg-white/5 shadow-inner"
     >
       <div className="absolute inset-3 animate-about-shimmer rounded-sm opacity-60" />
     </div>
@@ -94,7 +94,7 @@ function CellImagePlaceholder() {
 
 function CellImage({ src, alt }: { src: string; alt: string }) {
   return (
-    <div className="relative aspect-[572/377] w-full overflow-hidden rounded-md">
+    <div className="relative aspect-[572/377] w-full overflow-hidden rounded-2xl ring-1 ring-gold/25">
       <Image
         src={src}
         alt={alt}
@@ -108,11 +108,11 @@ function CellImage({ src, alt }: { src: string; alt: string }) {
 
 function ValueTextCard({ value }: { value: ValueCard }) {
   return (
-    <div className="flex h-full flex-col justify-center rounded-md bg-white p-5 shadow-sm md:p-6 lg:p-8">
-      <h3 className="font-heading text-xl font-bold text-brand-black md:text-2xl">
+    <div className="flex h-full flex-col justify-center rounded-2xl border border-gold/25 bg-[linear-gradient(180deg,#1a1a17_0%,#101011_75%)] p-5 md:p-6 lg:p-8">
+      <h3 className="font-serif text-[26px] leading-tight text-white md:text-[30px]">
         {value.title}
       </h3>
-      <div className="mt-3 space-y-3 font-heading text-base leading-relaxed text-brand-black/90 md:text-lg">
+      <div className="mt-3 space-y-3 text-base font-light leading-relaxed text-white/65 md:text-lg">
         {value.paragraphs.map((p, i) => (
           <p key={i}>{p}</p>
         ))}
@@ -198,7 +198,7 @@ export function CareersValues() {
   const { ref: ctaRef, inView: ctaIn } = useInView<HTMLDivElement>();
 
   return (
-    <section className="bg-neutral-100 py-12 md:py-16">
+    <section className="relative bg-ink py-16 text-white md:py-24">
       <div className="mx-auto max-w-5xl px-4 lg:max-w-[1200px]">
         <div
           ref={headRef}
@@ -206,13 +206,17 @@ export function CareersValues() {
             headIn ? "animate-about-fade-up" : "opacity-0"
           }`}
         >
-          <h2 className="font-heading text-[48px] font-bold leading-[1.15] text-brand-black md:text-4xl lg:text-[48px]">
+<p className="mb-6 inline-flex items-center gap-2.5 rounded-full border border-white/10 bg-white/[0.03] px-4 py-1.5 text-[10.5px] font-medium tracking-[0.32em] text-white/70 backdrop-blur">
+            <span aria-hidden className="size-1.5 rounded-full bg-gold shadow-[0_0_10px_2px_rgba(234,179,8,0.6)]" />
+            WHO WE HIRE
+          </p>
+          <h2 className="font-serif text-[36px] leading-[1.08] tracking-[-0.025em] text-white md:text-[44px] lg:text-[54px]">
             We want disciplined team players who trust and{" "}
-            <span className="underline decoration-[3px] underline-offset-[6px] md:decoration-4 md:underline-offset-8">
+            <em className="bg-gradient-to-br from-[#fbe7a1] via-gold to-[#a97a1f] bg-clip-text pr-1 text-transparent italic">
               win together.
-            </span>
+            </em>
           </h2>
-          <p className="mt-6 font-heading text-2xl leading-[1.5] text-brand-black/90 md:text-xl lg:text-2xl">
+          <p className="mt-6 text-base leading-8 font-light text-white/60 md:text-lg">
             At JAZA Media you&apos;ll help entrepreneurs build real businesses
             with strong foundations, scalable systems, and lasting impact. Our
             mission is straightforward: make real world business scaling
@@ -246,7 +250,7 @@ export function CareersValues() {
         >
           <a
             href="/careers/apply"
-            className="inline-block rounded-full bg-brand-yellow px-6 py-3 font-heading text-base font-bold text-brand-black shadow-sm transition-colors hover:bg-yellow-400 md:text-lg"
+            className="inline-flex items-center gap-2 rounded-full bg-gold px-7 py-3 text-[12px] font-semibold tracking-[0.14em] text-ink uppercase transition hover:bg-white"
           >
             View Job Openings
           </a>

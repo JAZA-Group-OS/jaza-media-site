@@ -62,8 +62,8 @@ const TESTIMONIALS: Testimonial[] = [
 ];
 
 const BG_CLASSES: Record<Testimonial["bg"], string> = {
-  yellow: "bg-brand-yellow",
-  gray: "bg-neutral-200",
+  yellow: "border border-gold/40 bg-[linear-gradient(180deg,#221d10_0%,#101011_80%)]",
+  gray: "border border-white/10 bg-[linear-gradient(180deg,#1a1a17_0%,#101011_75%)]",
 };
 
 function TestimonialCard({ t, delay }: { t: Testimonial; delay: number }) {
@@ -73,18 +73,18 @@ function TestimonialCard({ t, delay }: { t: Testimonial; delay: number }) {
     <div
       ref={ref}
       style={{ animationDelay: inView ? `${delay}ms` : undefined }}
-      className={`flex flex-col rounded-[28px] p-6 md:p-7 ${BG_CLASSES[t.bg]} ${
+      className={`flex flex-col rounded-2xl p-6 md:p-8 ${BG_CLASSES[t.bg]} ${
         t.placement ?? ""
       } ${inView ? "animate-about-fade-up" : "opacity-0"}`}
     >
-      <div className="space-y-3 font-heading text-[15px] leading-relaxed text-brand-black/90">
+      <div className="space-y-3 text-[15px] font-light leading-relaxed text-white/65">
         {t.body.map((p, i) => (
           <p key={i}>{p}</p>
         ))}
       </div>
 
       <div className="mt-auto flex items-center gap-3 pt-6">
-        <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-full md:h-14 md:w-14">
+        <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-full ring-1 ring-gold/50 md:h-14 md:w-14">
           <Image
             src={t.photo}
             alt={t.name}
@@ -93,9 +93,9 @@ function TestimonialCard({ t, delay }: { t: Testimonial; delay: number }) {
             sizes="56px"
           />
         </div>
-        <div className="font-heading text-brand-black">
+        <div className="font-heading text-white">
           <div className="text-base font-bold md:text-lg">{t.name}</div>
-          <div className="text-sm leading-snug text-brand-black/80">
+          <div className="text-sm leading-snug text-white/50">
             {t.role}
           </div>
         </div>
@@ -109,15 +109,15 @@ export function CareersTestimonials() {
   const { ref: ctaRef, inView: ctaIn } = useInView<HTMLDivElement>();
 
   return (
-    <section className="bg-neutral-100 py-12 md:py-16">
+    <section className="relative bg-ink py-16 text-white md:py-24">
       <div className="mx-auto max-w-5xl px-4">
         <h2
           ref={headRef}
-          className={`text-center font-heading text-[28px] font-black leading-[1.15] tracking-tight text-brand-black md:text-[40px] lg:text-[48px] ${
+          className={`text-center font-serif text-[28px] font-normal leading-[1.08] tracking-[-0.025em] text-white md:text-[40px] lg:text-[48px] ${
             headIn ? "animate-about-fade-up" : "opacity-0"
           }`}
         >
-          Why I Love Working at JAZA Media:
+          Why our people <em className="bg-gradient-to-br from-[#fbe7a1] via-gold to-[#a97a1f] bg-clip-text pr-1 text-transparent italic">love</em> working here
         </h2>
 
         <div className="mt-10 grid gap-5 md:grid-cols-[2fr_3fr] md:gap-6">
@@ -134,7 +134,7 @@ export function CareersTestimonials() {
         >
           <a
             href="/careers/apply"
-            className="inline-block rounded-full bg-brand-yellow px-6 py-3 font-heading text-base font-bold text-brand-black shadow-sm transition-colors hover:bg-yellow-400 md:text-lg"
+            className="inline-flex items-center gap-2 rounded-full bg-gold px-7 py-3 text-[12px] font-semibold tracking-[0.14em] text-ink uppercase transition hover:bg-white"
           >
             View Job Openings
           </a>

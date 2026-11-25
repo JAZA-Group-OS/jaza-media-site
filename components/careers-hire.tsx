@@ -28,14 +28,14 @@ function Card({ card, delay }: { card: HireCard; delay: number }) {
     <div
       ref={ref}
       style={{ animationDelay: inView ? `${delay}ms` : undefined }}
-      className={`flex flex-col items-center rounded-[28px] bg-brand-yellow px-6 py-8 text-center shadow-[0_8px_24px_-8px_rgba(0,0,0,0.25)] md:px-7 md:py-10 ${
+      className={`flex flex-col items-center rounded-2xl border border-gold/30 bg-[linear-gradient(180deg,#1a1a17_0%,#101011_75%)] px-6 py-8 text-center shadow-[0_30px_60px_-30px_rgba(0,0,0,0.9)] md:px-7 md:py-10 ${
         inView ? "animate-about-fade-up" : "opacity-0"
       }`}
     >
-      <h3 className="font-heading text-lg font-bold text-brand-black md:text-xl">
+      <h3 className="font-serif text-[24px] text-white md:text-xl">
         {card.title}
       </h3>
-      <p className="mt-5 font-heading text-base leading-relaxed text-brand-black/90 md:text-lg">
+      <p className="mt-5 text-base font-light leading-relaxed text-white/65 md:text-lg">
         {card.body}
       </p>
     </div>
@@ -48,21 +48,21 @@ export function CareersHire() {
   const { ref: outroRef, inView: outroIn } = useInView<HTMLParagraphElement>();
 
   return (
-    <section className="bg-neutral-100 py-12 md:py-16">
+    <section className="relative bg-ink py-16 text-white md:py-24">
       <div className="mx-auto max-w-5xl px-4">
         <h2
           ref={headRef}
-          className={`text-center font-heading text-[30px] font-black leading-[1.1] tracking-tight text-brand-black md:text-[42px] lg:text-[54px] xl:text-[64px] ${
+          className={`text-center font-serif text-[30px] font-normal leading-[1.08] tracking-[-0.025em] text-white md:text-[42px] lg:text-[54px] xl:text-[64px] ${
             headIn ? "animate-about-fade-up" : "opacity-0"
           }`}
         >
-          How We <span className="text-brand-yellow">Hire</span>
+          How we <em className="bg-gradient-to-br from-[#fbe7a1] via-gold to-[#a97a1f] bg-clip-text pr-1 text-transparent italic">hire</em>
         </h2>
 
         <div
           ref={introRef}
           style={{ animationDelay: introIn ? "100ms" : undefined }}
-          className={`mx-auto mt-8 max-w-3xl text-center font-heading text-base leading-relaxed text-brand-black/90 md:text-lg ${
+          className={`mx-auto mt-8 max-w-3xl text-center text-base font-light leading-relaxed text-white/65 md:text-lg ${
             introIn ? "animate-about-fade-up" : "opacity-0"
           }`}
         >
@@ -86,7 +86,7 @@ export function CareersHire() {
 
         <p
           ref={outroRef}
-          className={`mx-auto mt-10 max-w-3xl text-center font-heading text-base leading-relaxed text-brand-black/90 md:text-lg ${
+          className={`mx-auto mt-10 max-w-3xl text-center text-base font-light leading-relaxed text-white/65 md:text-lg ${
             outroIn ? "animate-about-fade-up" : "opacity-0"
           }`}
         >

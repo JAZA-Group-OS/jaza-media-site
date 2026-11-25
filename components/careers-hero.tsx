@@ -6,7 +6,7 @@ import { useInView } from "@/lib/use-in-view";
 
 function HeroImage() {
   return (
-    <div className="relative aspect-[2346/2106] w-full max-w-[680px] overflow-hidden rounded-md lg:ml-auto">
+    <div className="relative aspect-[2346/2106] w-full max-w-[680px] overflow-hidden rounded-2xl ring-1 ring-gold/30 shadow-[0_40px_80px_-30px_rgba(0,0,0,0.9)] lg:ml-auto">
       <Image
         src="/images/careers%201.png"
         alt="JAZA Media team at work"
@@ -26,24 +26,30 @@ export function CareersHero() {
   const { ref: imageRef, inView: imageIn } = useInView<HTMLDivElement>();
 
   return (
-    <section className="bg-white pt-4 pb-16 md:pt-0 md:pb-20">
-      <div className="mx-auto max-w-5xl px-4 lg:max-w-7xl">
+    <section className="relative overflow-hidden bg-[#0b0d0c] pt-10 pb-20 text-white md:pt-14 md:pb-24">
+<div aria-hidden className="pointer-events-none absolute -top-40 left-1/2 size-[820px] -translate-x-1/2 rounded-full bg-gold/10 blur-[160px]" />
+      <div aria-hidden className="pointer-events-none absolute inset-0 opacity-[0.05] [background-image:radial-gradient(white_1px,transparent_1px)] [background-size:4px_4px]" />
+      <div className="relative mx-auto max-w-5xl px-4 lg:max-w-7xl">
         <div className="grid gap-8 lg:grid-cols-[1fr_680px] lg:items-center lg:gap-12">
           <div>
-            <h1
+            <p className="mb-6 inline-flex items-center gap-2.5 rounded-full border border-white/10 bg-white/[0.03] px-4 py-1.5 text-[10.5px] font-medium tracking-[0.32em] text-white/70 backdrop-blur">
+            <span aria-hidden className="size-1.5 rounded-full bg-gold shadow-[0_0_10px_2px_rgba(234,179,8,0.6)]" />
+            CAREERS
+          </p>
+          <h1
               ref={headlineRef}
-              className={`font-heading font-bold leading-[1.05] tracking-tight text-brand-black ${
+              className={`font-serif font-normal leading-[1.02] tracking-[-0.03em] ${
                 headlineIn ? "animate-about-fade-up" : "opacity-0"
               }`}
             >
               <span className="block text-[36px] sm:text-[44px] md:whitespace-nowrap md:text-[34px] lg:text-[40px] xl:text-[54px]">
-                Join a{" "}
-                <span className="text-brand-yellow underline decoration-brand-yellow decoration-2 underline-offset-4">
+                <span className="bg-gradient-to-b from-white via-white to-white/60 bg-clip-text text-transparent">Join a</span>{" "}
+                <em className="bg-gradient-to-br from-[#fbe7a1] via-gold to-[#a97a1f] bg-clip-text pr-1 text-transparent italic">
                   world-record
-                </span>
+                </em>
               </span>
               <span className="block text-[44px] sm:text-[54px] md:whitespace-nowrap md:text-[44px] lg:text-[52px] xl:text-[68px]">
-                breaking team!
+                <span className="bg-gradient-to-b from-white via-white to-white/60 bg-clip-text text-transparent">breaking team!</span>
               </span>
             </h1>
 
@@ -52,14 +58,14 @@ export function CareersHero() {
               style={{ animationDelay: copyIn ? "120ms" : undefined }}
               className={copyIn ? "animate-about-fade-up" : "opacity-0"}
             >
-              <p className="mt-6 max-w-xl font-heading text-base leading-relaxed text-brand-black/90 sm:text-lg md:text-base lg:text-lg">
+              <p className="mt-6 max-w-xl text-base font-light leading-relaxed text-white/65 sm:text-lg md:text-base lg:text-lg">
                 We&apos;re seeking teammates who lead with trust, work with
                 discipline, and play to win as a team.
               </p>
 
               <a
                 href="/careers/apply"
-                className="mt-6 inline-block rounded-full bg-brand-yellow px-8 py-3 font-heading text-base font-bold text-brand-black shadow-sm transition-colors hover:bg-yellow-400 md:px-6 lg:text-lg"
+                className="mt-6 inline-flex items-center gap-2 rounded-full bg-gold px-7 py-3 text-[12px] font-semibold tracking-[0.14em] text-ink uppercase transition hover:bg-white"
               >
                 View Job Openings
               </a>

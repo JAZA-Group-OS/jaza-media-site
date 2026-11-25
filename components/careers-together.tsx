@@ -82,10 +82,10 @@ function PillarCard({ pillar, delay }: { pillar: Pillar; delay: number }) {
         inView ? "animate-about-fade-up" : "opacity-0"
       }`}
     >
-      <h3 className="text-center font-heading text-xl font-bold text-brand-black md:text-2xl">
+      <h3 className="text-center font-serif text-[28px] text-white">
         {pillar.title}
       </h3>
-      <div className="relative mt-4 aspect-[4/3] w-full overflow-hidden rounded-md">
+      <div className="relative mt-4 aspect-[4/3] w-full overflow-hidden rounded-2xl ring-1 ring-gold/25">
         <Image
           src={pillar.src}
           alt={pillar.alt}
@@ -94,7 +94,7 @@ function PillarCard({ pillar, delay }: { pillar: Pillar; delay: number }) {
           sizes="(min-width: 1024px) 320px, (min-width: 768px) 33vw, 100vw"
         />
       </div>
-      <div className="mt-5 space-y-4 font-heading text-base leading-relaxed text-brand-black/90 md:text-[17px]">
+      <div className="mt-5 space-y-4 text-base font-light leading-relaxed text-white/65 md:text-[17px]">
         {pillar.body}
       </div>
     </div>
@@ -105,7 +105,7 @@ export function CareersTogether() {
   const { ref: headRef, inView: headIn } = useInView<HTMLDivElement>();
 
   return (
-    <section id="openings" className="bg-white py-12 md:py-16">
+    <section id="openings" className="relative bg-[#0b0d0c] py-16 text-white md:py-24">
       <div className="mx-auto max-w-5xl px-4">
         <div
           ref={headRef}
@@ -113,9 +113,9 @@ export function CareersTogether() {
             headIn ? "animate-about-fade-up" : "opacity-0"
           }`}
         >
-          <h2 className="font-heading text-[30px] font-black leading-[1.1] tracking-tight text-brand-black md:text-[42px] lg:text-[54px] xl:text-[64px]">
+          <h2 className="font-serif text-[30px] font-normal leading-[1.08] tracking-[-0.025em] text-white md:text-[42px] lg:text-[54px] xl:text-[64px]">
             How we work{" "}
-            <span className="text-brand-yellow">TOGETHER!</span>
+            <em className="bg-gradient-to-br from-[#fbe7a1] via-gold to-[#a97a1f] bg-clip-text pr-1 text-transparent italic">together.</em>
           </h2>
         </div>
 
