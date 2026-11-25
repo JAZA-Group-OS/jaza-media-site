@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Script from 'next/script';
+import { CalendarCheck, Check, Clock, Video } from 'lucide-react';
 import { readPrefill, clearPrefill } from '@/lib/partner/booking-prefill';
 import {
   buildCalendlyUrl,
@@ -109,40 +110,84 @@ export function StepTwoBooking() {
   }, [router]);
 
   return (
-    <div className="mx-auto w-full max-w-5xl px-4 py-12 md:py-16">
-      <div className="flex flex-col items-center text-center">
-        <span className="inline-block rounded-md bg-brand-yellow px-5 py-1.5 font-heading text-sm font-black tracking-wider text-brand-black uppercase">
-          Step 2
-        </span>
-        <h1
-          ref={titleRef}
-          tabIndex={-1}
-          className="mt-6 font-heading text-3xl leading-tight font-black tracking-tight text-brand-black outline-none md:text-5xl"
-        >
-          NEXT, PLEASE BOOK YOUR CALL USING THE CALENDAR BELOW.
-        </h1>
-        <p className="mt-3 text-base text-neutral-700 md:text-lg">
-          Pick a time that works for you. We&apos;ll send a calendar invite
-          and Google Meet link.
+    <section className="relative overflow-hidden bg-[#0b0d0c] text-white">
+      <div aria-hidden className="pointer-events-none absolute -top-48 left-1/2 size-[900px] -translate-x-1/2 rounded-full bg-gold/12 blur-[170px]" />
+      <div aria-hidden className="pointer-events-none absolute inset-0 opacity-[0.05] [background-image:radial-gradient(white_1px,transparent_1px)] [background-size:4px_4px]" />
+
+      <div className="relative mx-auto w-full max-w-5xl px-4 py-14 md:py-20">
+        <div className="flex flex-col items-center text-center">
+          {/* step tracker */}
+          <ol aria-label="Application progress" className="flex items-center gap-3 text-[10.5px] font-medium tracking-[0.28em] uppercase">
+            <li className="flex items-center gap-2 text-white/45">
+              <span className="grid size-6 place-items-center rounded-full border border-gold/50 text-gold">
+                <Check className="size-3.5" strokeWidth={2.5} />
+              </span>
+              Application
+            </li>
+            <li aria-hidden className="h-px w-10 bg-gradient-to-r from-gold/60 to-gold/20" />
+            <li aria-current="step" className="flex items-center gap-2 text-white">
+              <span className="grid size-6 place-items-center rounded-full bg-gold text-[11px] font-semibold tracking-normal text-ink shadow-[0_0_14px_2px_rgba(234,179,8,0.45)]">2</span>
+              Book your call
+            </li>
+          </ol>
+
+          <h1
+            ref={titleRef}
+            tabIndex={-1}
+            className="mt-8 max-w-3xl font-serif text-[40px] leading-[1.04] tracking-[-0.03em] outline-none md:text-[60px]"
+          >
+            <span className="bg-gradient-to-b from-white via-white to-white/60 bg-clip-text text-transparent">Schedule your</span>{' '}
+            <em className="bg-gradient-to-br from-[#fbe7a1] via-gold to-[#a97a1f] bg-clip-text pr-1 text-transparent italic">discovery call</em>
+          </h1>
+          <p className="mt-5 max-w-xl text-[16px] leading-[1.75] font-light text-white/65 md:text-[17px]">
+            Thank you for your application. Please choose a date and time below — you&apos;ll receive a calendar invitation with a
+            Google Meet link once your call is confirmed.
+          </p>
+
+          <ul className="mt-7 flex flex-wrap justify-center gap-2.5">
+            {[
+              { icon: Clock, text: '30-minute session' },
+              { icon: Video, text: 'Google Meet' },
+              { icon: CalendarCheck, text: 'Complimentary strategy review' },
+            ].map(({ icon: Icon, text }) => (
+              <li key={text} className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-4 py-2 text-[13px] text-white/75">
+                <Icon className="size-4 text-gold" strokeWidth={1.75} />
+                {text}
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        {/* calendar in a gold-edged frame */}
+        <div className="mx-auto mt-12 max-w-[920px] rounded-[28px] bg-gradient-to-b from-gold/50 via-white/10 to-white/[0.03] p-px shadow-[0_60px_120px_-40px_rgba(0,0,0,0.95)]">
+          <div className="overflow-hidden rounded-[27px] bg-white">
+            <div
+              ref={containerRef}
+              className="overflow-hidden"
+              // Vanilla Calendly widget doesn't auto-resize its iframe via
+              // postMessage the way react-calendly's wrapper does. 1150px gives
+              // a buffer over the tallest step (the details form on a desktop
+              // viewport with custom questions) without clipping. overflow:hidden
+              // contains any unexpected internal layout drift.
+              style={{ minWidth: '280px', height: '1150px' }}
+            />
+          </div>
+        </div>
+
+        <p className="mt-8 text-center text-[13px] text-white/45">
+          Can&apos;t find a suitable time? Email us at{' '}
+          <a href="mailto:admin@jazamedia.com" className="text-gold hover:text-[#fde68a]">
+            admin@jazamedia.com
+          </a>{' '}
+          and we&apos;ll arrange one with you.
         </p>
       </div>
-
-      <div
-        ref={containerRef}
-        className="mt-10 overflow-hidden"
-        // Vanilla Calendly widget doesn't auto-resize its iframe via
-        // postMessage the way react-calendly's wrapper does. 1150px gives
-        // a buffer over the tallest step (the details form on a desktop
-        // viewport with custom questions) without clipping. overflow:hidden
-        // contains any unexpected internal layout drift.
-        style={{ minWidth: '280px', height: '1150px' }}
-      />
 
       <Script
         src="https://assets.calendly.com/assets/external/widget.js"
         strategy="afterInteractive"
         onLoad={() => setScriptLoaded(true)}
       />
-    </div>
+    </section>
   );
 }
