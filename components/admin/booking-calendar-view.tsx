@@ -1,7 +1,10 @@
 'use client';
 
-import { ChevronLeft, ChevronRight, Video } from 'lucide-react';
-import { useMemo, useState } from 'react';
+import { ChevronLeft, ChevronRight, Inbox, Video } from 'lucide-react';
+import { useEffect, useMemo, useState } from 'react';
+import { supabase } from '@/lib/supabase/client';
+
+type Inquiry = { id: string; full_name: string; email: string; outcome: string | null; created_at: string };
 
 export type CalendarBooking = {
   id: string;
@@ -10,6 +13,7 @@ export type CalendarBooking = {
   full_name: string;
   company: string | null;
   meet_url: string | null;
+  email?: string;
 };
 
 const WEEK = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
@@ -31,6 +35,32 @@ export default function BookingCalendarView({ bookings, tz }: { bookings: Calend
     return { y, m: m - 1 };
   });
   const [selected, setSelected] = useState(today);
+  const [inquiries, setInquiries] = useState<Inquiry[]>([]);
+
+  // Every Partner With Us inquiry is placed on the day it was submitted.
+  useEffect(() => {
+    let alive = true;
+    void (supabase.from('partner_inquiries') as unknown as {
+      select: (c: string) => { order: (c: string, o: { ascending: boolean }) => { limit: (n: number) => Promise<{ data: Inquiry[] | null }> } };
+    })
+      .select('id, full_name, email, outcome, created_at')
+      .order('created_at', { ascending: false })
+      .limit(1000)
+      .then(({ data }) => alive && setInquiries(data ?? []));
+    return () => {
+      alive = false;
+    };
+  }, []);
+
+  const leadsByDay = useMemo(() => {
+    const map = new Map<string, Inquiry[]>();
+    for (const q of inquiries) {
+      const k = dayKey(q.created_at, tz);
+      map.set(k, [...(map.get(k) ?? []), q]);
+    }
+    return map;
+  }, [inquiries, tz]);
+  const bookedEmails = useMemo(() => new Set(bookings.filter((b) => b.status === 'confirmed').map((b) => b.email?.toLowerCase())), [bookings]);
 
   const byDay = useMemo(() => {
     const map = new Map<string, CalendarBooking[]>();
@@ -69,6 +99,7 @@ export default function BookingCalendarView({ bookings, tz }: { bookings: Calend
           {cells.map((k, i) => {
             if (!k) return <div key={`e${i}`} />;
             const calls = byDay.get(k) ?? [];
+            const leads = leadsByDay.get(k) ?? [];
             const isToday = k === today;
             const isSel = k === selected;
             return (
@@ -77,10 +108,13 @@ export default function BookingCalendarView({ bookings, tz }: { bookings: Calend
                 type="button"
                 onClick={() => setSelected(k)}
                 className={`relative flex min-h-[64px] flex-col items-start rounded-lg border p-1.5 text-left transition ${
-                  isSel ? 'border-[#FFB829] bg-[#FFB829]/10' : calls.length ? 'border-[#FFB829]/30 bg-[#FFB829]/[0.04] hover:border-[#FFB829]/60' : 'border-[#1a1a1a] hover:border-[#333]'
+                  isSel ? 'border-[#FFB829] bg-[#FFB829]/10' : calls.length || leads.length ? 'border-[#FFB829]/30 bg-[#FFB829]/[0.04] hover:border-[#FFB829]/60' : 'border-[#1a1a1a] hover:border-[#333]'
                 }`}
               >
                 <span className={`grid size-6 place-items-center rounded-full text-xs ${isToday ? 'bg-[#FFB829] font-semibold text-black' : 'text-gray-300'}`}>{Number(k.slice(8))}</span>
+                {leads.length > 0 && (
+                  <span className="absolute top-1.5 right-1.5 rounded-full bg-sky-500/20 px-1.5 text-[10px] text-sky-300" title="Inquiries submitted">{leads.length}</span>
+                )}
                 {calls.length > 0 && (
                   <span className="mt-auto w-full truncate text-[10.5px] text-[#FFB829]">
                     {calls.length === 1 ? timeLabel(calls[0].start_at, tz) : `${calls.length} calls`}
@@ -92,6 +126,10 @@ export default function BookingCalendarView({ bookings, tz }: { bookings: Calend
         </div>
       </div>
 
+      <p className="-mt-3 flex flex-wrap gap-4 text-[11px] text-gray-500 lg:col-start-1">
+        <span className="flex items-center gap-1.5"><span className="size-2 rounded-full bg-[#FFB829]" />Booked call (time)</span>
+        <span className="flex items-center gap-1.5"><span className="size-2 rounded-full bg-sky-400" />Inquiries submitted (count)</span>
+      </p>
       <div className="rounded-lg border border-[#1a1a1a] p-4">
         <p className="text-sm font-semibold">
           {new Date(`${selected}T00:00:00Z`).toLocaleDateString('en-PH', { timeZone: 'UTC', weekday: 'long', month: 'long', day: 'numeric' })}
@@ -112,6 +150,22 @@ export default function BookingCalendarView({ bookings, tz }: { bookings: Calend
               </li>
             ))}
           </ul>
+        )}
+        {(leadsByDay.get(selected) ?? []).length > 0 && (
+          <>
+            <p className="mt-5 flex items-center gap-1.5 text-xs font-semibold tracking-wide text-sky-300 uppercase"><Inbox className="size-3.5" /> Inquiries submitted</p>
+            <ul className="mt-2 space-y-2">
+              {(leadsByDay.get(selected) ?? []).map((q) => (
+                <li key={q.id} className="rounded-lg border border-[#1a1a1a] bg-black px-3 py-2">
+                  <p className="text-sm text-white">{q.full_name}</p>
+                  <p className="text-xs text-gray-500">
+                    {timeLabel(q.created_at, tz)} · {q.outcome === 'not_qualified' ? 'Not qualified' : 'Qualified'}
+                    {bookedEmails.has(q.email.toLowerCase()) ? ' · call booked' : ' · no call booked yet'}
+                  </p>
+                </li>
+              ))}
+            </ul>
+          </>
         )}
         {dayCalls.length > 1 && <p className="mt-3 text-xs text-amber-300">{dayCalls.length} online meetings on this day.</p>}
       </div>
