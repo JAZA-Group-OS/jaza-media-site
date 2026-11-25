@@ -52,7 +52,7 @@ const CARD = "rounded-[20px] border border-gold/25 bg-[linear-gradient(180deg,#1
 
 function Hero() {
   return (
-    <section id="top" className="relative scroll-mt-28 overflow-hidden bg-[#0b0d0c] pt-12 pb-16 text-white md:pt-20 md:pb-20">
+    <section id="top" className="snap-start md:flex md:min-h-[calc(100svh-120px)] md:flex-col md:justify-center relative scroll-mt-28 overflow-hidden bg-[#0b0d0c] pt-12 pb-16 text-white md:pt-20 md:pb-20">
       <div aria-hidden className="pointer-events-none absolute -top-40 right-0 size-[760px] rounded-full bg-gold/12 blur-[160px]" />
       <div aria-hidden className="pointer-events-none absolute inset-0 opacity-[0.05] [background-image:radial-gradient(white_1px,transparent_1px)] [background-size:4px_4px]" />
       <div className="relative mx-auto grid max-w-[1200px] items-center gap-14 px-4 md:px-8 lg:grid-cols-2">
@@ -152,7 +152,7 @@ function PhotoStrip() {
   const dim = useTransform(p, [0, 0.25, 0.75, 1], [0.5, 1, 1, 0.35]);
   const rows = [WALL, [...WALL].reverse(), [...WALL.slice(3), ...WALL.slice(0, 3)]];
   return (
-    <div ref={ref} aria-hidden className="relative h-[460px] overflow-hidden bg-[#0b0d0c] [perspective:1600px] md:h-[680px]">
+    <div id="wall" ref={ref} aria-hidden className="snap-start relative h-[460px] overflow-hidden bg-[#0b0d0c] [perspective:1600px] md:h-[calc(100svh-120px)]">
       <motion.div
         style={{ opacity: dim }}
         className="absolute top-1/2 left-1/2 flex w-[180%] -translate-x-1/2 -translate-y-1/2 flex-col gap-5 [transform-style:preserve-3d] md:gap-6"
@@ -233,7 +233,7 @@ function Values() {
     return () => clearTimeout(t);
   }, [active, paused]);
   return (
-    <section id="culture" className="scroll-mt-28 border-t border-white/5 bg-[#0e0e0f] py-20 text-white md:py-28">
+    <section id="culture" className="snap-start md:flex md:min-h-[calc(100svh-120px)] md:flex-col md:justify-center scroll-mt-28 border-t border-white/5 bg-[#0e0e0f] py-20 text-white md:py-28">
       <div className="mx-auto max-w-[1200px] px-4 md:px-8">
         <Reveal className="mx-auto mb-14 flex max-w-[820px] flex-col items-center gap-5 text-center md:mb-16">
           <Eyebrow>Who we hire</Eyebrow>
@@ -322,7 +322,7 @@ function TogetherCard({ t, i }: { t: (typeof TOGETHER)[number]; i: number }) {
 
 function Together() {
   return (
-    <section id="life" className="relative scroll-mt-28 overflow-hidden bg-[#0b0d0c] py-20 text-white md:py-28">
+    <section id="life" className="snap-start md:flex md:min-h-[calc(100svh-120px)] md:flex-col md:justify-center relative scroll-mt-28 overflow-hidden bg-[#0b0d0c] py-20 text-white md:py-28">
       <div aria-hidden className="pointer-events-none absolute top-1/3 left-1/2 size-[800px] -translate-x-1/2 rounded-full bg-gold/[0.07] blur-[160px]" />
       <div className="relative mx-auto max-w-[1200px] px-4 md:px-8">
         <Reveal className="mx-auto mb-14 flex max-w-[720px] flex-col items-center gap-5 text-center">
@@ -361,7 +361,7 @@ function Hire() {
   const inView = useInView(ref, { once: true, margin: "-120px" });
   const reduce = useReducedMotion();
   return (
-    <section id="openings" className="relative scroll-mt-28 overflow-hidden bg-[#0e0e0f] py-20 text-white md:py-28">
+    <section id="openings" className="snap-start md:flex md:min-h-[calc(100svh-120px)] md:flex-col md:justify-center relative scroll-mt-28 overflow-hidden bg-[#0e0e0f] py-20 text-white md:py-28">
       <div aria-hidden className="pointer-events-none absolute top-1/2 left-1/2 size-[900px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-gold/[0.07] blur-[160px]" />
       <div aria-hidden className="pointer-events-none absolute inset-0 opacity-[0.04] [background-image:radial-gradient(white_1px,transparent_1px)] [background-size:4px_4px]" />
       <div className="relative mx-auto max-w-[1200px] px-4 text-center md:px-8">
@@ -454,7 +454,7 @@ const PERKS = [
 
 function Investing() {
   return (
-    <section id="perks" className="scroll-mt-28 bg-[#0b0d0c] py-20 text-white md:py-28">
+    <section id="perks" className="snap-start md:flex md:min-h-[calc(100svh-120px)] md:flex-col md:justify-center scroll-mt-28 bg-[#0b0d0c] py-20 text-white md:py-28">
       <div className="mx-auto max-w-[1200px] px-4 md:px-8">
         <Reveal>
           <h2 className={`${H2} mb-14 text-center`}>
@@ -534,7 +534,7 @@ function StoryCard({ name }: { name: string }) {
 function Testimonials() {
   const sam = TESTIMONIALS.find((x) => x.name === "Samantha M.")!;
   return (
-    <section id="stories" className="scroll-mt-28 bg-[#0e0e0f] py-20 text-white md:py-28">
+    <section id="stories" className="snap-start md:flex md:min-h-[calc(100svh-120px)] md:flex-col md:justify-center scroll-mt-28 bg-[#0e0e0f] py-20 text-white md:py-28">
       <div className="mx-auto max-w-[1200px] px-4 md:px-8">
         <Reveal>
           <h2 className={`${H2} mb-12 text-center`}>
@@ -577,7 +577,7 @@ function Testimonials() {
 
 function Closing() {
   return (
-    <section className="relative overflow-hidden bg-[#0b0d0c] py-24 text-center text-white md:py-32">
+    <section id="join" className="snap-start relative overflow-hidden bg-[#0b0d0c] py-14 text-center text-white md:py-16">
       <div aria-hidden className="pointer-events-none absolute -bottom-60 left-1/2 size-[820px] -translate-x-1/2 rounded-full bg-gold/15 blur-[160px]" />
       <Reveal className="relative mx-auto flex max-w-3xl flex-col items-center gap-6 px-4">
         <h2 className="font-serif text-[44px] leading-[1.02] tracking-[-0.03em] md:text-[68px]">
@@ -596,11 +596,13 @@ function Closing() {
 
 const DOTS = [
   { id: "top", label: "Join us" },
+  { id: "wall", label: "Our team" },
   { id: "culture", label: "Who we hire" },
   { id: "life", label: "Life at JAZA" },
   { id: "openings", label: "How we hire" },
   { id: "perks", label: "Benefits" },
   { id: "stories", label: "Stories" },
+  { id: "join", label: "Apply" },
 ];
 
 function ScrollDots() {
