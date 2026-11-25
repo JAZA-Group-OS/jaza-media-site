@@ -208,7 +208,7 @@ export default function CourseRequestsManager({
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: Math.min(index * 0.03, 0.3) }}
-                className="rounded-lg bg-gradient-to-br from-adm-surface to-black border border-adm-line hover:border-adm-accent/30 transition-colors"
+                className="rounded-lg bg-adm-surface border border-adm-line hover:border-adm-accent/30 transition-colors"
               >
                 <button
                   onClick={() => setExpandedId(isExpanded ? null : req.id)}
@@ -395,7 +395,7 @@ export default function CourseRequestsManager({
                         Rendered as a single labeled block since the address
                         reads as one mailing destination, not five separate
                         fields. */}
-                    <div className="rounded-md border border-adm-line bg-black/40 p-3">
+                    <div className="rounded-md border border-adm-line bg-adm-raised p-3">
                       <p className="flex items-center gap-1.5 text-xs text-adm-subtle mb-1.5">
                         <MapPin className="w-3.5 h-3.5" />
                         Shipping address

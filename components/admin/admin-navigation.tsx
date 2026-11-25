@@ -87,17 +87,12 @@ export default function AdminNavigation({
   }, [mobileOpen, onMobileOpenChange]);
 
   const content = (mini: boolean) => (
-    <div className="flex h-full flex-col">
+    <div className="flex h-full flex-col text-white">
       {/* brand + collapse */}
-      <div className={`flex h-16 shrink-0 items-center border-b border-adm-line ${mini ? 'justify-center px-2' : 'justify-between px-5'}`}>
-        <Link href="/admin/dashboard" className="flex items-center gap-2.5" onClick={() => onMobileOpenChange(false)}>
-          <span className="grid size-8 place-items-center rounded-lg bg-adm-accent font-serif text-[17px] font-semibold text-[#141414]">J</span>
-          {!mini && (
-            <span className="leading-none">
-              <span className="block font-serif text-[18px] tracking-[0.18em] text-adm-text">JAZA</span>
-              <span className="mt-0.5 block text-[9px] font-semibold tracking-[0.32em] text-adm-accent-ink">ADMIN</span>
-            </span>
-          )}
+      <div className={`flex h-[72px] shrink-0 items-center ${mini ? 'justify-center px-2' : 'justify-between pr-3 pl-6'}`}>
+        <Link href="/admin/dashboard" className="leading-none" onClick={() => onMobileOpenChange(false)} aria-label="JAZA Admin home">
+          <span className={`block font-semibold tracking-[0.22em] text-white ${mini ? 'text-[13px]' : 'text-[17px]'}`}>JAZA</span>
+          <span className={`mt-1 block font-semibold tracking-[0.36em] text-adm-accent ${mini ? 'text-[7px]' : 'text-[8.5px]'}`}>ADMIN</span>
         </Link>
         {!mini && (
           <button
@@ -105,7 +100,7 @@ export default function AdminNavigation({
             onClick={onToggleCollapsed}
             aria-label="Collapse sidebar"
             title="Collapse sidebar (Ctrl+B)"
-            className="hidden size-8 place-items-center rounded-md text-adm-subtle transition hover:bg-adm-hover hover:text-adm-text lg:grid"
+            className="hidden size-8 place-items-center rounded-lg text-adm-rail-text transition hover:bg-white/10 hover:text-white lg:grid"
           >
             <PanelLeftClose className="size-[18px]" />
           </button>
@@ -113,15 +108,11 @@ export default function AdminNavigation({
       </div>
 
       {/* nav */}
-      <nav aria-label="Admin" className={`flex-1 px-3 py-4 ${mini ? 'overflow-visible' : 'overflow-y-auto'}`}>
+      <nav aria-label="Admin" className={`flex-1 py-3 ${mini ? 'overflow-visible px-2' : 'overflow-y-auto px-4'}`}>
         {NAV_GROUPS.map((g) => (
-          <div key={g.title} className="mb-5 last:mb-0">
-            {mini ? (
-              <div aria-hidden className="mx-auto mb-2 h-px w-6 bg-adm-line" />
-            ) : (
-              <p className="mb-1.5 px-3 text-[10.5px] font-semibold tracking-[0.14em] text-adm-faint uppercase">{g.title}</p>
-            )}
-            <ul className="space-y-0.5">
+          <div key={g.title} className={mini ? 'mb-2' : 'mb-5 last:mb-0'}>
+            {!mini && <p className="mb-2 px-3 text-[10px] font-semibold tracking-[0.16em] text-white/40 uppercase">{g.title}</p>}
+            <ul className={mini ? 'space-y-2' : 'space-y-1'}>
               {g.items.map(({ id, label, icon: Icon }) => {
                 const active = activeTab === id;
                 return (
@@ -133,16 +124,20 @@ export default function AdminNavigation({
                         onMobileOpenChange(false);
                       }}
                       aria-current={active ? 'page' : undefined}
-                      title={mini ? label : undefined}
-                      className={`group relative flex w-full items-center rounded-lg text-[13.5px] font-medium transition-colors ${
-                        mini ? 'h-10 justify-center' : 'h-9 gap-3 px-3'
-                      } ${active ? 'bg-adm-accent-soft text-adm-text' : 'text-adm-muted hover:bg-adm-hover hover:text-adm-text'}`}
+                      className={
+                        mini
+                          ? `group relative flex w-full flex-col items-center gap-1 rounded-2xl py-2 transition-colors ${active ? 'bg-adm-accent text-[#141414]' : 'text-adm-rail-text hover:bg-white/[0.07] hover:text-white'}`
+                          : `flex h-11 w-full items-center gap-3 rounded-xl px-3 text-[13.5px] font-medium transition-colors ${active ? 'bg-adm-accent text-[#141414]' : 'text-adm-rail-text hover:bg-white/[0.07] hover:text-white'}`
+                      }
                     >
-                      {active && <span aria-hidden className="absolute top-2 bottom-2 left-0 w-[3px] rounded-r-full bg-adm-accent" />}
-                      <Icon className={`size-[18px] shrink-0 ${active ? 'text-adm-accent-ink' : ''}`} strokeWidth={1.8} />
-                      {!mini && <span className="truncate">{label}</span>}
+                      <Icon className="size-[19px] shrink-0" strokeWidth={1.8} />
+                      {mini ? (
+                        <span className="max-w-full truncate px-1 text-[9.5px] leading-tight font-medium">{label.split(' ')[0]}</span>
+                      ) : (
+                        <span className="truncate">{label}</span>
+                      )}
                       {mini && (
-                        <span className="pointer-events-none absolute left-full z-50 ml-3 hidden rounded-md border border-adm-line bg-adm-surface px-2.5 py-1.5 text-xs whitespace-nowrap text-adm-text shadow-lg group-hover:block">
+                        <span className="pointer-events-none absolute left-full z-50 ml-3 hidden rounded-lg bg-[#141414] px-2.5 py-1.5 text-xs whitespace-nowrap text-white shadow-lg ring-1 ring-white/10 group-hover:block">
                           {label}
                         </span>
                       )}
@@ -156,14 +151,14 @@ export default function AdminNavigation({
       </nav>
 
       {/* footer */}
-      <div className={`shrink-0 space-y-0.5 border-t border-adm-line p-3 ${mini ? 'flex flex-col items-center' : ''}`}>
+      <div className={`shrink-0 space-y-1 border-t border-white/[0.08] p-3 ${mini ? 'flex flex-col items-center' : ''}`}>
         {mini && (
           <button
             type="button"
             onClick={onToggleCollapsed}
             aria-label="Expand sidebar"
             title="Expand sidebar (Ctrl+B)"
-            className="hidden size-10 place-items-center rounded-lg text-adm-muted transition hover:bg-adm-hover hover:text-adm-text lg:grid"
+            className="hidden size-10 place-items-center rounded-xl text-adm-rail-text transition hover:bg-white/10 hover:text-white lg:grid"
           >
             <PanelLeftOpen className="size-[18px]" />
           </button>
@@ -188,8 +183,8 @@ export default function AdminNavigation({
     <>
       {/* Desktop sidebar */}
       <aside
-        className={`sticky top-0 hidden h-screen shrink-0 border-r border-adm-line bg-adm-surface transition-[width] duration-300 ease-out lg:block ${
-          collapsed ? 'w-[72px]' : 'w-64'
+        className={`sticky top-0 hidden h-screen shrink-0 bg-adm-rail transition-[width] duration-300 ease-out lg:block ${
+          collapsed ? 'w-[92px]' : 'w-60'
         }`}
       >
         {content(collapsed)}
@@ -212,13 +207,13 @@ export default function AdminNavigation({
               animate={{ x: 0 }}
               exit={{ x: '-100%' }}
               transition={{ type: 'spring', stiffness: 320, damping: 32 }}
-              className="fixed inset-y-0 left-0 z-50 w-72 max-w-[85vw] border-r border-adm-line bg-adm-surface lg:hidden"
+              className="fixed inset-y-0 left-0 z-50 w-72 max-w-[85vw] bg-adm-rail lg:hidden"
             >
               <button
                 type="button"
                 onClick={() => onMobileOpenChange(false)}
                 aria-label="Close menu"
-                className="absolute top-4 right-3 grid size-8 place-items-center rounded-md text-adm-muted hover:bg-adm-hover hover:text-adm-text"
+                className="absolute top-5 right-3 grid size-8 place-items-center rounded-lg text-adm-rail-text hover:bg-white/10 hover:text-white"
               >
                 <X className="size-[18px]" />
               </button>
@@ -232,13 +227,13 @@ export default function AdminNavigation({
 }
 
 const footerCls = (mini: boolean, danger?: boolean) =>
-  `group relative flex items-center rounded-lg text-[13px] font-medium transition-colors ${
-    mini ? 'size-10 justify-center' : 'h-9 w-full gap-3 px-3'
-  } ${danger ? 'text-adm-muted hover:bg-red-500/10 hover:text-red-400' : 'text-adm-muted hover:bg-adm-hover hover:text-adm-text'}`;
+  `group relative flex items-center rounded-xl text-[13px] font-medium transition-colors ${
+    mini ? 'size-10 justify-center' : 'h-10 w-full gap-3 px-3'
+  } ${danger ? 'text-adm-rail-text hover:bg-red-500/15 hover:text-red-300' : 'text-adm-rail-text hover:bg-white/[0.07] hover:text-white'}`;
 
 function Tip({ label }: { label: string }) {
   return (
-    <span className="pointer-events-none absolute left-full z-50 ml-3 hidden rounded-md border border-adm-line bg-adm-surface px-2.5 py-1.5 text-xs whitespace-nowrap text-adm-text shadow-lg group-hover:block">
+    <span className="pointer-events-none absolute left-full z-50 ml-3 hidden rounded-lg bg-[#141414] px-2.5 py-1.5 text-xs whitespace-nowrap text-white shadow-lg ring-1 ring-white/10 group-hover:block">
       {label}
     </span>
   );

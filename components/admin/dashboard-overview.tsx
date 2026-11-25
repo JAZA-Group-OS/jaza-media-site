@@ -162,20 +162,18 @@ export default function DashboardOverview() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.05 }}
-              className={`p-4 sm:p-6 rounded-xl border border-adm-line ${metric.bgColor}`}
+              className="rounded-2xl bg-adm-raised px-4 py-3.5 sm:px-5 sm:py-4"
             >
-              <div className="flex justify-between items-start mb-2 sm:mb-4">
-                <div>
-                  <p className="text-adm-muted text-xs sm:text-sm font-medium mb-1">{metric.label}</p>
-                  <h3 className="text-2xl font-semibold tracking-tight text-adm-text sm:text-[30px]">
-                    {data === null ? '—' : metric.value}
-                  </h3>
-                </div>
-                <div className={`p-2 rounded-lg ${metric.bgColor}`}>
-                  <Icon className={`w-4 h-4 sm:w-6 sm:h-6 ${metric.textColor}`} />
-                </div>
+              <p className="truncate text-[12.5px] font-medium text-adm-text-2">{metric.label}</p>
+              <div className="mt-2 flex items-center justify-between gap-3">
+                <span className="grid size-9 place-items-center rounded-xl bg-adm-surface">
+                  <Icon className={`size-[18px] ${metric.textColor}`} strokeWidth={1.8} />
+                </span>
+                <h3 className="text-[26px] leading-none font-semibold tracking-tight text-adm-text sm:text-[28px]">
+                  {data === null ? '—' : metric.value}
+                </h3>
               </div>
-              <p className="text-[10px] sm:text-xs text-adm-subtle">{metric.period}</p>
+              <p className="mt-2 text-[11px] text-adm-subtle">{metric.period}</p>
             </motion.div>
           );
         })}
@@ -217,7 +215,7 @@ export default function DashboardOverview() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="p-4 sm:p-6 rounded-xl bg-gradient-to-br from-adm-surface to-black border border-adm-line"
+          className="p-4 sm:p-6 rounded-xl bg-adm-surface border border-adm-line"
         >
           <h3 className="text-[15px] font-semibold text-adm-text mb-4 sm:mb-5">Submissions — last 7 days</h3>
           <ResponsiveContainer width="100%" height={250}>
@@ -249,7 +247,7 @@ export default function DashboardOverview() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
-          className="p-4 sm:p-6 rounded-xl bg-gradient-to-br from-adm-surface to-black border border-adm-line"
+          className="p-4 sm:p-6 rounded-xl bg-adm-surface border border-adm-line"
         >
           <h3 className="text-[15px] font-semibold text-adm-text mb-4 sm:mb-5">Qualification breakdown</h3>
           <ResponsiveContainer width="100%" height={250}>
@@ -277,7 +275,7 @@ export default function DashboardOverview() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.4 }}
-        className="p-4 sm:p-6 rounded-xl bg-gradient-to-br from-adm-surface to-black border border-adm-line"
+        className="p-4 sm:p-6 rounded-xl bg-adm-surface border border-adm-line"
       >
         <h3 className="text-[15px] font-semibold text-adm-text mb-4 sm:mb-5">Recent inquiries</h3>
         {data === null ? (
@@ -334,15 +332,17 @@ function FunnelTile({
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay }}
-      className="rounded-xl border border-adm-line bg-gradient-to-br from-adm-surface to-black p-3 sm:p-4 hover:border-adm-accent/30 transition-colors"
+      className="rounded-2xl bg-adm-surface p-4 transition-colors sm:p-5"
     >
-      <div className="flex items-center gap-2 mb-1.5">
-        <Icon className="w-3.5 h-3.5 text-adm-accent-ink/80 shrink-0" />
-        <p className="text-[10px] uppercase tracking-[0.12em] text-adm-subtle truncate">
-          {label}
-        </p>
+      <div className="flex items-center justify-between gap-3">
+        <div className="min-w-0">
+          <p className="truncate text-[12.5px] font-medium text-adm-text-2">{label}</p>
+          <p className="mt-1 text-[26px] leading-none font-semibold tracking-tight text-adm-text">{count}</p>
+        </div>
+        <span className="grid size-10 shrink-0 place-items-center rounded-full border border-adm-line-strong">
+          <Icon className="size-[18px] text-adm-accent-ink" strokeWidth={1.8} />
+        </span>
       </div>
-      <p className="text-2xl font-bold text-adm-text sm:text-3xl">{count}</p>
     </motion.div>
   );
 }

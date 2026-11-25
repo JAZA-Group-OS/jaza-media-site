@@ -30,6 +30,8 @@
   --color-gold-deep: #c9971a;
 
   /* Admin palette (values per theme live on .admin-ui below) */
+  --color-adm-rail: var(--adm-rail);
+  --color-adm-rail-text: var(--adm-rail-text);
   --color-adm-bg: var(--adm-bg);
   --color-adm-surface: var(--adm-surface);
   --color-adm-raised: var(--adm-raised);
@@ -366,43 +368,59 @@ html.dots-scroll::-webkit-scrollbar { display: none; }
 .font-serif { font-weight: 600; letter-spacing: -0.015em; }
 .font-serif, .font-serif em, .font-serif i, .font-serif.italic, .font-serif .italic { font-style: normal; }
 
-/* ---------- Admin UI theme (app/(admin)) ---------- */
+/* ---------- Admin UI theme (app/(admin)) ----------
+   Style reference: dark icon rail + soft grey canvas + white rounded cards
+   + grey stat chips + yellow accent, rounded geometric type (Poppins). */
 .admin-ui {
-  --adm-bg: #08090a;
-  --adm-surface: #0f1011;
-  --adm-raised: #16171a;
-  --adm-hover: #1c1d21;
-  --adm-line: #1f2024;
-  --adm-line-strong: #2b2c31;
-  --adm-text: #f4f4f5;
-  --adm-text-2: #d4d4d8;
-  --adm-muted: #a1a1aa;
-  --adm-subtle: #8b8b94;
-  --adm-faint: #6b6b74;
-  --adm-accent: #ffca26;
-  --adm-accent-ink: #ffca26;
-  --adm-accent-soft: rgba(255, 202, 38, 0.12);
+  --adm-rail: #0e0f11;
+  --adm-rail-text: #9a9ca3;
+  --adm-bg: #141517;
+  --adm-surface: #1d1f22;
+  --adm-raised: #26282c;
+  --adm-hover: #2e3035;
+  --adm-line: #2a2c30;
+  --adm-line-strong: #383a3f;
+  --adm-text: #f3f4f6;
+  --adm-text-2: #d6d7db;
+  --adm-muted: #a3a6ad;
+  --adm-subtle: #8e9198;
+  --adm-faint: #6f7279;
+  --adm-accent: #ffc52e;
+  --adm-accent-ink: #ffc52e;
+  --adm-accent-soft: rgba(255, 197, 46, 0.14);
   color-scheme: dark;
-  font-feature-settings: "cv11", "ss01";
+  font-family: var(--font-heading), ui-sans-serif, system-ui, sans-serif;
   font-variant-numeric: tabular-nums;
 }
 .admin-ui[data-theme="light"] {
-  --adm-bg: #f6f5f2;
+  --adm-rail: #1d1f22;
+  --adm-rail-text: #a3a6ad;
+  --adm-bg: #ecedef;
   --adm-surface: #ffffff;
-  --adm-raised: #f3f2ee;
-  --adm-hover: #ecebe6;
-  --adm-line: #e6e4dd;
-  --adm-line-strong: #d6d3ca;
-  --adm-text: #141416;
-  --adm-text-2: #2f2f35;
-  --adm-muted: #5c5c66;
-  --adm-subtle: #6b6b74;
-  --adm-faint: #8b8b94;
-  --adm-accent: #ffca26;
+  --adm-raised: #e4e5e8;
+  --adm-hover: #dcdde1;
+  --adm-line: #e3e4e7;
+  --adm-line-strong: #cfd1d5;
+  --adm-text: #17181a;
+  --adm-text-2: #2e3034;
+  --adm-muted: #5b5e65;
+  --adm-subtle: #63666d;
+  --adm-faint: #8a8d94;
+  --adm-accent: #ffc52e;
   --adm-accent-ink: #8a6400;
-  --adm-accent-soft: rgba(255, 202, 38, 0.18);
+  --adm-accent-soft: rgba(255, 197, 46, 0.22);
   color-scheme: light;
 }
+/* Cards across every admin section: softer, rounder, no heavy outlines. */
+.admin-ui main .rounded-xl,
+.admin-ui main .rounded-2xl { border-radius: 16px; }
+.admin-ui main .rounded-lg { border-radius: 12px; }
+.admin-ui[data-theme="light"] main .border-adm-line { border-color: transparent; }
+.admin-ui[data-theme="light"] main .bg-adm-surface,
+.admin-ui[data-theme="light"] main [class*="from-adm-surface"] { box-shadow: 0 1px 2px rgba(17, 18, 20, 0.04); }
+.admin-ui[data-theme="light"] main input,
+.admin-ui[data-theme="light"] main select,
+.admin-ui[data-theme="light"] main textarea { border-color: var(--adm-line-strong) !important; }
 /* Status colours keep enough contrast on light surfaces */
 .admin-ui[data-theme="light"] .text-green-300,
 .admin-ui[data-theme="light"] .text-green-400,

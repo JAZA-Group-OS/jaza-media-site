@@ -163,7 +163,7 @@ export default function SupportTicketsManager() {
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: Math.min(index * 0.03, 0.3) }}
-                className="rounded-lg bg-gradient-to-br from-adm-surface to-black border border-adm-line hover:border-adm-accent/30 transition-colors"
+                className="rounded-lg bg-adm-surface border border-adm-line hover:border-adm-accent/30 transition-colors"
               >
                 <button
                   onClick={() => setExpandedId(isExpanded ? null : ticket.id)}

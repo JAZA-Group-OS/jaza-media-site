@@ -1,6 +1,6 @@
 'use client';
 
-import { ChevronRight, Menu, Moon, PanelLeftOpen, Sun } from 'lucide-react';
+import { Menu, Moon, PanelLeftOpen, Sun } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
@@ -93,7 +93,7 @@ export default function AdminDashboardClient({ initialTab = 'overview' }: { init
 
   return (
     <AdminSessionProvider>
-      <div className="flex min-h-screen">
+      <div className="flex min-h-screen bg-adm-rail">
         <AdminNavigation
           activeTab={activeTab}
           onTabChange={(tab) => setActiveTab(tab as DashboardTab)}
@@ -104,14 +104,14 @@ export default function AdminDashboardClient({ initialTab = 'overview' }: { init
           onMobileOpenChange={setMobileOpen}
         />
 
-        <div className="flex min-w-0 flex-1 flex-col">
-          {/* top bar */}
-          <header className="sticky top-0 z-30 flex h-16 shrink-0 items-center gap-3 border-b border-adm-line bg-adm-bg/80 px-4 backdrop-blur-xl sm:px-6 lg:px-8">
+        {/* canvas */}
+        <div className="flex min-w-0 flex-1 flex-col bg-adm-bg lg:my-3 lg:mr-3 lg:rounded-[28px]">
+          <header className="sticky top-0 z-30 flex min-h-[72px] shrink-0 flex-wrap items-center gap-x-4 gap-y-2 bg-adm-bg/85 px-4 py-3 backdrop-blur-xl sm:px-6 lg:top-3 lg:rounded-t-[28px] lg:px-8">
             <button
               type="button"
               onClick={() => setMobileOpen(true)}
               aria-label="Open menu"
-              className="grid size-9 place-items-center rounded-lg border border-adm-line text-adm-muted hover:bg-adm-hover hover:text-adm-text lg:hidden"
+              className="grid size-10 place-items-center rounded-full bg-adm-surface text-adm-muted hover:text-adm-text lg:hidden"
             >
               <Menu className="size-[18px]" />
             </button>
@@ -121,39 +121,35 @@ export default function AdminDashboardClient({ initialTab = 'overview' }: { init
                 onClick={toggleCollapsed}
                 aria-label="Expand sidebar"
                 title="Expand sidebar (Ctrl+B)"
-                className="hidden size-9 place-items-center rounded-lg border border-adm-line text-adm-muted hover:bg-adm-hover hover:text-adm-text lg:grid"
+                className="hidden size-10 place-items-center rounded-full bg-adm-surface text-adm-muted hover:text-adm-text lg:grid"
               >
                 <PanelLeftOpen className="size-[18px]" />
               </button>
             )}
-            <nav aria-label="Breadcrumb" className="flex min-w-0 items-center gap-1.5 text-[13px]">
-              <span className="text-adm-subtle">{group}</span>
-              <ChevronRight className="size-3.5 shrink-0 text-adm-faint" />
-              <span className="truncate font-medium text-adm-text">{page.title}</span>
-            </nav>
-            <div className="ml-auto flex items-center gap-2">
+            <div className="min-w-0">
+              <h1 className="truncate text-[22px] leading-tight font-semibold tracking-[-0.01em] text-adm-text sm:text-[24px]">{page.title}</h1>
+              <p className="hidden truncate text-[12.5px] text-adm-subtle sm:block">
+                {group} · {page.description}
+              </p>
+            </div>
+            <div className="ml-auto flex items-center gap-2.5">
               <button
                 type="button"
                 onClick={toggle}
                 aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
                 title={theme === 'dark' ? 'Light mode' : 'Dark mode'}
-                className="grid size-9 place-items-center rounded-lg border border-adm-line text-adm-muted transition hover:bg-adm-hover hover:text-adm-text"
+                className="grid size-10 place-items-center rounded-full border border-adm-line-strong bg-adm-surface text-adm-text-2 transition hover:border-adm-accent"
               >
                 {theme === 'dark' ? <Sun className="size-[17px]" /> : <Moon className="size-[17px]" />}
               </button>
-              <span className="hidden items-center gap-2 rounded-lg border border-adm-line py-1 pr-3 pl-1 sm:flex">
-                <span className="grid size-7 place-items-center rounded-md bg-adm-accent text-[12px] font-bold text-[#141414]">A</span>
-                <span className="text-[13px] font-medium text-adm-text">Admin</span>
+              <span className="relative grid size-10 place-items-center rounded-full bg-adm-accent text-[14px] font-semibold text-[#141414]" title="Admin">
+                A
+                <span aria-hidden className="absolute -top-0.5 -right-0.5 size-2.5 rounded-full border-2 border-adm-bg bg-green-500" />
               </span>
             </div>
           </header>
 
-          <main className="mx-auto w-full max-w-[1400px] flex-1 px-4 py-6 sm:px-6 sm:py-8 lg:px-8">
-            <div className="mb-6 sm:mb-8">
-              <h1 className="font-serif text-[30px] leading-tight tracking-[-0.01em] text-adm-text sm:text-[36px]">{page.title}</h1>
-              <p className="mt-1 text-[14px] text-adm-muted">{page.description}</p>
-            </div>
-
+          <main className="w-full flex-1 px-4 pt-2 pb-8 sm:px-6 lg:px-8">
             <UpcomingCallAlert onOpen={() => setActiveTab('bookings')} />
             {activeTab === 'overview' && <DashboardOverview />}
             {activeTab === 'leads' && <PartnerLeadsManager />}
