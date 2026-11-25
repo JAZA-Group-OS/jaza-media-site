@@ -6,13 +6,13 @@ import { useInView } from "@/lib/use-in-view";
 
 function HeroImage() {
   return (
-    <div className="relative aspect-[3/2] w-full max-w-[680px] overflow-hidden rounded-2xl ring-1 ring-gold/30 shadow-[0_40px_80px_-30px_rgba(0,0,0,0.9)] lg:ml-auto">
+    <div className="relative aspect-[2346/1581] w-full max-w-[600px] overflow-hidden rounded-2xl ring-1 ring-gold/30 shadow-[0_40px_80px_-30px_rgba(0,0,0,0.9)] lg:ml-auto">
       <Image
-        src="/images/careers%201.png"
+        src="/images/careers-hero.jpg"
         alt="JAZA Media team at work"
         fill
         className="object-cover"
-        sizes="(min-width: 1024px) 680px, 100vw"
+        sizes="(min-width: 1024px) 600px, 100vw"
         priority
       />
     </div>
@@ -26,11 +26,11 @@ export function CareersHero() {
   const { ref: imageRef, inView: imageIn } = useInView<HTMLDivElement>();
 
   return (
-    <section className="relative overflow-hidden bg-[#0b0d0c] pt-10 pb-20 text-white md:pt-14 md:pb-24">
+    <section className="relative overflow-hidden bg-[#0b0d0c] pt-8 pb-12 text-white md:pt-10 md:pb-14">
 <div aria-hidden className="pointer-events-none absolute -top-40 left-1/2 size-[820px] -translate-x-1/2 rounded-full bg-gold/10 blur-[160px]" />
       <div aria-hidden className="pointer-events-none absolute inset-0 opacity-[0.05] [background-image:radial-gradient(white_1px,transparent_1px)] [background-size:4px_4px]" />
       <div className="relative mx-auto max-w-5xl px-4 lg:max-w-7xl">
-        <div className="grid gap-8 lg:grid-cols-[1fr_680px] lg:items-center lg:gap-12">
+        <div className="grid gap-8 lg:grid-cols-[1fr_600px] lg:items-center lg:gap-12">
           <div>
             <p className="mb-6 inline-flex items-center gap-2.5 rounded-full border border-white/10 bg-white/[0.03] px-4 py-1.5 text-[10.5px] font-medium tracking-[0.32em] text-white/70 backdrop-blur">
             <span aria-hidden className="size-1.5 rounded-full bg-gold shadow-[0_0_10px_2px_rgba(234,179,8,0.6)]" />
@@ -75,7 +75,7 @@ export function CareersHero() {
           <div
             ref={imageRef}
             style={{ animationDelay: imageIn ? "200ms" : undefined }}
-            className={`lg:h-full ${
+            className={`${
               imageIn ? "animate-about-pop-in" : "opacity-0"
             }`}
           >
