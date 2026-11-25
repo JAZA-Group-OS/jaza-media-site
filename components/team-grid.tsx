@@ -148,12 +148,11 @@ function WaveSlider() {
   const [W, setW] = useState(1200);
   const [step, setStep] = useState(0);
   const [paused, setPaused] = useState(false);
-  const [offsets, setOffsets] = useState<Record<string, Offset>>({});
+  const [group, setGroup] = useState<Offset | null>(null); // shared offset for every card
   const [active, setActive] = useState<string | null>(null); // card being dragged
-  const [lastMoved, setLastMoved] = useState<string | null>(null); // keeps it on top
   const drag = useRef<{ slug: string; sx: number; sy: number; base: Offset; moved: boolean } | null>(null);
   const n = MEMBERS.length;
-  const userSet = Object.keys(offsets).length > 0; // stop auto-advance once arranged
+  const userSet = group !== null; // stop auto-advance once arranged
 
   useEffect(() => {
     const el = wrap.current;
@@ -180,10 +179,10 @@ function WaveSlider() {
 
   const onDown = (slug: string) => (e: React.PointerEvent<HTMLDivElement>) => {
     if (e.button !== 0) return;
-    drag.current = { slug, sx: e.clientX, sy: e.clientY, base: offsets[slug] ?? { x: 0, y: 0 }, moved: false };
+    drag.current = { slug, sx: e.clientX, sy: e.clientY, base: group ?? { x: 0, y: 0 }, moved: false };
   };
 
-  const onMove = (baseX: number, baseY: number) => (e: React.PointerEvent<HTMLDivElement>) => {
+  const onMove = (e: React.PointerEvent<HTMLDivElement>) => {
     const d = drag.current;
     if (!d) return;
     const dx = e.clientX - d.sx;
@@ -193,12 +192,11 @@ function WaveSlider() {
       d.moved = true;
       e.currentTarget.setPointerCapture(e.pointerId);
       setActive(d.slug);
-      setLastMoved(d.slug);
     }
-    // keep the card inside the team area
-    const x = Math.max(-baseX, Math.min(W - card - baseX, d.base.x + dx));
-    const y = Math.max(-baseY, Math.min(H - card - baseY, d.base.y + dy));
-    setOffsets((o) => ({ ...o, [d.slug]: { x, y } }));
+    // the whole row moves together; keep it on screen
+    const x = Math.max(-left0, Math.min(left0, d.base.x + dx));
+    const y = Math.max(-220, Math.min(220, d.base.y + dy));
+    setGroup({ x, y });
   };
 
   const onUp = () => {
@@ -223,13 +221,13 @@ function WaveSlider() {
           const visible = slot >= 0 && slot <= 4;
           const baseX = left0 + slot * pitch;
           const baseY = visible ? ys[slot] : 0;
-          const off = offsets[m.slug] ?? { x: 0, y: 0 };
-          const dragging = active === m.slug;
+          const off = group ?? { x: 0, y: 0 };
+          const dragging = active !== null;
           return (
             <div
               key={m.slug}
               onPointerDown={onDown(m.slug)}
-              onPointerMove={onMove(baseX, baseY)}
+              onPointerMove={onMove}
               onPointerUp={onUp}
               onPointerCancel={onUp}
               onClickCapture={(e) => {
@@ -239,9 +237,9 @@ function WaveSlider() {
               onDragStart={(e) => e.preventDefault()}
               className={`absolute top-0 left-0 touch-none ${dragging ? "cursor-grabbing" : "cursor-grab"}`}
               style={{
-                transform: `translate3d(${baseX + off.x}px, ${baseY + off.y}px, 0) scale(${dragging ? 1.05 : slot === 2 && !userSet ? 1.06 : 1})`,
+                transform: `translate3d(${baseX + off.x}px, ${baseY + off.y}px, 0) scale(${slot === 2 ? 1.06 : 1})`,
                 opacity: visible ? 1 : 0,
-                zIndex: dragging ? 60 : lastMoved === m.slug ? 40 : slot === 2 ? 20 : 10,
+                zIndex: slot === 2 ? 20 : 10,
                 pointerEvents: visible ? "auto" : "none",
                 transition:
                   dragging || slot > 4
