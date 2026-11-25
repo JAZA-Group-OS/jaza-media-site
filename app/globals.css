@@ -275,3 +275,19 @@
   .anim-profit-burst { opacity: 0; }
   .anim-book-float, .anim-book-sheen, .anim-glow-breathe, .anim-screen-scroll, .anim-ken-burns, .anim-card-streak { animation: none !important; }
 }
+
+/* Explode-profit CTA: slow attention pulse on the Learn More button */
+@keyframes cta-breathe {
+  0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(234, 179, 8, 0.45); }
+  50% { transform: scale(1.05); box-shadow: 0 0 0 12px rgba(234, 179, 8, 0); }
+}
+@keyframes cta-nudge {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(4px); }
+}
+.cta-breathe { animation: cta-breathe 2.8s ease-in-out infinite; }
+.cta-breathe:hover { animation-play-state: paused; }
+.cta-nudge { animation: cta-nudge 2.8s ease-in-out infinite; }
+@media (prefers-reduced-motion: reduce) {
+  .cta-breathe, .cta-nudge { animation: none; }
+}

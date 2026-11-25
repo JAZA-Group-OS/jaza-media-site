@@ -32,10 +32,10 @@ export function ExplodeProfitCta() {
 
           <Link
             href="/partner-with-us"
-            className="group inline-flex shrink-0 items-center gap-2.5 rounded-full bg-gold px-7 py-3 text-[12px] font-semibold tracking-[0.12em] text-ink transition hover:bg-white"
+            className="cta-breathe group inline-flex shrink-0 items-center gap-2.5 rounded-full bg-gold px-7 py-3 text-[12px] font-semibold tracking-[0.12em] text-ink transition hover:bg-white"
           >
             LEARN MORE
-            <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" />
+            <ArrowRight className="cta-nudge size-4" />
           </Link>
         </div>
       </Reveal>
