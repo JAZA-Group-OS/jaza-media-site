@@ -135,7 +135,7 @@ export function StepTwoBooking() {
       <div aria-hidden className="pointer-events-none absolute -top-48 left-1/2 size-[900px] -translate-x-1/2 rounded-full bg-gold/12 blur-[170px]" />
       <div aria-hidden className="pointer-events-none absolute inset-0 opacity-[0.05] [background-image:radial-gradient(white_1px,transparent_1px)] [background-size:4px_4px]" />
 
-      <div className="relative mx-auto w-full max-w-6xl px-4 py-14 md:py-20">
+      <div className="relative mx-auto w-full max-w-6xl px-4 pt-6 pb-14 md:pt-8 md:pb-20">
         <div className="flex flex-col items-center text-center">
           {/* step tracker */}
           <ol aria-label="Application progress" className="flex items-center gap-3 text-[10.5px] font-medium tracking-[0.28em] uppercase">
@@ -180,7 +180,7 @@ export function StepTwoBooking() {
         </div>
 
         {/* details panel + calendar */}
-        <div className="mt-12 grid items-start gap-6 lg:grid-cols-[400px_1fr]">
+        <div className="mt-10 grid items-start gap-6 lg:grid-cols-[360px_1fr]">
           <aside className="rounded-[24px] border border-gold/30 bg-[linear-gradient(180deg,#1a1913_0%,#0f0f10_80%)] p-7 shadow-[0_40px_80px_-40px_rgba(0,0,0,0.9)]">
             <div className="flex items-center gap-3">
               <span className="relative size-12 shrink-0 overflow-hidden rounded-full ring-1 ring-gold/50">
@@ -261,13 +261,22 @@ export function StepTwoBooking() {
                 ))}
               </ol>
               <div aria-hidden className="h-px bg-gradient-to-r from-transparent via-gold/60 to-transparent" />
-              <div
-                ref={containerRef}
-                className="overflow-hidden"
-                // Height follows Calendly's calendly.page_height messages (see above),
-                // so each step (calendar, times, details form) fits without empty space.
-                style={{ minWidth: '280px', height: `${frameHeight}px`, transition: 'height 400ms ease' }}
-              />
+              {/* The Calendly frame is 240px wider than the card and centred, so its
+                  corner "Powered by Calendly" ribbon falls outside the visible area. */}
+              <div className="overflow-hidden">
+                <div
+                  ref={containerRef}
+                  // Height follows Calendly's calendly.page_height messages (see above),
+                  // so each step (calendar, times, details form) fits without empty space.
+                  style={{
+                    minWidth: '280px',
+                    width: 'calc(100% + 240px)',
+                    marginLeft: '-120px',
+                    height: `${frameHeight}px`,
+                    transition: 'height 400ms ease',
+                  }}
+                />
+              </div>
             </div>
           </div>
         </div>
