@@ -111,7 +111,7 @@ function Hero() {
 
 /* ---------- 2. photo strip ---------- */
 
-const STRIP = ["maju.png", "careers-3.jpg", "careers-4.jpg", "Solving for Scale.png", "Culture of Growth.png", "Hybrd Work.png"];
+const STRIP = ["maju.jpg", "careers-3.jpg", "careers-4.jpg", "Solving for Scale.png", "Culture of Growth.png", "Hybrd Work.png"];
 
 function PhotoStrip() {
   return (
@@ -133,7 +133,7 @@ const VALUES = [
   {
     title: "You build with the long game in mind.",
     body: "You're not here for shortcuts. You care about creating businesses that compound over years, not months — focusing on fundamentals and building systems that scale.",
-    photo: "maju.png",
+    photo: "maju.jpg",
   },
   {
     title: "You hold a high standard.",
@@ -195,7 +195,7 @@ function Values() {
         </Reveal>
 
         <div className="grid items-start gap-14 lg:grid-cols-2">
-          <div className="sticky top-32 hidden aspect-[3/2] overflow-hidden rounded-3xl border border-gold/30 lg:block">
+          <div className="sticky top-[calc(50vh-180px)] hidden aspect-[3/2] overflow-hidden rounded-3xl border border-gold/30 lg:block">
             {VALUES.map((v, i) => (
               <Image
                 key={v.photo}
