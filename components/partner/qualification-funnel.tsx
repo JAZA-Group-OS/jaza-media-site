@@ -445,9 +445,13 @@ export function QualificationFunnel() {
         Step {stepFromUrl} of {TOTAL_STEPS}
       </p>
 
-      <p className="mx-auto mt-10 max-w-2xl text-center text-[11px] leading-relaxed text-white/35">
-        {DISCLAIMER}
-      </p>
+      <details className="group mx-auto mt-10 max-w-2xl text-center">
+        <summary className="mx-auto inline-flex cursor-pointer list-none items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-4 py-1.5 text-[11px] tracking-[0.18em] text-white/55 uppercase transition hover:border-gold/40 hover:text-white [&::-webkit-details-marker]:hidden">
+          Privacy &amp; consent
+          <span aria-hidden className="text-gold transition-transform group-open:rotate-45">+</span>
+        </summary>
+        <p className="mt-4 text-[11px] leading-relaxed text-white/40">{DISCLAIMER}</p>
+      </details>
     </div>
     </section>
   );
