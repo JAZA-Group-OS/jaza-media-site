@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ArrowRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -131,73 +131,78 @@ export function TeamGrid() {
   );
 }
 
-// Five fixed "slots" follow a U-shaped path (high · mid · low · mid · high).
-// Cards glide slowly right-to-left through the slots, rising and dipping as they go.
-const LOOP = [...MEMBERS, ...MEMBERS];
-const SPEED = 22; // px per second
+// Five fixed slots on a U-shaped path: high · mid · low (centre) · mid · high.
+// Every few seconds every card steps one slot to the left, so a new person
+// lands in the centre spot (CEO → Company Advisor → …).
+const HOLD_MS = 3500;
+const MOVE_MS = 1100;
 
 function WaveSlider() {
   const wrap = useRef<HTMLDivElement>(null);
-  const items = useRef<(HTMLDivElement | null)[]>([]);
-  const paused = useRef(false);
+  const [W, setW] = useState(1200);
+  const [step, setStep] = useState(0);
+  const [paused, setPaused] = useState(false);
+  const n = MEMBERS.length;
 
   useEffect(() => {
     const el = wrap.current;
     if (!el) return;
-    const still = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    let shift = 0;
-    let last = performance.now();
-    let raf = 0;
-
-    const frame = (now: number) => {
-      const dt = Math.min(now - last, 64) / 1000;
-      last = now;
-      if (!paused.current && !still) shift += SPEED * dt;
-
-      const W = el.clientWidth;
-      const card = W < 640 ? 220 : W < 1024 ? 250 : 290;
-      const gap = W < 640 ? 20 : 40;
-      const slot = card + gap;
-      const total = LOOP.length * slot;
-      const dip = W < 640 ? 70 : 150;
-      el.style.setProperty("--card", `${card}px`);
-      el.style.height = `${card + dip + 40}px`;
-
-      items.current.forEach((node, i) => {
-        if (!node) return;
-        let x = (((i * slot - shift) % total) + total) % total; // 0..total
-        x -= slot; // allow one card to enter from the left edge
-        const d = Math.max(-1, Math.min(1, (x + card / 2 - W / 2) / (W / 2)));
-        const y = dip * (1 - d * d); // lowest at the centre
-        node.style.transform = `translate3d(${x}px, ${y}px, 0)`;
-        node.style.zIndex = String(100 - Math.round(Math.abs(d) * 50));
-      });
-      raf = requestAnimationFrame(frame);
-    };
-    raf = requestAnimationFrame(frame);
-    return () => cancelAnimationFrame(raf);
+    const ro = new ResizeObserver(() => setW(el.clientWidth));
+    ro.observe(el);
+    return () => ro.disconnect();
   }, []);
 
+  useEffect(() => {
+    if (paused || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const t = setInterval(() => setStep((s) => s + 1), HOLD_MS);
+    return () => clearInterval(t);
+  }, [paused]);
+
+  const gap = W < 640 ? 12 : 28;
+  const card = Math.min(290, Math.floor((W - 4 * gap) / 5));
+  const dip = Math.round(card * 0.55);
+  const ys = [0, dip * 0.45, dip, dip * 0.45, 0];
+  const total = 5 * card + 4 * gap;
+  const left0 = (W - total) / 2;
+
   return (
-    <div
-      ref={wrap}
-      onMouseEnter={() => (paused.current = true)}
-      onMouseLeave={() => (paused.current = false)}
-      onFocus={() => (paused.current = true)}
-      onBlur={() => (paused.current = false)}
-      className="relative mt-14 h-[480px] [--card:290px] [mask-image:linear-gradient(90deg,transparent,black_6%,black_94%,transparent)] md:mt-16"
-    >
-      {LOOP.map((m, i) => (
-        <div
-          key={`${m.slug}-${i}`}
-          ref={(n) => {
-            items.current[i] = n;
-          }}
-          className="absolute top-0 left-0 will-change-transform"
-        >
-          <TeamCard member={m} hidden={i >= MEMBERS.length} />
-        </div>
-      ))}
+    <div className="mx-auto mt-14 max-w-[1560px] px-4 md:mt-16 md:px-6">
+      <div
+        ref={wrap}
+        onMouseEnter={() => setPaused(true)}
+        onMouseLeave={() => setPaused(false)}
+        onFocus={() => setPaused(true)}
+        onBlur={() => setPaused(false)}
+        className="relative"
+        style={{ height: card + dip + 30, ["--card" as string]: `${card}px` }}
+      >
+        {MEMBERS.map((m, i) => {
+          const p = (((i - step) % n) + n) % n; // 0..4 visible, n-1 off left, rest off right
+          const slot = p <= 4 ? p : p === n - 1 ? -1 : 5;
+          const visible = slot >= 0 && slot <= 4;
+          // cards wrapping from the far left to the far right jump while hidden
+          const wrapping = p === n - 2 || (p === 5 && n === 6);
+          const x = left0 + slot * (card + gap);
+          const y = visible ? ys[slot] : 0;
+          return (
+            <div
+              key={m.slug}
+              className="absolute top-0 left-0"
+              style={{
+                transform: `translate3d(${x}px, ${y}px, 0) scale(${slot === 2 ? 1.06 : 1})`,
+                opacity: visible ? 1 : 0,
+                zIndex: slot === 2 ? 20 : 10,
+                pointerEvents: visible ? "auto" : "none",
+                transition: wrapping
+                  ? "none"
+                  : `transform ${MOVE_MS}ms cubic-bezier(0.65,0,0.35,1), opacity ${MOVE_MS}ms ease`,
+              }}
+            >
+              <TeamCard member={m} hidden={!visible} />
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 }
