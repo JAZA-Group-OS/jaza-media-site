@@ -26,6 +26,7 @@ export default function SupportPage() {
       </main>
       <Footer />
       <CopyrightBar />
+      <div aria-hidden className="snap-end" />
     </>
   );
 }

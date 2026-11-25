@@ -1,11 +1,9 @@
 "use client";
 
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
+import { Plus } from "lucide-react";
+import { useState } from "react";
+
+import { Eyebrow, Gold, H2, SLIDE } from "@/components/support-ui";
 
 const SUPPORT_FAQS = [
   {
@@ -35,32 +33,68 @@ const SUPPORT_FAQS = [
 ];
 
 export function SupportFaqs() {
+  const [open, setOpen] = useState(0);
   return (
-    <section className="bg-surface-grey py-16 md:py-20">
-      <div className="mx-auto max-w-4xl px-4">
-        <h2 className="text-center font-heading text-2xl font-extrabold tracking-tight text-brand-black md:text-3xl">
-          Help & FAQs
-        </h2>
-        <p className="mx-auto mt-3 max-w-2xl text-center font-heading text-sm text-neutral-600 md:text-base">
-          Quick answers to the questions our support team gets the most.
-        </p>
+    <section id="faqs" className={`${SLIDE} border-t border-white/5 bg-[#0e0e0f]`}>
+      <div className="mx-auto grid w-full max-w-[1160px] items-center gap-8 px-4 md:px-8 lg:grid-cols-[340px_minmax(0,1fr)] lg:gap-16">
+        <div className="flex flex-col items-start gap-4 lg:gap-5">
+          <Eyebrow>Help &amp; FAQs</Eyebrow>
+          <h2 className={H2}>
+            Quick answers, <Gold>fast.</Gold>
+          </h2>
+          <p className="text-[16px] leading-[1.7] font-light text-white/60 md:text-[17px]">
+            The questions our support team gets the most.
+          </p>
+          <a href="#contact" className="mt-1 hidden text-[12px] tracking-[0.14em] text-gold uppercase hover:text-white lg:inline">
+            Still stuck? Message us →
+          </a>
+        </div>
 
-        <Accordion className="mt-12">
-          {SUPPORT_FAQS.map((item, i) => (
-            <AccordionItem
-              key={i}
-              value={`support-faq-${i}`}
-              className="!border-b-2 !border-dotted !border-neutral-500/70"
-            >
-              <AccordionTrigger className="py-4 text-left font-heading text-lg font-bold text-brand-black hover:no-underline md:text-[22px]">
-                {item.q}
-              </AccordionTrigger>
-              <AccordionContent className="font-heading text-base text-neutral-700 md:text-lg">
-                {item.a}
-              </AccordionContent>
-            </AccordionItem>
-          ))}
-        </Accordion>
+        <ul className="flex flex-col">
+          {SUPPORT_FAQS.map((item, i) => {
+            const isOpen = open === i;
+            return (
+              <li
+                key={item.q}
+                className={`rounded-[20px] border transition-colors duration-300 ${
+                  isOpen
+                    ? "my-1 border-gold/30 bg-[linear-gradient(180deg,#1a1a17_0%,#101011_75%)]"
+                    : "border-transparent border-b-white/[0.08]"
+                }`}
+              >
+                <button
+                  type="button"
+                  aria-expanded={isOpen}
+                  aria-controls={`faq-panel-${i}`}
+                  id={`faq-trigger-${i}`}
+                  onClick={() => setOpen(isOpen ? -1 : i)}
+                  className="flex w-full items-center gap-4 px-4 py-3.5 text-left focus-visible:ring-2 focus-visible:ring-gold focus-visible:outline-none md:gap-5 md:px-6 md:py-4"
+                >
+                  <span className={`font-serif text-[22px] italic md:text-[26px] ${isOpen ? "text-gold" : "text-gold/55"}`}>
+                    0{i + 1}
+                  </span>
+                  <span className={`flex-1 font-serif text-[18px] leading-tight md:text-[22px] ${isOpen ? "text-white" : "text-white/85"}`}>
+                    {item.q}
+                  </span>
+                  <Plus
+                    aria-hidden
+                    className={`size-5 shrink-0 transition-transform duration-300 ${isOpen ? "rotate-45 text-gold" : "text-white/50"}`}
+                  />
+                </button>
+                <div
+                  id={`faq-panel-${i}`}
+                  role="region"
+                  aria-labelledby={`faq-trigger-${i}`}
+                  className={`grid transition-[grid-template-rows] duration-300 ${isOpen ? "grid-rows-[1fr]" : "grid-rows-[0fr]"}`}
+                >
+                  <p className="overflow-hidden px-4 pl-[52px] text-[15px] leading-[1.7] font-light text-white/65 md:pr-6 md:pl-[70px]">
+                    <span className="block pb-5">{item.a}</span>
+                  </p>
+                </div>
+              </li>
+            );
+          })}
+        </ul>
       </div>
     </section>
   );

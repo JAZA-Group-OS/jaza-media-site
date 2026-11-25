@@ -3,6 +3,8 @@
 import { useEffect, useRef, useState } from "react";
 import type { FormEvent, ReactNode } from "react";
 
+import { Eyebrow, Gold, H2, SLIDE } from "@/components/support-ui";
+
 type Topic =
   | "general"
   | "course_rule_of_10x"
@@ -26,8 +28,40 @@ const SUPPORT_EMAIL = "admin@jazamedia.com";
 const MAX_MESSAGE_CHARS = 2000;
 
 const INPUT_CLASS =
-  "w-full rounded-md border border-white/15 bg-neutral-900 px-3 py-2.5 font-heading text-sm text-white placeholder:text-white/30 " +
-  "focus:outline-none focus-visible:border-brand-yellow/60 focus-visible:ring-2 focus-visible:ring-brand-yellow focus-visible:ring-offset-2 focus-visible:ring-offset-neutral-800";
+  "w-full rounded-xl border border-white/12 bg-white/[0.03] px-3.5 py-2.5 text-sm text-white placeholder:text-white/30 transition " +
+  "focus:outline-none focus-visible:border-gold/60 focus-visible:ring-2 focus-visible:ring-gold/60";
+
+const LABEL_CLASS = "mb-1.5 block text-[10.5px] font-medium tracking-[0.2em] text-white/70 uppercase";
+
+function Intro() {
+  return (
+    <div className="flex flex-col items-start gap-4 lg:gap-5">
+      <Eyebrow>Contact</Eyebrow>
+      <h2 className={H2}>
+        Still need <Gold>help?</Gold>
+      </h2>
+      <p className="text-[16px] leading-[1.7] font-light text-white/60 md:text-[17px]">
+        Send us a message and we&apos;ll reply within 2 business days.
+      </p>
+      <p className="hidden text-sm text-white/50 lg:block">
+        Or email{" "}
+        <a className="text-gold hover:text-white" href={`mailto:${SUPPORT_EMAIL}`}>
+          {SUPPORT_EMAIL}
+        </a>
+      </p>
+    </div>
+  );
+}
+
+const SECTION = `${SLIDE} bg-[#0b0d0c]`;
+const GLOW = (
+  <div aria-hidden className="pointer-events-none absolute -bottom-80 left-1/2 size-[900px] -translate-x-1/2 rounded-full bg-gold/[0.07] blur-[160px]" />
+);
+const GRID = "relative mx-auto grid w-full max-w-[1160px] items-center gap-8 px-4 md:px-8 lg:grid-cols-[340px_minmax(0,1fr)] lg:gap-16";
+const FRAME = "rounded-3xl bg-gradient-to-b from-gold/45 via-white/10 to-white/[0.03] p-px";
+const PANEL = "rounded-[23px] bg-[linear-gradient(180deg,#1a1913_0%,#0f0f10_75%)]";
+const GOLD_BTN =
+  "inline-flex items-center justify-center gap-2 rounded-full bg-gold px-6 py-3 text-[12px] font-semibold tracking-[0.14em] text-ink uppercase transition hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-[#0f0f10] disabled:cursor-not-allowed disabled:opacity-60";
 
 type SubmitState =
   | { kind: "idle" }
@@ -136,33 +170,27 @@ export function SupportContactCard() {
 
   if (state.kind === "success") {
     return (
-      <section className="bg-neutral-800 py-16 md:py-20">
-        <div className="mx-auto max-w-2xl px-4 text-center">
-          <div className="relative overflow-hidden rounded-2xl border border-brand-yellow/40 bg-white/[0.04] p-10">
-            <span
-              aria-hidden="true"
-              className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-brand-yellow to-transparent"
-            />
-            <p className="font-heading text-xs font-bold uppercase tracking-[0.3em] text-brand-yellow">
-              Message received
-            </p>
-            <h2
-              ref={successHeadingRef}
-              tabIndex={-1}
-              className="mt-4 font-heading text-2xl font-extrabold text-white md:text-3xl focus:outline-none"
-            >
-              We&apos;ve got your message.
-            </h2>
-            <p className="mt-3 font-heading text-base text-white/70 md:text-lg">
-              We&apos;ll reply to the email you provided within 2 business days.
-            </p>
-            <button
-              type="button"
-              onClick={resetForm}
-              className="mt-8 inline-flex items-center rounded-full bg-brand-yellow px-6 py-2.5 font-heading text-sm font-bold text-brand-black transition-transform hover:scale-[1.02] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-yellow focus-visible:ring-offset-2 focus-visible:ring-offset-neutral-800"
-            >
-              Send another message
-            </button>
+      <section id="contact" className={SECTION}>
+        {GLOW}
+        <div className={GRID}>
+          <Intro />
+          <div className={FRAME}>
+            <div className={`${PANEL} p-10 text-center`}>
+              <p className="text-[10.5px] font-medium tracking-[0.3em] text-gold uppercase">Message received</p>
+              <h2
+                ref={successHeadingRef}
+                tabIndex={-1}
+                className="mt-4 font-serif text-[36px] leading-tight text-white focus:outline-none md:text-[44px]"
+              >
+                We&apos;ve got your <Gold>message.</Gold>
+              </h2>
+              <p className="mt-3 text-base font-light text-white/65">
+                We&apos;ll reply to the email you provided within 2 business days.
+              </p>
+              <button type="button" onClick={resetForm} className={`${GOLD_BTN} mt-8`}>
+                Send another message
+              </button>
+            </div>
           </div>
         </div>
       </section>
@@ -172,24 +200,12 @@ export function SupportContactCard() {
   const isSubmitting = state.kind === "submitting";
 
   return (
-    <section className="bg-neutral-800 py-16 md:py-20">
-      <div className="mx-auto max-w-2xl px-4">
-        <h2 className="text-center font-heading text-2xl font-extrabold text-white md:text-3xl">
-          Still need help?
-        </h2>
-        <p className="mx-auto mt-3 max-w-xl text-center font-heading text-sm text-white/70 md:text-base">
-          Send us a message and we&apos;ll reply within 2 business days.
-        </p>
-
-        <form
-          onSubmit={handleSubmit}
-          className="relative mt-10 space-y-5 overflow-hidden rounded-2xl border border-brand-yellow/25 bg-white/[0.04] p-6 md:p-8"
-          noValidate
-        >
-          <span
-            aria-hidden="true"
-            className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-brand-yellow to-transparent"
-          />
+    <section id="contact" className={SECTION}>
+      {GLOW}
+      <div className={GRID}>
+        <Intro />
+        <form onSubmit={handleSubmit} className={`relative ${FRAME}`} noValidate>
+          <div className={`${PANEL} grid gap-4 p-5 sm:grid-cols-2 md:p-7`}>
           <Field
             label="Full name"
             name="fullName"
@@ -215,9 +231,9 @@ export function SupportContactCard() {
           <div>
             <label
               htmlFor="topic"
-              className="mb-1.5 block font-heading text-sm font-semibold text-white"
+              className={LABEL_CLASS}
             >
-              Topic <span className="text-brand-yellow">*</span>
+              Topic <span className="text-gold">*</span>
             </label>
             <select
               id="topic"
@@ -240,23 +256,25 @@ export function SupportContactCard() {
             )}
           </div>
 
-          <Field label="Subject" name="subject" required error={fieldErrors.subject} />
+          <div className="sm:col-span-2">
+            <Field label="Subject" name="subject" required error={fieldErrors.subject} />
+          </div>
 
-          <div>
+          <div className="sm:col-span-2">
             <label
               htmlFor="message"
-              className="mb-1.5 block font-heading text-sm font-semibold text-white"
+              className={LABEL_CLASS}
             >
-              Message <span className="text-brand-yellow">*</span>
+              Message <span className="text-gold">*</span>
             </label>
             <textarea
               id="message"
               name="message"
               required
-              rows={6}
+              rows={4}
               maxLength={MAX_MESSAGE_CHARS}
               onChange={(e) => setMessageChars(e.currentTarget.value.length)}
-              className={`${INPUT_CLASS} resize-y`}
+              className={`${INPUT_CLASS} resize-none`}
               aria-describedby="message-counter"
             />
             <div className="mt-1 flex items-center justify-between gap-3">
@@ -267,7 +285,7 @@ export function SupportContactCard() {
               )}
               <p
                 id="message-counter"
-                className="font-heading text-xs text-white/50"
+                className="text-xs text-white/50"
                 aria-live="polite"
               >
                 {messageChars} / {MAX_MESSAGE_CHARS}
@@ -284,7 +302,7 @@ export function SupportContactCard() {
           </div>
 
           {state.kind === "error" && (
-            <p className="text-sm text-red-400" role="alert">
+            <p className="text-sm text-red-400 sm:col-span-2" role="alert">
               {state.message}
             </p>
           )}
@@ -293,7 +311,7 @@ export function SupportContactCard() {
             type="submit"
             disabled={isSubmitting}
             aria-busy={isSubmitting}
-            className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-brand-yellow px-6 py-3 font-heading text-sm font-bold text-brand-black transition-transform hover:scale-[1.02] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-yellow focus-visible:ring-offset-2 focus-visible:ring-offset-neutral-800 disabled:cursor-not-allowed disabled:opacity-60"
+            className={`${GOLD_BTN} w-full sm:col-span-2`}
           >
             {isSubmitting && (
               <svg
@@ -308,6 +326,7 @@ export function SupportContactCard() {
             )}
             {isSubmitting ? "Sending..." : "Send message"}
           </button>
+          </div>
         </form>
       </div>
     </section>
@@ -331,9 +350,9 @@ function Field({
 }) {
   return (
     <div>
-      <label htmlFor={name} className="mb-1.5 block font-heading text-sm font-semibold text-white">
+      <label htmlFor={name} className={LABEL_CLASS}>
         {label}
-        {required && <span className="text-brand-yellow"> *</span>}
+        {required && <span className="text-gold"> *</span>}
       </label>
       <input
         id={name}
