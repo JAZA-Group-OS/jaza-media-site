@@ -10,7 +10,7 @@ import AdminDashboardClient from './dashboard-client';
 export default async function AdminDashboardPage({
   searchParams,
 }: {
-  searchParams: Promise<{ booking_google?: string }>;
+  searchParams: Promise<{ booking_google?: string; tab?: string }>;
 }) {
   const supabase = await createServerClient();
   const {
@@ -24,6 +24,8 @@ export default async function AdminDashboardPage({
   }
 
   // Returning from the Google Calendar connect flow → open the Discovery Calls tab.
-  const { booking_google } = await searchParams;
-  return <AdminDashboardClient initialTab={booking_google ? 'bookings' : 'overview'} />;
+  // ?tab=support deep-links straight to the Support Desk.
+  const { booking_google, tab } = await searchParams;
+  const initialTab = booking_google ? 'bookings' : tab === 'support' ? 'support' : 'overview';
+  return <AdminDashboardClient initialTab={initialTab} />;
 }

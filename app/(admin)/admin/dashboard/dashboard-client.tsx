@@ -1,6 +1,6 @@
 'use client';
 
-import { Menu, Moon, PanelLeftOpen, Sun } from 'lucide-react';
+import { LifeBuoy, Menu, Moon, PanelLeftOpen, Sun } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
@@ -12,7 +12,7 @@ import CareerApplicationsManager from '@/components/admin/career-applications-ma
 import CourseRequestsManager from '@/components/admin/course-requests-manager';
 import DashboardOverview from '@/components/admin/dashboard-overview';
 import PartnerLeadsManager from '@/components/admin/partner-leads-manager';
-import SupportTicketsManager from '@/components/admin/support-tickets-manager';
+import SupportDesk from '@/components/admin/support-desk';
 import UpcomingCallAlert from '@/components/admin/upcoming-call-alert';
 import { COURSE_CATALOG } from '@/lib/courses/catalog';
 import { supabase } from '@/lib/supabase/client';
@@ -33,7 +33,7 @@ const PAGE: Record<DashboardTab, { title: string; description: string }> = {
   applications: { title: 'Career Applications', description: 'Candidates who applied through the careers page.' },
   'course-rule-of-10x': { title: 'Rule of 10X', description: 'Course access requests.' },
   'course-marketing-templates': { title: 'Marketing Templates', description: 'Template download requests.' },
-  support: { title: 'Support Tickets', description: 'Messages sent from the Support page.' },
+  support: { title: 'Support Desk', description: 'Tickets from the Support page: triage, assign, note and resolve.' },
 };
 
 const COLLAPSE_KEY = 'jaza-admin-sidebar-collapsed';
@@ -151,7 +151,22 @@ export default function AdminDashboardClient({ initialTab = 'overview' }: { init
 
           <main className="w-full flex-1 px-4 pt-2 pb-8 sm:px-6 lg:px-8">
             <UpcomingCallAlert onOpen={() => setActiveTab('bookings')} />
-            {activeTab === 'overview' && <DashboardOverview />}
+            {activeTab === 'overview' && (
+              <>
+                <button
+                  type="button"
+                  onClick={() => setActiveTab('support')}
+                  className="mb-4 flex w-full items-center justify-between gap-3 rounded-2xl border border-adm-line bg-adm-surface px-4 py-3 text-left transition hover:border-adm-accent"
+                >
+                  <span className="flex items-center gap-2.5 text-[13.5px] text-adm-text">
+                    <LifeBuoy className="size-4 text-adm-accent" aria-hidden />
+                    Support Desk — triage and resolve messages from the Support page
+                  </span>
+                  <span className="text-[12.5px] font-medium text-adm-accent">Open desk →</span>
+                </button>
+                <DashboardOverview />
+              </>
+            )}
             {activeTab === 'leads' && <PartnerLeadsManager />}
             {activeTab === 'applications' && <CareerApplicationsManager />}
             {activeTab === 'course-rule-of-10x' && (
@@ -160,7 +175,7 @@ export default function AdminDashboardClient({ initialTab = 'overview' }: { init
             {activeTab === 'course-marketing-templates' && (
               <CourseRequestsManager courseSlug="marketing-templates" courseTitle={COURSE_CATALOG['marketing-templates'].shortName} />
             )}
-            {activeTab === 'support' && <SupportTicketsManager />}
+            {activeTab === 'support' && <SupportDesk />}
             {activeTab === 'bookings' && <BookingManager />}
           </main>
         </div>

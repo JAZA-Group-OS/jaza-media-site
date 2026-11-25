@@ -380,8 +380,29 @@ export interface SupportTicket {
   status: SupportTicketStatus;
   admin_notes: string | null;
   source: string;
+  number: number;
+  priority: SupportTicketPriority;
+  assignee: string | null;
   created_at: string;
   updated_at: string;
+}
+
+export type SupportTicketPriority = 'low' | 'normal' | 'high' | 'urgent';
+
+export interface SupportTicketComment {
+  id: string;
+  ticket_id: string;
+  kind: 'note' | 'event';
+  body: string;
+  author_email: string;
+  created_at: string;
+}
+
+export interface SupportTicketCommentInsert {
+  ticket_id: string;
+  kind?: 'note' | 'event';
+  body: string;
+  author_email: string;
 }
 
 export interface SupportTicketInsert {
@@ -399,6 +420,8 @@ export interface SupportTicketInsert {
 export interface SupportTicketUpdate {
   status?: SupportTicketStatus;
   admin_notes?: string | null;
+  priority?: SupportTicketPriority;
+  assignee?: string | null;
 }
 
 // ============================================================================
@@ -601,6 +624,12 @@ export type Database = {
         Row: SupportTicket;
         Insert: SupportTicketInsert;
         Update: SupportTicketUpdate;
+        Relationships: [];
+      };
+      support_ticket_comments: {
+        Row: SupportTicketComment;
+        Insert: SupportTicketCommentInsert;
+        Update: never;
         Relationships: [];
       };
     };

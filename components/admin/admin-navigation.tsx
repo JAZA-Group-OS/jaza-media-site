@@ -49,7 +49,7 @@ export const NAV_GROUPS: { title: string; items: Item[] }[] = [
   },
   {
     title: 'Help desk',
-    items: [{ id: 'support', label: 'Support Tickets', icon: LifeBuoy }],
+    items: [{ id: 'support', label: 'Support Desk', icon: LifeBuoy }],
   },
 ];
 
