@@ -19,7 +19,7 @@
   --font-sans: var(--font-sans);
   --font-display: var(--font-display);
   --font-heading: var(--font-heading);
-  --font-serif: var(--font-serif);
+  --font-serif: var(--font-heading), ui-sans-serif, system-ui, sans-serif;
 
   /* Premium palette */
   --color-ink: #0c0c0e;
@@ -345,3 +345,7 @@ html.dots-scroll::-webkit-scrollbar { display: none; }
 @media (prefers-reduced-motion: reduce) {
   .flag-wave, .flag-shade { animation: none; }
 }
+
+/* Site-wide: former serif headings render in Poppins, upright and semi-bold */
+.font-serif { font-weight: 600; letter-spacing: -0.015em; }
+.font-serif, .font-serif em, .font-serif i, .font-serif.italic, .font-serif .italic { font-style: normal; }
