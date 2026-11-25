@@ -26,6 +26,8 @@ export function SiteScrollDots() {
   const [dots, setDots] = useState<Dot[]>([]);
   const [active, setActive] = useState(0);
   const hidden = pathname.startsWith("/admin");
+  // Support page: dots sit as a horizontal pager in the empty space at the bottom of the screen.
+  const row = pathname === "/support";
 
   useEffect(() => {
     if (hidden) return;
@@ -60,7 +62,14 @@ export function SiteScrollDots() {
   if (hidden || dots.length < 2) return null;
 
   return (
-    <nav aria-label="Page sections" className="fixed top-1/2 right-3 z-40 hidden -translate-y-1/2 flex-col items-end gap-4 md:flex lg:right-6">
+    <nav
+      aria-label="Page sections"
+      className={
+        row
+          ? "fixed bottom-8 left-1/2 z-40 hidden -translate-x-1/2 flex-row items-center gap-5 rounded-full border border-white/10 bg-black/40 px-5 py-3 backdrop-blur md:flex"
+          : "fixed top-1/2 right-3 z-40 hidden -translate-y-1/2 flex-col items-end gap-4 md:flex lg:right-6"
+      }
+    >
       {dots.map((d, i) => (
         <button
           key={i}
@@ -68,10 +77,10 @@ export function SiteScrollDots() {
           onClick={() => d.el.scrollIntoView({ behavior: "smooth", block: "start" })}
           aria-label={d.label || `Section ${i + 1}`}
           aria-current={i === active ? "true" : undefined}
-          className="group flex items-center gap-3 py-0.5"
+          className={`group relative flex items-center gap-3 py-0.5 ${row ? "flex-col" : ""}`}
         >
           {d.label && (
-            <span className="pointer-events-none rounded-full border border-white/10 bg-black/70 px-2.5 py-1 text-[10px] tracking-[0.2em] text-white/80 uppercase opacity-0 backdrop-blur transition group-hover:opacity-100">
+            <span className={`pointer-events-none ${row ? "absolute bottom-full mb-3 whitespace-nowrap" : ""} rounded-full border border-white/10 bg-black/70 px-2.5 py-1 text-[10px] tracking-[0.2em] text-white/80 uppercase opacity-0 backdrop-blur transition group-hover:opacity-100`}>
               {d.label}
             </span>
           )}
