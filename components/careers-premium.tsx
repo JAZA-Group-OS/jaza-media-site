@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useInView, useReducedMotion } from "framer-motion";
+import { motion, useInView, useReducedMotion, useScroll, useSpring, useTransform, type MotionValue } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useRef, useState, type ReactNode } from "react";
@@ -113,16 +113,38 @@ function Hero() {
 
 const STRIP = ["maju.jpg", "careers-3.jpg", "careers-4.jpg", "Solving for Scale.png", "Culture of Growth.png", "Hybrd Work.png"];
 
-function PhotoStrip() {
+function StripRow({ files, x }: { files: string[]; x: MotionValue<string> }) {
   return (
-    <div aria-hidden className="overflow-hidden bg-[#0b0d0c] pb-16 md:pb-20">
-      <div className="animate-careers-strip flex w-max gap-4">
-        {[...STRIP, ...STRIP].map((f, i) => (
-          <div key={i} className="relative h-40 w-60 shrink-0 overflow-hidden rounded-2xl md:h-48 md:w-80">
-            <Image src={img(f)} alt="" fill sizes="320px" className="object-cover grayscale-[0.4] transition duration-500 hover:grayscale-0" />
-          </div>
-        ))}
+    <motion.div style={{ x }} className="flex w-max gap-4 md:gap-5">
+      {files.map((f, i) => (
+        <div
+          key={i}
+          className="group relative aspect-[3/2] w-60 shrink-0 overflow-hidden rounded-2xl ring-1 ring-white/10 transition duration-500 hover:ring-gold/60 md:w-80"
+        >
+          <Image src={img(f)} alt="" fill sizes="320px" className="object-cover grayscale-[0.6] transition duration-700 group-hover:scale-105 group-hover:grayscale-0" />
+        </div>
+      ))}
+    </motion.div>
+  );
+}
+
+// Two tilted rows that slide in opposite directions as the page scrolls (not on a timer).
+function PhotoStrip() {
+  const ref = useRef<HTMLDivElement>(null);
+  const reduce = useReducedMotion();
+  const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
+  const p = useSpring(scrollYProgress, { stiffness: 80, damping: 25, mass: 0.4 });
+  const a = useTransform(p, [0, 1], reduce ? ["-10%", "-10%"] : ["0%", "-22%"]);
+  const b = useTransform(p, [0, 1], reduce ? ["-12%", "-12%"] : ["-24%", "-2%"]);
+  const row = [...STRIP, ...STRIP];
+  return (
+    <div ref={ref} aria-hidden className="relative overflow-hidden bg-[#0b0d0c] py-10 md:py-14">
+      <div className="flex -rotate-[4deg] scale-110 flex-col gap-4 md:gap-5">
+        <StripRow files={row} x={a} />
+        <StripRow files={[...row].reverse()} x={b} />
       </div>
+      <div className="pointer-events-none absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-[#0b0d0c] to-transparent md:w-48" />
+      <div className="pointer-events-none absolute inset-y-0 right-0 w-24 bg-gradient-to-l from-[#0b0d0c] to-transparent md:w-48" />
     </div>
   );
 }
