@@ -38,6 +38,7 @@ export function StepTwoBooking() {
   // we size the frame to fit and move the step tracker along.
   const [frameHeight, setFrameHeight] = useState(640);
   const [bookingStep, setBookingStep] = useState(0);
+  const [showMore, setShowMore] = useState(false);
 
   useEffect(() => {
     const onMsg = (e: MessageEvent) => {
@@ -206,6 +207,8 @@ export function StepTwoBooking() {
                 Practical business scaling, guided by <em className="text-gold">operators</em> who build and grow brands every day.
               </blockquote>
             </figure>
+            <div className={`grid transition-all duration-500 ease-out ${showMore ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}>
+              <div className="overflow-hidden">
             <ul className="mt-5 grid gap-2.5">
               {[
                 ['₱582M', 'in total sales generated'],
@@ -237,6 +240,17 @@ export function StepTwoBooking() {
               <li className="flex items-center gap-2.5"><Video className="size-4 text-gold" strokeWidth={1.75} />Google Meet — link sent by email</li>
               <li className="flex items-center gap-2.5"><CalendarCheck className="size-4 text-gold" strokeWidth={1.75} />Free of charge</li>
             </ul>
+              </div>
+            </div>
+            <button
+              type="button"
+              onClick={() => setShowMore((v) => !v)}
+              aria-expanded={showMore}
+              className="group mt-5 inline-flex items-center gap-2 rounded-full border border-gold/40 px-4 py-2 text-[11px] font-semibold tracking-[0.2em] text-gold uppercase transition hover:bg-gold/10"
+            >
+              {showMore ? 'See less' : 'See more'}
+              <span aria-hidden className={`transition-transform duration-300 ${showMore ? 'rotate-180' : ''}`}>&#9662;</span>
+            </button>
           </aside>
 
           <div className="rounded-[28px] bg-gradient-to-b from-gold/50 via-white/10 to-white/[0.03] p-px shadow-[0_60px_120px_-40px_rgba(0,0,0,0.95)]">
