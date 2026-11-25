@@ -111,7 +111,7 @@ function Hero() {
 
 /* ---------- 2. photo strip ---------- */
 
-const STRIP = ["maju.jpg", "careers-3.jpg", "careers-4.jpg", "Solving for Scale.png", "Culture of Growth.png", "Hybrd Work.png"];
+const STRIP = ["maju.jpg", "careers-3.jpg", "careers-4.jpg", "together-scale.jpg", "together-growth.jpg", "together-hybrid.jpg"];
 
 const WALL = [...STRIP, "careers 1.png", "careers 2.png"];
 
@@ -276,114 +276,71 @@ const TOGETHER = [
     title: "Hybrid Work",
     short: "Impact, not geography.",
     body: "Remote for focus and autonomy, in-person for strategy and relationships. The goal isn't hours at a desk — it's doing work that moves the needle.",
-    photo: "Hybrd Work.png",
+    photo: "together-hybrid.jpg",
   },
   {
     title: "Solving for Scale",
     short: "We don't just talk about growth — we build it.",
     body: "We partner with entrepreneurs to scale companies with strong systems. Internally, same standard: smarter processes, stronger teams, and leverage that compounds.",
-    photo: "Solving for Scale.png",
+    photo: "together-scale.jpg",
   },
   {
     title: "Culture of Growth",
     short: "High bar, constant feedback, full accountability.",
     body: "Trust, integrity, ownership — no politics, shortcuts, or excuses. We win by focusing on fundamentals and raising standards daily.",
-    photo: "Culture of Growth.png",
+    photo: "together-growth.jpg",
   },
 ];
 
-function TogetherCard({ t, i, open, onOpen }: { t: (typeof TOGETHER)[number]; i: number; open: boolean; onOpen: () => void }) {
-  const ref = useRef<HTMLElement>(null);
-  const onMove = (e: React.MouseEvent) => {
-    const el = ref.current;
-    if (!el) return;
-    const r = el.getBoundingClientRect();
-    el.style.setProperty("--mx", `${e.clientX - r.left}px`);
-    el.style.setProperty("--my", `${e.clientY - r.top}px`);
-  };
+function TogetherCard({ t, i }: { t: (typeof TOGETHER)[number]; i: number }) {
   return (
-    <article
-      ref={ref}
-      onMouseEnter={onOpen}
-      onMouseMove={onMove}
-      onFocus={onOpen}
-      tabIndex={0}
-      className={`group relative h-[420px] min-w-0 cursor-pointer overflow-hidden rounded-[24px] border transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] outline-none md:h-[520px] ${
-        open ? "border-gold/60 shadow-[0_40px_100px_-40px_rgba(234,179,8,0.45)] md:flex-[2.4]" : "border-white/10 md:flex-1"
-      }`}
-    >
-      <Image
-        src={img(t.photo)}
-        alt={t.title}
-        fill
-        sizes="(min-width: 768px) 700px, 100vw"
-        className={`object-cover transition duration-1000 ${open ? "scale-105 grayscale-0" : "scale-100 grayscale-[0.7]"}`}
-      />
-      <div className={`absolute inset-0 transition duration-700 ${open ? "bg-gradient-to-t from-black/95 via-black/40 to-black/10" : "bg-black/55"}`} />
-      {/* cursor light */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 opacity-0 transition duration-500 group-hover:opacity-100"
-        style={{ background: "radial-gradient(420px circle at var(--mx, 50%) var(--my, 50%), rgba(234,179,8,0.22), transparent 60%)" }}
-      />
-      {/* number + progress */}
-      <div className="absolute top-6 right-6 left-6 flex items-center gap-4">
-        <span className="bg-gradient-to-br from-[#fbe7a1] via-gold to-[#a97a1f] bg-clip-text font-serif text-4xl text-transparent italic">0{i + 1}</span>
-        <span className="relative h-px flex-1 overflow-hidden bg-white/15">
-          <span
-            className={`absolute inset-y-0 left-0 bg-gold ${open ? "w-full transition-[width] ease-linear" : "w-0"}`}
-            style={{ transitionDuration: open ? `${CYCLE_MS}ms` : "0ms" }}
+    <article className="group relative flex h-full flex-col overflow-hidden rounded-[26px] bg-gradient-to-b from-gold/40 via-white/10 to-white/[0.03] p-px shadow-[0_40px_80px_-40px_rgba(0,0,0,0.95)] transition duration-500 hover:-translate-y-2 hover:shadow-[0_50px_100px_-40px_rgba(234,179,8,0.35)]">
+      <div className="flex h-full flex-col overflow-hidden rounded-[25px] bg-[linear-gradient(180deg,#17160f_0%,#0f0f10_70%)]">
+        <div className="relative aspect-[4/3] overflow-hidden">
+          <Image
+            src={img(t.photo)}
+            alt={t.title}
+            fill
+            sizes="(min-width: 768px) 400px, 100vw"
+            className="object-cover object-top grayscale-[0.35] transition duration-1000 group-hover:scale-105 group-hover:grayscale-0"
           />
-        </span>
-      </div>
-      <div className="absolute inset-x-6 bottom-6 md:inset-x-8 md:bottom-8">
-        <h3 className={`font-serif leading-tight text-white transition-all duration-700 ${open ? "text-[34px] md:text-[44px]" : "text-[28px] md:text-[30px]"}`}>
-          {t.title}
-        </h3>
-        <div className={`grid transition-all duration-700 ${open ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0 md:grid-rows-[0fr]"}`}>
-          <div className="overflow-hidden">
-            <p className="mt-2 text-sm tracking-wide text-gold">{t.short}</p>
-            <p className="mt-3 max-w-[520px] text-[15px] leading-[1.7] text-white/80">{t.body}</p>
-          </div>
+          <div className="absolute inset-0 bg-gradient-to-t from-[#141410] via-transparent to-black/20" />
+          <span className="absolute top-5 left-5 grid size-11 place-items-center rounded-full border border-gold/50 bg-black/50 font-serif text-lg text-gold italic backdrop-blur">
+            0{i + 1}
+          </span>
+        </div>
+        <div className="flex flex-1 flex-col px-7 pt-2 pb-8">
+          <h3 className="font-serif text-[30px] leading-tight text-white">{t.title}</h3>
+          <p className="mt-2 font-serif text-[17px] text-gold italic">{t.short}</p>
+          <div aria-hidden className="my-5 h-px w-10 bg-gold/60 transition-all duration-500 group-hover:w-20" />
+          <p className="text-[15px] leading-[1.75] font-light text-white/65">{t.body}</p>
         </div>
       </div>
     </article>
   );
 }
 
-const CYCLE_MS = 5000;
-
 function Together() {
-  const [open, setOpen] = useState(0);
-  const [hover, setHover] = useState(false);
-  const reduce = useReducedMotion();
-  useEffect(() => {
-    if (hover || reduce) return;
-    const id = setInterval(() => setOpen((o) => (o + 1) % TOGETHER.length), CYCLE_MS);
-    return () => clearInterval(id);
-  }, [hover, reduce]);
   return (
     <section className="relative overflow-hidden bg-[#0b0d0c] py-20 text-white md:py-28">
-      <div aria-hidden className="pointer-events-none absolute top-1/3 -left-40 size-[600px] rounded-full bg-gold/8 blur-[150px]" />
+      <div aria-hidden className="pointer-events-none absolute top-1/3 left-1/2 size-[800px] -translate-x-1/2 rounded-full bg-gold/[0.07] blur-[160px]" />
       <div className="relative mx-auto max-w-[1200px] px-4 md:px-8">
-        <Reveal className="mb-12 flex flex-wrap items-end justify-between gap-5">
-          <div className="flex flex-col items-start gap-5">
-            <Eyebrow>Life at JAZA</Eyebrow>
-            <h2 className={H2}>
-              How we work <Gold>together.</Gold>
-            </h2>
-          </div>
-          <p className="max-w-[380px] leading-[1.7] font-light text-white/60">
+        <Reveal className="mx-auto mb-14 flex max-w-[720px] flex-col items-center gap-5 text-center">
+          <Eyebrow>Life at JAZA</Eyebrow>
+          <h2 className={H2}>
+            How we work <Gold>together.</Gold>
+          </h2>
+          <p className="font-serif text-[19px] text-white/60 italic md:text-[21px]">
             Impact over hours. Systems over shortcuts. Growth as part of the job.
           </p>
         </Reveal>
-        <Reveal>
-          <div className="flex flex-col gap-4 md:flex-row md:gap-5" onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}>
-            {TOGETHER.map((t, i) => (
-              <TogetherCard key={t.title} t={t} i={i} open={open === i} onOpen={() => setOpen(i)} />
-            ))}
-          </div>
-        </Reveal>
+        <div className="grid gap-6 md:grid-cols-3">
+          {TOGETHER.map((t, i) => (
+            <Reveal key={t.title} delay={i * 0.12} className="h-full">
+              <TogetherCard t={t} i={i} />
+            </Reveal>
+          ))}
+        </div>
       </div>
     </section>
   );
