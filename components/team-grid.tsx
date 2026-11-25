@@ -119,8 +119,16 @@ export function TeamGrid() {
             <em className="bg-gradient-to-br from-[#fbe7a1] via-gold to-[#a97a1f] bg-clip-text pr-2 text-transparent">operators</em>{" "}
             <span className="bg-gradient-to-b from-white via-white to-white/60 bg-clip-text text-transparent">behind JAZA</span>
           </h1>
-          <p className="mt-5 max-w-xl text-[15px] leading-7 font-light text-white/60">
-            The builders, strategists and operators scaling the JAZA Group of Companies. Hover over a profile to read their story.
+          <blockquote className="mt-7 max-w-2xl">
+            <p className="font-serif text-[19px] leading-8 italic text-white/80 md:text-[22px] md:leading-9">
+              <span aria-hidden className="mr-1 text-gold/80">&ldquo;</span>
+              Each department is led by a head who sets the standard: people who carry the vision of the JAZA Group of Companies into every project and client we take on.
+              <span aria-hidden className="ml-1 text-gold/80">&rdquo;</span>
+            </p>
+          </blockquote>
+          <div aria-hidden className="mt-6 h-px w-16 bg-gradient-to-r from-transparent via-gold/60 to-transparent" />
+          <p className="mt-5 text-[11px] font-medium tracking-[0.28em] text-white/45 uppercase">
+            Hover over a profile to read their story
           </p>
         </Reveal>
       </div>
@@ -141,7 +149,12 @@ function WaveSlider() {
   const wrap = useRef<HTMLDivElement>(null);
   const [W, setW] = useState(1200);
   const [step, setStep] = useState(0);
+  const [drag, setDrag] = useState(0); // fractional slots while dragging
+  const [dragging, setDragging] = useState(false);
   const [paused, setPaused] = useState(false);
+  const [userSet, setUserSet] = useState(false); // stop autoplay once the visitor positions it
+  const start = useRef<{ x: number; moved: boolean } | null>(null);
+  const prevSlot = useRef<number[]>([]);
   const n = MEMBERS.length;
 
   useEffect(() => {
@@ -153,17 +166,49 @@ function WaveSlider() {
   }, []);
 
   useEffect(() => {
-    if (paused || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    if (paused || userSet || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     const t = setInterval(() => setStep((s) => s + 1), HOLD_MS);
     return () => clearInterval(t);
-  }, [paused]);
+  }, [paused, userSet]);
 
   const gap = W < 640 ? 12 : 28;
   const card = Math.min(290, Math.floor((W - 4 * gap) / 5));
+  const pitch = card + gap;
   const dip = Math.round(card * 0.55);
   const ys = [0, dip * 0.45, dip, dip * 0.45, 0];
   const total = 5 * card + 4 * gap;
   const left0 = (W - total) / 2;
+  const pos = step + drag;
+
+  const yAt = (slot: number) => {
+    const c = Math.max(0, Math.min(4, slot));
+    const a = Math.floor(c);
+    const b = Math.min(4, a + 1);
+    return ys[a] + (ys[b] - ys[a]) * (c - a);
+  };
+
+  const onDown = (e: React.PointerEvent) => {
+    start.current = { x: e.clientX, moved: false };
+  };
+  const onMove = (e: React.PointerEvent) => {
+    if (!start.current) return;
+    const dx = e.clientX - start.current.x;
+    if (!start.current.moved && Math.abs(dx) > 6) {
+      start.current.moved = true;
+      setDragging(true);
+      wrap.current?.setPointerCapture(e.pointerId);
+    }
+    if (start.current.moved) setDrag(-dx / pitch);
+  };
+  const onUp = () => {
+    if (start.current?.moved) {
+      setStep((s) => Math.round(s + drag));
+      setUserSet(true);
+    }
+    setDrag(0);
+    setDragging(false);
+    setTimeout(() => (start.current = null), 0);
+  };
 
   return (
     <div className="mx-auto mt-8 max-w-[1560px] px-4 md:mt-10 md:px-6">
@@ -173,29 +218,42 @@ function WaveSlider() {
         onMouseLeave={() => setPaused(false)}
         onFocus={() => setPaused(true)}
         onBlur={() => setPaused(false)}
-        className="relative"
+        onPointerDown={onDown}
+        onPointerMove={onMove}
+        onPointerUp={onUp}
+        onPointerCancel={onUp}
+        onClickCapture={(e) => {
+          // a drag shouldn't also open the bio page
+          if (start.current?.moved) e.preventDefault();
+        }}
+        onDragStart={(e) => e.preventDefault()}
+        className={`relative touch-pan-y select-none ${dragging ? "cursor-grabbing" : "cursor-grab"}`}
         style={{ height: card + dip + 30, ["--card" as string]: `${card}px` }}
       >
         {MEMBERS.map((m, i) => {
-          const p = (((i - step) % n) + n) % n; // 0..4 visible, n-1 off left, rest off right
-          const slot = p <= 4 ? p : p === n - 1 ? -1 : 5;
-          const visible = slot >= 0 && slot <= 4;
-          // cards wrapping from the far left to the far right jump while hidden
-          const wrapping = p === n - 2 || (p === 5 && n === 6);
-          const x = left0 + slot * (card + gap);
-          const y = visible ? ys[slot] : 0;
+          let p = (((i - pos) % n) + n) % n; // 0..n
+          if (p > n - 1.5) p -= n; // just left of the first slot
+          const slot = p; // -1.5 … n-1.5; visible 0..4
+          const visible = slot > -0.5 && slot < 4.5;
+          const opacity = Math.max(0, Math.min(1, 1 - Math.max(-slot, slot - 4)));
+          const jump = Math.abs(slot - (prevSlot.current[i] ?? slot)) > 2.5;
+          prevSlot.current[i] = slot;
+          const x = left0 + slot * pitch;
+          const y = yAt(slot);
+          const centre = Math.max(0, 1 - Math.abs(slot - 2));
           return (
             <div
               key={m.slug}
               className="absolute top-0 left-0"
               style={{
-                transform: `translate3d(${x}px, ${y}px, 0) scale(${slot === 2 ? 1.06 : 1})`,
-                opacity: visible ? 1 : 0,
-                zIndex: slot === 2 ? 20 : 10,
+                transform: `translate3d(${x}px, ${y}px, 0) scale(${1 + 0.06 * centre})`,
+                opacity,
+                zIndex: 10 + Math.round(centre * 10),
                 pointerEvents: visible ? "auto" : "none",
-                transition: wrapping
-                  ? "none"
-                  : `transform ${MOVE_MS}ms cubic-bezier(0.65,0,0.35,1), opacity ${MOVE_MS}ms ease`,
+                transition:
+                  dragging || jump
+                    ? "none"
+                    : `transform ${MOVE_MS}ms cubic-bezier(0.65,0,0.35,1), opacity ${MOVE_MS}ms ease`,
               }}
             >
               <TeamCard member={m} hidden={!visible} />
