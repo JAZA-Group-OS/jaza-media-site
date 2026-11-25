@@ -103,8 +103,41 @@ function TeamCard({ member, hidden, onOpen }: { member: Member; hidden?: boolean
 }
 
 export function TeamGrid() {
+  // Temporary spacing tuner: add ?tune=1 to the URL, drag the gold bar at the bottom edge.
+  const [tune, setTune] = useState(false);
+  const [pb, setPb] = useState<number | null>(null);
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setTune(new URLSearchParams(window.location.search).has("tune"));
+  }, []);
+  const startTune = (e: React.PointerEvent<HTMLDivElement>) => {
+    const section = e.currentTarget.parentElement!;
+    const start = e.clientY;
+    const base = parseFloat(getComputedStyle(section).paddingBottom);
+    const move = (ev: PointerEvent) => setPb(Math.max(0, Math.round(base + ev.clientY - start)));
+    const up = () => {
+      window.removeEventListener("pointermove", move);
+      window.removeEventListener("pointerup", up);
+    };
+    window.addEventListener("pointermove", move);
+    window.addEventListener("pointerup", up);
+  };
+
   return (
-    <section className="relative overflow-hidden bg-[#0b0d0c] pt-5 pb-10 text-white md:pt-6 md:pb-14">
+    <section
+      className="relative overflow-hidden bg-[#0b0d0c] pt-5 pb-10 text-white md:pt-6 md:pb-14"
+      style={pb !== null ? { paddingBottom: pb } : undefined}
+    >
+      {tune && (
+        <div
+          onPointerDown={startTune}
+          className="absolute inset-x-0 bottom-0 z-50 flex h-6 cursor-ns-resize touch-none items-center justify-center bg-gold/30 hover:bg-gold/50"
+        >
+          <span className="rounded-full bg-black px-3 py-0.5 text-xs text-gold">
+            bottom space: {pb ?? "drag me"}{pb !== null && "px"}
+          </span>
+        </div>
+      )}
       <div aria-hidden className="pointer-events-none absolute -top-40 left-1/2 size-[820px] -translate-x-1/2 rounded-full bg-gold/12 blur-[160px]" />
       <div aria-hidden className="pointer-events-none absolute inset-0 opacity-[0.05] [background-image:radial-gradient(white_1px,transparent_1px)] [background-size:4px_4px]" />
 
