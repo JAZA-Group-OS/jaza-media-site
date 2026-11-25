@@ -33,11 +33,14 @@ export async function proxy(request: NextRequest) {
   const hostname = host.split(':')[0];
   const port = host.includes(':') ? `:${host.split(':')[1]}` : '';
   const isAdminSubdomain = hostname.startsWith('admin.');
+  // *.vercel.app can't serve a nested admin. subdomain, so on those hosts the
+  // admin lives at /admin/* on the main host instead ("path mode").
+  const pathMode = hostname.endsWith('.vercel.app');
   const url = request.nextUrl.clone();
 
   // Step 1: Force /admin/* on the main host onto the subdomain. This runs
   // before any session work, so there are no refreshed cookies to preserve.
-  if (!isAdminSubdomain && url.pathname.startsWith('/admin')) {
+  if (!pathMode && !isAdminSubdomain && url.pathname.startsWith('/admin')) {
     const newPath = url.pathname.replace(/^\/admin/, '') || '/dashboard';
     const adminHost = `admin.${hostname}${port}`;
     return NextResponse.redirect(
@@ -80,6 +83,23 @@ export async function proxy(request: NextRequest) {
   // Step 4: On the admin subdomain, gate non-login traffic on a real session
   // AND on the admin email — RLS protects data, but the dashboard bundle is
   // sensitive enough to deny non-admin authenticated users at the edge.
+  if (pathMode && url.pathname.startsWith('/admin')) {
+    if (!isAdmin && url.pathname !== '/admin/login') {
+      const loginUrl = url.clone();
+      loginUrl.pathname = '/admin/login';
+      const redirect = NextResponse.redirect(loginUrl);
+      copyAuthCookies(response, redirect);
+      return redirect;
+    }
+    if (url.pathname === '/admin' || url.pathname === '/admin/') {
+      const dash = url.clone();
+      dash.pathname = '/admin/dashboard';
+      const redirect = NextResponse.redirect(dash);
+      copyAuthCookies(response, redirect);
+      return redirect;
+    }
+  }
+
   if (isAdminSubdomain) {
     const isLoginPath =
       url.pathname === '/login' || url.pathname === '/admin/login';

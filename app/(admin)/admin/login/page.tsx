@@ -35,7 +35,7 @@ export default function AdminLoginPage() {
     // the async cookie write and land back on /login until cookies settle.
     // `replace` keeps the login page out of history. Stays loading until the
     // browser tears down this document.
-    window.location.replace('/dashboard');
+    window.location.replace('/admin/dashboard');
   };
 
   return (
