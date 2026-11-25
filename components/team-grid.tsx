@@ -163,6 +163,21 @@ function WaveSlider() {
     return () => ro.disconnect();
   }, []);
 
+  // remember where the row was dragged to
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem("jaza-team-offset");
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      if (saved) setGroup(JSON.parse(saved) as Offset);
+    } catch {}
+  }, []);
+  useEffect(() => {
+    if (!group || active) return;
+    try {
+      localStorage.setItem("jaza-team-offset", JSON.stringify(group));
+    } catch {}
+  }, [group, active]);
+
   useEffect(() => {
     if (paused || open || userSet || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     const t = setInterval(() => setStep((s) => s + 1), HOLD_MS);
