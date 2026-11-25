@@ -149,13 +149,15 @@ function WaveSlider() {
   const n = MEMBERS.length;
   const [open, setOpen] = useState<{ member: Member; rect: DOMRect } | null>(null);
 
+  const narrow = W < 640;
+  // Re-attach when switching between the phone strip and the wave (different wrapper element).
   useEffect(() => {
     const el = wrap.current;
     if (!el) return;
     const ro = new ResizeObserver(() => setW(el.clientWidth));
     ro.observe(el);
     return () => ro.disconnect();
-  }, []);
+  }, [narrow]);
 
   useEffect(() => {
     if (paused || open || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
@@ -171,6 +173,27 @@ function WaveSlider() {
   const total = 5 * card + 4 * gap;
   const left0 = (W - total) / 2;
   const H = card + dip + 30;
+
+  // Phones: five cards across would be ~60px wide, so swap the wave for a
+  // swipeable row of full-size cards.
+  if (narrow) {
+    return (
+      <div ref={wrap} className="mt-6">
+        <div
+          className="flex snap-x snap-mandatory gap-4 overflow-x-auto px-[max(16px,calc(50vw-120px))] pb-5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+          style={{ ["--card" as string]: "240px" }}
+        >
+          {MEMBERS.map((m) => (
+            <div key={m.slug} className={`shrink-0 snap-center transition-opacity ${open?.member.slug === m.slug ? "opacity-0" : ""}`}>
+              <TeamCard member={m} onOpen={(member, rect) => setOpen({ member, rect })} />
+            </div>
+          ))}
+        </div>
+        <p className="text-center text-[11px] tracking-[0.24em] text-white/40 uppercase">Swipe to meet the team · tap to read</p>
+        <AnimatePresence>{open && <ProfilePanel key={open.member.slug} {...open} onClose={() => setOpen(null)} />}</AnimatePresence>
+      </div>
+    );
+  }
 
   return (
     <div className="mx-auto -mt-3 max-w-[1560px] px-4 md:-mt-6 md:px-6">
