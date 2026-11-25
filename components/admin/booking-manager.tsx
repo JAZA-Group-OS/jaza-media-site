@@ -1,6 +1,6 @@
 'use client';
 
-import { CalendarDays, Check, Link2, Loader2, Mail, Phone, Plus, Trash2, Video, X } from 'lucide-react';
+import { CalendarDays, Check, ChevronDown, Link2, Loader2, Mail, Phone, Plus, Settings2, Trash2, Video, X } from 'lucide-react';
 import { useCallback, useEffect, useState } from 'react';
 import BookingCalendarView from './booking-calendar-view';
 
@@ -46,6 +46,7 @@ export default function BookingManager() {
   const [saving, setSaving] = useState(false);
   const [newDayOff, setNewDayOff] = useState('');
   const [showPast, setShowPast] = useState(false);
+  const [showSettings, setShowSettings] = useState(false);
   const [cancelId, setCancelId] = useState<string | null>(null);
   const [now] = useState(() => Date.now());
   const [googleNotice] = useState<string | null>(() => {
@@ -159,13 +160,42 @@ export default function BookingManager() {
         )}
       </section>
 
-      {/* Settings — left: weekly hours · right: rules, Google, days off */}
-      <div className="grid items-start gap-6 xl:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)]">
+      {/* Settings — hidden behind one button to keep the page clean */}
+      <section className={`${CARD} !p-0 overflow-hidden`}>
+        <button
+          type="button"
+          onClick={() => setShowSettings((v) => !v)}
+          aria-expanded={showSettings}
+          aria-controls="booking-settings"
+          className="flex w-full flex-wrap items-center gap-4 p-5 text-left transition hover:bg-adm-raised/50 sm:p-6"
+        >
+          <span className="grid size-11 shrink-0 place-items-center rounded-2xl bg-adm-accent text-[#141414]">
+            <Settings2 className="size-5" />
+          </span>
+          <span className="min-w-0 flex-1">
+            <span className="block text-[15px] font-semibold text-adm-text">Booking settings</span>
+            <span className="mt-0.5 block truncate text-[13px] text-adm-subtle">Weekly hours, booking rules, Google Calendar &amp; notifications, days off</span>
+            <span className="mt-2.5 flex flex-wrap gap-1.5">
+              <Chip>{daysSummary(data.settings.weekly_hours)}</Chip>
+              <Chip>{data.settings.slot_minutes} min calls · {data.settings.buffer_minutes} min buffer</Chip>
+              <Chip tone={data.googleConnected ? 'ok' : 'warn'}>{data.googleConnected ? 'Google connected' : 'Google not connected'}</Chip>
+              {data.daysOff.length > 0 && <Chip>{data.daysOff.length} day{data.daysOff.length === 1 ? '' : 's'} off</Chip>}
+            </span>
+          </span>
+          <span className="ml-auto inline-flex items-center gap-1.5 rounded-xl border border-adm-line-strong px-3.5 py-2 text-[13px] font-medium text-adm-text">
+            {showSettings ? 'Hide settings' : 'Edit settings'}
+            <ChevronDown className={`size-4 transition-transform duration-200 ${showSettings ? 'rotate-180' : ''}`} />
+          </span>
+        </button>
+      </section>
+
+      {showSettings && (
+      <div id="booking-settings" className="grid items-start gap-6 xl:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)]">
         <section className={CARD}>
           <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
             <div>
-              <h2 className="text-lg font-semibold">Weekly hours</h2>
-              <p className="text-sm text-gray-500">When clients can book a call ({form.timezone}).</p>
+              <h2 className="text-[15px] font-semibold text-adm-text">Weekly hours</h2>
+              <p className="text-sm text-adm-subtle">When clients can book a call ({form.timezone}).</p>
             </div>
             <button type="button" onClick={save} disabled={saving} className={`${BTN} bg-adm-accent text-black hover:bg-white`}>
           {saving ? <Loader2 className="size-4 animate-spin" /> : saved ? <Check className="size-4" /> : null}
@@ -206,19 +236,19 @@ export default function BookingManager() {
 
         <div className="space-y-6">
           <section className={CARD}>
-            <h2 className="mb-4 text-lg font-semibold">Booking rules</h2>
+            <h2 className="mb-4 text-[15px] font-semibold text-adm-text">Booking rules</h2>
             <div className="grid gap-4 sm:grid-cols-2">
-              <label className="grid gap-1 text-sm text-gray-400">Call length (min)<input type="number" className={INPUT} value={form.slot_minutes} onChange={num('slot_minutes')} /></label>
-              <label className="grid gap-1 text-sm text-gray-400">Buffer between calls (min)<input type="number" className={INPUT} value={form.buffer_minutes} onChange={num('buffer_minutes')} /></label>
-              <label className="grid gap-1 text-sm text-gray-400">Minimum notice (hours)<input type="number" className={INPUT} value={form.min_notice_hours} onChange={num('min_notice_hours')} /></label>
-              <label className="grid gap-1 text-sm text-gray-400">Bookable days ahead<input type="number" className={INPUT} value={form.max_days_ahead} onChange={num('max_days_ahead')} /></label>
-              <label className="grid gap-1 text-sm text-gray-400 sm:col-span-2">Timezone<input className={INPUT} value={form.timezone} onChange={(e) => setForm({ ...form, timezone: e.target.value })} /></label>
+              <label className="grid gap-1 text-sm text-adm-muted">Call length (min)<input type="number" className={INPUT} value={form.slot_minutes} onChange={num('slot_minutes')} /></label>
+              <label className="grid gap-1 text-sm text-adm-muted">Buffer between calls (min)<input type="number" className={INPUT} value={form.buffer_minutes} onChange={num('buffer_minutes')} /></label>
+              <label className="grid gap-1 text-sm text-adm-muted">Minimum notice (hours)<input type="number" className={INPUT} value={form.min_notice_hours} onChange={num('min_notice_hours')} /></label>
+              <label className="grid gap-1 text-sm text-adm-muted">Bookable days ahead<input type="number" className={INPUT} value={form.max_days_ahead} onChange={num('max_days_ahead')} /></label>
+              <label className="grid gap-1 text-sm text-adm-muted sm:col-span-2">Timezone<input className={INPUT} value={form.timezone} onChange={(e) => setForm({ ...form, timezone: e.target.value })} /></label>
             </div>
-            <p className="mt-3 text-xs text-gray-600">Saved with “Save settings” (Weekly hours card).</p>
+            <p className="mt-3 text-xs text-adm-faint">Saved with “Save settings” (Weekly hours card).</p>
           </section>
 
           <section className={CARD}>
-            <h2 className="mb-3 flex items-center gap-2 text-lg font-semibold"><Link2 className="size-5 text-[#FFB829]" /> Google Calendar &amp; notifications</h2>
+            <h2 className="mb-3 flex items-center gap-2 text-[15px] font-semibold text-adm-text"><Link2 className="size-5 text-adm-accent-ink" /> Google Calendar &amp; notifications</h2>
             {googleNotice && <p className="mb-3 text-sm text-adm-accent-ink">{googleNotice}</p>}
         {!data.googleConfigured ? (
           <p className="text-sm text-adm-muted">Set <code>GOOGLE_CLIENT_ID</code> and <code>GOOGLE_CLIENT_SECRET</code> in Vercel, redeploy, then connect here.</p>
@@ -234,14 +264,14 @@ export default function BookingManager() {
           </div>
         )}
             <div className="mt-4 grid gap-4 sm:grid-cols-2">
-              <label className="grid gap-1 text-sm text-gray-400">Notification email<input type="email" className={INPUT} placeholder="admin@jazamedia.com" value={form.host_email ?? ''} onChange={(e) => setForm({ ...form, host_email: e.target.value })} /></label>
-              <label className="grid gap-1 text-sm text-gray-400">Google calendar ID<input className={INPUT} value={form.google_calendar_id} onChange={(e) => setForm({ ...form, google_calendar_id: e.target.value })} /></label>
+              <label className="grid gap-1 text-sm text-adm-muted">Notification email<input type="email" className={INPUT} placeholder="admin@jazamedia.com" value={form.host_email ?? ''} onChange={(e) => setForm({ ...form, host_email: e.target.value })} /></label>
+              <label className="grid gap-1 text-sm text-adm-muted">Google calendar ID<input className={INPUT} value={form.google_calendar_id} onChange={(e) => setForm({ ...form, google_calendar_id: e.target.value })} /></label>
             </div>
           </section>
 
           <section className={CARD}>
-            <h2 className="mb-1 text-lg font-semibold">Days off</h2>
-            <p className="mb-4 text-sm text-gray-500">Dates nobody can book.</p>
+            <h2 className="mb-1 text-[15px] font-semibold text-adm-text">Days off</h2>
+            <p className="mb-4 text-sm text-adm-subtle">Dates nobody can book.</p>
             <div className="flex flex-wrap items-center gap-2">
           <input type="date" className={INPUT} value={newDayOff} onChange={(e) => setNewDayOff(e.target.value)} />
           <button type="button" disabled={!newDayOff} onClick={() => { action({ action: 'add_day_off', day: newDayOff }); setNewDayOff(''); }} className={`${BTN} bg-adm-accent/20 text-adm-accent-ink hover:bg-adm-accent/30`}><Plus className="size-4" />Add</button>
@@ -259,6 +289,31 @@ export default function BookingManager() {
           </section>
         </div>
       </div>
+      )}
     </div>
   );
+}
+
+const DAY_SHORT = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+
+function to12(t: string) {
+  const [h, m] = t.split(':').map(Number);
+  const hh = h % 12 || 12;
+  return `${hh}${m ? `:${String(m).padStart(2, '0')}` : ''}${h < 12 ? 'am' : 'pm'}`;
+}
+
+/** e.g. "Mon–Fri · 9am–5pm" (or a day count when hours differ). */
+function daysSummary(hours: Record<string, [string, string][]>) {
+  const open = DAY_SHORT.map((_, i) => i).filter((i) => (hours[String(i)] ?? []).length > 0);
+  if (!open.length) return 'No open days';
+  const first = hours[String(open[0])][0];
+  const same = open.every((i) => hours[String(i)].length === 1 && hours[String(i)][0][0] === first[0] && hours[String(i)][0][1] === first[1]);
+  const consecutive = open.every((d, i) => i === 0 || d === open[i - 1] + 1);
+  const days = consecutive && open.length > 2 ? `${DAY_SHORT[open[0]]}–${DAY_SHORT[open[open.length - 1]]}` : open.map((i) => DAY_SHORT[i]).join(', ');
+  return same ? `${days} · ${to12(first[0])}–${to12(first[1])}` : `${open.length} days a week`;
+}
+
+function Chip({ children, tone }: { children: React.ReactNode; tone?: 'ok' | 'warn' }) {
+  const cls = tone === 'ok' ? 'bg-green-500/15 text-green-300' : tone === 'warn' ? 'bg-red-500/10 text-red-300' : 'bg-adm-raised text-adm-text-2';
+  return <span className={`inline-flex items-center rounded-lg px-2.5 py-1 text-[12px] font-medium ${cls}`}>{children}</span>;
 }
