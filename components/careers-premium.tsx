@@ -85,8 +85,8 @@ function Hero() {
           </div>
         </Reveal>
 
-        <Reveal delay={0.15} className="relative h-[380px] sm:h-[460px] lg:h-[520px]">
-          <div className="absolute inset-0 right-[12%] bottom-[14%] overflow-hidden rounded-3xl border border-gold/35 shadow-[0_50px_100px_-40px_rgba(0,0,0,0.95)]">
+        <Reveal delay={0.15} className="relative aspect-[5/4] w-full">
+          <div className="absolute top-0 left-0 aspect-[3/2] w-[88%] overflow-hidden rounded-3xl border border-gold/35 shadow-[0_50px_100px_-40px_rgba(0,0,0,0.95)]">
             <Image
               src={img("careers 1.png")}
               alt="JAZA Media team on an outing"
@@ -96,7 +96,7 @@ function Hero() {
               className="animate-careers-kenburns object-cover"
             />
           </div>
-          <div className="absolute right-0 bottom-0 h-[46%] w-[46%] overflow-hidden rounded-[20px] border border-gold/45 shadow-[0_40px_80px_-30px_rgba(0,0,0,0.95)]">
+          <div className="absolute right-0 bottom-0 aspect-[3/2] w-[48%] overflow-hidden rounded-[20px] border border-gold/45 shadow-[0_40px_80px_-30px_rgba(0,0,0,0.95)]">
             <Image src={img("careers 2.png")} alt="JAZA Media team on set" fill sizes="280px" className="object-cover" />
           </div>
           <div className={`absolute bottom-8 -left-2 flex items-center gap-3 px-4 py-3 sm:-left-4 ${CARD}`}>
@@ -118,7 +118,7 @@ function PhotoStrip() {
     <div aria-hidden className="overflow-hidden bg-[#0b0d0c] pb-16 md:pb-20">
       <div className="animate-careers-strip flex w-max gap-4">
         {[...STRIP, ...STRIP].map((f, i) => (
-          <div key={i} className="relative h-40 w-64 shrink-0 overflow-hidden rounded-2xl md:h-48 md:w-80">
+          <div key={i} className="relative h-40 w-60 shrink-0 overflow-hidden rounded-2xl md:h-48 md:w-80">
             <Image src={img(f)} alt="" fill sizes="320px" className="object-cover grayscale-[0.4] transition duration-500 hover:grayscale-0" />
           </div>
         ))}
@@ -195,7 +195,7 @@ function Values() {
         </Reveal>
 
         <div className="grid items-start gap-14 lg:grid-cols-2">
-          <div className="sticky top-32 hidden h-[560px] overflow-hidden rounded-3xl border border-gold/30 lg:block">
+          <div className="sticky top-32 hidden aspect-[3/2] overflow-hidden rounded-3xl border border-gold/30 lg:block">
             {VALUES.map((v, i) => (
               <Image
                 key={v.photo}
