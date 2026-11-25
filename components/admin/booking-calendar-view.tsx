@@ -86,7 +86,7 @@ export default function BookingCalendarView({
   const dayCalls = byDay.get(selected) ?? [];
 
   return (
-    <div className="grid gap-6 lg:grid-cols-[1fr_340px]">
+    <div className="grid items-start gap-6 lg:grid-cols-[1fr_340px]">
       <div>
         <div className="mb-3 flex items-center justify-between">
           <button type="button" aria-label="Previous month" onClick={() => shift(-1)} className="rounded-lg p-2 text-gray-400 hover:bg-white/5 hover:text-white"><ChevronLeft className="size-4" /></button>
@@ -128,12 +128,12 @@ export default function BookingCalendarView({
             );
           })}
         </div>
+        <p className="mt-3 flex flex-wrap gap-4 text-[11px] text-gray-500">
+          <span className="flex items-center gap-1.5"><span className="size-2 rounded-full bg-[#FFB829]" />Meeting at the time the client chose</span>
+          <span className="flex items-center gap-1.5"><span className="size-2 rounded-full bg-gray-600" />Cancelled</span>
+        </p>
       </div>
 
-      <p className="-mt-3 flex flex-wrap gap-4 text-[11px] text-gray-500 lg:col-start-1">
-        <span className="flex items-center gap-1.5"><span className="size-2 rounded-full bg-[#FFB829]" />Meeting at the time the client chose</span>
-        <span className="flex items-center gap-1.5"><span className="size-2 rounded-full bg-gray-600" />Cancelled</span>
-      </p>
       <div className="rounded-lg border border-[#1a1a1a] p-4">
         <p className="text-sm font-semibold">
           {new Date(`${selected}T00:00:00Z`).toLocaleDateString('en-PH', { timeZone: 'UTC', weekday: 'long', month: 'long', day: 'numeric' })}
@@ -151,7 +151,7 @@ export default function BookingCalendarView({
           const rows = [...new Set([...slots, ...atSlot.keys()])].sort();
           if (rows.length === 0) return <p className="mt-3 text-sm text-gray-500">{isOff ? 'Day off — no slots.' : 'No available hours this day.'}</p>;
           return (
-            <ul className="mt-3 max-h-[520px] divide-y divide-[#1a1a1a] overflow-y-auto rounded-lg border border-[#1a1a1a]">
+            <ul className="mt-3 max-h-[520px] divide-y [scrollbar-width:thin] [scrollbar-color:#333_transparent] divide-[#1a1a1a] overflow-y-auto rounded-lg border border-[#1a1a1a]">
               {rows.map((hm) => {
                 const here = atSlot.get(hm) ?? [];
                 const end = toHM(toMin(hm) + slotMinutes);
