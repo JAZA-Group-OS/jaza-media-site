@@ -81,7 +81,7 @@ function PillarCard({ pillar, delay }: { pillar: Pillar; delay: number }) {
       <h3 className="font-serif text-[26px] leading-[1.15] text-white md:text-2xl lg:min-h-[2lh] lg:text-xl xl:text-2xl">
         {pillar.title}
       </h3>
-      <div className="relative mx-auto mt-5 aspect-square w-40 sm:w-48 md:w-60 lg:w-72">
+      <div className="relative mx-auto mt-5 aspect-square w-32 opacity-90 sm:w-36 md:w-40 lg:w-44">
         <Image
           src={pillar.src}
           alt={pillar.alt}

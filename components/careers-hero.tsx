@@ -6,7 +6,7 @@ import { useInView } from "@/lib/use-in-view";
 
 function HeroImage() {
   return (
-    <div className="relative aspect-[2346/2106] w-full max-w-[680px] overflow-hidden rounded-2xl ring-1 ring-gold/30 shadow-[0_40px_80px_-30px_rgba(0,0,0,0.9)] lg:ml-auto">
+    <div className="relative aspect-[3/2] w-full max-w-[680px] overflow-hidden rounded-2xl ring-1 ring-gold/30 shadow-[0_40px_80px_-30px_rgba(0,0,0,0.9)] lg:ml-auto">
       <Image
         src="/images/careers%201.png"
         alt="JAZA Media team at work"
