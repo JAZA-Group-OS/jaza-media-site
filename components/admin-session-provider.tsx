@@ -30,7 +30,7 @@ export default function AdminSessionProvider({
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (!active) return;
       if (!session) {
-        router.replace('/login');
+        router.replace('/admin/login');
         return;
       }
       setChecked(true);
@@ -40,7 +40,7 @@ export default function AdminSessionProvider({
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {
       if (!session) {
-        router.replace('/login');
+        router.replace('/admin/login');
       }
     });
 

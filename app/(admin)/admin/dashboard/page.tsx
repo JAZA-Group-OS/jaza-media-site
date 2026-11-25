@@ -7,11 +7,7 @@ import AdminDashboardClient from './dashboard-client';
 // is ever bypassed — a matcher misconfiguration, or a future Next.js release
 // dropping the deprecated convention — the dashboard HTML/RSC is never served
 // to a non-admin session. Runs before any client JS ships.
-export default async function AdminDashboardPage({
-  searchParams,
-}: {
-  searchParams: Promise<{ booking_google?: string }>;
-}) {
+export default async function AdminDashboardPage() {
   const supabase = await createServerClient();
   const {
     data: { user },
@@ -23,7 +19,5 @@ export default async function AdminDashboardPage({
     redirect('/admin/login');
   }
 
-  // Returning from the Google Calendar connect flow → open the Discovery Calls tab.
-  const { booking_google } = await searchParams;
-  return <AdminDashboardClient initialTab={booking_google ? 'bookings' : 'overview'} />;
+  return <AdminDashboardClient />;
 }
