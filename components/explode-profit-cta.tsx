@@ -7,7 +7,7 @@ import { Reveal } from "@/components/reveal";
 /** "Explode profit" call to action: the JAZA Media mark, headline and one button. */
 export function ExplodeProfitCta() {
   return (
-    <section className="relative overflow-hidden bg-ink pt-10 pb-16 text-center text-white md:pt-12 md:pb-20">
+    <section className="relative overflow-hidden bg-ink pt-4 pb-16 text-center text-white md:pt-5 md:pb-20">
       <div className="relative mx-auto flex max-w-3xl flex-col items-center px-4">
         {/* logo + shockwaves */}
         <Reveal>
