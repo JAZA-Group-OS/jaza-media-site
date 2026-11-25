@@ -111,6 +111,7 @@ export function TeamGrid() {
     setTune(new URLSearchParams(window.location.search).has("tune"));
   }, []);
   const startTune = (e: React.PointerEvent<HTMLDivElement>) => {
+    e.preventDefault();
     const section = e.currentTarget.parentElement!;
     const start = e.clientY;
     const base = parseFloat(getComputedStyle(section).paddingBottom);
