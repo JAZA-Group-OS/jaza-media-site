@@ -62,9 +62,9 @@ export const TEAM: Member[] = [
   },
   {
     slug: "abie",
-    name: "ABIE CANAVERAL",
+    name: "BAMBIE CANAVERAL",
     role: "CHIEF MARKETING OFFICER",
-    image: null,
+    image: "/images/bambie-square.webp",
   },
   {
     slug: "bea",
@@ -76,13 +76,13 @@ export const TEAM: Member[] = [
     slug: "aeron",
     name: "AERON TESORO",
     role: "MULTIMEDIA HEAD",
-    image: null,
+    image: "/images/aeron-square.webp",
   },
   {
     slug: "jyrille",
     name: "JYRILLE CARAIG",
     role: "KOL HEAD",
-    image: null,
+    image: "/images/jyrille-square.webp",
   },
 ];
 
