@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useInView, useReducedMotion, useScroll, useSpring, useTransform, type MotionValue } from "framer-motion";
+import { motion, useInView, useReducedMotion, useScroll, useSpring, useTime, useTransform, type MotionValue } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useRef, useState, type ReactNode } from "react";
@@ -113,38 +113,58 @@ function Hero() {
 
 const STRIP = ["maju.jpg", "careers-3.jpg", "careers-4.jpg", "Solving for Scale.png", "Culture of Growth.png", "Hybrd Work.png"];
 
-function StripRow({ files, x }: { files: string[]; x: MotionValue<string> }) {
+const WALL = [...STRIP, "careers 1.png", "careers 2.png"];
+
+function WallRow({ files, x }: { files: string[]; x: MotionValue<string> }) {
   return (
-    <motion.div style={{ x }} className="flex w-max gap-4 md:gap-5">
+    <motion.div style={{ x }} className="flex w-max gap-5 md:gap-6">
       {files.map((f, i) => (
         <div
           key={i}
-          className="group relative aspect-[3/2] w-60 shrink-0 overflow-hidden rounded-2xl ring-1 ring-white/10 transition duration-500 hover:ring-gold/60 md:w-80"
+          className="group relative aspect-[3/2] w-72 shrink-0 overflow-hidden rounded-xl bg-[#141414] shadow-[0_30px_60px_-20px_rgba(0,0,0,0.9)] ring-1 ring-white/10 transition duration-500 hover:ring-gold/60 md:w-[420px]"
         >
-          <Image src={img(f)} alt="" fill sizes="320px" className="object-cover grayscale-[0.6] transition duration-700 group-hover:scale-105 group-hover:grayscale-0" />
+          <Image src={img(f)} alt="" fill sizes="420px" className="object-cover transition duration-700 group-hover:scale-105" />
         </div>
       ))}
     </motion.div>
   );
 }
 
-// Two tilted rows that slide in opposite directions as the page scrolls (not on a timer).
+// 3D photo wall: three rows on a tilted plane, neighbouring rows drifting opposite ways as you scroll.
 function PhotoStrip() {
   const ref = useRef<HTMLDivElement>(null);
   const reduce = useReducedMotion();
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
-  const p = useSpring(scrollYProgress, { stiffness: 80, damping: 25, mass: 0.4 });
-  const a = useTransform(p, [0, 1], reduce ? ["-10%", "-10%"] : ["0%", "-22%"]);
-  const b = useTransform(p, [0, 1], reduce ? ["-12%", "-12%"] : ["-24%", "-2%"]);
-  const row = [...STRIP, ...STRIP];
+  const p = useSpring(scrollYProgress, { stiffness: 70, damping: 24, mass: 0.5 });
+  // Rows drift on their own all the time (looping), and scrolling adds a little extra push.
+  const time = useTime();
+  const row = (dir: 1 | -1, speed: number, start: number) =>
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    useTransform([time, p] as MotionValue<number>[], ([t, s]: number[]) => {
+      if (reduce) return `${-start}%`;
+      const loop = (((t / 1000) * speed + s * 12 + start) % 50 + 50) % 50; // each row holds two copies → loop at 50%
+      return `${dir === 1 ? -loop : loop - 50}%`;
+    });
+  const r1 = row(1, 0.9, 4);
+  const r2 = row(-1, 0.7, 18);
+  const r3 = row(1, 0.55, 30);
+  // fades in as it enters, dims as it leaves (like the reference)
+  const dim = useTransform(p, [0, 0.25, 0.75, 1], [0.5, 1, 1, 0.35]);
+  const rows = [WALL, [...WALL].reverse(), [...WALL.slice(3), ...WALL.slice(0, 3)]];
   return (
-    <div ref={ref} aria-hidden className="relative overflow-hidden bg-[#0b0d0c] py-10 md:py-14">
-      <div className="flex -rotate-[4deg] scale-110 flex-col gap-4 md:gap-5">
-        <StripRow files={row} x={a} />
-        <StripRow files={[...row].reverse()} x={b} />
-      </div>
-      <div className="pointer-events-none absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-[#0b0d0c] to-transparent md:w-48" />
-      <div className="pointer-events-none absolute inset-y-0 right-0 w-24 bg-gradient-to-l from-[#0b0d0c] to-transparent md:w-48" />
+    <div ref={ref} aria-hidden className="relative h-[460px] overflow-hidden bg-[#0b0d0c] [perspective:1600px] md:h-[680px]">
+      <motion.div
+        style={{ opacity: dim }}
+        className="absolute top-1/2 left-1/2 flex w-[180%] -translate-x-1/2 -translate-y-1/2 flex-col gap-5 [transform-style:preserve-3d] md:gap-6"
+      >
+        <div className="flex flex-col gap-5 [transform:rotateX(22deg)_rotateY(-12deg)_rotateZ(7deg)] md:gap-6">
+          <WallRow files={[...rows[0], ...rows[0]]} x={r1} />
+          <WallRow files={[...rows[1], ...rows[1]]} x={r2} />
+          <WallRow files={[...rows[2], ...rows[2]]} x={r3} />
+        </div>
+      </motion.div>
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-[#0b0d0c] to-transparent" />
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-[#0b0d0c] to-transparent" />
     </div>
   );
 }
