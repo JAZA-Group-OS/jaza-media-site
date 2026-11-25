@@ -85,11 +85,11 @@ export function StepTwoBooking() {
               strengthen marketing, sales, team structure, and profitability using strategies actively implemented inside JAZA
               Media and our client portfolio.
             </p>
-            <figure className="relative mt-5 overflow-hidden rounded-2xl border border-gold/25 bg-gradient-to-br from-gold/[0.08] to-transparent px-5 py-5">
-              <span aria-hidden className="absolute top-0 left-0 h-full w-[3px] bg-gradient-to-b from-[#fbe7a1] via-gold to-[#a97a1f]" />
-              <span aria-hidden className="pointer-events-none absolute -top-3 right-3 font-serif text-[84px] leading-none text-gold/15">&rdquo;</span>
-              <p className="text-[10.5px] font-medium tracking-[0.3em] text-gold/80 uppercase">Not coaching. Not motivation.</p>
-              <blockquote className="mt-2 font-serif text-[21px] leading-[1.3] text-white">
+            <figure className="relative mt-5 overflow-hidden rounded-2xl border border-gold/25 bg-gradient-to-br from-gold/[0.08] to-transparent px-5 py-4">
+              <span aria-hidden className="absolute top-0 left-0 h-full w-[2px] bg-gradient-to-b from-[#fbe7a1] via-gold to-[#a97a1f]" />
+              <span aria-hidden className="pointer-events-none absolute -top-3 right-3 font-serif text-[64px] leading-none text-gold/10">&rdquo;</span>
+              <p className="text-[10px] font-medium tracking-[0.2em] whitespace-nowrap text-gold/75 uppercase">Not coaching · Not motivation</p>
+              <blockquote className="mt-2 font-serif text-[17px] leading-[1.45] text-white/90">
                 Practical business scaling, guided by <em className="text-gold">operators</em> who build and grow brands every day.
               </blockquote>
             </figure>
