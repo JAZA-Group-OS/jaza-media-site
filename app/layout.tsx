@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { GFS_Didot, Poppins, Inter, Instrument_Serif } from "next/font/google";
 import { getSiteBaseUrl } from "@/lib/site-url";
 import "./globals.css";
+import { SiteScrollDots } from "@/components/site-scroll-dots";
 
 const gfsDidot = GFS_Didot({
   variable: "--font-display",
@@ -77,6 +78,7 @@ export default function RootLayout({
         suppressHydrationWarning
       >
         {children}
+        <SiteScrollDots />
       </body>
     </html>
   );

@@ -326,3 +326,7 @@ html.no-scrollbar::-webkit-scrollbar { display: none; }
 /* Careers values: progress line on the active (auto-rotating) item */
 @keyframes values-progress { from { transform: scaleX(0); } to { transform: scaleX(1); } }
 .values-progress { transform-origin: left; animation: values-progress linear forwards; }
+
+/* Site-wide: hide the browser scrollbar; the gold dot rail replaces it */
+html.dots-scroll { scrollbar-width: none; scroll-padding-top: 120px; }
+html.dots-scroll::-webkit-scrollbar { display: none; }
