@@ -14,7 +14,6 @@ const nextConfig: NextConfig = {
     const scriptSrc = [
       "script-src 'self' 'unsafe-inline'",
       isDev ? "'unsafe-eval'" : '',
-      'https://assets.calendly.com',
     ]
       .filter(Boolean)
       .join(' ');
@@ -36,18 +35,18 @@ const nextConfig: NextConfig = {
         key: 'Strict-Transport-Security',
         value: 'max-age=63072000; includeSubDomains; preload',
       },
-      // CSP: tight default-src, allow Supabase + Calendly origins explicitly.
+      // CSP: tight default-src, allow Supabase origins explicitly.
       // 'unsafe-inline' is required for Next.js + Tailwind injected styles.
       {
         key: 'Content-Security-Policy',
         value: [
           "default-src 'self'",
           scriptSrc,
-          "style-src 'self' 'unsafe-inline' https://assets.calendly.com https://fonts.googleapis.com",
+          "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
           "img-src 'self' data: blob: https:",
           "font-src 'self' data: https://fonts.gstatic.com",
-          "connect-src 'self' https://*.supabase.co wss://*.supabase.co https://calendly.com https://*.calendly.com",
-          "frame-src https://calendly.com https://*.calendly.com",
+          "connect-src 'self' https://*.supabase.co wss://*.supabase.co",
+          "frame-src 'none'",
           "frame-ancestors 'none'",
           "base-uri 'self'",
           "form-action 'self'",

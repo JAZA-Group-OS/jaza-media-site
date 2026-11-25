@@ -1,153 +1,21 @@
 'use client';
 
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
-import Script from 'next/script';
-import { CalendarCheck, Check, Clock, Video } from 'lucide-react';
-import { readPrefill, clearPrefill } from '@/lib/partner/booking-prefill';
-import { BookingCalendar } from './booking-calendar';
-import {
-  buildCalendlyUrl,
-  isCalendlyEvent,
-  isTrustedCalendlyUrl,
-  makeCalendlyMessageHandler,
-} from '@/lib/partner/calendly';
+import { CalendarCheck, Check, Clock, Mail, Video } from 'lucide-react';
 
-// SECURITY INVARIANT: this fallback must always be a trusted hardcoded
-// string controlled by JAZA. Never derive it from request parameters,
-// query strings, or user input — that would turn the booking page into
-// an open-redirect to an attacker-controlled Calendly clone.
-const FALLBACK_CALENDLY_URL =
-  'https://calendly.com/jazamediaph/discovery-call?utm_id=97757_v0_s00_e0_tv0';
-
-function resolveCalendlyBase(): string {
-  const envUrl = process.env.NEXT_PUBLIC_CALENDLY_URL;
-  // Only use the env var if it points at a trusted Calendly host. A typo,
-  // wrong env, or an injected value falls through to the fallback rather
-  // than embedding a foreign URL.
-  if (envUrl && isTrustedCalendlyUrl(envUrl)) return envUrl;
-  return FALLBACK_CALENDLY_URL;
-}
+// Step 2 of Partner With Us. Calendly was removed — JAZA's own built-in
+// booking system will plug into the right-hand panel below.
 
 export function StepTwoBooking() {
-  const router = useRouter();
   const titleRef = useRef<HTMLHeadingElement>(null);
-  const containerRef = useRef<HTMLDivElement>(null);
-  const [scriptLoaded, setScriptLoaded] = useState(false);
-  // Calendly reports its content height and booking progress via postMessage;
-  // we size the frame to fit and move the step tracker along.
-  const [frameHeight, setFrameHeight] = useState(640);
-  const [bookingStep, setBookingStep] = useState(0);
   const [showMore, setShowMore] = useState(false);
-
-  useEffect(() => {
-    const onMsg = (e: MessageEvent) => {
-      if (!isCalendlyEvent(e)) return;
-      const { event, payload } = e.data as { event: string; payload?: { height?: string } };
-      if (event === 'calendly.page_height' && payload?.height) {
-        const h = parseInt(payload.height, 10);
-        if (Number.isFinite(h) && h > 300) setFrameHeight(Math.min(h + 8, 1400));
-      }
-      if (event === 'calendly.date_and_time_selected') setBookingStep(1);
-      if (event === 'calendly.event_scheduled') setBookingStep(2);
-    };
-    window.addEventListener('message', onMsg);
-    return () => window.removeEventListener('message', onMsg);
-  }, []);
-
-  // Lazy state initializer reads sessionStorage once on first render. Same
-  // pattern as the funnel's answers state — keeps the URL stable across
-  // re-renders and avoids re-reading on every render.
-  const [prefill] = useState(() => readPrefill());
-  // Our own JAZA calendar picks the slot; Calendly then opens at that slot for
-  // name/email and the actual booking. If availability can't be loaded we fall
-  // back to Calendly's own calendar.
-  const [slot, setSlot] = useState<string | null>(null);
-  const [fallback, setFallback] = useState(false);
-  const onUnavailable = useCallback(() => setFallback(true), []);
-  const showWidget = slot !== null || fallback;
-  const calendlyUrl = useMemo(() => {
-    const base = resolveCalendlyBase();
-    if (!slot) return buildCalendlyUrl(base, prefill);
-    // Calendly needs the slot's literal "+" time-zone offset in the path, but
-    // buildCalendlyUrl turns every "+" into %20 (for names in the query). So
-    // build the full URL first, then splice the slot into the path as text.
-    const u = new URL(base);
-    u.searchParams.set('month', slot.slice(0, 7));
-    u.searchParams.set('date', slot.slice(0, 10));
-    const built = new URL(buildCalendlyUrl(u.toString(), prefill));
-    const path = built.pathname.replace(/\/$/, '');
-    return `${built.origin}${path}/${slot}${built.search}`;
-  }, [slot, prefill]);
 
   // Move focus to the heading on mount so keyboard / screen-reader users
   // start at a predictable place.
   useEffect(() => {
     titleRef.current?.focus();
   }, []);
-
-  // Initialize Calendly inline widget when the script is ready, then
-  // scroll the heading into view. Two entry paths:
-  //  - First page load: <Script> loads, onLoad flips scriptLoaded, this
-  //    effect runs once.
-  //  - SPA navigation back to /book: <Script> is a no-op (browser cached
-  //    the asset), but window.Calendly already exists, so the early-init
-  //    branch fires on mount with scriptLoaded=false.
-  // Tying scrollIntoView to this effect (rather than mount) avoids a
-  // jarring double-reflow on slow networks where the iframe arrives
-  // after the initial scroll.
-  useEffect(() => {
-    const container = containerRef.current;
-    if (!container || !showWidget) return;
-    if (typeof window === 'undefined' || !window.Calendly) return;
-    // Clear any previous render so SPA-navigation re-mounts get a clean
-    // slate. The container has no React children, so there's no reconciler
-    // tracking to break.
-    container.innerHTML = '';
-    window.Calendly.initInlineWidget({
-      url: calendlyUrl,
-      parentElement: container,
-    });
-  }, [scriptLoaded, calendlyUrl, showWidget]);
-
-  // Listen for Calendly's "event scheduled" postMessage to detect a
-  // successful booking, then route to /booked.
-  useEffect(() => {
-    const onScheduled = () => {
-      // Analytics hook for the highest-signal conversion event in the
-      // funnel. gtag is loaded by the site analytics script if present;
-      // guard for absence so this doesn't break in dev or pre-analytics.
-      if (typeof window !== 'undefined') {
-        const w = window as unknown as {
-          gtag?: (event: 'event', name: string, params?: object) => void;
-        };
-        w.gtag?.('event', 'partner_booking_complete');
-      }
-      clearPrefill();
-      router.push('/partner-with-us/booked');
-    };
-
-    const handler = makeCalendlyMessageHandler(onScheduled);
-    window.addEventListener('message', handler);
-
-    // Test-only hook so Playwright can verify the routing branch without
-    // forging a MessageEvent origin (non-configurable on modern Chromium).
-    // Production builds tree-shake this branch via NODE_ENV inlining.
-    if (process.env.NODE_ENV !== 'production') {
-      (window as unknown as { __partnerHandleScheduled?: () => void })
-        .__partnerHandleScheduled = onScheduled;
-    }
-
-    return () => {
-      window.removeEventListener('message', handler);
-      if (process.env.NODE_ENV !== 'production') {
-        delete (window as unknown as {
-          __partnerHandleScheduled?: () => void;
-        }).__partnerHandleScheduled;
-      }
-    };
-  }, [router]);
 
   return (
     <section className="relative overflow-hidden bg-[#0b0d0c] text-white">
@@ -180,8 +48,8 @@ export function StepTwoBooking() {
             <em className="bg-gradient-to-br from-[#fbe7a1] via-gold to-[#a97a1f] bg-clip-text pr-1 text-transparent italic">your growth.</em>
           </h1>
           <p className="mt-5 max-w-xl text-[16px] leading-[1.75] font-light text-white/65 md:text-[17px]">
-            You&apos;re one step away. Grab a time that suits you — we&apos;ll send the Google Meet link straight to your
-            inbox.
+            You&apos;re one step away. Reach out and we&apos;ll set up your call — the Google Meet link goes straight to
+            your inbox.
           </p>
 
           <ul className="mt-7 flex flex-wrap justify-center gap-2.5">
@@ -272,77 +140,28 @@ export function StepTwoBooking() {
           </aside>
 
           <div className="rounded-[28px] bg-gradient-to-b from-gold/50 via-white/10 to-white/[0.03] p-px shadow-[0_60px_120px_-40px_rgba(0,0,0,0.95)]">
-            <div className={`overflow-hidden rounded-[27px] ${showWidget ? 'bg-white' : 'bg-[linear-gradient(180deg,#171612_0%,#0f0f10_80%)]'}`}>
-              <ol aria-label="Booking steps" className="flex items-center gap-2 bg-[linear-gradient(180deg,#1a1913_0%,#121211_100%)] px-5 py-4 text-[10.5px] font-medium tracking-[0.2em] uppercase sm:gap-3 sm:px-7">
-                {['Date & time', 'Your details', 'Confirmed'].map((label, i) => (
-                  <li key={label} className="flex items-center gap-2 sm:gap-3" aria-current={i === bookingStep ? 'step' : undefined}>
-                    {i > 0 && <span aria-hidden className={`h-px w-5 sm:w-10 ${i <= bookingStep ? 'bg-gold' : 'bg-white/15'}`} />}
-                    <span
-                      className={`grid size-6 place-items-center rounded-full text-[11px] tracking-normal transition ${
-                        i < bookingStep
-                          ? 'border border-gold/60 text-gold'
-                          : i === bookingStep
-                            ? 'bg-gold font-semibold text-ink shadow-[0_0_14px_2px_rgba(234,179,8,0.45)]'
-                            : 'border border-white/15 text-white/40'
-                      }`}
-                    >
-                      {i < bookingStep ? <Check className="size-3.5" strokeWidth={2.5} /> : i + 1}
-                    </span>
-                    <span className={`hidden sm:inline ${i === bookingStep ? 'text-white' : 'text-white/45'}`}>{label}</span>
-                  </li>
-                ))}
-              </ol>
-              <div aria-hidden className="h-px bg-gradient-to-r from-transparent via-gold/60 to-transparent" />
-              {!showWidget ? (
-                <BookingCalendar onPick={(t) => { setSlot(t); setBookingStep(1); }} onUnavailable={onUnavailable} />
-              ) : null}
-              {slot ? (
-                <div className="flex items-center justify-between gap-3 bg-[#141413] px-5 py-3 text-[13px] text-white/75 sm:px-7">
-                  <span>
-                    <span className="text-white/45">Selected:</span>{' '}
-                    <span className="font-medium text-white">
-                      {new Date(slot).toLocaleString('en-US', { weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })}
-                    </span>
-                  </span>
-                  <button
-                    type="button"
-                    onClick={() => { setSlot(null); setBookingStep(0); }}
-                    className="text-[11px] font-semibold tracking-[0.18em] text-gold uppercase hover:text-[#fde68a]"
-                  >
-                    Change
-                  </button>
-                </div>
-              ) : null}
-              <div className={showWidget ? 'overflow-hidden' : 'hidden'}>
-                <div
-                  ref={containerRef}
-                  // Height follows Calendly's calendly.page_height messages (see above),
-                  // so each step (calendar, times, details form) fits without empty space.
-                  style={{
-                    minWidth: '280px',
-                    height: `${frameHeight}px`,
-                    transition: 'height 400ms ease',
-                  }}
-                />
-              </div>
+            <div className="flex min-h-[420px] flex-col items-center justify-center gap-5 rounded-[27px] bg-[linear-gradient(180deg,#171612_0%,#0f0f10_80%)] px-8 py-14 text-center">
+              <span className="grid size-14 place-items-center rounded-2xl border border-gold/40 bg-gold/10 text-gold">
+                <CalendarCheck className="size-6" strokeWidth={1.6} />
+              </span>
+              <h2 className="font-serif text-[30px] leading-tight text-white">Online booking is coming soon</h2>
+              <p className="max-w-md text-[15px] leading-[1.7] text-white/60">
+                We&apos;re upgrading our booking calendar. In the meantime, email us and we&apos;ll arrange your discovery call
+                with you directly.
+              </p>
+              <a
+                href="mailto:admin@jazamedia.com"
+                className="careers-shine group inline-flex items-center gap-2.5 rounded-full bg-gold px-7 py-3.5 text-[12px] font-semibold tracking-[0.14em] text-ink uppercase transition hover:bg-white"
+              >
+                <Mail className="size-4" />
+                admin@jazamedia.com
+              </a>
             </div>
           </div>
         </div>
 
-        <p className="mt-8 text-center text-[13px] text-white/45">
-          Can&apos;t find a suitable time? Email us at{' '}
-          <a href="mailto:admin@jazamedia.com" className="text-gold hover:text-[#fde68a]">
-            admin@jazamedia.com
-          </a>{' '}
-          and we&apos;ll arrange one with you.
-        </p>
       </div>
 
-      <Script
-        src="https://assets.calendly.com/assets/external/widget.js"
-        strategy="afterInteractive"
-        onLoad={() => setScriptLoaded(true)}
-      />
     </section>
   );
 }

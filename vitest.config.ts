@@ -3,9 +3,7 @@ import path from 'node:path';
 
 export default defineConfig({
   test: {
-    // jsdom gives us window/sessionStorage/MessageEvent for the
-    // pure-but-DOM-adjacent functions we test (isCalendlyEvent,
-    // buildCalendlyUrl + readPrefill).
+    // jsdom gives us window/sessionStorage for DOM-adjacent tests.
     environment: 'jsdom',
     // Match files like `*.test.ts` next to source.
     include: ['**/*.test.ts'],
