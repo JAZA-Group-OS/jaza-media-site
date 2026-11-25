@@ -174,19 +174,13 @@ export function TeamGrid() {
 const HOLD_MS = 3500;
 const MOVE_MS = 1100;
 
-type Offset = { x: number; y: number };
-
 function WaveSlider() {
   const wrap = useRef<HTMLDivElement>(null);
   const [W, setW] = useState(1200);
   const [step, setStep] = useState(0);
   const [paused, setPaused] = useState(false);
-  const [group, setGroup] = useState<Offset | null>(null); // shared offset for every card
-  const [active, setActive] = useState<string | null>(null); // card being dragged
-  const drag = useRef<{ slug: string; sx: number; sy: number; base: Offset; moved: boolean } | null>(null);
   const n = MEMBERS.length;
   const [open, setOpen] = useState<{ member: Member; rect: DOMRect } | null>(null);
-  const userSet = group !== null; // stop auto-advance once arranged
 
   useEffect(() => {
     const el = wrap.current;
@@ -196,26 +190,11 @@ function WaveSlider() {
     return () => ro.disconnect();
   }, []);
 
-  // remember where the row was dragged to
   useEffect(() => {
-    try {
-      const saved = localStorage.getItem("jaza-team-offset");
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      if (saved) setGroup(JSON.parse(saved) as Offset);
-    } catch {}
-  }, []);
-  useEffect(() => {
-    if (!group || active) return;
-    try {
-      localStorage.setItem("jaza-team-offset", JSON.stringify(group));
-    } catch {}
-  }, [group, active]);
-
-  useEffect(() => {
-    if (paused || open || userSet || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    if (paused || open || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     const t = setInterval(() => setStep((s) => s + 1), HOLD_MS);
     return () => clearInterval(t);
-  }, [paused, open, userSet]);
+  }, [paused, open]);
 
   const gap = W < 640 ? 12 : 28;
   const card = Math.min(290, Math.floor((W - 4 * gap) / 5));
@@ -226,33 +205,6 @@ function WaveSlider() {
   const left0 = (W - total) / 2;
   const H = card + dip + 30;
 
-  const onDown = (slug: string) => (e: React.PointerEvent<HTMLDivElement>) => {
-    if (e.button !== 0) return;
-    drag.current = { slug, sx: e.clientX, sy: e.clientY, base: group ?? { x: 0, y: 0 }, moved: false };
-  };
-
-  const onMove = (e: React.PointerEvent<HTMLDivElement>) => {
-    const d = drag.current;
-    if (!d) return;
-    const dx = e.clientX - d.sx;
-    const dy = e.clientY - d.sy;
-    if (!d.moved) {
-      if (Math.hypot(dx, dy) < 6) return;
-      d.moved = true;
-      e.currentTarget.setPointerCapture(e.pointerId);
-      setActive(d.slug);
-    }
-    // the whole row moves together; keep it on screen
-    const x = Math.max(-left0, Math.min(left0, d.base.x + dx));
-    const y = Math.max(-220, Math.min(220, d.base.y + dy));
-    setGroup({ x, y });
-  };
-
-  const onUp = () => {
-    setActive(null);
-    setTimeout(() => (drag.current = null), 0);
-  };
-
   return (
     <div className="mx-auto -mt-3 max-w-[1560px] px-4 md:-mt-6 md:px-6">
       <div
@@ -261,7 +213,7 @@ function WaveSlider() {
         onMouseLeave={() => setPaused(false)}
         onFocus={() => setPaused(true)}
         onBlur={() => setPaused(false)}
-        className="relative select-none"
+        className="relative"
         style={{ height: H, ["--card" as string]: `${card}px` }}
       >
         {MEMBERS.map((m, i) => {
@@ -270,28 +222,17 @@ function WaveSlider() {
           const visible = slot >= 0 && slot <= 4;
           const baseX = left0 + slot * pitch;
           const baseY = visible ? ys[slot] : 0;
-          const off = group ?? { x: 0, y: 0 };
-          const dragging = active !== null;
           return (
             <div
               key={m.slug}
-              onPointerDown={onDown(m.slug)}
-              onPointerMove={onMove}
-              onPointerUp={onUp}
-              onPointerCancel={onUp}
-              onClickCapture={(e) => {
-                // dropping a card shouldn't also open the bio page
-                if (drag.current?.moved) e.preventDefault();
-              }}
-              onDragStart={(e) => e.preventDefault()}
-              className={`absolute top-0 left-0 touch-none ${dragging ? "cursor-grabbing" : "cursor-grab"}`}
+              className="absolute top-0 left-0"
               style={{
-                transform: `translate3d(${baseX + off.x}px, ${baseY + off.y}px, 0) scale(${slot === 2 ? 1.06 : 1})`,
+                transform: `translate3d(${baseX}px, ${baseY}px, 0) scale(${slot === 2 ? 1.06 : 1})`,
                 opacity: visible && open?.member.slug !== m.slug ? 1 : 0,
                 zIndex: slot === 2 ? 20 : 10,
                 pointerEvents: visible ? "auto" : "none",
                 transition:
-                  dragging || slot > 4
+                  slot > 4
                     ? "none"
                     : `transform ${MOVE_MS}ms cubic-bezier(0.65,0,0.35,1), opacity ${MOVE_MS}ms ease`,
               }}
