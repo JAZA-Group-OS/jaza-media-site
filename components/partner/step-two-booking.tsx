@@ -70,12 +70,15 @@ export function StepTwoBooking() {
   const calendlyUrl = useMemo(() => {
     const base = resolveCalendlyBase();
     if (!slot) return buildCalendlyUrl(base, prefill);
+    // Calendly needs the slot's literal "+" time-zone offset in the path, but
+    // buildCalendlyUrl turns every "+" into %20 (for names in the query). So
+    // build the full URL first, then splice the slot into the path as text.
     const u = new URL(base);
-    // %2B keeps the time zone's "+" intact (buildCalendlyUrl turns raw "+" into spaces).
-    u.pathname = `${u.pathname.replace(/\/$/, '')}/${slot.replace('+', '%2B')}`;
     u.searchParams.set('month', slot.slice(0, 7));
     u.searchParams.set('date', slot.slice(0, 10));
-    return buildCalendlyUrl(u.toString(), prefill);
+    const built = new URL(buildCalendlyUrl(u.toString(), prefill));
+    const path = built.pathname.replace(/\/$/, '');
+    return `${built.origin}${path}/${slot}${built.search}`;
   }, [slot, prefill]);
 
   // Move focus to the heading on mount so keyboard / screen-reader users
