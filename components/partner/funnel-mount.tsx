@@ -15,9 +15,9 @@ const QualificationFunnel = dynamic(
   {
     ssr: false,
     loading: () => (
-      <div className="mx-auto w-full max-w-3xl px-4 py-12 md:py-16">
-        <div className="h-[600px] animate-pulse rounded-xl bg-surface-grey" />
-      </div>
+      <div className="bg-[#0b0d0c]"><div className="mx-auto w-full max-w-3xl px-4 py-12 md:py-16">
+        <div className="h-[600px] animate-pulse rounded-3xl bg-white/5" />
+      </div></div>
     ),
   },
 );

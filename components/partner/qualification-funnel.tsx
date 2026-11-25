@@ -360,15 +360,19 @@ export function QualificationFunnel() {
   const progressPercent = (stepFromUrl / TOTAL_STEPS) * 100;
 
   return (
-    <div className="mx-auto w-full max-w-3xl px-4 py-12 md:py-16">
+    <section className="relative overflow-hidden bg-[#0b0d0c] text-white">
+      <div aria-hidden className="pointer-events-none absolute -top-48 left-1/2 size-[900px] -translate-x-1/2 rounded-full bg-gold/10 blur-[160px]" />
+      <div aria-hidden className="pointer-events-none absolute inset-0 opacity-[0.05] [background-image:radial-gradient(white_1px,transparent_1px)] [background-size:4px_4px]" />
+    <div className="relative mx-auto w-full max-w-3xl px-4 py-12 md:py-16">
       <div className="flex flex-col items-center text-center">
-        <span className="inline-block rounded-md bg-brand-yellow px-5 py-1.5 font-heading text-sm font-black tracking-wider text-brand-black uppercase">
-          Step {stepFromUrl}
+        <span className="inline-flex items-center gap-2.5 rounded-full border border-white/10 bg-white/[0.03] px-4 py-1.5 text-[10.5px] font-medium tracking-[0.32em] text-white/70 uppercase backdrop-blur">
+          <span aria-hidden className="size-1.5 rounded-full bg-gold shadow-[0_0_10px_2px_rgba(234,179,8,0.6)]" />
+          Step {stepFromUrl} of {TOTAL_STEPS}
         </span>
-        <h1 className="mt-6 font-heading text-3xl leading-tight font-black tracking-tight text-brand-black md:text-5xl">
-          WE{' '}
-          <em className="font-black text-brand-yellow italic">SCALE</em>{' '}
-          GREAT COMPANIES.
+        <h1 className="mt-6 font-serif text-[40px] leading-[1.04] tracking-[-0.03em] text-balance md:text-[60px]">
+          <span className="bg-gradient-to-b from-white via-white to-white/60 bg-clip-text text-transparent">We</span>{' '}
+          <em className="bg-gradient-to-br from-[#fbe7a1] via-gold to-[#a97a1f] bg-clip-text pr-2 text-transparent italic">scale</em>{' '}
+          <span className="bg-gradient-to-b from-white via-white to-white/60 bg-clip-text text-transparent">great companies.</span>
         </h1>
       </div>
 
@@ -378,10 +382,10 @@ export function QualificationFunnel() {
         aria-valuemin={1}
         aria-valuemax={TOTAL_STEPS}
         aria-label={`Step ${stepFromUrl} of ${TOTAL_STEPS}`}
-        className="mt-8 h-2 w-full overflow-hidden rounded-full bg-neutral-200"
+        className="mt-10 h-1 w-full overflow-hidden rounded-full bg-white/10"
       >
         <div
-          className="h-full bg-brand-yellow transition-all duration-300 ease-out"
+          className="h-full bg-gradient-to-r from-[#a97a1f] via-gold to-[#fbe7a1] shadow-[0_0_12px_rgba(234,179,8,0.6)] transition-all duration-500 ease-out"
           style={{ width: `${progressPercent}%` }}
         />
       </div>
@@ -397,13 +401,13 @@ export function QualificationFunnel() {
           {stepFromUrl > 1 ? (
             <div
               aria-hidden
-              className="absolute inset-y-4 -left-2 right-2 -z-10 rounded-2xl border border-neutral-200 bg-white shadow-md"
+              className="absolute inset-y-4 -left-2 right-2 -z-10 rounded-3xl border border-white/5 bg-white/[0.02]"
             />
           ) : null}
           {stepFromUrl < TOTAL_STEPS ? (
             <div
               aria-hidden
-              className="absolute inset-y-4 left-2 -right-2 -z-10 rounded-2xl border border-neutral-200 bg-white shadow-md"
+              className="absolute inset-y-4 left-2 -right-2 -z-10 rounded-3xl border border-white/5 bg-white/[0.02]"
             />
           ) : null}
 
@@ -441,9 +445,10 @@ export function QualificationFunnel() {
         Step {stepFromUrl} of {TOTAL_STEPS}
       </p>
 
-      <p className="mx-auto mt-8 max-w-2xl text-center text-xs leading-relaxed text-text-muted">
+      <p className="mx-auto mt-10 max-w-2xl text-center text-[11px] leading-relaxed text-white/35">
         {DISCLAIMER}
       </p>
     </div>
+    </section>
   );
 }

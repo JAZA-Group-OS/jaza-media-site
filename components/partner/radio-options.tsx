@@ -69,21 +69,21 @@ function CardOption({ option }: { option: Option }) {
   return (
     <label
       className={cn(
-        'group flex min-h-[44px] cursor-pointer items-center gap-3 rounded-md border border-neutral-300 bg-white px-4 py-3.5 transition-colors',
-        'hover:border-neutral-500',
-        'has-data-[checked]:border-brand-black has-data-[checked]:ring-2 has-data-[checked]:ring-brand-black/20',
+        'group flex min-h-[44px] cursor-pointer items-center gap-3 rounded-xl border border-white/10 bg-white/[0.03] px-4 py-3.5 transition',
+        'hover:border-gold/40 hover:bg-white/[0.05]',
+        'has-data-[checked]:border-gold has-data-[checked]:bg-gold/10 has-data-[checked]:shadow-[0_0_24px_-6px_rgba(234,179,8,0.5)]',
       )}
     >
       <Radio.Root
         value={option.value}
         className={cn(
-          'grid size-4 place-items-center rounded-full border border-neutral-400 bg-white',
-          'data-[checked]:border-brand-black',
+          'grid size-4 shrink-0 place-items-center rounded-full border border-white/30 bg-transparent',
+          'data-[checked]:border-gold',
         )}
       >
-        <Radio.Indicator className="size-2 rounded-full bg-brand-black opacity-0 data-[checked]:opacity-100" />
+        <Radio.Indicator className="size-2 rounded-full bg-gold opacity-0 data-[checked]:opacity-100" />
       </Radio.Root>
-      <span className="text-base font-medium text-brand-black">
+      <span className="text-base text-white/85">
         {option.label}
       </span>
     </label>
@@ -94,21 +94,21 @@ function RowOption({ option }: { option: Option }) {
   return (
     <label
       className={cn(
-        'group flex min-h-[44px] cursor-pointer items-center gap-3 rounded-md border border-neutral-300 bg-white px-4 py-3.5 transition-colors',
-        'hover:border-neutral-500',
-        'has-data-[checked]:border-brand-black has-data-[checked]:ring-2 has-data-[checked]:ring-brand-black/20',
+        'group flex min-h-[44px] cursor-pointer items-center gap-3 rounded-xl border border-white/10 bg-white/[0.03] px-4 py-3.5 transition',
+        'hover:border-gold/40 hover:bg-white/[0.05]',
+        'has-data-[checked]:border-gold has-data-[checked]:bg-gold/10 has-data-[checked]:shadow-[0_0_24px_-6px_rgba(234,179,8,0.5)]',
       )}
     >
       <Radio.Root
         value={option.value}
         className={cn(
-          'grid size-4 place-items-center rounded-full border border-neutral-400 bg-white',
-          'data-[checked]:border-brand-black',
+          'grid size-4 shrink-0 place-items-center rounded-full border border-white/30 bg-transparent',
+          'data-[checked]:border-gold',
         )}
       >
-        <Radio.Indicator className="size-2 rounded-full bg-brand-black opacity-0 data-[checked]:opacity-100" />
+        <Radio.Indicator className="size-2 rounded-full bg-gold opacity-0 data-[checked]:opacity-100" />
       </Radio.Root>
-      <span className="text-base font-medium text-brand-black">
+      <span className="text-base text-white/85">
         {option.label}
       </span>
     </label>
@@ -125,24 +125,24 @@ function FlagCardOption({ option }: { option: Option }) {
   return (
     <label
       className={cn(
-        'group relative flex min-h-[140px] cursor-pointer flex-col items-center justify-end gap-3 rounded-md border border-neutral-300 bg-white p-4 pt-8 transition-colors',
-        'hover:border-neutral-500',
-        'has-data-[checked]:border-brand-black has-data-[checked]:bg-brand-yellow/15',
+        'group relative flex min-h-[150px] cursor-pointer flex-col items-center justify-end gap-3 rounded-2xl border border-white/10 bg-white/[0.03] p-4 pt-8 transition duration-300 hover:-translate-y-1',
+        'hover:border-gold/40 hover:bg-white/[0.05]',
+        'has-data-[checked]:border-gold has-data-[checked]:bg-gold/10 has-data-[checked]:shadow-[0_0_30px_-6px_rgba(234,179,8,0.55)]',
       )}
     >
       <Radio.Root
         value={option.value}
         className={cn(
-          'absolute top-3 left-3 grid size-4 place-items-center rounded-full border border-neutral-400 bg-white',
-          'data-[checked]:border-brand-black',
+          'absolute top-3 left-3 grid size-4 place-items-center rounded-full border border-white/30 bg-transparent',
+          'data-[checked]:border-gold',
         )}
       >
-        <Radio.Indicator className="size-2 rounded-full bg-brand-black opacity-0 data-[checked]:opacity-100" />
+        <Radio.Indicator className="size-2 rounded-full bg-gold opacity-0 data-[checked]:opacity-100" />
       </Radio.Root>
       <span className="flex flex-1 items-center justify-center">
         {FLAGS[option.value]}
       </span>
-      <span className="text-xs font-bold tracking-wider text-brand-black uppercase">
+      <span className="text-[11px] font-medium tracking-[0.24em] text-white/80 uppercase">
         {option.label}
       </span>
     </label>
@@ -160,8 +160,8 @@ function FlagFrame({ children }: { children: ReactNode }) {
       aria-hidden
     >
       {/* pole */}
-      <rect x="10" y="6" width="2" height="52" fill="#181818" />
-      <circle cx="11" cy="6" r="2" fill="#181818" />
+      <rect x="10" y="6" width="2" height="52" fill="#d4a72c" />
+      <circle cx="11" cy="6" r="2" fill="#d4a72c" />
       {children}
     </svg>
   );
@@ -205,8 +205,8 @@ function OthersFlag() {
         y="8"
         width="40"
         height="22"
-        fill="#e5e7eb"
-        stroke="#181818"
+        fill="#1f1d17"
+        stroke="#d4a72c"
         strokeWidth="0.6"
       />
       <text
@@ -215,7 +215,7 @@ function OthersFlag() {
         textAnchor="middle"
         fontSize="16"
         fontWeight="900"
-        fill="#181818"
+        fill="#d4a72c"
         fontFamily="system-ui, sans-serif"
       >
         ?
