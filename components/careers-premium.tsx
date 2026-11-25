@@ -45,20 +45,20 @@ function PrimaryButton({ href = APPLY, children }: { href?: string; children: Re
   );
 }
 
-const H2 = "font-serif text-[38px] leading-[1.05] tracking-[-0.025em] text-white md:text-[52px] lg:text-[58px]";
+const H2 = "font-serif text-[30px] leading-[1.2] tracking-[-0.005em] text-white md:text-[38px] lg:text-[42px]";
 const CARD = "rounded-[20px] border border-gold/25 bg-[linear-gradient(180deg,#1a1a17_0%,#101011_75%)]";
 
 /* ---------- 1. hero ---------- */
 
 function Hero() {
   return (
-    <section id="top" className="snap-start md:flex md:min-h-[calc(100svh-120px)] md:flex-col md:justify-center relative scroll-mt-28 overflow-hidden bg-[#0b0d0c] pt-12 pb-16 text-white md:pt-20 md:pb-20">
+    <section id="top" className="snap-start md:flex md:min-h-[calc(100svh-120px)] md:flex-col md:justify-start relative scroll-mt-28 overflow-hidden bg-[#0b0d0c] pt-10 pb-14 text-white md:pt-12 md:pb-16">
       <div aria-hidden className="pointer-events-none absolute -top-40 right-0 size-[760px] rounded-full bg-gold/12 blur-[160px]" />
       <div aria-hidden className="pointer-events-none absolute inset-0 opacity-[0.05] [background-image:radial-gradient(white_1px,transparent_1px)] [background-size:4px_4px]" />
       <div className="relative mx-auto grid max-w-[1200px] items-center gap-14 px-4 md:px-8 lg:grid-cols-2">
         <Reveal className="flex flex-col items-start gap-6">
           <Eyebrow>Now hiring · Careers</Eyebrow>
-          <h1 className="font-serif text-[48px] leading-[1] tracking-[-0.03em] md:text-[68px] lg:text-[80px]">
+          <h1 className="font-serif text-[38px] leading-[1.12] tracking-[-0.01em] md:text-[50px] lg:text-[56px]">
             <span className="bg-gradient-to-b from-white via-white to-white/60 bg-clip-text text-transparent">Join a</span>{" "}
             <Gold>world-record</Gold>
             <br />
@@ -212,7 +212,7 @@ function ValueRow({ i, active, onActive }: { i: number; active: boolean; onActiv
         <div className="relative mb-5 aspect-[16/10] overflow-hidden rounded-2xl border border-gold/25 lg:hidden">
           <Image src={img(v.photo)} alt="" fill sizes="100vw" className="object-cover" />
         </div>
-        <h3 className="mt-1.5 font-serif text-[28px] leading-tight text-white md:text-[30px]">{v.title}</h3>
+        <h3 className="mt-1.5 font-serif text-[22px] leading-snug text-white md:text-[24px]">{v.title}</h3>
         <p className="mt-2.5 leading-[1.75] font-light text-white/62">{v.body}</p>
       </div>
       {active && (
@@ -310,8 +310,8 @@ function TogetherCard({ t, i }: { t: (typeof TOGETHER)[number]; i: number }) {
           </span>
         </div>
         <div className="flex flex-1 flex-col px-7 pt-2 pb-8">
-          <h3 className="font-serif text-[30px] leading-tight text-white">{t.title}</h3>
-          <p className="mt-2 font-serif text-[17px] text-gold italic">{t.short}</p>
+          <h3 className="font-serif text-[23px] leading-snug text-white">{t.title}</h3>
+          <p className="mt-1.5 font-serif text-[15px] text-gold italic">{t.short}</p>
           <div aria-hidden className="my-5 h-px w-10 bg-gold/60 transition-all duration-500 group-hover:w-20" />
           <p className="text-[15px] leading-[1.75] font-light text-white/65">{t.body}</p>
         </div>
@@ -330,7 +330,7 @@ function Together() {
           <h2 className={H2}>
             How we work <Gold>together.</Gold>
           </h2>
-          <p className="font-serif text-[19px] text-white/60 italic md:text-[21px]">
+          <p className="font-serif text-[16px] text-white/60 italic md:text-[18px]">
             Impact over hours. Systems over shortcuts. Growth as part of the job.
           </p>
         </Reveal>
@@ -403,7 +403,7 @@ function Hire() {
                   </span>
                   <span className="text-[10.5px] font-medium tracking-[0.3em] text-gold/80 uppercase">Step 0{i + 1}</span>
                 </div>
-                <h3 className="relative mt-8 font-serif text-[28px] leading-tight">{title}</h3>
+                <h3 className="relative mt-8 font-serif text-[22px] leading-snug">{title}</h3>
                 <p className="relative mt-3 leading-[1.75] font-light text-white/62">{body}</p>
                 <div aria-hidden className="relative mt-8 h-px w-12 bg-gold/60 transition-all duration-500 group-hover:w-24" />
               </div>
@@ -471,7 +471,7 @@ function Investing() {
                     <Image src={img(p.icon)} alt="" fill sizes="96px" className="object-contain" />
                   </div>
                 </div>
-                <h3 className="mt-7 font-serif text-[28px] leading-tight">{p.title}</h3>
+                <h3 className="mt-7 font-serif text-[22px] leading-snug">{p.title}</h3>
                 <p className="mt-3 leading-[1.75] font-light text-white/62">{p.body}</p>
               </div>
             </Reveal>
@@ -550,7 +550,7 @@ function Testimonials() {
               <span aria-hidden className="bg-gradient-to-br from-[#fbe7a1] via-gold to-[#a97a1f] bg-clip-text font-serif text-[90px] leading-[0.6] text-transparent">
                 “
               </span>
-              <blockquote className="font-serif text-[26px] leading-[1.3] md:text-[30px]">
+              <blockquote className="font-serif text-[21px] leading-[1.45] md:text-[24px]">
                 This was never just a job. They made us feel like part of a real family while pushing us to grow and achieve our
                 individual goals in life.
               </blockquote>
@@ -580,7 +580,7 @@ function Closing() {
     <section id="join" className="snap-start relative overflow-hidden bg-[#0b0d0c] py-14 text-center text-white md:py-16">
       <div aria-hidden className="pointer-events-none absolute -bottom-60 left-1/2 size-[820px] -translate-x-1/2 rounded-full bg-gold/15 blur-[160px]" />
       <Reveal className="relative mx-auto flex max-w-3xl flex-col items-center gap-6 px-4">
-        <h2 className="font-serif text-[44px] leading-[1.02] tracking-[-0.03em] md:text-[68px]">
+        <h2 className="font-serif text-[34px] leading-[1.15] tracking-[-0.01em] md:text-[48px]">
           Your next chapter <Gold>starts here.</Gold>
         </h2>
         <p className="max-w-[520px] leading-[1.7] font-light text-white/60">
