@@ -104,7 +104,7 @@ function TeamCard({ member, hidden }: { member: Member; hidden?: boolean }) {
 
 export function TeamGrid() {
   return (
-    <section className="relative overflow-hidden bg-[#0b0d0c] pt-10 pb-24 text-white md:pt-14 md:pb-32">
+    <section className="relative overflow-hidden bg-[#0b0d0c] pt-5 pb-24 text-white md:pt-6 md:pb-32">
       <div aria-hidden className="pointer-events-none absolute -top-40 left-1/2 size-[820px] -translate-x-1/2 rounded-full bg-gold/12 blur-[160px]" />
       <div aria-hidden className="pointer-events-none absolute inset-0 opacity-[0.05] [background-image:radial-gradient(white_1px,transparent_1px)] [background-size:4px_4px]" />
 
