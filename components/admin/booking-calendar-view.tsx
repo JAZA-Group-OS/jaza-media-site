@@ -25,7 +25,38 @@ export function timeLabel(iso: string, tz: string) {
 }
 
 /** Month calendar of confirmed discovery calls; pick a day to see who and when. */
-export default function BookingCalendarView({ bookings, tz }: { bookings: CalendarBooking[]; tz: string }) {
+type Hours = Record<string, [string, string][]>;
+
+const toMin = (hm: string) => Number(hm.slice(0, 2)) * 60 + Number(hm.slice(3, 5));
+const toHM = (m: number) => `${String(Math.floor(m / 60)).padStart(2, '0')}:${String(m % 60).padStart(2, '0')}`;
+const hm12 = (hm: string) => {
+  const [h, m] = hm.split(':').map(Number);
+  return `${h % 12 || 12}:${String(m).padStart(2, '0')}`;
+};
+
+/** Every slot start (local HH:MM) for a calendar day, from the weekly hours. */
+function daySlots(day: string, hours: Hours, slotMinutes: number): string[] {
+  const wd = new Date(`${day}T00:00:00Z`).getUTCDay();
+  const out: string[] = [];
+  for (const [from, to] of hours[String(wd)] ?? []) {
+    for (let t = toMin(from); t + slotMinutes <= toMin(to); t += slotMinutes) out.push(toHM(t));
+  }
+  return out;
+}
+
+export default function BookingCalendarView({
+  bookings,
+  tz,
+  weeklyHours = {},
+  slotMinutes = 30,
+  daysOff = [],
+}: {
+  bookings: CalendarBooking[];
+  tz: string;
+  weeklyHours?: Hours;
+  slotMinutes?: number;
+  daysOff?: string[];
+}) {
   const [today] = useState(() => dayKey(Date.now(), tz));
   const [cursor, setCursor] = useState(() => {
     const [y, m] = today.split('-').map(Number);
@@ -55,7 +86,7 @@ export default function BookingCalendarView({ bookings, tz }: { bookings: Calend
   const dayCalls = byDay.get(selected) ?? [];
 
   return (
-    <div className="grid gap-6 lg:grid-cols-[1fr_300px]">
+    <div className="grid gap-6 lg:grid-cols-[1fr_340px]">
       <div>
         <div className="mb-3 flex items-center justify-between">
           <button type="button" aria-label="Previous month" onClick={() => shift(-1)} className="rounded-lg p-2 text-gray-400 hover:bg-white/5 hover:text-white"><ChevronLeft className="size-4" /></button>
@@ -107,23 +138,56 @@ export default function BookingCalendarView({ bookings, tz }: { bookings: Calend
         <p className="text-sm font-semibold">
           {new Date(`${selected}T00:00:00Z`).toLocaleDateString('en-PH', { timeZone: 'UTC', weekday: 'long', month: 'long', day: 'numeric' })}
         </p>
-        {dayCalls.length === 0 ? (
-          <p className="mt-3 text-sm text-gray-500">No calls this day.</p>
-        ) : (
-          <ul className="mt-3 space-y-2">
-            {dayCalls.map((b) => (
-              <li key={b.id} className="rounded-lg border border-[#1a1a1a] bg-black px-3 py-2">
-                <p className={`text-sm font-medium ${b.status === 'cancelled' ? 'text-gray-500 line-through' : 'text-[#FFB829]'}`}>{timeLabel(b.start_at, tz)}{b.status === 'cancelled' && <span className="ml-2 text-xs text-red-400 no-underline">Cancelled</span>}</p>
-                <p className="text-sm text-white">{b.full_name}{b.company ? ` · ${b.company}` : ''}</p>
-                {b.meet_url && b.status === 'confirmed' && (
-                  <a href={b.meet_url} target="_blank" rel="noopener noreferrer" className="mt-1 inline-flex items-center gap-1 text-xs text-gray-400 hover:text-[#FFB829]">
-                    <Video className="size-3.5" /> Join Meet
-                  </a>
-                )}
-              </li>
-            ))}
-          </ul>
-        )}
+        {(() => {
+          const localHM = (iso: string) => new Date(iso).toLocaleTimeString('en-GB', { timeZone: tz, hour: '2-digit', minute: '2-digit', hour12: false });
+          const isOff = daysOff.includes(selected);
+          const slots = isOff ? [] : daySlots(selected, weeklyHours, slotMinutes);
+          const atSlot = new Map<string, CalendarBooking[]>();
+          for (const b of dayCalls) {
+            const k = localHM(b.start_at);
+            atSlot.set(k, [...(atSlot.get(k) ?? []), b]);
+          }
+          // bookings at a time that isn't a current slot (hours changed later) still show
+          const rows = [...new Set([...slots, ...atSlot.keys()])].sort();
+          if (rows.length === 0) return <p className="mt-3 text-sm text-gray-500">{isOff ? 'Day off — no slots.' : 'No available hours this day.'}</p>;
+          return (
+            <ul className="mt-3 max-h-[520px] divide-y divide-[#1a1a1a] overflow-y-auto rounded-lg border border-[#1a1a1a]">
+              {rows.map((hm) => {
+                const here = atSlot.get(hm) ?? [];
+                const end = toHM(toMin(hm) + slotMinutes);
+                const taken = here.some((b) => b.status === 'confirmed');
+                return (
+                  <li key={hm} className={`flex gap-3 px-3 py-2.5 ${taken ? 'bg-[#FFB829]/10' : ''}`}>
+                    <span className={`w-[92px] shrink-0 pt-0.5 text-xs tabular-nums ${taken ? 'font-semibold text-[#FFB829]' : 'text-gray-400'}`}>
+                      {hm12(hm)} – {hm12(end)}
+                    </span>
+                    <span className="min-w-0 flex-1">
+                      {here.length === 0 ? (
+                        <span className="text-xs text-gray-600">Open</span>
+                      ) : (
+                        here.map((b) => (
+                          <span key={b.id} className={`block ${b.status === 'cancelled' ? 'opacity-50' : ''}`}>
+                            <span className={`block truncate text-sm font-semibold uppercase ${b.status === 'cancelled' ? 'text-gray-400 line-through' : 'text-white'}`}>{b.full_name}</span>
+                            {b.company && <span className="block truncate text-xs text-gray-400">{b.company}</span>}
+                            {b.status === 'cancelled' ? (
+                              <span className="text-[11px] text-red-400">Cancelled</span>
+                            ) : (
+                              b.meet_url && (
+                                <a href={b.meet_url} target="_blank" rel="noopener noreferrer" className="mt-0.5 inline-flex items-center gap-1 text-[11px] text-gray-400 hover:text-[#FFB829]">
+                                  <Video className="size-3" /> Join Meet
+                                </a>
+                              )
+                            )}
+                          </span>
+                        ))
+                      )}
+                    </span>
+                  </li>
+                );
+              })}
+            </ul>
+          );
+        })()}
         {dayCalls.filter((b) => b.status === 'confirmed').length > 1 && <p className="mt-3 text-xs text-amber-300">{dayCalls.filter((b) => b.status === 'confirmed').length} online meetings on this day.</p>}
       </div>
     </div>

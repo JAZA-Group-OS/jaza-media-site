@@ -113,7 +113,7 @@ export default function BookingManager() {
       {/* Calendar */}
       <section className={CARD}>
         <h2 className="mb-4 flex items-center gap-2 text-lg font-semibold"><CalendarDays className="size-5 text-[#FFB829]" /> Calendar</h2>
-        <BookingCalendarView bookings={data.bookings} tz={tz} />
+        <BookingCalendarView bookings={data.bookings} tz={tz} weeklyHours={data.settings.weekly_hours} slotMinutes={data.settings.slot_minutes} daysOff={data.daysOff} />
       </section>
 
       {/* Upcoming bookings */}
