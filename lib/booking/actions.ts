@@ -19,6 +19,7 @@ const SLOT_TAKEN = 'That time was just taken. Please pick another slot.';
 export async function createBooking(input: {
   start: string;
   fullName: string;
+  company?: string | null;
   email: string;
   phone?: string | null;
   description?: string | null;
@@ -36,6 +37,7 @@ export async function createBooking(input: {
       start_at: start,
       end_at: end,
       full_name: input.fullName,
+      company: input.company || null,
       email: input.email,
       phone: input.phone || null,
       description: input.description || null,

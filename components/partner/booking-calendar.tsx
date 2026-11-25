@@ -101,6 +101,7 @@ export function BookingCalendar(props: Props) {
         body: JSON.stringify({
           start: slot,
           fullName: String(fd.get('fullName') ?? ''),
+          company: String(fd.get('company') ?? '') || null,
           email: String(fd.get('email') ?? ''),
           phone: String(fd.get('phone') ?? '') || null,
           description: String(fd.get('description') ?? '') || null,
@@ -200,7 +201,8 @@ export function BookingCalendar(props: Props) {
         <div className="mt-6 grid gap-4 sm:grid-cols-2">
           <Field label="Full name" name="fullName" required defaultValue={prefill.fullName} autoComplete="name" error={fieldErrors.fullName} />
           <Field label="Email" name="email" type="email" required defaultValue={prefill.email} autoComplete="email" error={fieldErrors.email} />
-          <div className="sm:col-span-2">
+          <Field label="Company / brand name" name="company" autoComplete="organization" error={fieldErrors.company} />
+          <div>
             <Field label="Best contact number" name="phone" defaultValue={prefill.phone} autoComplete="tel" error={fieldErrors.phone} />
           </div>
           <div className="sm:col-span-2">

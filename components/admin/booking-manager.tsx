@@ -20,6 +20,7 @@ type Booking = {
   start_at: string;
   status: 'confirmed' | 'cancelled';
   full_name: string;
+  company: string | null;
   email: string;
   phone: string | null;
   description: string | null;
@@ -126,7 +127,7 @@ export default function BookingManager() {
                 <li key={b.id} className="flex flex-col gap-2 py-4 sm:flex-row sm:items-start sm:justify-between">
                   <div className="min-w-0">
                     <p className={`font-medium ${b.status === 'cancelled' ? 'text-gray-500 line-through' : 'text-white'}`}>
-                      {fmt(b.start_at, tz)} · {b.full_name}
+                      {fmt(b.start_at, tz)} · {b.full_name}{b.company ? ` · ${b.company}` : ''}
                     </p>
                     <p className="mt-1 flex flex-wrap gap-x-4 gap-y-1 text-sm text-gray-400">
                       <a href={`mailto:${b.email}`} className="inline-flex items-center gap-1 hover:text-[#FFB829]"><Mail className="size-3.5" />{b.email}</a>

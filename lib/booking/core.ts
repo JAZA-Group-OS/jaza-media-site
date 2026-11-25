@@ -25,6 +25,7 @@ export type Booking = {
   end_at: string;
   status: 'confirmed' | 'cancelled';
   full_name: string;
+  company: string | null;
   email: string;
   phone: string | null;
   description: string | null;
