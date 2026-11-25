@@ -88,7 +88,7 @@ function Hero() {
         <Reveal delay={0.15} className="relative aspect-[5/4] w-full">
           <div className="absolute top-0 left-0 aspect-[3/2] w-[88%] overflow-hidden rounded-3xl border border-gold/35 shadow-[0_50px_100px_-40px_rgba(0,0,0,0.95)]">
             <Image
-              src={img("careers 1.png")}
+              src={img("careers-1.jpg")}
               alt="JAZA Media team on an outing"
               fill
               priority
@@ -97,7 +97,7 @@ function Hero() {
             />
           </div>
           <div className="absolute right-0 bottom-0 aspect-[3/2] w-[48%] overflow-hidden rounded-[20px] border border-gold/45 shadow-[0_40px_80px_-30px_rgba(0,0,0,0.95)]">
-            <Image src={img("careers 2.png")} alt="JAZA Media team on set" fill sizes="280px" className="object-cover" />
+            <Image src={img("careers-2.jpg")} alt="JAZA Media team on set" fill sizes="280px" className="object-cover" />
           </div>
           <div className={`absolute bottom-8 -left-2 flex items-center gap-3 px-4 py-3 sm:-left-4 ${CARD}`}>
             <span aria-hidden className="size-1.5 rounded-full bg-gold shadow-[0_0_10px_2px_rgba(234,179,8,0.6)]" />
@@ -111,7 +111,7 @@ function Hero() {
 
 /* ---------- 2. photo strip ---------- */
 
-const STRIP = ["maju.png", "careers 3.png", "careers 4.png", "Solving for Scale.png", "Culture of Growth.png", "Hybrd Work.png"];
+const STRIP = ["maju.png", "careers-3.jpg", "careers-4.jpg", "Solving for Scale.png", "Culture of Growth.png", "Hybrd Work.png"];
 
 function PhotoStrip() {
   return (
@@ -138,17 +138,17 @@ const VALUES = [
   {
     title: "You hold a high standard.",
     body: "Excellence isn't optional. You take ownership, sweat the details, and raise the bar for the people around you.",
-    photo: "careers 3.png",
+    photo: "careers-3.jpg",
   },
   {
     title: "You thrive in disciplined execution.",
     body: "Big ideas matter, but execution wins. You bring focus, structure, and accountability — consistency beats intensity.",
-    photo: "careers 4.png",
+    photo: "careers-4.jpg",
   },
   {
     title: "You win together.",
     body: "You're competitive, but not at the expense of the team. You share credit, support others, and play to win as one.",
-    photo: "careers 2.png",
+    photo: "careers-2.jpg",
   },
 ];
 
