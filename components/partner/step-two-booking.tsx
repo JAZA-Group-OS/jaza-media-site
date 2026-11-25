@@ -160,8 +160,8 @@ export function StepTwoBooking() {
         </div>
 
         {/* details panel + calendar */}
-        <div className="mt-12 grid items-start gap-6 lg:grid-cols-[360px_1fr]">
-          <aside className="rounded-[24px] border border-gold/30 bg-[linear-gradient(180deg,#1a1913_0%,#0f0f10_80%)] p-7 shadow-[0_40px_80px_-40px_rgba(0,0,0,0.9)] lg:sticky lg:top-28">
+        <div className="mt-12 grid items-start gap-6 lg:grid-cols-[400px_1fr]">
+          <aside className="rounded-[24px] border border-gold/30 bg-[linear-gradient(180deg,#1a1913_0%,#0f0f10_80%)] p-7 shadow-[0_40px_80px_-40px_rgba(0,0,0,0.9)]">
             <div className="flex items-center gap-3">
               <span className="relative size-12 shrink-0 overflow-hidden rounded-full ring-1 ring-gold/50">
                 <Image src="/images/jaza-media-icon.png" alt="JAZA Media" fill sizes="48px" className="scale-[1.12] object-cover" />
@@ -172,22 +172,41 @@ export function StepTwoBooking() {
               </div>
             </div>
             <div aria-hidden className="my-6 h-px bg-gradient-to-r from-gold/50 to-transparent" />
-            <p className="text-[11px] tracking-[0.26em] text-white/50 uppercase">What we&apos;ll cover</p>
-            <ol className="mt-4 space-y-4">
+            <p className="text-[14.5px] leading-[1.7] font-light text-white/70">
+              <strong className="font-medium text-white">JAZA Media Business Scaling</strong> is a hands-on growth partner for
+              businesses ready to scale through proven systems and real execution. We work directly with companies to
+              strengthen marketing, sales, team structure, and profitability using strategies actively implemented inside JAZA
+              Media and our client portfolio.
+            </p>
+            <p className="mt-3 font-serif text-[17px] leading-snug text-gold italic">
+              This is not coaching or motivation — it&apos;s practical business scaling guided by operators who build and grow
+              brands daily.
+            </p>
+            <ul className="mt-5 grid gap-2.5">
               {[
-                ['Your business today', 'Goals, offer, and where growth is stuck.'],
-                ['Growth opportunities', 'Marketing, sales and systems we would improve first.'],
-                ['Next steps', 'A clear recommendation — no obligation.'],
-              ].map(([t, d], i) => (
-                <li key={t} className="flex gap-3.5">
-                  <span className="mt-0.5 bg-gradient-to-br from-[#fbe7a1] via-gold to-[#a97a1f] bg-clip-text font-serif text-xl text-transparent italic">0{i + 1}</span>
-                  <div>
-                    <p className="text-[15px] text-white">{t}</p>
-                    <p className="mt-0.5 text-[13px] leading-relaxed text-white/55">{d}</p>
-                  </div>
+                ['₱582M', 'in total sales generated'],
+                ['₱249M', 'in total GMV generated'],
+                ['88+', 'brands served and scaled'],
+                ['Official', 'TikTok Shop & Affiliate Partner'],
+              ].map(([k, v]) => (
+                <li key={v} className="flex items-center gap-3 rounded-xl border border-white/[0.08] bg-white/[0.02] px-3.5 py-2.5">
+                  <Check className="size-4 shrink-0 text-gold" strokeWidth={2.5} />
+                  <span className="text-[13.5px] text-white/70">
+                    <span className="font-semibold text-white">{k}</span> {v}
+                  </span>
                 </li>
               ))}
-            </ol>
+            </ul>
+            <p className="mt-5 text-[14px] leading-[1.7] text-white/65">
+              Whether you&apos;re stuck at low ROAS or don&apos;t know where to start,{' '}
+              <span className="text-white">our team is here to guide you</span>. Book your free 30-minute discovery call and
+              let&apos;s audit your brand, find the gaps, and show you what&apos;s possible.
+            </p>
+            <p className="mt-3 text-[14px] text-white/65">Let&apos;s make your brand the next big success story.</p>
+            <p className="mt-4 inline-flex items-center gap-2 rounded-full border border-gold/40 bg-gold/10 px-3.5 py-1.5 text-[11px] font-semibold tracking-[0.2em] text-gold uppercase">
+              <span className="size-1.5 animate-pulse rounded-full bg-gold" />
+              Spots are limited
+            </p>
             <div aria-hidden className="my-6 h-px bg-gradient-to-r from-gold/50 to-transparent" />
             <ul className="space-y-2.5 text-[13.5px] text-white/70">
               <li className="flex items-center gap-2.5"><Clock className="size-4 text-gold" strokeWidth={1.75} />30 minutes</li>

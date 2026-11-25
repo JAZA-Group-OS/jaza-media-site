@@ -54,6 +54,8 @@ export function buildCalendlyUrl(
   // PH/AU audience. If we ever expand to EU leads we'll need to drop this
   // parameter to comply with GDPR Article 13.
   url.searchParams.set('hide_gdpr_banner', '1');
+  // The event description lives in the site's own details panel beside the calendar.
+  url.searchParams.set('hide_event_type_details', '1');
 
   if (prefill.fullName) {
     url.searchParams.set('name', prefill.fullName.slice(0, MAX.fullName));
