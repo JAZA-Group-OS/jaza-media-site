@@ -221,7 +221,7 @@ function WaveSlider() {
   };
 
   return (
-    <div className="mx-auto mt-2 max-w-[1560px] px-4 md:mt-3 md:px-6">
+    <div className="mx-auto -mt-3 max-w-[1560px] px-4 md:-mt-6 md:px-6">
       <div
         ref={wrap}
         onMouseEnter={() => setPaused(true)}
