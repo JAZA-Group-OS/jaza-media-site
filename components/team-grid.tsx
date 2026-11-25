@@ -166,7 +166,7 @@ function WaveSlider() {
   const left0 = (W - total) / 2;
 
   return (
-    <div className="mx-auto mt-14 max-w-[1560px] px-4 md:mt-16 md:px-6">
+    <div className="mx-auto mt-8 max-w-[1560px] px-4 md:mt-10 md:px-6">
       <div
         ref={wrap}
         onMouseEnter={() => setPaused(true)}
