@@ -13,6 +13,7 @@ import CareerApplicationsManager from '@/components/admin/career-applications-ma
 import CourseRequestsManager from '@/components/admin/course-requests-manager';
 import SupportTicketsManager from '@/components/admin/support-tickets-manager';
 import BookingManager from '@/components/admin/booking-manager';
+import UpcomingCallAlert from '@/components/admin/upcoming-call-alert';
 import { COURSE_CATALOG } from '@/lib/courses/catalog';
 
 export type DashboardTab =
@@ -60,6 +61,7 @@ export default function AdminDashboardClient({ initialTab = 'overview' }: { init
               </motion.button>
             </div>
 
+            <UpcomingCallAlert onOpen={() => setActiveTab('bookings')} />
             {activeTab === 'overview' && <DashboardOverview />}
             {activeTab === 'leads' && <PartnerLeadsManager />}
             {activeTab === 'applications' && <CareerApplicationsManager />}

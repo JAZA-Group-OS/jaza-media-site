@@ -2,6 +2,7 @@
 
 import { CalendarDays, Check, Link2, Loader2, Mail, Phone, Plus, Trash2, Video, X } from 'lucide-react';
 import { useCallback, useEffect, useState } from 'react';
+import BookingCalendarView from './booking-calendar-view';
 
 type Range = [string, string];
 type Settings = {
@@ -108,6 +109,12 @@ export default function BookingManager() {
   return (
     <div className="space-y-6">
       {error && <p className="rounded-lg border border-red-500/30 bg-red-500/10 p-3 text-sm text-red-300">{error}</p>}
+
+      {/* Calendar */}
+      <section className={CARD}>
+        <h2 className="mb-4 flex items-center gap-2 text-lg font-semibold"><CalendarDays className="size-5 text-[#FFB829]" /> Calendar</h2>
+        <BookingCalendarView bookings={data.bookings} tz={tz} />
+      </section>
 
       {/* Upcoming bookings */}
       <section className={CARD}>
