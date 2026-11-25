@@ -41,11 +41,11 @@ export function Hero() {
           </p>
         </Reveal>
         <Reveal delay={0.08}>
-          <h1 className="mt-8 font-serif text-[46px] leading-[1.02] tracking-[-0.03em] text-balance sm:text-6xl lg:text-[86px]">
+          <h1 className="mt-8 font-heading font-semibold text-[38px] leading-[1.12] tracking-[-0.02em] text-balance sm:text-5xl lg:text-[68px]">
             <span className="bg-gradient-to-b from-white via-white to-white/60 bg-clip-text text-transparent">
               Do you want to
             </span>{" "}
-            <em className="relative inline-block bg-gradient-to-br from-[#fbe7a1] via-gold to-[#a97a1f] bg-clip-text pr-2 text-transparent [text-shadow:0_0_40px_rgba(234,179,8,0.25)]">
+            <em className="relative inline-block not-italic bg-gradient-to-br from-[#fbe7a1] via-gold to-[#a97a1f] bg-clip-text pr-2 text-transparent [text-shadow:0_0_40px_rgba(234,179,8,0.25)]">
               scale
               <svg aria-hidden viewBox="0 0 200 12" preserveAspectRatio="none" className="absolute -bottom-1 left-0 h-2.5 w-[95%] text-gold/70">
                 <path d="M2 9 C 50 2, 120 2, 198 7" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
@@ -59,7 +59,7 @@ export function Hero() {
         <Reveal delay={0.16}>
           <p className="mx-auto mt-8 max-w-md text-[15px] leading-7 font-light tracking-wide text-white/55 md:text-[17px]">
             Learn from the team that has scaled a portfolio to over{" "}
-            <span className="font-serif text-xl font-normal tracking-normal text-gold italic md:text-2xl">₱150M+</span>{" "}
+            <span className="font-heading text-lg font-semibold tracking-normal text-gold md:text-xl">₱150M+</span>{" "}
             in annual revenue.
           </p>
         </Reveal>
