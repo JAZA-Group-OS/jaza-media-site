@@ -1,5 +1,5 @@
 import type { ReactNode, Ref } from 'react';
-import { ArrowLeft, ArrowRight } from 'lucide-react';
+import { ArrowLeft, ArrowRight, ListChecks } from 'lucide-react';
 
 // FunnelStepCard expects to live inside a <form>. The submit button advances
 // the funnel via the form's onSubmit handler — no onNext prop needed, which
@@ -18,6 +18,8 @@ type Props = {
   shakeKey?: number;
   /** Disables the submit button while the final step is being persisted. */
   submitting?: boolean;
+  /** Last step only: opens the "review your answers" summary. */
+  onReview?: () => void;
 };
 
 export function FunnelStepCard({
@@ -31,6 +33,7 @@ export function FunnelStepCard({
   titleRef,
   shakeKey = 0,
   submitting = false,
+  onReview,
 }: Props) {
   return (
     <div
@@ -79,6 +82,18 @@ export function FunnelStepCard({
           </button>
         )}
 
+        <div className="flex items-center gap-3">
+        {isLast && onReview ? (
+          <button
+            type="button"
+            onClick={onReview}
+            className="inline-flex min-h-[44px] items-center gap-2 rounded-full border border-gold/50 px-5 text-[12px] font-medium tracking-[0.14em] text-white uppercase transition hover:bg-gold/10"
+          >
+            <ListChecks className="size-4 text-gold" strokeWidth={2} />
+            <span className="hidden sm:inline">Review answers</span>
+            <span className="sm:hidden">Review</span>
+          </button>
+        ) : null}
         <button
           type="submit"
           disabled={submitting}
@@ -89,6 +104,7 @@ export function FunnelStepCard({
           {isLast ? (submitting ? 'Submitting…' : 'Submit') : 'Next'}
           <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" strokeWidth={2.5} />
         </button>
+        </div>
       </div>
       </div>
     </div>

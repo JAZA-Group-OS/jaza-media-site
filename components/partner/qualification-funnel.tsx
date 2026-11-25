@@ -8,6 +8,7 @@ import { writePrefill } from '@/lib/partner/booking-prefill';
 import { FunnelStepCard } from './funnel-step-card';
 import { RadioOptions } from './radio-options';
 import { FunnelTextInput } from './funnel-text-input';
+import { ReviewAnswers } from './review-answers';
 
 const STORAGE_KEY = 'partner-with-us:answers';
 
@@ -127,6 +128,7 @@ export function QualificationFunnel() {
   // Final-step submit guard: blocks double submits and drives the button's
   // busy state while the inquiry is being persisted.
   const [submitting, setSubmitting] = useState(false);
+  const [reviewOpen, setReviewOpen] = useState(false);
 
   // Validation is keyed to the step it ran on. When stepFromUrl changes,
   // the derived `error` below becomes null automatically — no effect needed.
@@ -432,10 +434,28 @@ export function QualificationFunnel() {
               titleRef={titleRef}
               shakeKey={shakeKey}
               submitting={submitting}
+              onReview={() => setReviewOpen(true)}
             />
           </div>
         </div>
       </form>
+
+      {reviewOpen ? (
+        <ReviewAnswers
+          answers={answers}
+          submitting={submitting}
+          onClose={() => setReviewOpen(false)}
+          onEdit={(step) => {
+            setReviewOpen(false);
+            setDirection('backward');
+            router.push(`/partner-with-us?step=${step}`);
+          }}
+          onSubmit={() => {
+            setReviewOpen(false);
+            goNext();
+          }}
+        />
+      ) : null}
 
       {/* Screen-reader-only counter; sighted users get the same info from the
           STEP badge above and the visual progress bar. The progressbar above
