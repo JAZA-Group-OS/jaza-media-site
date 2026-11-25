@@ -12,6 +12,7 @@ import CareerApplicationsManager from '@/components/admin/career-applications-ma
 import CourseRequestsManager from '@/components/admin/course-requests-manager';
 import DashboardOverview from '@/components/admin/dashboard-overview';
 import PartnerLeadsManager from '@/components/admin/partner-leads-manager';
+import AiAgent from '@/components/admin/ai-agent';
 import AiAssistant from '@/components/admin/ai-assistant';
 import SupportDesk from '@/components/admin/support-desk';
 import { aiEnabled } from './ai-actions';
@@ -26,6 +27,7 @@ export type DashboardTab =
   | 'course-rule-of-10x'
   | 'course-marketing-templates'
   | 'support'
+  | 'ai-agent'
   | 'bookings';
 
 const PAGE: Record<DashboardTab, { title: string; description: string }> = {
@@ -35,6 +37,7 @@ const PAGE: Record<DashboardTab, { title: string; description: string }> = {
   applications: { title: 'Career Applications', description: 'Candidates who applied through the careers page.' },
   'course-rule-of-10x': { title: 'Rule of 10X', description: 'Course access requests.' },
   'course-marketing-templates': { title: 'Marketing Templates', description: 'Template download requests.' },
+  'ai-agent': { title: 'AI Agent', description: 'Claude on this computer, working with the site’s admin data.' },
   support: { title: 'Support Desk', description: 'Tickets from the Support page: triage, assign, note and resolve.' },
 };
 
@@ -183,11 +186,12 @@ export default function AdminDashboardClient({ initialTab = 'overview' }: { init
               <CourseRequestsManager courseSlug="marketing-templates" courseTitle={COURSE_CATALOG['marketing-templates'].shortName} />
             )}
             {activeTab === 'support' && <SupportDesk ai={ai} />}
+            {activeTab === 'ai-agent' && <AiAgent fallbackAi={ai} />}
             {activeTab === 'bookings' && <BookingManager />}
           </main>
         </div>
       </div>
-      {ai && <AiAssistant />}
+      {ai && activeTab !== 'ai-agent' && <AiAssistant />}
     </AdminSessionProvider>
   );
 }

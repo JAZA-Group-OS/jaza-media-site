@@ -3,6 +3,7 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import {
   BookOpen,
+  Bot,
   Briefcase,
   CalendarDays,
   ExternalLink,
@@ -50,6 +51,10 @@ export const NAV_GROUPS: { title: string; items: Item[] }[] = [
   {
     title: 'Help desk',
     items: [{ id: 'support', label: 'Support Desk', icon: LifeBuoy }],
+  },
+  {
+    title: 'AI',
+    items: [{ id: 'ai-agent', label: 'AI Agent', icon: Bot }],
   },
 ];
 

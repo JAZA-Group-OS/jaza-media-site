@@ -26,6 +26,6 @@ export default async function AdminDashboardPage({
   // Returning from the Google Calendar connect flow → open the Discovery Calls tab.
   // ?tab=support deep-links straight to the Support Desk.
   const { booking_google, tab } = await searchParams;
-  const initialTab = booking_google ? 'bookings' : tab === 'support' ? 'support' : 'overview';
+  const initialTab = booking_google ? 'bookings' : tab === 'support' ? 'support' : tab === 'ai-agent' ? 'ai-agent' : 'overview';
   return <AdminDashboardClient initialTab={initialTab} />;
 }

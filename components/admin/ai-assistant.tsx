@@ -16,8 +16,9 @@ const NO = /^(no|nope|cancel|stop|don'?t)\b/i;
  * It reads the support tickets and can propose one change or internal note;
  * nothing happens until the admin confirms. Render it only when the AI server is set up.
  */
-export default function AiAssistant({ onChanged }: { onChanged?: () => void }) {
-  const [open, setOpen] = useState(false);
+export default function AiAssistant({ onChanged, inline = false }: { onChanged?: () => void; inline?: boolean }) {
+  const [openSelf, setOpen] = useState(false);
+  const open = inline || openSelf;
   const [msgs, setMsgs] = useState<Msg[]>([]);
   const [text, setText] = useState('');
   const [busy, setBusy] = useState(false);
@@ -81,13 +82,15 @@ export default function AiAssistant({ onChanged }: { onChanged?: () => void }) {
       )}
       {open && (
         <div role="dialog" aria-label="AI assistant"
-          className="fixed right-4 bottom-4 z-50 flex max-h-[80vh] w-[min(420px,calc(100vw-2rem))] flex-col rounded-2xl border border-adm-line-strong bg-adm-bg shadow-2xl">
+          className={inline
+            ? 'flex h-[min(640px,70vh)] w-full flex-col rounded-2xl border border-adm-line bg-adm-bg'
+            : 'fixed right-4 bottom-4 z-50 flex max-h-[80vh] w-[min(420px,calc(100vw-2rem))] flex-col rounded-2xl border border-adm-line-strong bg-adm-bg shadow-2xl'}>
           <div className="flex items-center gap-2 border-b border-adm-line px-4 py-3">
             <Bot className="size-4 text-adm-accent" aria-hidden />
             <b className="text-[13.5px] text-adm-text">AI assistant</b>
-            <button type="button" aria-label="Close" className="ml-auto rounded-sm p-1 text-adm-muted hover:text-adm-text" onClick={() => setOpen(false)}>
+            {!inline && <button type="button" aria-label="Close" className="ml-auto rounded-sm p-1 text-adm-muted hover:text-adm-text" onClick={() => setOpen(false)}>
               <X className="size-4" />
-            </button>
+            </button>}
           </div>
           <div className="flex min-h-48 flex-1 flex-col gap-3 overflow-y-auto px-4 py-3">
             {msgs.length === 0 && (
