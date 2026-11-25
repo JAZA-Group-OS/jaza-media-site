@@ -352,6 +352,33 @@ export default function CourseRequestsManager({
                     animate={{ opacity: 1, height: 'auto' }}
                     className="border-t border-adm-line p-5 space-y-4"
                   >
+                    {/* Status — right-aligned segmented control, same style as the filter pills */}
+                    <div className="flex flex-wrap items-center justify-between gap-3">
+                      <p className="text-xs font-semibold tracking-[0.14em] text-adm-subtle uppercase">Request details</p>
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs text-adm-subtle">Status</span>
+                        <div className="inline-flex rounded-full border border-adm-line bg-adm-raised p-1">
+                          {(['new', 'contacted', 'closed'] as FollowUpStatus[]).map((status) => {
+                            const active = req.follow_up_status === status;
+                            return (
+                              <button
+                                key={status}
+                                type="button"
+                                onClick={() => updateFollowUp(req.id, status)}
+                                disabled={updatingId === req.id || active}
+                                aria-pressed={active}
+                                className={`rounded-full px-3.5 py-1 text-xs font-semibold transition-colors ${
+                                  active ? 'bg-adm-accent text-black' : 'text-adm-muted hover:text-adm-text'
+                                } disabled:cursor-default ${updatingId === req.id && !active ? 'opacity-50' : ''}`}
+                              >
+                                {followUpLabels[status]}
+                              </button>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    </div>
+
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
                       <DetailItem
                         icon={<User className="w-3.5 h-3.5" />}
@@ -417,27 +444,6 @@ export default function CourseRequestsManager({
                       </div>
                     ) : null}
 
-                    <div className="flex flex-wrap gap-2 pt-2">
-                      {(['new', 'contacted', 'closed'] as FollowUpStatus[]).map(
-                        (status) => (
-                          <button
-                            key={status}
-                            onClick={() => updateFollowUp(req.id, status)}
-                            disabled={
-                              updatingId === req.id ||
-                              req.follow_up_status === status
-                            }
-                            className={`px-3 py-1.5 rounded-md text-xs font-semibold border transition-colors ${
-                              req.follow_up_status === status
-                                ? followUpColors[status]
-                                : 'bg-transparent text-adm-muted border-adm-line-strong hover:border-adm-accent/40 hover:text-adm-text'
-                            } disabled:opacity-50 disabled:cursor-not-allowed`}
-                          >
-                            Mark {followUpLabels[status]}
-                          </button>
-                        ),
-                      )}
-                    </div>
                   </motion.div>
                 )}
               </motion.div>
