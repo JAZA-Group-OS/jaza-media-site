@@ -431,5 +431,10 @@ html.dots-scroll::-webkit-scrollbar { display: none; }
 .admin-ui[data-theme="light"] .text-blue-400 { color: #1d4ed8; }
 .admin-ui[data-theme="light"] .text-purple-400 { color: #7e22ce; }
 .admin-ui[data-theme="light"] .text-amber-300 { color: #a16207; }
+.admin-ui[data-theme="light"] .text-amber-300 { color: #92400e; }
+.admin-ui[data-theme="light"] .text-sky-300 { color: #0369a1; }
+.admin-ui[data-theme="light"] .text-emerald-300 { color: #047857; }
+.admin-ui[data-theme="light"] .text-violet-300 { color: #6d28d9; }
+.admin-ui[data-theme="light"] .text-rose-300 { color: #be123c; }
 .admin-ui ::selection { background: var(--adm-accent); color: #141414; }
 .admin-ui input[type="date"], .admin-ui input[type="time"] { color-scheme: inherit; }
