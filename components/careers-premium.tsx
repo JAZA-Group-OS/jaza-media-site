@@ -52,7 +52,7 @@ const CARD = "rounded-[20px] border border-gold/25 bg-[linear-gradient(180deg,#1
 
 function Hero() {
   return (
-    <section className="relative overflow-hidden bg-[#0b0d0c] pt-12 pb-16 text-white md:pt-20 md:pb-20">
+    <section id="top" className="relative scroll-mt-28 overflow-hidden bg-[#0b0d0c] pt-12 pb-16 text-white md:pt-20 md:pb-20">
       <div aria-hidden className="pointer-events-none absolute -top-40 right-0 size-[760px] rounded-full bg-gold/12 blur-[160px]" />
       <div aria-hidden className="pointer-events-none absolute inset-0 opacity-[0.05] [background-image:radial-gradient(white_1px,transparent_1px)] [background-size:4px_4px]" />
       <div className="relative mx-auto grid max-w-[1200px] items-center gap-14 px-4 md:px-8 lg:grid-cols-2">
@@ -322,7 +322,7 @@ function TogetherCard({ t, i }: { t: (typeof TOGETHER)[number]; i: number }) {
 
 function Together() {
   return (
-    <section className="relative overflow-hidden bg-[#0b0d0c] py-20 text-white md:py-28">
+    <section id="life" className="relative scroll-mt-28 overflow-hidden bg-[#0b0d0c] py-20 text-white md:py-28">
       <div aria-hidden className="pointer-events-none absolute top-1/3 left-1/2 size-[800px] -translate-x-1/2 rounded-full bg-gold/[0.07] blur-[160px]" />
       <div className="relative mx-auto max-w-[1200px] px-4 md:px-8">
         <Reveal className="mx-auto mb-14 flex max-w-[720px] flex-col items-center gap-5 text-center">
@@ -454,7 +454,7 @@ const PERKS = [
 
 function Investing() {
   return (
-    <section className="bg-[#0b0d0c] py-20 text-white md:py-28">
+    <section id="perks" className="scroll-mt-28 bg-[#0b0d0c] py-20 text-white md:py-28">
       <div className="mx-auto max-w-[1200px] px-4 md:px-8">
         <Reveal>
           <h2 className={`${H2} mb-14 text-center`}>
@@ -534,7 +534,7 @@ function StoryCard({ name }: { name: string }) {
 function Testimonials() {
   const sam = TESTIMONIALS.find((x) => x.name === "Samantha M.")!;
   return (
-    <section className="bg-[#0e0e0f] py-20 text-white md:py-28">
+    <section id="stories" className="scroll-mt-28 bg-[#0e0e0f] py-20 text-white md:py-28">
       <div className="mx-auto max-w-[1200px] px-4 md:px-8">
         <Reveal>
           <h2 className={`${H2} mb-12 text-center`}>
@@ -592,9 +592,61 @@ function Closing() {
   );
 }
 
+/* ---------- dot scroll indicator (replaces the scrollbar on this page) ---------- */
+
+const DOTS = [
+  { id: "top", label: "Join us" },
+  { id: "culture", label: "Who we hire" },
+  { id: "life", label: "Life at JAZA" },
+  { id: "openings", label: "How we hire" },
+  { id: "perks", label: "Benefits" },
+  { id: "stories", label: "Stories" },
+];
+
+function ScrollDots() {
+  const [active, setActive] = useState(0);
+  useEffect(() => {
+    document.documentElement.classList.add("no-scrollbar");
+    const onScroll = () => {
+      const mid = window.innerHeight * 0.45;
+      let a = 0;
+      DOTS.forEach((d, i) => {
+        const el = document.getElementById(d.id);
+        if (el && el.getBoundingClientRect().top <= mid) a = i;
+      });
+      setActive(a);
+    };
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => {
+      document.documentElement.classList.remove("no-scrollbar");
+      window.removeEventListener("scroll", onScroll);
+    };
+  }, []);
+  return (
+    <nav aria-label="Page sections" className="fixed top-1/2 right-3 z-40 hidden -translate-y-1/2 flex-col items-end gap-4 md:flex lg:right-6">
+      {DOTS.map((d, i) => (
+        <a key={d.id} href={`#${d.id}`} aria-label={d.label} aria-current={i === active ? "true" : undefined} className="group flex items-center gap-3 py-0.5">
+          <span className="pointer-events-none rounded-full border border-white/10 bg-black/70 px-2.5 py-1 text-[10px] tracking-[0.2em] text-white/80 uppercase opacity-0 backdrop-blur transition group-hover:opacity-100">
+            {d.label}
+          </span>
+          <span
+            className={`block rounded-full transition-all duration-500 ${
+              i === active
+                ? "size-3.5 bg-gold shadow-[0_0_14px_3px_rgba(234,179,8,0.55)]"
+                : "size-2.5 bg-white/25 group-hover:bg-gold/70"
+            }`}
+          />
+        </a>
+      ))}
+    </nav>
+  );
+}
+
 export function CareersPremium() {
   return (
     <>
+      <ScrollDots />
       <Hero />
       <PhotoStrip />
       <Values />
