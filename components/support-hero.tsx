@@ -9,7 +9,7 @@ const LABEL = "text-[10.5px] font-medium tracking-[0.3em] text-gold/85 uppercase
 
 export function SupportHero() {
   return (
-    <section id="top" className={`${SLIDE} bg-[#0b0d0c]`}>
+    <section id="top" className={`${SLIDE} !justify-start !pt-8 md:!pt-10 bg-[#0b0d0c]`}>
       <div aria-hidden className="pointer-events-none absolute -top-56 left-1/2 size-[900px] -translate-x-1/2 rounded-full bg-gold/10 blur-[160px]" />
       <div className="relative mx-auto flex w-full max-w-[1100px] flex-col items-center gap-10 px-4 text-center md:gap-14 md:px-8">
         <div className="flex flex-col items-center gap-5 md:gap-6">
