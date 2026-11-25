@@ -330,3 +330,18 @@ html.no-scrollbar::-webkit-scrollbar { display: none; }
 /* Site-wide: hide the browser scrollbar; the gold dot rail replaces it */
 html.dots-scroll { scrollbar-width: none; scroll-padding-top: 120px; }
 html.dots-scroll::-webkit-scrollbar { display: none; }
+
+/* Partner form: waving flags (components/partner/radio-options.tsx) */
+@keyframes flag-wave {
+  0%, 100% { transform: translateY(calc(var(--amp) * -1)); }
+  50% { transform: translateY(var(--amp)); }
+}
+@keyframes flag-shade {
+  0%, 100% { opacity: 0.22; }
+  50% { opacity: 0; }
+}
+.flag-wave { animation: flag-wave 2.8s ease-in-out infinite; transform-box: view-box; }
+.flag-shade { animation: flag-shade 2.8s ease-in-out infinite; opacity: 0.1; }
+@media (prefers-reduced-motion: reduce) {
+  .flag-wave, .flag-shade { animation: none; }
+}
