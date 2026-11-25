@@ -33,7 +33,7 @@ export function Hero() {
       {/* bottom fade — melts the hero (photos, glow, grid) into the next section, no seam */}
       <div aria-hidden className="pointer-events-none absolute inset-x-0 bottom-0 z-[5] h-48 bg-gradient-to-b from-transparent via-ink/70 to-ink" />
 
-      <div className="relative z-10 mx-auto flex max-w-3xl flex-col items-center px-4 pt-16 text-center md:px-6 md:pt-24">
+      <div className="relative z-10 mx-auto flex max-w-3xl flex-col items-center px-4 pt-6 text-center md:px-6 md:pt-24">
         <Reveal>
           <p className="inline-flex items-center gap-2.5 rounded-full border border-white/10 bg-white/[0.03] px-4 py-1.5 text-[10.5px] font-medium tracking-[0.32em] text-white/70 backdrop-blur">
             <span aria-hidden className="size-1.5 rounded-full bg-gold shadow-[0_0_10px_2px_rgba(234,179,8,0.6)]" />
