@@ -261,8 +261,6 @@ export function StepTwoBooking() {
                 ))}
               </ol>
               <div aria-hidden className="h-px bg-gradient-to-r from-transparent via-gold/60 to-transparent" />
-              {/* The Calendly frame is 240px wider than the card and centred, so its
-                  corner "Powered by Calendly" ribbon falls outside the visible area. */}
               <div className="overflow-hidden">
                 <div
                   ref={containerRef}
@@ -270,8 +268,6 @@ export function StepTwoBooking() {
                   // so each step (calendar, times, details form) fits without empty space.
                   style={{
                     minWidth: '280px',
-                    width: 'calc(100% + 240px)',
-                    marginLeft: '-120px',
                     height: `${frameHeight}px`,
                     transition: 'height 400ms ease',
                   }}
