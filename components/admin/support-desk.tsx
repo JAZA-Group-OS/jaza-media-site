@@ -1,6 +1,8 @@
 'use client';
 
-import { ArrowLeft, Inbox, Mail, Phone, Search } from 'lucide-react';
+import { ArrowLeft, Bot, Inbox, Mail, Phone, Search } from 'lucide-react';
+import { assistTicket } from '@/app/(admin)/admin/dashboard/ai-actions';
+import type { TicketAssist } from '@/lib/admin/ai-assist';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { supabase } from '@/lib/supabase/client';
 import { useRealtimeTable } from '@/lib/admin/use-realtime-table';
@@ -116,7 +118,7 @@ const fmt = (iso: string) =>
 
 /* ---------- desk ---------- */
 
-export default function SupportDesk() {
+export default function SupportDesk({ ai = false }: { ai?: boolean }) {
   const { rows: tickets, setRows, loading, error } = useRealtimeTable<SupportTicket>('support_tickets');
   const [me, setMe] = useState<string | null>(null);
   const [filters, setFilters] = useState<DeskFilters>(NO_FILTERS);
@@ -135,7 +137,7 @@ export default function SupportDesk() {
   const onSaved = useCallback((t: SupportTicket) => setRows((rs) => rs.map((r) => (r.id === t.id ? t : r))), [setRows]);
 
   const open = openId ? tickets.find((t) => t.id === openId) : undefined;
-  if (open) return <TicketView ticket={open} me={me} onBack={() => setOpenId(null)} onSaved={onSaved} />;
+  if (open) return <TicketView ticket={open} me={me} ai={ai} onBack={() => setOpenId(null)} onSaved={onSaved} />;
 
   return (
     <div className="flex flex-col gap-5 lg:flex-row">
@@ -224,8 +226,8 @@ export default function SupportDesk() {
 
 /* ---------- one ticket ---------- */
 
-function TicketView({ ticket: t, me, onBack, onSaved }: {
-  ticket: SupportTicket; me: string | null; onBack: () => void; onSaved: (t: SupportTicket) => void;
+function TicketView({ ticket: t, me, ai, onBack, onSaved }: {
+  ticket: SupportTicket; me: string | null; ai: boolean; onBack: () => void; onSaved: (t: SupportTicket) => void;
 }) {
   const [comments, setComments] = useState<SupportTicketComment[]>([]);
   const [threadError, setThreadError] = useState<string | null>(null);
@@ -338,6 +340,10 @@ function TicketView({ ticket: t, me, onBack, onSaved }: {
             )}
           </section>
 
+          {ai && (
+            <AiPanel ticket={t} saving={saving} onApplyPriority={(p) => void change({ priority: p })} onDraft={setBody} />
+          )}
+
           <section className="flex flex-col gap-4 border-t border-adm-line pt-5">
             <h3 className="text-[13px] font-semibold text-adm-text">Internal notes &amp; activity</h3>
             {threadError ? (
@@ -417,3 +423,70 @@ function TicketView({ ticket: t, me, onBack, onSaved }: {
 const Row = ({ label, value }: { label: string; value: string }) => (
   <div className="flex justify-between gap-3"><dt className="text-adm-subtle">{label}</dt><dd className="min-w-0 truncate text-right text-adm-text-2">{value || '—'}</dd></div>
 );
+
+/* ---------- per-ticket AI help (ported from Finance's CaseAiPanel) ---------- */
+
+/** Suggests; the admin decides. Priority changes only on "Apply priority"; the draft only fills the note box or an email. */
+function AiPanel({ ticket: t, saving, onApplyPriority, onDraft }: {
+  ticket: SupportTicket; saving: boolean; onApplyPriority: (p: SupportTicketPriority) => void; onDraft: (text: string) => void;
+}) {
+  const [busy, setBusy] = useState(false);
+  const [result, setResult] = useState<TicketAssist | null>(null);
+  const [err, setErr] = useState<string | null>(null);
+
+  const ask = async () => {
+    setBusy(true);
+    setErr(null);
+    const r = await assistTicket(t.id);
+    if (r.ok) setResult(r.value);
+    else setErr(r.error);
+    setBusy(false);
+  };
+
+  const current = t.priority ?? 'normal';
+  return (
+    <section className="flex flex-col gap-3 rounded-2xl border border-adm-line p-4">
+      <div className="flex items-center gap-2">
+        <Bot className="size-4 text-adm-accent" aria-hidden />
+        <h3 className="text-[13px] font-semibold text-adm-text">AI help</h3>
+        <span className="truncate text-[12px] text-adm-subtle">{result ? `by ${result.model}` : 'Self-hosted AI server'}</span>
+        <button type="button" className={`${btnOutline} ml-auto`} disabled={busy} onClick={() => void ask()}>
+          {busy ? 'Reading…' : result ? 'Ask again' : 'Ask AI'}
+        </button>
+      </div>
+      {busy && !result && <p className="text-[13px] text-adm-subtle">Reading the ticket. This can take up to a minute.</p>}
+      {err && <p className="text-[13px] text-red-300">{err}</p>}
+      {result && (
+        <>
+          {result.summary && <p className="whitespace-pre-wrap text-[13.5px] leading-relaxed text-adm-text-2">{result.summary}</p>}
+          <p className="text-[13px] text-adm-subtle">
+            Priority:{' '}
+            {result.priority === current
+              ? <span className="text-adm-text-2">{PRIORITY_LABELS[current]}</span>
+              : <span><s>{PRIORITY_LABELS[current]}</s> → <b className="text-adm-text">{PRIORITY_LABELS[result.priority]}</b></span>}
+          </p>
+          {result.reply && (
+            <div className="flex flex-col gap-1.5">
+              <h4 className="text-[12px] font-semibold text-adm-subtle">Suggested reply to the visitor</h4>
+              <p className="whitespace-pre-wrap rounded-xl bg-adm-surface p-3 text-[13.5px] leading-relaxed text-adm-text-2">{result.reply}</p>
+            </div>
+          )}
+          <div className="flex flex-wrap justify-end gap-2">
+            {result.priority !== current && (
+              <button type="button" className={btnOutline} disabled={saving} onClick={() => onApplyPriority(result.priority)}>Apply priority</button>
+            )}
+            {result.reply && (
+              <>
+                <button type="button" className={btnOutline} onClick={() => onDraft(result.reply)}>Use as note</button>
+                <a className={btnPrimary}
+                  href={`mailto:${t.email}?subject=${encodeURIComponent(`Re: ${t.subject} [${ticketKey(t)}]`)}&body=${encodeURIComponent(result.reply)}`}>
+                  Email this reply
+                </a>
+              </>
+            )}
+          </div>
+        </>
+      )}
+    </section>
+  );
+}

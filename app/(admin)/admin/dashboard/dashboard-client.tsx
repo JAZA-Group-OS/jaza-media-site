@@ -12,7 +12,9 @@ import CareerApplicationsManager from '@/components/admin/career-applications-ma
 import CourseRequestsManager from '@/components/admin/course-requests-manager';
 import DashboardOverview from '@/components/admin/dashboard-overview';
 import PartnerLeadsManager from '@/components/admin/partner-leads-manager';
+import AiAssistant from '@/components/admin/ai-assistant';
 import SupportDesk from '@/components/admin/support-desk';
+import { aiEnabled } from './ai-actions';
 import UpcomingCallAlert from '@/components/admin/upcoming-call-alert';
 import { COURSE_CATALOG } from '@/lib/courses/catalog';
 import { supabase } from '@/lib/supabase/client';
@@ -44,6 +46,11 @@ export default function AdminDashboardClient({ initialTab = 'overview' }: { init
   const [activeTab, setActiveTab] = useState<DashboardTab>(initialTab);
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  // AI is shown only when the server has AI_SERVER_URL set.
+  const [ai, setAi] = useState(false);
+  useEffect(() => {
+    void aiEnabled().then(setAi).catch(() => setAi(false));
+  }, []);
 
   // Remember the sidebar state per browser: read once, then save every change.
   const ready = useRef(false);
@@ -175,11 +182,12 @@ export default function AdminDashboardClient({ initialTab = 'overview' }: { init
             {activeTab === 'course-marketing-templates' && (
               <CourseRequestsManager courseSlug="marketing-templates" courseTitle={COURSE_CATALOG['marketing-templates'].shortName} />
             )}
-            {activeTab === 'support' && <SupportDesk />}
+            {activeTab === 'support' && <SupportDesk ai={ai} />}
             {activeTab === 'bookings' && <BookingManager />}
           </main>
         </div>
       </div>
+      {ai && <AiAssistant />}
     </AdminSessionProvider>
   );
 }
