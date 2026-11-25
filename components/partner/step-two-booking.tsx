@@ -114,7 +114,7 @@ export function StepTwoBooking() {
       <div aria-hidden className="pointer-events-none absolute -top-48 left-1/2 size-[900px] -translate-x-1/2 rounded-full bg-gold/12 blur-[170px]" />
       <div aria-hidden className="pointer-events-none absolute inset-0 opacity-[0.05] [background-image:radial-gradient(white_1px,transparent_1px)] [background-size:4px_4px]" />
 
-      <div className="relative mx-auto w-full max-w-5xl px-4 py-14 md:py-20">
+      <div className="relative mx-auto w-full max-w-6xl px-4 py-14 md:py-20">
         <div className="flex flex-col items-center text-center">
           {/* step tracker */}
           <ol aria-label="Application progress" className="flex items-center gap-3 text-[10.5px] font-medium tracking-[0.28em] uppercase">
@@ -159,8 +159,8 @@ export function StepTwoBooking() {
         </div>
 
         {/* calendar in a gold-edged frame */}
-        <div className="mx-auto mt-12 max-w-[920px] rounded-[28px] bg-gradient-to-b from-gold/50 via-white/10 to-white/[0.03] p-px shadow-[0_60px_120px_-40px_rgba(0,0,0,0.95)]">
-          <div className="overflow-hidden rounded-[27px] bg-white">
+        <div className="mx-auto mt-12 max-w-[1080px] rounded-[28px] bg-gradient-to-b from-gold/50 via-white/10 to-white/[0.03] p-px shadow-[0_60px_120px_-40px_rgba(0,0,0,0.95)]">
+          <div className="overflow-hidden rounded-[27px] bg-[#141413]">
             <div
               ref={containerRef}
               className="overflow-hidden"
