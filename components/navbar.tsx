@@ -19,7 +19,7 @@ export function Navbar() {
         <div className="flex items-center gap-3">
           <Link
             href="/partner-with-us"
-            className="cta-breathe hidden rounded-full bg-gold/15 px-4 py-2 text-sm font-medium text-gold transition hover:bg-gold hover:text-ink md:inline-flex"
+            className="cta-breathe hidden rounded-full bg-gold px-4 py-2 text-sm font-semibold text-ink transition hover:bg-white hover:text-ink md:inline-flex"
           >
             Partner With Us
           </Link>
