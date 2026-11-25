@@ -178,10 +178,14 @@ export function StepTwoBooking() {
               strengthen marketing, sales, team structure, and profitability using strategies actively implemented inside JAZA
               Media and our client portfolio.
             </p>
-            <p className="mt-3 font-serif text-[17px] leading-snug text-gold italic">
-              This is not coaching or motivation — it&apos;s practical business scaling guided by operators who build and grow
-              brands daily.
-            </p>
+            <figure className="relative mt-5 overflow-hidden rounded-2xl border border-gold/25 bg-gradient-to-br from-gold/[0.08] to-transparent px-5 py-5">
+              <span aria-hidden className="absolute top-0 left-0 h-full w-[3px] bg-gradient-to-b from-[#fbe7a1] via-gold to-[#a97a1f]" />
+              <span aria-hidden className="pointer-events-none absolute -top-3 right-3 font-serif text-[84px] leading-none text-gold/15">&rdquo;</span>
+              <p className="text-[10.5px] font-medium tracking-[0.3em] text-gold/80 uppercase">Not coaching. Not motivation.</p>
+              <blockquote className="mt-2 font-serif text-[21px] leading-[1.3] text-white">
+                Practical business scaling, guided by <em className="text-gold">operators</em> who build and grow brands every day.
+              </blockquote>
+            </figure>
             <ul className="mt-5 grid gap-2.5">
               {[
                 ['₱582M', 'in total sales generated'],
