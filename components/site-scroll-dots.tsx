@@ -25,7 +25,8 @@ export function SiteScrollDots() {
   const pathname = usePathname();
   const [dots, setDots] = useState<Dot[]>([]);
   const [active, setActive] = useState(0);
-  const hidden = pathname.startsWith("/admin");
+  // /support has its own slide pager (components/support-slides.tsx).
+  const hidden = pathname.startsWith("/admin") || pathname === "/support";
   // Support page: dots sit as a horizontal pager in the empty space at the bottom of the screen.
   const row = pathname === "/support";
 

@@ -1,8 +1,8 @@
 import type { ReactNode } from "react";
 
-/** One full-screen "slide": fills the viewport below the sticky header (~120px) and snaps on scroll. */
+/** One support "slide": fills the slide deck (components/support-slides.tsx). Bottom padding clears the pager. */
 export const SLIDE =
-  "relative flex min-h-[calc(100svh-120px)] snap-start scroll-mt-28 flex-col justify-center overflow-hidden py-10 text-white md:py-8";
+  "relative flex min-h-full flex-col justify-center overflow-hidden py-10 pb-24 text-white md:py-8 md:pb-24";
 
 export const H2 = "font-serif text-[40px] leading-[1.05] tracking-[-0.025em] text-white md:text-[52px] lg:text-[58px]";
 
