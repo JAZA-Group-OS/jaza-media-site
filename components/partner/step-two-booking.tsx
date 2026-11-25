@@ -8,6 +8,7 @@ import { CalendarCheck, Check, Clock, Video } from 'lucide-react';
 import { readPrefill, clearPrefill } from '@/lib/partner/booking-prefill';
 import {
   buildCalendlyUrl,
+  isCalendlyEvent,
   isTrustedCalendlyUrl,
   makeCalendlyMessageHandler,
 } from '@/lib/partner/calendly';
@@ -33,6 +34,25 @@ export function StepTwoBooking() {
   const titleRef = useRef<HTMLHeadingElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const [scriptLoaded, setScriptLoaded] = useState(false);
+  // Calendly reports its content height and booking progress via postMessage;
+  // we size the frame to fit and move the step tracker along.
+  const [frameHeight, setFrameHeight] = useState(640);
+  const [bookingStep, setBookingStep] = useState(0);
+
+  useEffect(() => {
+    const onMsg = (e: MessageEvent) => {
+      if (!isCalendlyEvent(e)) return;
+      const { event, payload } = e.data as { event: string; payload?: { height?: string } };
+      if (event === 'calendly.page_height' && payload?.height) {
+        const h = parseInt(payload.height, 10);
+        if (Number.isFinite(h) && h > 300) setFrameHeight(Math.min(h + 8, 1400));
+      }
+      if (event === 'calendly.date_and_time_selected') setBookingStep(1);
+      if (event === 'calendly.event_scheduled') setBookingStep(2);
+    };
+    window.addEventListener('message', onMsg);
+    return () => window.removeEventListener('message', onMsg);
+  }, []);
 
   // Lazy state initializer reads sessionStorage once on first render. Same
   // pattern as the funnel's answers state — keeps the URL stable across
@@ -221,19 +241,32 @@ export function StepTwoBooking() {
 
           <div className="rounded-[28px] bg-gradient-to-b from-gold/50 via-white/10 to-white/[0.03] p-px shadow-[0_60px_120px_-40px_rgba(0,0,0,0.95)]">
             <div className="overflow-hidden rounded-[27px] bg-white">
-              <div className="flex items-center gap-2 border-b border-black/5 bg-[#faf8f1] px-5 py-3 text-[11px] font-medium tracking-[0.24em] text-[#7a5a12] uppercase">
-                <span className="size-1.5 rounded-full bg-gold" />
-                Select a date &amp; time
-              </div>
+              <ol aria-label="Booking steps" className="flex items-center gap-2 bg-[linear-gradient(180deg,#1a1913_0%,#121211_100%)] px-5 py-4 text-[10.5px] font-medium tracking-[0.2em] uppercase sm:gap-3 sm:px-7">
+                {['Date & time', 'Your details', 'Confirmed'].map((label, i) => (
+                  <li key={label} className="flex items-center gap-2 sm:gap-3" aria-current={i === bookingStep ? 'step' : undefined}>
+                    {i > 0 && <span aria-hidden className={`h-px w-5 sm:w-10 ${i <= bookingStep ? 'bg-gold' : 'bg-white/15'}`} />}
+                    <span
+                      className={`grid size-6 place-items-center rounded-full text-[11px] tracking-normal transition ${
+                        i < bookingStep
+                          ? 'border border-gold/60 text-gold'
+                          : i === bookingStep
+                            ? 'bg-gold font-semibold text-ink shadow-[0_0_14px_2px_rgba(234,179,8,0.45)]'
+                            : 'border border-white/15 text-white/40'
+                      }`}
+                    >
+                      {i < bookingStep ? <Check className="size-3.5" strokeWidth={2.5} /> : i + 1}
+                    </span>
+                    <span className={`hidden sm:inline ${i === bookingStep ? 'text-white' : 'text-white/45'}`}>{label}</span>
+                  </li>
+                ))}
+              </ol>
+              <div aria-hidden className="h-px bg-gradient-to-r from-transparent via-gold/60 to-transparent" />
               <div
                 ref={containerRef}
                 className="overflow-hidden"
-                // Vanilla Calendly widget doesn't auto-resize its iframe via
-                // postMessage the way react-calendly's wrapper does. 1150px gives
-                // a buffer over the tallest step (the details form on a desktop
-                // viewport with custom questions) without clipping. overflow:hidden
-                // contains any unexpected internal layout drift.
-                style={{ minWidth: '280px', height: '1150px' }}
+                // Height follows Calendly's calendly.page_height messages (see above),
+                // so each step (calendar, times, details form) fits without empty space.
+                style={{ minWidth: '280px', height: `${frameHeight}px`, transition: 'height 400ms ease' }}
               />
             </div>
           </div>
