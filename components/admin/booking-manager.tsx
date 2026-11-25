@@ -159,40 +159,20 @@ export default function BookingManager() {
         )}
       </section>
 
-      {/* Google */}
-      <section className={CARD}>
-        <h2 className="mb-2 flex items-center gap-2 text-[15px] font-semibold text-adm-text"><Link2 className="size-5 text-adm-accent-ink" /> Google Calendar</h2>
-        {googleNotice && <p className="mb-3 text-sm text-adm-accent-ink">{googleNotice}</p>}
-        {!data.googleConfigured ? (
-          <p className="text-sm text-adm-muted">Set <code>GOOGLE_CLIENT_ID</code> and <code>GOOGLE_CLIENT_SECRET</code> in Vercel, redeploy, then connect here.</p>
-        ) : data.googleConnected ? (
-          <div className="flex flex-wrap items-center gap-3">
-            <span className="inline-flex items-center gap-2 text-sm text-green-300"><Check className="size-4" /> Connected{data.settings.google_account_email ? ` as ${data.settings.google_account_email}` : ''}</span>
-            <button type="button" onClick={() => action({ action: 'disconnect_google' })} className={`${BTN} border border-adm-line-strong text-adm-muted hover:border-red-500 hover:text-red-400`}>Disconnect</button>
+      {/* Settings — left: weekly hours · right: rules, Google, days off */}
+      <div className="grid items-start gap-6 xl:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)]">
+        <section className={CARD}>
+          <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+            <div>
+              <h2 className="text-lg font-semibold">Weekly hours</h2>
+              <p className="text-sm text-gray-500">When clients can book a call ({form.timezone}).</p>
+            </div>
+            <button type="button" onClick={save} disabled={saving} className={`${BTN} bg-adm-accent text-black hover:bg-white`}>
+          {saving ? <Loader2 className="size-4 animate-spin" /> : saved ? <Check className="size-4" /> : null}
+          {saved ? 'Saved' : 'Save settings'}
+        </button>
           </div>
-        ) : (
-          <div className="flex flex-wrap items-center gap-3">
-            <p className="text-sm text-adm-muted">Not connected — slots ignore your Google events and calls get no Meet link.</p>
-            <a href="/api/booking/google/connect" className={`${BTN} bg-adm-accent text-black hover:bg-white`}>Connect Google Calendar</a>
-          </div>
-        )}
-      </section>
-
-      {/* Availability */}
-      <section className={CARD}>
-        <h2 className="mb-4 text-[15px] font-semibold text-adm-text">Availability</h2>
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          <label className="grid gap-1 text-sm text-adm-muted">Timezone<input className={INPUT} value={form.timezone} onChange={(e) => setForm({ ...form, timezone: e.target.value })} /></label>
-          <label className="grid gap-1 text-sm text-adm-muted">Call length (minutes)<input type="number" className={INPUT} value={form.slot_minutes} onChange={num('slot_minutes')} /></label>
-          <label className="grid gap-1 text-sm text-adm-muted">Buffer between calls (minutes)<input type="number" className={INPUT} value={form.buffer_minutes} onChange={num('buffer_minutes')} /></label>
-          <label className="grid gap-1 text-sm text-adm-muted">Minimum notice (hours)<input type="number" className={INPUT} value={form.min_notice_hours} onChange={num('min_notice_hours')} /></label>
-          <label className="grid gap-1 text-sm text-adm-muted">Bookable days ahead<input type="number" className={INPUT} value={form.max_days_ahead} onChange={num('max_days_ahead')} /></label>
-          <label className="grid gap-1 text-sm text-adm-muted">Notification email<input type="email" className={INPUT} placeholder="admin@jazamedia.com" value={form.host_email ?? ''} onChange={(e) => setForm({ ...form, host_email: e.target.value })} /></label>
-          <label className="grid gap-1 text-sm text-adm-muted">Google calendar ID<input className={INPUT} value={form.google_calendar_id} onChange={(e) => setForm({ ...form, google_calendar_id: e.target.value })} /></label>
-        </div>
-
-        <h3 className="mt-6 mb-3 text-sm font-semibold tracking-wide text-adm-text-2 uppercase">Weekly hours</h3>
-        <div className="space-y-2">
+          <div className="space-y-2">
           {DAYS.map((name, d) => {
             const ranges = form.weekly_hours[String(d)] ?? [];
             return (
@@ -222,16 +202,47 @@ export default function BookingManager() {
             );
           })}
         </div>
-        <button type="button" onClick={save} disabled={saving} className={`${BTN} mt-5 bg-adm-accent text-black hover:bg-white`}>
-          {saving ? <Loader2 className="size-4 animate-spin" /> : saved ? <Check className="size-4" /> : null}
-          {saved ? 'Saved' : 'Save availability'}
-        </button>
-      </section>
+        </section>
 
-      {/* Days off */}
-      <section className={CARD}>
-        <h2 className="mb-4 text-[15px] font-semibold text-adm-text">Days off</h2>
-        <div className="flex flex-wrap items-center gap-2">
+        <div className="space-y-6">
+          <section className={CARD}>
+            <h2 className="mb-4 text-lg font-semibold">Booking rules</h2>
+            <div className="grid gap-4 sm:grid-cols-2">
+              <label className="grid gap-1 text-sm text-gray-400">Call length (min)<input type="number" className={INPUT} value={form.slot_minutes} onChange={num('slot_minutes')} /></label>
+              <label className="grid gap-1 text-sm text-gray-400">Buffer between calls (min)<input type="number" className={INPUT} value={form.buffer_minutes} onChange={num('buffer_minutes')} /></label>
+              <label className="grid gap-1 text-sm text-gray-400">Minimum notice (hours)<input type="number" className={INPUT} value={form.min_notice_hours} onChange={num('min_notice_hours')} /></label>
+              <label className="grid gap-1 text-sm text-gray-400">Bookable days ahead<input type="number" className={INPUT} value={form.max_days_ahead} onChange={num('max_days_ahead')} /></label>
+              <label className="grid gap-1 text-sm text-gray-400 sm:col-span-2">Timezone<input className={INPUT} value={form.timezone} onChange={(e) => setForm({ ...form, timezone: e.target.value })} /></label>
+            </div>
+            <p className="mt-3 text-xs text-gray-600">Saved with “Save settings” (Weekly hours card).</p>
+          </section>
+
+          <section className={CARD}>
+            <h2 className="mb-3 flex items-center gap-2 text-lg font-semibold"><Link2 className="size-5 text-[#FFB829]" /> Google Calendar &amp; notifications</h2>
+            {googleNotice && <p className="mb-3 text-sm text-adm-accent-ink">{googleNotice}</p>}
+        {!data.googleConfigured ? (
+          <p className="text-sm text-adm-muted">Set <code>GOOGLE_CLIENT_ID</code> and <code>GOOGLE_CLIENT_SECRET</code> in Vercel, redeploy, then connect here.</p>
+        ) : data.googleConnected ? (
+          <div className="flex flex-wrap items-center gap-3">
+            <span className="inline-flex items-center gap-2 text-sm text-green-300"><Check className="size-4" /> Connected{data.settings.google_account_email ? ` as ${data.settings.google_account_email}` : ''}</span>
+            <button type="button" onClick={() => action({ action: 'disconnect_google' })} className={`${BTN} border border-adm-line-strong text-adm-muted hover:border-red-500 hover:text-red-400`}>Disconnect</button>
+          </div>
+        ) : (
+          <div className="flex flex-wrap items-center gap-3">
+            <p className="text-sm text-adm-muted">Not connected — slots ignore your Google events and calls get no Meet link.</p>
+            <a href="/api/booking/google/connect" className={`${BTN} bg-adm-accent text-black hover:bg-white`}>Connect Google Calendar</a>
+          </div>
+        )}
+            <div className="mt-4 grid gap-4 sm:grid-cols-2">
+              <label className="grid gap-1 text-sm text-gray-400">Notification email<input type="email" className={INPUT} placeholder="admin@jazamedia.com" value={form.host_email ?? ''} onChange={(e) => setForm({ ...form, host_email: e.target.value })} /></label>
+              <label className="grid gap-1 text-sm text-gray-400">Google calendar ID<input className={INPUT} value={form.google_calendar_id} onChange={(e) => setForm({ ...form, google_calendar_id: e.target.value })} /></label>
+            </div>
+          </section>
+
+          <section className={CARD}>
+            <h2 className="mb-1 text-lg font-semibold">Days off</h2>
+            <p className="mb-4 text-sm text-gray-500">Dates nobody can book.</p>
+            <div className="flex flex-wrap items-center gap-2">
           <input type="date" className={INPUT} value={newDayOff} onChange={(e) => setNewDayOff(e.target.value)} />
           <button type="button" disabled={!newDayOff} onClick={() => { action({ action: 'add_day_off', day: newDayOff }); setNewDayOff(''); }} className={`${BTN} bg-adm-accent/20 text-adm-accent-ink hover:bg-adm-accent/30`}><Plus className="size-4" />Add</button>
         </div>
@@ -245,7 +256,9 @@ export default function BookingManager() {
             ))}
           </ul>
         )}
-      </section>
+          </section>
+        </div>
+      </div>
     </div>
   );
 }
