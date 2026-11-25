@@ -1,11 +1,12 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import Script from 'next/script';
 import { CalendarCheck, Check, Clock, Video } from 'lucide-react';
 import { readPrefill, clearPrefill } from '@/lib/partner/booking-prefill';
+import { BookingCalendar } from './booking-calendar';
 import {
   buildCalendlyUrl,
   isCalendlyEvent,
@@ -58,9 +59,24 @@ export function StepTwoBooking() {
   // Lazy state initializer reads sessionStorage once on first render. Same
   // pattern as the funnel's answers state — keeps the URL stable across
   // re-renders and avoids re-reading on every render.
-  const [calendlyUrl] = useState<string>(() =>
-    buildCalendlyUrl(resolveCalendlyBase(), readPrefill()),
-  );
+  const [prefill] = useState(() => readPrefill());
+  // Our own JAZA calendar picks the slot; Calendly then opens at that slot for
+  // name/email and the actual booking. If availability can't be loaded we fall
+  // back to Calendly's own calendar.
+  const [slot, setSlot] = useState<string | null>(null);
+  const [fallback, setFallback] = useState(false);
+  const onUnavailable = useCallback(() => setFallback(true), []);
+  const showWidget = slot !== null || fallback;
+  const calendlyUrl = useMemo(() => {
+    const base = resolveCalendlyBase();
+    if (!slot) return buildCalendlyUrl(base, prefill);
+    const u = new URL(base);
+    // %2B keeps the time zone's "+" intact (buildCalendlyUrl turns raw "+" into spaces).
+    u.pathname = `${u.pathname.replace(/\/$/, '')}/${slot.replace('+', '%2B')}`;
+    u.searchParams.set('month', slot.slice(0, 7));
+    u.searchParams.set('date', slot.slice(0, 10));
+    return buildCalendlyUrl(u.toString(), prefill);
+  }, [slot, prefill]);
 
   // Move focus to the heading on mount so keyboard / screen-reader users
   // start at a predictable place.
@@ -80,7 +96,7 @@ export function StepTwoBooking() {
   // after the initial scroll.
   useEffect(() => {
     const container = containerRef.current;
-    if (!container) return;
+    if (!container || !showWidget) return;
     if (typeof window === 'undefined' || !window.Calendly) return;
     // Clear any previous render so SPA-navigation re-mounts get a clean
     // slate. The container has no React children, so there's no reconciler
@@ -90,8 +106,7 @@ export function StepTwoBooking() {
       url: calendlyUrl,
       parentElement: container,
     });
-    titleRef.current?.scrollIntoView({ behavior: 'auto', block: 'start' });
-  }, [scriptLoaded, calendlyUrl]);
+  }, [scriptLoaded, calendlyUrl, showWidget]);
 
   // Listen for Calendly's "event scheduled" postMessage to detect a
   // successful booking, then route to /booked.
@@ -254,7 +269,7 @@ export function StepTwoBooking() {
           </aside>
 
           <div className="rounded-[28px] bg-gradient-to-b from-gold/50 via-white/10 to-white/[0.03] p-px shadow-[0_60px_120px_-40px_rgba(0,0,0,0.95)]">
-            <div className="overflow-hidden rounded-[27px] bg-white">
+            <div className={`overflow-hidden rounded-[27px] ${showWidget ? 'bg-white' : 'bg-[linear-gradient(180deg,#171612_0%,#0f0f10_80%)]'}`}>
               <ol aria-label="Booking steps" className="flex items-center gap-2 bg-[linear-gradient(180deg,#1a1913_0%,#121211_100%)] px-5 py-4 text-[10.5px] font-medium tracking-[0.2em] uppercase sm:gap-3 sm:px-7">
                 {['Date & time', 'Your details', 'Confirmed'].map((label, i) => (
                   <li key={label} className="flex items-center gap-2 sm:gap-3" aria-current={i === bookingStep ? 'step' : undefined}>
@@ -275,7 +290,27 @@ export function StepTwoBooking() {
                 ))}
               </ol>
               <div aria-hidden className="h-px bg-gradient-to-r from-transparent via-gold/60 to-transparent" />
-              <div className="overflow-hidden">
+              {!showWidget ? (
+                <BookingCalendar onPick={(t) => { setSlot(t); setBookingStep(1); }} onUnavailable={onUnavailable} />
+              ) : null}
+              {slot ? (
+                <div className="flex items-center justify-between gap-3 bg-[#141413] px-5 py-3 text-[13px] text-white/75 sm:px-7">
+                  <span>
+                    <span className="text-white/45">Selected:</span>{' '}
+                    <span className="font-medium text-white">
+                      {new Date(slot).toLocaleString('en-US', { weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })}
+                    </span>
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => { setSlot(null); setBookingStep(0); }}
+                    className="text-[11px] font-semibold tracking-[0.18em] text-gold uppercase hover:text-[#fde68a]"
+                  >
+                    Change
+                  </button>
+                </div>
+              ) : null}
+              <div className={showWidget ? 'overflow-hidden' : 'hidden'}>
                 <div
                   ref={containerRef}
                   // Height follows Calendly's calendly.page_height messages (see above),
