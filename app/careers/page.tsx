@@ -24,6 +24,7 @@ export default function CareersPage() {
       </main>
       <Footer />
       <CopyrightBar />
+      <div aria-hidden className="snap-end" />
     </>
   );
 }
