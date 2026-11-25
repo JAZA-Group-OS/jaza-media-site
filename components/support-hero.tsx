@@ -1,6 +1,6 @@
 import { ArrowRight } from "lucide-react";
 
-import { PUBLISHED_SOCIAL_LINKS } from "@/components/social-icons";
+import { SOCIAL_LINKS } from "@/components/social-icons";
 import { Eyebrow, Gold, SLIDE } from "@/components/support-ui";
 
 const SUPPORT_EMAIL = "admin@jazamedia.com";
@@ -53,17 +53,27 @@ export function SupportHero() {
           <div className={`${CARD} hidden sm:block`}>
             <p className={LABEL}>Follow along</p>
             <ul className="mt-3.5 flex flex-wrap gap-2.5">
-              {PUBLISHED_SOCIAL_LINKS.map(({ label, href, Icon }) => (
+              {SOCIAL_LINKS.map(({ label, href, Icon }) => (
                 <li key={label}>
-                  <a
-                    href={href}
-                    aria-label={label}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="grid size-11 place-items-center rounded-full border border-white/15 text-white/75 transition hover:border-gold/60 hover:text-gold focus-visible:ring-2 focus-visible:ring-gold focus-visible:outline-none"
-                  >
-                    <Icon className="size-[18px]" />
-                  </a>
+                  {href ? (
+                    <a
+                      href={href}
+                      aria-label={label}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="grid size-11 place-items-center rounded-full border border-white/15 text-white/75 transition hover:border-gold/60 hover:text-gold focus-visible:ring-2 focus-visible:ring-gold focus-visible:outline-none"
+                    >
+                      <Icon className="size-[18px]" />
+                    </a>
+                  ) : (
+                    <span
+                      title={`${label} — coming soon`}
+                      aria-label={`${label} (coming soon)`}
+                      className="grid size-11 place-items-center rounded-full border border-white/15 text-white/75 transition hover:border-gold/60 hover:text-gold"
+                    >
+                      <Icon className="size-[18px]" />
+                    </span>
+                  )}
                 </li>
               ))}
             </ul>
