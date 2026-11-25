@@ -82,8 +82,16 @@ export function Hero() {
         </Reveal>
 
         {/* Combined cutout — mobile only */}
-        <div aria-hidden className="relative -mt-6 aspect-[7331/6191] w-full max-w-md md:hidden">
-          <Image src="/about-the-form/JazaBela%20no%20bg%20trimmed.png" alt="" fill sizes="100vw" className="object-contain object-bottom" />
+        {/* Same treatment as desktop: gold glow behind, edges melted into the background. */}
+        <div aria-hidden className="relative -mx-4 -mt-6 aspect-[7331/6191] w-[calc(100%+2rem)] max-w-md md:hidden">
+          <div className="absolute inset-x-[12%] top-[20%] bottom-[8%] rounded-full bg-gold/15 blur-[70px]" />
+          <Image
+            src="/about-the-form/JazaBela%20no%20bg%20trimmed.png"
+            alt=""
+            fill
+            sizes="100vw"
+            className="object-contain object-bottom brightness-[0.92] contrast-[1.04] saturate-[0.92] [mask-image:linear-gradient(to_top,transparent_0%,black_30%),linear-gradient(to_right,transparent_0%,black_14%,black_86%,transparent_100%)] [mask-composite:intersect] [-webkit-mask-composite:source-in]"
+          />
         </div>
       </div>
     </section>
