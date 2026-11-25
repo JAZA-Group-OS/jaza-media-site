@@ -113,7 +113,7 @@ export default function AdminNavigation({
       </div>
 
       {/* nav */}
-      <nav aria-label="Admin" className="flex-1 overflow-y-auto px-3 py-4">
+      <nav aria-label="Admin" className={`flex-1 px-3 py-4 ${mini ? 'overflow-visible' : 'overflow-y-auto'}`}>
         {NAV_GROUPS.map((g) => (
           <div key={g.title} className="mb-5 last:mb-0">
             {mini ? (
