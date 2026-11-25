@@ -154,7 +154,6 @@ function WaveSlider() {
   const [paused, setPaused] = useState(false);
   const [userSet, setUserSet] = useState(false); // stop autoplay once the visitor positions it
   const start = useRef<{ x: number; moved: boolean } | null>(null);
-  const prevSlot = useRef<number[]>([]);
   const n = MEMBERS.length;
 
   useEffect(() => {
@@ -236,8 +235,8 @@ function WaveSlider() {
           const slot = p; // -1.5 … n-1.5; visible 0..4
           const visible = slot > -0.5 && slot < 4.5;
           const opacity = Math.max(0, Math.min(1, 1 - Math.max(-slot, slot - 4)));
-          const jump = Math.abs(slot - (prevSlot.current[i] ?? slot)) > 2.5;
-          prevSlot.current[i] = slot;
+          // parked off the right edge (hidden) — jump there instantly so it never sweeps across
+          const jump = slot > 4.5;
           const x = left0 + slot * pitch;
           const y = yAt(slot);
           const centre = Math.max(0, 1 - Math.abs(slot - 2));
