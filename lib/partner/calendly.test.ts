@@ -45,7 +45,8 @@ describe('buildCalendlyUrl', () => {
   it('always sets brand color and hides the GDPR banner', () => {
     const result = buildCalendlyUrl(BASE);
     const url = new URL(result);
-    expect(url.searchParams.get('primary_color')).toBe('181818');
+    expect(url.searchParams.get('primary_color')).toBe('eab308');
+    expect(url.searchParams.get('background_color')).toBe('111111');
     expect(url.searchParams.get('hide_gdpr_banner')).toBe('1');
   });
 
@@ -100,7 +101,7 @@ describe('buildCalendlyUrl', () => {
     // The serialized URL should not contain a raw &, +, /, =, or " in the
     // value — they should be percent-encoded.
     expect(result).toContain('a2=');
-    expect(result).toMatch(/a2=A%26B\+%2B\+C%2FD\+%3D\+%22test%22/);
+    expect(result).toMatch(/a2=A%26B%20%2B%20C%2FD%20%3D%20%22test%22/);
   });
 });
 

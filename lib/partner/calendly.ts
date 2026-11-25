@@ -46,7 +46,10 @@ export function buildCalendlyUrl(
   prefill: BookingPrefill = {},
 ): string {
   const url = new URL(base);
-  url.searchParams.set('primary_color', '181818');
+  // Dark, formal theme to match the site (colour params need a paid Calendly plan).
+  url.searchParams.set('background_color', '111111');
+  url.searchParams.set('text_color', 'f5f5f4');
+  url.searchParams.set('primary_color', 'eab308');
   // The funnel's own consent disclaimer covers contact consent for our
   // PH/AU audience. If we ever expand to EU leads we'll need to drop this
   // parameter to comply with GDPR Article 13.
@@ -71,7 +74,9 @@ export function buildCalendlyUrl(
     );
   }
 
-  return url.toString();
+  // URLSearchParams encodes spaces as '+', which Calendly shows literally
+  // in prefilled fields ("Juan+Dela+Cruz"). Use %20 instead.
+  return url.toString().replace(/\+/g, '%20');
 }
 
 /**
