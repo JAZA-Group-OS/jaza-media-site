@@ -1,7 +1,8 @@
 import Link from "next/link";
 
 import { MobileMenu } from "@/components/mobile-menu";
-import { NAV_LINKS, isInternalRoute } from "@/lib/site-nav";
+import { NavLinks } from "@/components/nav-links";
+import { NAV_LINKS } from "@/lib/site-nav";
 
 export function Navbar() {
   const links = NAV_LINKS.filter((l) => l.href !== "/partner-with-us");
@@ -13,21 +14,7 @@ export function Navbar() {
           <span className="mt-0.5 pl-[0.35em] text-[10px] font-semibold tracking-[0.35em] text-gold">MEDIA</span>
         </Link>
         <nav className="hidden md:block" aria-label="Main">
-          <ul className="flex items-center gap-1 text-sm text-white/80">
-            {links.map((link) => (
-              <li key={link.label}>
-                {isInternalRoute(link.href) ? (
-                  <Link href={link.href} className="rounded-full px-3.5 py-1.5 transition-colors hover:bg-white/[0.06] hover:text-white">
-                    {link.label}
-                  </Link>
-                ) : (
-                  <a href={link.href} className="rounded-full px-3.5 py-1.5 transition-colors hover:bg-white/[0.06] hover:text-white">
-                    {link.label}
-                  </a>
-                )}
-              </li>
-            ))}
-          </ul>
+          <NavLinks links={links} />
         </nav>
         <div className="flex items-center gap-3">
           <Link
