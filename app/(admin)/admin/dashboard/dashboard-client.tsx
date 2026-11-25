@@ -2,7 +2,7 @@
 
 import { ChevronRight, Menu, Moon, PanelLeftOpen, Sun } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 import AdminSessionProvider from '@/components/admin-session-provider';
 import AdminNavigation, { NAV_GROUPS } from '@/components/admin/admin-navigation';
@@ -45,7 +45,8 @@ export default function AdminDashboardClient({ initialTab = 'overview' }: { init
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
 
-  // Remember the sidebar state per browser.
+  // Remember the sidebar state per browser: read once, then save every change.
+  const ready = useRef(false);
   useEffect(() => {
     let saved: string | null = null;
     try {
@@ -53,19 +54,22 @@ export default function AdminDashboardClient({ initialTab = 'overview' }: { init
     } catch {
       /* ignore */
     }
-    if (saved === '1') queueMicrotask(() => setCollapsed(true));
-  }, []);
-
-  const toggleCollapsed = useCallback(() => {
-    setCollapsed((c) => {
-      try {
-        localStorage.setItem(COLLAPSE_KEY, c ? '0' : '1');
-      } catch {
-        /* ignore */
-      }
-      return !c;
+    queueMicrotask(() => {
+      if (saved === '1') setCollapsed(true);
+      ready.current = true;
     });
   }, []);
+
+  useEffect(() => {
+    if (!ready.current) return;
+    try {
+      localStorage.setItem(COLLAPSE_KEY, collapsed ? '1' : '0');
+    } catch {
+      /* ignore */
+    }
+  }, [collapsed]);
+
+  const toggleCollapsed = useCallback(() => setCollapsed((c) => !c), []);
 
   // Ctrl/⌘ + B toggles the sidebar.
   useEffect(() => {

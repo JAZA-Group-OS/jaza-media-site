@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, useCallback, useContext, useEffect, useState, type ReactNode } from 'react';
+import { createContext, useCallback, useContext, useEffect, useRef, useState, type ReactNode } from 'react';
 
 type Theme = 'dark' | 'light';
 const KEY = 'jaza-admin-theme';
@@ -12,7 +12,9 @@ export const useAdminTheme = () => useContext(Ctx);
 /** Scopes the admin palette (.admin-ui in globals.css) and remembers light/dark per browser. */
 export function AdminTheme({ children }: { children: ReactNode }) {
   const [theme, setTheme] = useState<Theme>('dark');
+  const ready = useRef(false);
 
+  // Read the saved choice once, then save every change after that.
   useEffect(() => {
     let saved: string | null = null;
     try {
@@ -20,20 +22,22 @@ export function AdminTheme({ children }: { children: ReactNode }) {
     } catch {
       /* storage blocked — stay dark */
     }
-    if (saved === 'light') queueMicrotask(() => setTheme('light'));
-  }, []);
-
-  const toggle = useCallback(() => {
-    setTheme((t) => {
-      const next = t === 'dark' ? 'light' : 'dark';
-      try {
-        localStorage.setItem(KEY, next);
-      } catch {
-        /* ignore */
-      }
-      return next;
+    queueMicrotask(() => {
+      if (saved === 'light') setTheme('light');
+      ready.current = true;
     });
   }, []);
+
+  useEffect(() => {
+    if (!ready.current) return;
+    try {
+      localStorage.setItem(KEY, theme);
+    } catch {
+      /* ignore */
+    }
+  }, [theme]);
+
+  const toggle = useCallback(() => setTheme((t) => (t === 'dark' ? 'light' : 'dark')), []);
 
   return (
     <Ctx.Provider value={{ theme, toggle }}>
