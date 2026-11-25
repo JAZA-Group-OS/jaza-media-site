@@ -194,17 +194,16 @@ const VALUES = [
   },
 ];
 
+const ROTATE_MS = 4500;
+
 function ValueRow({ i, active, onActive }: { i: number; active: boolean; onActive: (i: number) => void }) {
-  const ref = useRef<HTMLDivElement>(null);
-  const inView = useInView(ref, { margin: "-45% 0px -45% 0px" });
-  useEffect(() => {
-    if (inView) onActive(i);
-  }, [inView, i, onActive]);
   const v = VALUES[i];
   return (
-    <div
-      ref={ref}
-      className={`flex gap-6 border-b border-white/[0.08] py-8 transition-opacity duration-500 last:border-b-0 md:gap-7 lg:py-12 ${active ? "opacity-100" : "lg:opacity-45"}`}
+    <button
+      type="button"
+      onClick={() => onActive(i)}
+      onMouseEnter={() => onActive(i)}
+      className={`relative flex w-full gap-6 border-b border-white/[0.08] py-8 text-left transition-opacity duration-500 last:border-b-0 md:gap-7 lg:py-10 ${active ? "opacity-100" : "lg:opacity-45 lg:hover:opacity-80"}`}
     >
       <span className="bg-gradient-to-br from-[#fbe7a1] via-gold to-[#a97a1f] bg-clip-text font-serif text-[52px] leading-none text-transparent italic md:text-[64px]">
         0{i + 1}
@@ -216,12 +215,23 @@ function ValueRow({ i, active, onActive }: { i: number; active: boolean; onActiv
         <h3 className="mt-1.5 font-serif text-[28px] leading-tight text-white md:text-[30px]">{v.title}</h3>
         <p className="mt-2.5 leading-[1.75] font-light text-white/62">{v.body}</p>
       </div>
-    </div>
+      {active && (
+        <span aria-hidden className="absolute bottom-[-1px] left-0 hidden h-px w-full overflow-hidden lg:block">
+          <span key={i} className="values-progress block h-full bg-gold" style={{ animationDuration: `${ROTATE_MS}ms` }} />
+        </span>
+      )}
+    </button>
   );
 }
 
 function Values() {
   const [active, setActive] = useState(0);
+  const [paused, setPaused] = useState(false);
+  useEffect(() => {
+    if (paused || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const t = setTimeout(() => setActive((a) => (a + 1) % VALUES.length), ROTATE_MS);
+    return () => clearTimeout(t);
+  }, [active, paused]);
   return (
     <section id="culture" className="scroll-mt-28 border-t border-white/5 bg-[#0e0e0f] py-20 text-white md:py-28">
       <div className="mx-auto max-w-[1200px] px-4 md:px-8">
@@ -252,7 +262,7 @@ function Values() {
               <span className="text-xs tracking-[0.24em] text-gold">0{active + 1} / 04</span>
             </div>
           </div>
-          <div>
+          <div onMouseEnter={() => setPaused(true)} onMouseLeave={() => setPaused(false)}>
             {VALUES.map((_, i) => (
               <ValueRow key={i} i={i} active={i === active} onActive={setActive} />
             ))}

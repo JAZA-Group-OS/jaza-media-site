@@ -316,3 +316,7 @@
 @media (prefers-reduced-motion: reduce) {
   .cta-breathe, .cta-nudge { animation: none; }
 }
+
+/* Careers values: progress line on the active (auto-rotating) item */
+@keyframes values-progress { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+.values-progress { transform-origin: left; animation: values-progress linear forwards; }
