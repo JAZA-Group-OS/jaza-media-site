@@ -107,7 +107,7 @@ export default function BookingCalendarView({ bookings, tz }: { bookings: Calend
                 key={k}
                 type="button"
                 onClick={() => setSelected(k)}
-                className={`relative flex min-h-[64px] flex-col items-start rounded-lg border p-1.5 text-left transition ${
+                className={`relative flex min-h-[84px] flex-col items-start rounded-lg border p-1.5 text-left transition ${
                   isSel ? 'border-[#FFB829] bg-[#FFB829]/10' : calls.length || leads.length ? 'border-[#FFB829]/30 bg-[#FFB829]/[0.04] hover:border-[#FFB829]/60' : 'border-[#1a1a1a] hover:border-[#333]'
                 }`}
               >
@@ -116,8 +116,15 @@ export default function BookingCalendarView({ bookings, tz }: { bookings: Calend
                   <span className="absolute top-1.5 right-1.5 rounded-full bg-sky-500/20 px-1.5 text-[10px] text-sky-300" title="Inquiries submitted">{leads.length}</span>
                 )}
                 {calls.length > 0 && (
-                  <span className="mt-auto w-full truncate text-[10.5px] text-[#FFB829]">
-                    {calls.length === 1 ? timeLabel(calls[0].start_at, tz) : `${calls.length} calls`}
+                  <span className="mt-1 flex w-full flex-col gap-1">
+                    {calls.slice(0, 2).map((b) => (
+                      <span key={b.id} className="block w-full rounded-md bg-[#FFB829]/15 px-1.5 py-1 text-left leading-tight">
+                        <span className="block text-[10.5px] font-semibold text-[#FFB829]">{timeLabel(b.start_at, tz)}</span>
+                        <span className="block truncate text-[11px] text-white">{b.full_name}</span>
+                        {b.company && <span className="block truncate text-[10px] text-gray-400">{b.company}</span>}
+                      </span>
+                    ))}
+                    {calls.length > 2 && <span className="text-[10px] text-[#FFB829]">+{calls.length - 2} more</span>}
                   </span>
                 )}
               </button>
