@@ -1,10 +1,7 @@
 'use client';
 
-import { ChevronLeft, ChevronRight, Inbox, Video } from 'lucide-react';
-import { useEffect, useMemo, useState } from 'react';
-import { supabase } from '@/lib/supabase/client';
-
-type Inquiry = { id: string; full_name: string; email: string; outcome: string | null; created_at: string };
+import { ChevronLeft, ChevronRight, Video } from 'lucide-react';
+import { useMemo, useState } from 'react';
 
 export type CalendarBooking = {
   id: string;
@@ -35,37 +32,10 @@ export default function BookingCalendarView({ bookings, tz }: { bookings: Calend
     return { y, m: m - 1 };
   });
   const [selected, setSelected] = useState(today);
-  const [inquiries, setInquiries] = useState<Inquiry[]>([]);
-
-  // Every Partner With Us inquiry is placed on the day it was submitted.
-  useEffect(() => {
-    let alive = true;
-    void (supabase.from('partner_inquiries') as unknown as {
-      select: (c: string) => { order: (c: string, o: { ascending: boolean }) => { limit: (n: number) => Promise<{ data: Inquiry[] | null }> } };
-    })
-      .select('id, full_name, email, outcome, created_at')
-      .order('created_at', { ascending: false })
-      .limit(1000)
-      .then(({ data }) => alive && setInquiries(data ?? []));
-    return () => {
-      alive = false;
-    };
-  }, []);
-
-  const leadsByDay = useMemo(() => {
-    const map = new Map<string, Inquiry[]>();
-    for (const q of inquiries) {
-      const k = dayKey(q.created_at, tz);
-      map.set(k, [...(map.get(k) ?? []), q]);
-    }
-    return map;
-  }, [inquiries, tz]);
-  const bookedEmails = useMemo(() => new Set(bookings.filter((b) => b.status === 'confirmed').map((b) => b.email?.toLowerCase())), [bookings]);
 
   const byDay = useMemo(() => {
     const map = new Map<string, CalendarBooking[]>();
     for (const b of bookings) {
-      if (b.status !== 'confirmed') continue;
       const k = dayKey(b.start_at, tz);
       map.set(k, [...(map.get(k) ?? []), b]);
     }
@@ -99,7 +69,6 @@ export default function BookingCalendarView({ bookings, tz }: { bookings: Calend
           {cells.map((k, i) => {
             if (!k) return <div key={`e${i}`} />;
             const calls = byDay.get(k) ?? [];
-            const leads = leadsByDay.get(k) ?? [];
             const isToday = k === today;
             const isSel = k === selected;
             return (
@@ -108,18 +77,15 @@ export default function BookingCalendarView({ bookings, tz }: { bookings: Calend
                 type="button"
                 onClick={() => setSelected(k)}
                 className={`relative flex min-h-[84px] flex-col items-start rounded-lg border p-1.5 text-left transition ${
-                  isSel ? 'border-[#FFB829] bg-[#FFB829]/10' : calls.length || leads.length ? 'border-[#FFB829]/30 bg-[#FFB829]/[0.04] hover:border-[#FFB829]/60' : 'border-[#1a1a1a] hover:border-[#333]'
+                  isSel ? 'border-[#FFB829] bg-[#FFB829]/10' : calls.length ? 'border-[#FFB829]/30 bg-[#FFB829]/[0.04] hover:border-[#FFB829]/60' : 'border-[#1a1a1a] hover:border-[#333]'
                 }`}
               >
                 <span className={`grid size-6 place-items-center rounded-full text-xs ${isToday ? 'bg-[#FFB829] font-semibold text-black' : 'text-gray-300'}`}>{Number(k.slice(8))}</span>
-                {leads.length > 0 && (
-                  <span className="absolute top-1.5 right-1.5 rounded-full bg-sky-500/20 px-1.5 text-[10px] text-sky-300" title="Inquiries submitted">{leads.length}</span>
-                )}
                 {calls.length > 0 && (
                   <span className="mt-1 flex w-full flex-col gap-1">
                     {calls.slice(0, 2).map((b) => (
-                      <span key={b.id} className="block w-full rounded-md bg-[#FFB829]/15 px-1.5 py-1 text-left leading-tight">
-                        <span className="block text-[10.5px] font-semibold text-[#FFB829]">{timeLabel(b.start_at, tz)}</span>
+                      <span key={b.id} className={`block w-full rounded-md px-1.5 py-1 text-left leading-tight ${b.status === 'cancelled' ? 'bg-white/5 opacity-60' : 'bg-[#FFB829]/15'}`}>
+                        <span className={`block text-[10.5px] font-semibold ${b.status === 'cancelled' ? 'text-gray-400 line-through' : 'text-[#FFB829]'}`}>{timeLabel(b.start_at, tz)}{b.status === 'cancelled' ? ' · cancelled' : ''}</span>
                         <span className="block truncate text-[11px] text-white">{b.full_name}</span>
                         {b.company && <span className="block truncate text-[10px] text-gray-400">{b.company}</span>}
                       </span>
@@ -134,8 +100,8 @@ export default function BookingCalendarView({ bookings, tz }: { bookings: Calend
       </div>
 
       <p className="-mt-3 flex flex-wrap gap-4 text-[11px] text-gray-500 lg:col-start-1">
-        <span className="flex items-center gap-1.5"><span className="size-2 rounded-full bg-[#FFB829]" />Booked call (time)</span>
-        <span className="flex items-center gap-1.5"><span className="size-2 rounded-full bg-sky-400" />Inquiries submitted (count)</span>
+        <span className="flex items-center gap-1.5"><span className="size-2 rounded-full bg-[#FFB829]" />Meeting at the time the client chose</span>
+        <span className="flex items-center gap-1.5"><span className="size-2 rounded-full bg-gray-600" />Cancelled</span>
       </p>
       <div className="rounded-lg border border-[#1a1a1a] p-4">
         <p className="text-sm font-semibold">
@@ -147,9 +113,9 @@ export default function BookingCalendarView({ bookings, tz }: { bookings: Calend
           <ul className="mt-3 space-y-2">
             {dayCalls.map((b) => (
               <li key={b.id} className="rounded-lg border border-[#1a1a1a] bg-black px-3 py-2">
-                <p className="text-sm font-medium text-[#FFB829]">{timeLabel(b.start_at, tz)}</p>
+                <p className={`text-sm font-medium ${b.status === 'cancelled' ? 'text-gray-500 line-through' : 'text-[#FFB829]'}`}>{timeLabel(b.start_at, tz)}{b.status === 'cancelled' && <span className="ml-2 text-xs text-red-400 no-underline">Cancelled</span>}</p>
                 <p className="text-sm text-white">{b.full_name}{b.company ? ` · ${b.company}` : ''}</p>
-                {b.meet_url && (
+                {b.meet_url && b.status === 'confirmed' && (
                   <a href={b.meet_url} target="_blank" rel="noopener noreferrer" className="mt-1 inline-flex items-center gap-1 text-xs text-gray-400 hover:text-[#FFB829]">
                     <Video className="size-3.5" /> Join Meet
                   </a>
@@ -158,23 +124,7 @@ export default function BookingCalendarView({ bookings, tz }: { bookings: Calend
             ))}
           </ul>
         )}
-        {(leadsByDay.get(selected) ?? []).length > 0 && (
-          <>
-            <p className="mt-5 flex items-center gap-1.5 text-xs font-semibold tracking-wide text-sky-300 uppercase"><Inbox className="size-3.5" /> Inquiries submitted</p>
-            <ul className="mt-2 space-y-2">
-              {(leadsByDay.get(selected) ?? []).map((q) => (
-                <li key={q.id} className="rounded-lg border border-[#1a1a1a] bg-black px-3 py-2">
-                  <p className="text-sm text-white">{q.full_name}</p>
-                  <p className="text-xs text-gray-500">
-                    {timeLabel(q.created_at, tz)} · {q.outcome === 'not_qualified' ? 'Not qualified' : 'Qualified'}
-                    {bookedEmails.has(q.email.toLowerCase()) ? ' · call booked' : ' · no call booked yet'}
-                  </p>
-                </li>
-              ))}
-            </ul>
-          </>
-        )}
-        {dayCalls.length > 1 && <p className="mt-3 text-xs text-amber-300">{dayCalls.length} online meetings on this day.</p>}
+        {dayCalls.filter((b) => b.status === 'confirmed').length > 1 && <p className="mt-3 text-xs text-amber-300">{dayCalls.filter((b) => b.status === 'confirmed').length} online meetings on this day.</p>}
       </div>
     </div>
   );
