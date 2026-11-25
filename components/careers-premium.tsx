@@ -15,7 +15,7 @@ const img = (name: string) => `/images/${encodeURIComponent(name)}`;
 
 function Gold({ children }: { children: ReactNode }) {
   return (
-    <em className="bg-gradient-to-br from-[#fbe7a1] via-gold to-[#a97a1f] bg-clip-text pr-1 text-transparent italic">
+    <em className="bg-gradient-to-br from-[#fbe7a1] via-gold to-[#a97a1f] bg-clip-text pr-1 text-transparent not-italic">
       {children}
     </em>
   );
@@ -45,7 +45,7 @@ function PrimaryButton({ href = APPLY, children }: { href?: string; children: Re
   );
 }
 
-const H2 = "font-serif text-[30px] leading-[1.2] tracking-[-0.005em] text-white md:text-[38px] lg:text-[42px]";
+const H2 = "font-sans font-semibold tracking-tight text-[30px] leading-[1.2] tracking-[-0.005em] text-white md:text-[38px] lg:text-[42px]";
 const CARD = "rounded-[20px] border border-gold/25 bg-[linear-gradient(180deg,#1a1a17_0%,#101011_75%)]";
 
 /* ---------- 1. hero ---------- */
@@ -58,7 +58,7 @@ function Hero() {
       <div className="relative mx-auto grid max-w-[1200px] items-center gap-14 px-4 md:px-8 lg:grid-cols-2">
         <Reveal className="flex flex-col items-start gap-6">
           <Eyebrow>Now hiring · Careers</Eyebrow>
-          <h1 className="font-serif text-[38px] leading-[1.12] tracking-[-0.01em] md:text-[50px] lg:text-[56px]">
+          <h1 className="font-sans font-semibold tracking-tight text-[38px] leading-[1.12] tracking-[-0.01em] md:text-[50px] lg:text-[56px]">
             <span className="bg-gradient-to-b from-white via-white to-white/60 bg-clip-text text-transparent">Join a</span>{" "}
             <Gold>world-record</Gold>
             <br />
@@ -205,14 +205,14 @@ function ValueRow({ i, active, onActive }: { i: number; active: boolean; onActiv
       onMouseEnter={() => onActive(i)}
       className={`relative flex w-full gap-6 border-b border-white/[0.08] py-8 text-left transition-opacity duration-500 last:border-b-0 md:gap-7 lg:py-10 ${active ? "opacity-100" : "lg:opacity-45 lg:hover:opacity-80"}`}
     >
-      <span className="bg-gradient-to-br from-[#fbe7a1] via-gold to-[#a97a1f] bg-clip-text font-serif text-[52px] leading-none text-transparent italic md:text-[64px]">
+      <span className="bg-gradient-to-br from-[#fbe7a1] via-gold to-[#a97a1f] bg-clip-text font-sans font-semibold tracking-tight text-[52px] leading-none text-transparent md:text-[64px]">
         0{i + 1}
       </span>
       <div>
         <div className="relative mb-5 aspect-[16/10] overflow-hidden rounded-2xl border border-gold/25 lg:hidden">
           <Image src={img(v.photo)} alt="" fill sizes="100vw" className="object-cover" />
         </div>
-        <h3 className="mt-1.5 font-serif text-[22px] leading-snug text-white md:text-[24px]">{v.title}</h3>
+        <h3 className="mt-1.5 font-sans font-semibold tracking-tight text-[22px] leading-snug text-white md:text-[24px]">{v.title}</h3>
         <p className="mt-2.5 leading-[1.75] font-light text-white/62">{v.body}</p>
       </div>
       {active && (
@@ -305,13 +305,13 @@ function TogetherCard({ t, i }: { t: (typeof TOGETHER)[number]; i: number }) {
             className="object-cover object-top grayscale-[0.35] transition duration-1000 group-hover:scale-105 group-hover:grayscale-0"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-[#141410] via-transparent to-black/20" />
-          <span className="absolute top-5 left-5 grid size-11 place-items-center rounded-full border border-gold/50 bg-black/50 font-serif text-lg text-gold italic backdrop-blur">
+          <span className="absolute top-5 left-5 grid size-11 place-items-center rounded-full border border-gold/50 bg-black/50 font-sans font-semibold tracking-tight text-lg text-gold backdrop-blur">
             0{i + 1}
           </span>
         </div>
         <div className="flex flex-1 flex-col px-7 pt-2 pb-8">
-          <h3 className="font-serif text-[23px] leading-snug text-white">{t.title}</h3>
-          <p className="mt-1.5 font-serif text-[15px] text-gold italic">{t.short}</p>
+          <h3 className="font-sans font-semibold tracking-tight text-[23px] leading-snug text-white">{t.title}</h3>
+          <p className="mt-1.5 font-sans font-semibold tracking-tight text-[15px] text-gold">{t.short}</p>
           <div aria-hidden className="my-5 h-px w-10 bg-gold/60 transition-all duration-500 group-hover:w-20" />
           <p className="text-[15px] leading-[1.75] font-light text-white/65">{t.body}</p>
         </div>
@@ -330,7 +330,7 @@ function Together() {
           <h2 className={H2}>
             How we work <Gold>together.</Gold>
           </h2>
-          <p className="font-serif text-[16px] text-white/60 italic md:text-[18px]">
+          <p className="font-sans font-semibold tracking-tight text-[16px] text-white/60 md:text-[18px]">
             Impact over hours. Systems over shortcuts. Growth as part of the job.
           </p>
         </Reveal>
@@ -393,7 +393,7 @@ function Hire() {
               transition={{ duration: reduce ? 0 : 0.7, delay: reduce ? 0 : 0.3 + i * 0.25, ease: [0.22, 1, 0.36, 1] }}
             >
               <div className="relative h-full overflow-hidden rounded-[23px] bg-[linear-gradient(180deg,#1a1913_0%,#0f0f10_75%)] p-7 md:p-8">
-                <span aria-hidden className="pointer-events-none absolute -right-3 -bottom-10 font-serif text-[170px] leading-none text-white/[0.04] italic transition duration-700 group-hover:text-gold/[0.09]">
+                <span aria-hidden className="pointer-events-none absolute -right-3 -bottom-10 font-sans font-semibold tracking-tight text-[170px] leading-none text-white/[0.04] transition duration-700 group-hover:text-gold/[0.09]">
                   0{i + 1}
                 </span>
                 <div aria-hidden className="pointer-events-none absolute -top-24 -left-16 size-56 rounded-full bg-gold/10 opacity-0 blur-3xl transition duration-700 group-hover:opacity-100" />
@@ -403,7 +403,7 @@ function Hire() {
                   </span>
                   <span className="text-[10.5px] font-medium tracking-[0.3em] text-gold/80 uppercase">Step 0{i + 1}</span>
                 </div>
-                <h3 className="relative mt-8 font-serif text-[22px] leading-snug">{title}</h3>
+                <h3 className="relative mt-8 font-sans font-semibold tracking-tight text-[22px] leading-snug">{title}</h3>
                 <p className="relative mt-3 leading-[1.75] font-light text-white/62">{body}</p>
                 <div aria-hidden className="relative mt-8 h-px w-12 bg-gold/60 transition-all duration-500 group-hover:w-24" />
               </div>
@@ -471,7 +471,7 @@ function Investing() {
                     <Image src={img(p.icon)} alt="" fill sizes="96px" className="object-contain" />
                   </div>
                 </div>
-                <h3 className="mt-7 font-serif text-[22px] leading-snug">{p.title}</h3>
+                <h3 className="mt-7 font-sans font-semibold tracking-tight text-[22px] leading-snug">{p.title}</h3>
                 <p className="mt-3 leading-[1.75] font-light text-white/62">{p.body}</p>
               </div>
             </Reveal>
@@ -499,7 +499,7 @@ function StoryCard({ name }: { name: string }) {
   const [open, setOpen] = useState(false);
   return (
     <div className={`flex h-full flex-col gap-5 p-7 transition duration-500 hover:border-gold/50 ${CARD}`}>
-      <span aria-hidden className="bg-gradient-to-br from-[#fbe7a1] via-gold to-[#a97a1f] bg-clip-text font-serif text-6xl leading-[0.5] text-transparent">
+      <span aria-hidden className="bg-gradient-to-br from-[#fbe7a1] via-gold to-[#a97a1f] bg-clip-text font-sans font-semibold tracking-tight text-6xl leading-[0.5] text-transparent">
         “
       </span>
       <p className="leading-[1.7] text-white/75">{s.quote}</p>
@@ -547,10 +547,10 @@ function Testimonials() {
               <Image src={sam.photo} alt={sam.name} fill sizes="(min-width: 768px) 460px, 100vw" className="object-cover object-top" />
             </div>
             <div className="flex flex-col justify-center gap-6 p-8 md:p-12">
-              <span aria-hidden className="bg-gradient-to-br from-[#fbe7a1] via-gold to-[#a97a1f] bg-clip-text font-serif text-[90px] leading-[0.6] text-transparent">
+              <span aria-hidden className="bg-gradient-to-br from-[#fbe7a1] via-gold to-[#a97a1f] bg-clip-text font-sans font-semibold tracking-tight text-[90px] leading-[0.6] text-transparent">
                 “
               </span>
-              <blockquote className="font-serif text-[21px] leading-[1.45] md:text-[24px]">
+              <blockquote className="font-sans font-semibold tracking-tight text-[21px] leading-[1.45] md:text-[24px]">
                 This was never just a job. They made us feel like part of a real family while pushing us to grow and achieve our
                 individual goals in life.
               </blockquote>
@@ -580,7 +580,7 @@ function Closing() {
     <section id="join" className="snap-start relative overflow-hidden bg-[#0b0d0c] py-14 text-center text-white md:py-16">
       <div aria-hidden className="pointer-events-none absolute -bottom-60 left-1/2 size-[820px] -translate-x-1/2 rounded-full bg-gold/15 blur-[160px]" />
       <Reveal className="relative mx-auto flex max-w-3xl flex-col items-center gap-6 px-4">
-        <h2 className="font-serif text-[34px] leading-[1.15] tracking-[-0.01em] md:text-[48px]">
+        <h2 className="font-sans font-semibold tracking-tight text-[34px] leading-[1.15] tracking-[-0.01em] md:text-[48px]">
           Your next chapter <Gold>starts here.</Gold>
         </h2>
         <p className="max-w-[520px] leading-[1.7] font-light text-white/60">
