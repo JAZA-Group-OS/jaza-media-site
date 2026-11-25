@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 import Script from 'next/script';
 import { CalendarCheck, Check, Clock, Video } from 'lucide-react';
 import { readPrefill, clearPrefill } from '@/lib/partner/booking-prefill';
@@ -158,19 +159,60 @@ export function StepTwoBooking() {
           </ul>
         </div>
 
-        {/* calendar in a gold-edged frame */}
-        <div className="mx-auto mt-12 max-w-[1080px] rounded-[28px] bg-gradient-to-b from-gold/50 via-white/10 to-white/[0.03] p-px shadow-[0_60px_120px_-40px_rgba(0,0,0,0.95)]">
-          <div className="overflow-hidden rounded-[27px] bg-[#141413]">
-            <div
-              ref={containerRef}
-              className="overflow-hidden"
-              // Vanilla Calendly widget doesn't auto-resize its iframe via
-              // postMessage the way react-calendly's wrapper does. 1150px gives
-              // a buffer over the tallest step (the details form on a desktop
-              // viewport with custom questions) without clipping. overflow:hidden
-              // contains any unexpected internal layout drift.
-              style={{ minWidth: '280px', height: '1150px' }}
-            />
+        {/* details panel + calendar */}
+        <div className="mt-12 grid items-start gap-6 lg:grid-cols-[360px_1fr]">
+          <aside className="rounded-[24px] border border-gold/30 bg-[linear-gradient(180deg,#1a1913_0%,#0f0f10_80%)] p-7 shadow-[0_40px_80px_-40px_rgba(0,0,0,0.9)] lg:sticky lg:top-28">
+            <div className="flex items-center gap-3">
+              <span className="relative size-12 shrink-0 overflow-hidden rounded-full ring-1 ring-gold/50">
+                <Image src="/images/jaza-media-icon.png" alt="JAZA Media" fill sizes="48px" className="scale-[1.12] object-cover" />
+              </span>
+              <div>
+                <p className="text-[10.5px] tracking-[0.28em] text-gold uppercase">JAZA Media</p>
+                <p className="font-serif text-[22px] leading-tight">Discovery &amp; Strategy Meeting</p>
+              </div>
+            </div>
+            <div aria-hidden className="my-6 h-px bg-gradient-to-r from-gold/50 to-transparent" />
+            <p className="text-[11px] tracking-[0.26em] text-white/50 uppercase">What we&apos;ll cover</p>
+            <ol className="mt-4 space-y-4">
+              {[
+                ['Your business today', 'Goals, offer, and where growth is stuck.'],
+                ['Growth opportunities', 'Marketing, sales and systems we would improve first.'],
+                ['Next steps', 'A clear recommendation — no obligation.'],
+              ].map(([t, d], i) => (
+                <li key={t} className="flex gap-3.5">
+                  <span className="mt-0.5 bg-gradient-to-br from-[#fbe7a1] via-gold to-[#a97a1f] bg-clip-text font-serif text-xl text-transparent italic">0{i + 1}</span>
+                  <div>
+                    <p className="text-[15px] text-white">{t}</p>
+                    <p className="mt-0.5 text-[13px] leading-relaxed text-white/55">{d}</p>
+                  </div>
+                </li>
+              ))}
+            </ol>
+            <div aria-hidden className="my-6 h-px bg-gradient-to-r from-gold/50 to-transparent" />
+            <ul className="space-y-2.5 text-[13.5px] text-white/70">
+              <li className="flex items-center gap-2.5"><Clock className="size-4 text-gold" strokeWidth={1.75} />30 minutes</li>
+              <li className="flex items-center gap-2.5"><Video className="size-4 text-gold" strokeWidth={1.75} />Google Meet — link sent by email</li>
+              <li className="flex items-center gap-2.5"><CalendarCheck className="size-4 text-gold" strokeWidth={1.75} />Free of charge</li>
+            </ul>
+          </aside>
+
+          <div className="rounded-[28px] bg-gradient-to-b from-gold/50 via-white/10 to-white/[0.03] p-px shadow-[0_60px_120px_-40px_rgba(0,0,0,0.95)]">
+            <div className="overflow-hidden rounded-[27px] bg-white">
+              <div className="flex items-center gap-2 border-b border-black/5 bg-[#faf8f1] px-5 py-3 text-[11px] font-medium tracking-[0.24em] text-[#7a5a12] uppercase">
+                <span className="size-1.5 rounded-full bg-gold" />
+                Select a date &amp; time
+              </div>
+              <div
+                ref={containerRef}
+                className="overflow-hidden"
+                // Vanilla Calendly widget doesn't auto-resize its iframe via
+                // postMessage the way react-calendly's wrapper does. 1150px gives
+                // a buffer over the tallest step (the details form on a desktop
+                // viewport with custom questions) without clipping. overflow:hidden
+                // contains any unexpected internal layout drift.
+                style={{ minWidth: '280px', height: '1150px' }}
+              />
+            </div>
           </div>
         </div>
 
