@@ -38,12 +38,6 @@ const followUpLabels: Record<FollowUpStatus, string> = {
   closed: 'Closed',
 };
 
-const followUpColors: Record<FollowUpStatus, string> = {
-  new: 'bg-adm-accent/20 text-adm-accent-ink border-adm-accent/30',
-  contacted: 'bg-blue-500/20 text-blue-300 border-blue-500/30',
-  closed: 'bg-gray-500/20 text-adm-text-2 border-gray-500/30',
-};
-
 function formatDate(iso: string): string {
   return new Date(iso).toLocaleString('en-PH', {
     timeZone: 'Asia/Manila',
@@ -210,9 +204,19 @@ export default function CourseRequestsManager({
                 transition={{ delay: Math.min(index * 0.03, 0.3) }}
                 className="rounded-lg bg-adm-surface border border-adm-line hover:border-adm-accent/30 transition-colors"
               >
-                <button
+                <div
+                  role="button"
+                  tabIndex={0}
+                  aria-expanded={isExpanded}
                   onClick={() => setExpandedId(isExpanded ? null : req.id)}
-                  className="w-full p-4 sm:p-5 text-left"
+                  onKeyDown={(e) => {
+                    if (e.target !== e.currentTarget) return;
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault();
+                      setExpandedId(isExpanded ? null : req.id);
+                    }
+                  }}
+                  className="w-full cursor-pointer p-4 sm:p-5 text-left"
                 >
                   {/* Mobile: header row + 2-col metadata grid */}
                   <div className="space-y-3.5 sm:hidden">
@@ -281,11 +285,9 @@ export default function CourseRequestsManager({
                         <p className="text-[10px] uppercase tracking-[0.12em] text-adm-subtle">
                           Status
                         </p>
-                        <span
-                          className={`mt-1 inline-block px-2 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wide border ${followUpColors[req.follow_up_status]}`}
-                        >
-                          {followUpLabels[req.follow_up_status]}
-                        </span>
+                        <div className="mt-1">
+                          <StatusSwitch value={req.follow_up_status} busy={updatingId === req.id} onChange={(st) => updateFollowUp(req.id, st)} />
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -299,7 +301,7 @@ export default function CourseRequestsManager({
                       </p>
                     </div>
 
-                    <div className="sm:col-span-3 text-xs">
+                    <div className="sm:col-span-2 text-xs">
                       <p className="text-adm-subtle">Asset chosen</p>
                       <p className="font-semibold text-adm-accent-ink truncate">
                         {assetLabel}
@@ -328,23 +330,14 @@ export default function CourseRequestsManager({
                       </p>
                     </div>
 
-                    <div className="sm:col-span-1">
-                      <span
-                        className={`inline-block px-2 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wide border ${followUpColors[req.follow_up_status]}`}
-                      >
-                        {followUpLabels[req.follow_up_status]}
+                    <div className="sm:col-span-3 flex items-center justify-end gap-3">
+                      <StatusSwitch value={req.follow_up_status} busy={updatingId === req.id} onChange={(st) => updateFollowUp(req.id, st)} />
+                      <span className="text-adm-muted">
+                        {isExpanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
                       </span>
                     </div>
-
-                    <div className="sm:col-span-1 flex justify-end text-adm-muted">
-                      {isExpanded ? (
-                        <ChevronUp className="w-4 h-4" />
-                      ) : (
-                        <ChevronDown className="w-4 h-4" />
-                      )}
-                    </div>
                   </div>
-                </button>
+                </div>
 
                 {isExpanded && (
                   <motion.div
@@ -352,33 +345,6 @@ export default function CourseRequestsManager({
                     animate={{ opacity: 1, height: 'auto' }}
                     className="border-t border-adm-line p-5 space-y-4"
                   >
-                    {/* Status — right-aligned segmented control, same style as the filter pills */}
-                    <div className="flex flex-wrap items-center justify-between gap-3">
-                      <p className="text-xs font-semibold tracking-[0.14em] text-adm-subtle uppercase">Request details</p>
-                      <div className="flex items-center gap-2">
-                        <span className="text-xs text-adm-subtle">Status</span>
-                        <div className="inline-flex rounded-full border border-adm-line bg-adm-raised p-1">
-                          {(['new', 'contacted', 'closed'] as FollowUpStatus[]).map((status) => {
-                            const active = req.follow_up_status === status;
-                            return (
-                              <button
-                                key={status}
-                                type="button"
-                                onClick={() => updateFollowUp(req.id, status)}
-                                disabled={updatingId === req.id || active}
-                                aria-pressed={active}
-                                className={`rounded-full px-3.5 py-1 text-xs font-semibold transition-colors ${
-                                  active ? 'bg-adm-accent text-black' : 'text-adm-muted hover:text-adm-text'
-                                } disabled:cursor-default ${updatingId === req.id && !active ? 'opacity-50' : ''}`}
-                              >
-                                {followUpLabels[status]}
-                              </button>
-                            );
-                          })}
-                        </div>
-                      </div>
-                    </div>
-
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
                       <DetailItem
                         icon={<User className="w-3.5 h-3.5" />}
@@ -545,6 +511,43 @@ function DetailItem({
       ) : (
         <p className="text-adm-text-2 break-words">{value}</p>
       )}
+    </div>
+  );
+}
+
+/** Per-row status switch (New · Contacted · Closed); clicks don't toggle the row. */
+function StatusSwitch({
+  value,
+  busy,
+  onChange,
+}: {
+  value: FollowUpStatus;
+  busy: boolean;
+  onChange: (s: FollowUpStatus) => void;
+}) {
+  return (
+    <div
+      className="inline-flex rounded-full border border-adm-line bg-adm-raised p-0.5"
+      onClick={(e) => e.stopPropagation()}
+      onKeyDown={(e) => e.stopPropagation()}
+    >
+      {(['new', 'contacted', 'closed'] as FollowUpStatus[]).map((st) => {
+        const active = value === st;
+        return (
+          <button
+            key={st}
+            type="button"
+            onClick={() => !active && onChange(st)}
+            disabled={busy}
+            aria-pressed={active}
+            className={`rounded-full px-3 py-1 text-[11px] font-semibold transition-colors ${
+              active ? 'bg-adm-accent text-black' : 'text-adm-muted hover:text-adm-text'
+            } disabled:opacity-60`}
+          >
+            {followUpLabels[st]}
+          </button>
+        );
+      })}
     </div>
   );
 }
