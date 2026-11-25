@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, useInView, useReducedMotion, useScroll, useSpring, useTime, useTransform, type MotionValue } from "framer-motion";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Check, Compass, Gauge, Handshake } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 
@@ -240,10 +240,6 @@ function Values() {
           <h2 className={H2}>
             Disciplined team players who trust and <Gold>win together.</Gold>
           </h2>
-          <p className="text-[17px] leading-[1.8] font-light text-white/60">
-            At JAZA Media you&apos;ll help entrepreneurs build real businesses with strong foundations, scalable systems, and lasting
-            impact. We set a high bar, move with urgency, and measure ourselves by results.
-          </p>
         </Reveal>
 
         <div className="grid items-start gap-14 lg:grid-cols-2">
@@ -396,18 +392,22 @@ function Together() {
 /* ---------- 5. how we hire: timeline ---------- */
 
 const STEPS = [
-  { title: "Your goals & experience", body: "What you've done and what you're looking for." },
-  { title: "Technical depth", body: "How you solve problems and drive real results." },
-  { title: "Culture & values", body: "How you collaborate, make decisions, and align with our principles." },
+  { title: "Your goals & experience", body: "What you've done and what you're looking for.", Icon: Compass },
+  { title: "Technical depth", body: "How you solve problems and drive real results.", Icon: Gauge },
+  { title: "Culture & values", body: "How you collaborate, make decisions, and align with our principles.", Icon: Handshake },
 ];
+
+const PROMISES = ["Transparency", "Respect for your time", "Clear communication"];
 
 function Hire() {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: "-120px" });
   const reduce = useReducedMotion();
   return (
-    <section id="openings" className="scroll-mt-28 bg-[#0e0e0f] py-20 text-white md:py-28">
-      <div className="mx-auto max-w-[1200px] px-4 text-center md:px-8">
+    <section id="openings" className="relative scroll-mt-28 overflow-hidden bg-[#0e0e0f] py-20 text-white md:py-28">
+      <div aria-hidden className="pointer-events-none absolute top-1/2 left-1/2 size-[900px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-gold/[0.07] blur-[160px]" />
+      <div aria-hidden className="pointer-events-none absolute inset-0 opacity-[0.04] [background-image:radial-gradient(white_1px,transparent_1px)] [background-size:4px_4px]" />
+      <div className="relative mx-auto max-w-[1200px] px-4 text-center md:px-8">
         <Reveal className="flex flex-col items-center gap-5">
           <Eyebrow>The process</Eyebrow>
           <h2 className={H2}>
@@ -418,36 +418,58 @@ function Hire() {
             straightforward, and designed to give you a clear sense of what it&apos;s like to work here.
           </p>
         </Reveal>
-        <div ref={ref} className="relative mt-14 grid gap-7 md:grid-cols-3">
+
+        <div ref={ref} className="relative mt-16 grid gap-6 text-left md:grid-cols-3">
           <motion.div
             aria-hidden
-            className="absolute top-[31px] right-[16%] left-[16%] hidden h-px origin-left bg-gradient-to-r from-gold via-gold/60 to-gold/20 md:block"
+            className="absolute top-[52px] right-[10%] left-[10%] hidden h-px origin-left bg-gradient-to-r from-gold/0 via-gold/70 to-gold/0 md:block"
             initial={{ scaleX: 0 }}
             animate={{ scaleX: inView ? 1 : 0 }}
             transition={{ duration: reduce ? 0 : 1.6, ease: [0.22, 1, 0.36, 1] }}
           />
-          {STEPS.map((s, i) => (
+          {STEPS.map(({ title, body, Icon }, i) => (
             <motion.div
-              key={s.title}
-              className="relative flex flex-col items-center gap-5"
-              initial={{ opacity: 0, y: 20 }}
+              key={title}
+              className="group relative overflow-hidden rounded-3xl bg-gradient-to-b from-gold/45 via-white/10 to-white/[0.03] p-px shadow-[0_40px_80px_-40px_rgba(0,0,0,0.95)] transition duration-500 hover:-translate-y-2"
+              initial={{ opacity: 0, y: 28 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: reduce ? 0 : 0.6, delay: reduce ? 0 : 0.35 + i * 0.4 }}
+              transition={{ duration: reduce ? 0 : 0.7, delay: reduce ? 0 : 0.3 + i * 0.25, ease: [0.22, 1, 0.36, 1] }}
             >
-              <span className="grid size-[62px] place-items-center rounded-full border border-gold bg-[#141414] text-sm font-semibold text-gold shadow-[0_0_0_8px_rgba(234,179,8,0.08)]">
-                0{i + 1}
-              </span>
-              <div className={`w-full p-7 ${CARD}`}>
-                <h3 className="font-serif text-[26px] leading-tight">{s.title}</h3>
-                <p className="mt-2 leading-[1.7] text-white/62">{s.body}</p>
+              <div className="relative h-full overflow-hidden rounded-[23px] bg-[linear-gradient(180deg,#1a1913_0%,#0f0f10_75%)] p-7 md:p-8">
+                <span aria-hidden className="pointer-events-none absolute -right-3 -bottom-10 font-serif text-[170px] leading-none text-white/[0.04] italic transition duration-700 group-hover:text-gold/[0.09]">
+                  0{i + 1}
+                </span>
+                <div aria-hidden className="pointer-events-none absolute -top-24 -left-16 size-56 rounded-full bg-gold/10 opacity-0 blur-3xl transition duration-700 group-hover:opacity-100" />
+                <div className="relative flex items-center justify-between">
+                  <span className="grid size-12 place-items-center rounded-2xl border border-gold/40 bg-gold/10 text-gold shadow-[0_0_24px_-4px_rgba(234,179,8,0.45)]">
+                    <Icon className="size-5" strokeWidth={1.6} />
+                  </span>
+                  <span className="text-[10.5px] font-medium tracking-[0.3em] text-gold/80 uppercase">Step 0{i + 1}</span>
+                </div>
+                <h3 className="relative mt-8 font-serif text-[28px] leading-tight">{title}</h3>
+                <p className="relative mt-3 leading-[1.75] font-light text-white/62">{body}</p>
+                <div aria-hidden className="relative mt-8 h-px w-12 bg-gold/60 transition-all duration-500 group-hover:w-24" />
               </div>
             </motion.div>
           ))}
         </div>
-        <p className="mx-auto mt-12 max-w-[620px] text-[15px] text-white/60">
-          While every role is a little different, you can always count on transparency, respect for your time, and clear
-          communication at every step.
-        </p>
+
+        <Reveal className="mt-14 flex flex-col items-center gap-7">
+          <div className="flex flex-wrap justify-center gap-3">
+            {PROMISES.map((p) => (
+              <span key={p} className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-4 py-2 text-[13px] text-white/75">
+                <Check className="size-3.5 text-gold" strokeWidth={2.4} />
+                {p}
+              </span>
+            ))}
+          </div>
+          <p className="max-w-[560px] text-[15px] leading-7 text-white/55">
+            Every role is a little different, but this is our promise at every step.
+          </p>
+          <PrimaryButton>
+            Start your application
+          </PrimaryButton>
+        </Reveal>
       </div>
     </section>
   );
