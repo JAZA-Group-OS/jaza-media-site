@@ -1,80 +1,111 @@
-import { ArrowDown, ArrowRight } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
 import { Reveal } from "@/components/reveal";
 import { TEAM, type Member } from "@/lib/team";
 
-// Shield silhouette: angled shoulders on the top edge, flat bottom.
-const SHIELD =
-  "[clip-path:polygon(0_56px,22%_0,78%_0,100%_56px,100%_100%,0_100%)]";
+// Order along the strip — CEO sits in the dip of the wave, partners beside him.
+const ORDER = ["aeron", "bela", "jaza", "manny", "bea", "jyrille", "abie"];
+const MEMBERS = ORDER.map((s) => TEAM.find((m) => m.slug === s)).filter(Boolean) as Member[];
+
+// Vertical offset per card: one full wave per loop so the seam is invisible.
+function waveOffset(i: number, n: number) {
+  return Math.round(60 * (1 + Math.cos((2 * Math.PI * (i - 2)) / n)));
+}
 
 function titleCase(s: string) {
-  return s.toLowerCase().replace(/\b([a-z])/g, (c) => c.toUpperCase()).replace(/\bCeo\b/, "CEO").replace(/\bKol\b/, "KOL");
+  return s
+    .toLowerCase()
+    .replace(/\b([a-z])/g, (c) => c.toUpperCase())
+    .replace(/\bCeo\b/, "CEO")
+    .replace(/\bKol\b/, "KOL");
 }
 
 function initials(name: string) {
   return name.split(" ").map((w) => w[0]).slice(0, 2).join("");
 }
 
-function Portrait({ member, size }: { member: Member; size: "lg" | "sm" }) {
-  const box = size === "lg" ? "h-40 w-36 md:h-44 md:w-40" : "h-24 w-20";
-  return (
-    <div
-      className={`relative ${box} overflow-hidden rounded-t-[999px] rounded-b-2xl bg-[radial-gradient(80%_70%_at_50%_30%,#3a2e10,#141414)] shadow-[0_20px_40px_-15px_rgba(0,0,0,0.9)] ring-1 ring-gold/40`}
-    >
-      {member.image ? (
-        // source PNGs carry a baked black frame — scale from the bottom to crop it out
-        <div className="absolute inset-0 origin-bottom scale-[1.08]">
-          <Image
-            src={member.image}
-            alt={member.name ?? ""}
-            fill
-            sizes={size === "lg" ? "160px" : "80px"}
-            className="object-cover object-top grayscale-[0.25]"
-          />
-        </div>
-      ) : (
-        <span className="absolute inset-0 grid place-items-center bg-gradient-to-br from-[#fde9a6] via-gold to-[#a8771b] bg-clip-text font-serif text-3xl text-transparent italic">
-          {member.name ? initials(member.name) : ""}
-        </span>
-      )}
-    </div>
-  );
+function shortRole(m: Member) {
+  return titleCase(m.role.split(",").slice(-1)[0].trim());
 }
 
-function SideCard({ member }: { member: Member }) {
+function TeamCard({ member, offset, hidden }: { member: Member; offset: number; hidden?: boolean }) {
   const name = titleCase(member.name ?? "");
-  const role = titleCase(member.role.split(",").slice(-1)[0].trim());
-  const body = (
-    <div className="relative flex flex-col items-center pt-12">
-      <div className="absolute top-0 z-10">
-        <Portrait member={member} size="sm" />
-      </div>
-      <div className={`w-full bg-gradient-to-b from-gold/45 via-white/10 to-transparent p-px ${SHIELD}`}>
-        <div className={`flex flex-col items-center bg-[linear-gradient(180deg,#1a1a17_0%,#101011_70%)] px-5 pt-16 pb-7 text-center ${SHIELD}`}>
-          <h3 className="font-serif text-[26px] leading-tight text-white">{name}</h3>
-          <p className="mt-1 text-[13px] text-gold/90">{role}</p>
+  const role = shortRole(member);
+  const intro = member.bio?.[0];
+  const quote = member.bio?.find((p) => p.length < 70) ?? member.bio?.at(-1);
+  const hasBio = Boolean(member.bio?.length);
+  const Wrapper = hasBio ? Link : "div";
+
+  return (
+    <div className="w-[260px] shrink-0 md:w-[290px]" style={{ marginTop: offset }} aria-hidden={hidden || undefined}>
+      <Wrapper
+        href={`/team/${member.slug}`}
+        tabIndex={hidden ? -1 : hasBio ? 0 : -1}
+        className="group/card relative block h-[380px] overflow-hidden rounded-2xl bg-gradient-to-b from-gold/50 via-white/10 to-white/[0.03] p-px shadow-[0_30px_60px_-30px_rgba(0,0,0,0.95)] transition duration-500 hover:-translate-y-2 focus-visible:outline-none"
+      >
+        <div className="relative h-full overflow-hidden rounded-[15px] bg-[linear-gradient(180deg,#1b1a15_0%,#0f0f10_80%)]">
+          {/* portrait */}
+          <div className="absolute inset-x-0 top-0 h-[270px] bg-[radial-gradient(70%_60%_at_50%_35%,#3a2e10,#121212)]">
+            {member.image ? (
+              <div className="absolute inset-0 origin-bottom scale-[1.08]">
+                <Image
+                  src={member.image}
+                  alt={name}
+                  fill
+                  sizes="290px"
+                  className="object-cover object-top grayscale-[0.3] transition duration-700 group-hover/card:scale-105 group-hover/card:grayscale-0"
+                />
+              </div>
+            ) : (
+              <span className="absolute inset-0 grid place-items-center bg-gradient-to-br from-[#fde9a6] via-gold to-[#a8771b] bg-clip-text font-serif text-7xl text-transparent italic">
+                {initials(member.name ?? "")}
+              </span>
+            )}
+            <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[#141412] to-transparent" />
+          </div>
+
+          {/* name plate */}
+          <div className="absolute inset-x-0 bottom-0 px-6 pb-6 text-center">
+            <h3 className="font-serif text-[28px] leading-tight text-white">{name}</h3>
+            <p className="mt-1 text-[11px] tracking-[0.24em] text-gold uppercase">{role}</p>
+          </div>
+
+          {/* hover popup — editorial preview of the bio */}
+          <div className="absolute inset-0 flex translate-y-4 flex-col bg-[#0e0e0e]/95 p-6 opacity-0 backdrop-blur-md transition duration-500 group-hover/card:translate-y-0 group-hover/card:opacity-100 group-focus-visible/card:translate-y-0 group-focus-visible/card:opacity-100">
+            <p className="text-[10px] tracking-[0.3em] text-gold uppercase">{role}</p>
+            <h4 className="mt-2 font-serif text-[26px] leading-tight text-white">{name}</h4>
+            {intro ? (
+              <>
+                <p className="mt-3 line-clamp-5 font-serif text-[16px] leading-snug text-white/85">{intro}</p>
+                {quote && (
+                  <blockquote className="mt-4 border-l-2 border-gold pl-3 font-serif text-[17px] leading-snug text-gold italic">
+                    {quote}
+                  </blockquote>
+                )}
+                <span className="mt-auto inline-flex items-center gap-2 text-sm text-white">
+                  Read full story
+                  <ArrowRight className="size-4 text-gold transition-transform group-hover/card:translate-x-1" />
+                </span>
+              </>
+            ) : (
+              <>
+                <p className="mt-3 text-[14px] leading-6 text-white/65">
+                  Part of the JAZA Media leadership team, driving results as our {role}.
+                </p>
+                <p className="mt-auto text-[12px] tracking-wide text-white/40">Full profile coming soon</p>
+              </>
+            )}
+          </div>
         </div>
-      </div>
+      </Wrapper>
     </div>
-  );
-  return member.bio?.length ? (
-    <Link href={`/team/${member.slug}`} className="group block transition duration-500 hover:-translate-y-1">
-      {body}
-    </Link>
-  ) : (
-    <div>{body}</div>
   );
 }
 
 export function TeamGrid() {
-  const [lead, ...rest] = TEAM;
-  // alternate so each partner heads a column: Bela left, Manny right
-  const left = rest.filter((_, i) => i % 2 === 0);
-  const right = rest.filter((_, i) => i % 2 === 1);
-  const leadRole = lead.role.split(",").map((r) => r.trim());
-
+  const n = MEMBERS.length;
   return (
     <section className="relative overflow-hidden bg-[#0b0d0c] pt-10 pb-24 text-white md:pt-14 md:pb-32">
       <div aria-hidden className="pointer-events-none absolute -top-40 left-1/2 size-[820px] -translate-x-1/2 rounded-full bg-gold/12 blur-[160px]" />
@@ -91,56 +122,22 @@ export function TeamGrid() {
             <em className="bg-gradient-to-br from-[#fbe7a1] via-gold to-[#a97a1f] bg-clip-text pr-2 text-transparent">operators</em>{" "}
             <span className="bg-gradient-to-b from-white via-white to-white/60 bg-clip-text text-transparent">behind JAZA</span>
           </h1>
+          <p className="mt-5 max-w-xl text-[15px] leading-7 font-light text-white/60">
+            The builders, strategists and operators scaling the JAZA Group of Companies. Hover over a profile to read their story.
+          </p>
         </Reveal>
+      </div>
 
-        <div className="mt-16 grid items-start gap-8 md:mt-20 lg:grid-cols-[1fr_1.35fr_1fr] lg:gap-10">
-          {/* featured lead — first on mobile */}
-          <Reveal className="lg:order-2">
-            <div className="relative flex flex-col items-center pt-24">
-              <div className="absolute top-0 z-10">
-                <Portrait member={lead} size="lg" />
-              </div>
-              <div className={`w-full bg-gradient-to-b from-gold/70 via-gold/15 to-white/[0.04] p-px ${SHIELD}`}>
-                <div className={`flex flex-col items-center bg-[linear-gradient(180deg,#1d1c16_0%,#111112_75%)] px-8 pt-28 pb-12 text-center md:px-12 ${SHIELD}`}>
-                  <h2 className="font-serif text-[42px] leading-tight text-white md:text-[48px]">{titleCase(lead.name ?? "")}</h2>
-                  <p className="mt-1 font-serif text-xl text-gold italic">{titleCase(leadRole.slice(-1)[0])}</p>
-                  <p className="mt-1 text-[11px] tracking-[0.28em] text-white/45">{leadRole[0]}</p>
-                  <p className="mt-6 max-w-sm text-[14.5px] leading-7 font-light text-white/60">
-                    Founded JAZA Media in 2022 and grew it into the JAZA Group of Companies — founding, scaling, and exiting three companies along the way.
-                  </p>
-                  <Link
-                    href={`/team/${lead.slug}`}
-                    className="group mt-8 inline-flex items-center gap-2 rounded-md border border-gold/60 bg-gold/10 px-6 py-3 text-sm tracking-wide text-white transition hover:bg-gold hover:text-ink"
-                  >
-                    Read More
-                    <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" />
-                  </Link>
-                  <a
-                    href="#team-more"
-                    aria-label="Scroll to the rest of the page"
-                    className="mt-10 grid size-14 place-items-center rounded-full border border-white/15 text-white/70 ring-8 ring-white/[0.03] transition hover:border-gold hover:text-gold"
-                  >
-                    <ArrowDown className="size-4" />
-                  </a>
-                </div>
-              </div>
+      {/* continuous slow slider — pauses on hover */}
+      <div className="relative mt-14 [mask-image:linear-gradient(90deg,transparent,black_8%,black_92%,transparent)] md:mt-16">
+        <div className="animate-team-marquee flex w-max items-start gap-6 pb-6 md:gap-8">
+          {[0, 1].map((copy) => (
+            <div key={copy} className="flex items-start gap-6 pr-6 md:gap-8 md:pr-8">
+              {MEMBERS.map((m, i) => (
+                <TeamCard key={`${copy}-${m.slug}`} member={m} offset={waveOffset(i, n)} hidden={copy === 1} />
+              ))}
             </div>
-          </Reveal>
-
-          <div className="grid gap-8 sm:grid-cols-2 lg:order-1 lg:mt-10 lg:grid-cols-1">
-            {left.map((m, i) => (
-              <Reveal key={m.slug} delay={0.06 * i}>
-                <SideCard member={m} />
-              </Reveal>
-            ))}
-          </div>
-          <div className="grid gap-8 sm:grid-cols-2 lg:order-3 lg:mt-10 lg:grid-cols-1">
-            {right.map((m, i) => (
-              <Reveal key={m.slug} delay={0.06 * i}>
-                <SideCard member={m} />
-              </Reveal>
-            ))}
-          </div>
+          ))}
         </div>
       </div>
       <div id="team-more" />

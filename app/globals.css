@@ -182,6 +182,13 @@
   .animate-about-marquee {
     animation: about-marquee 28s linear infinite;
   }
+  .animate-team-marquee {
+    animation: about-marquee 70s linear infinite;
+  }
+  .animate-team-marquee:hover,
+  .animate-team-marquee:focus-within {
+    animation-play-state: paused;
+  }
   .animate-about-marquee:hover {
     animation-play-state: paused;
   }
@@ -194,7 +201,8 @@
     .animate-about-fade-in,
     .animate-about-pop-in,
     .animate-about-shimmer,
-    .animate-about-marquee {
+    .animate-about-marquee,
+    .animate-team-marquee {
       animation: none;
     }
   }
