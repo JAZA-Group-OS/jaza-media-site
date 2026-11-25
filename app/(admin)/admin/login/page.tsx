@@ -39,19 +39,19 @@ export default function AdminLoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-black flex items-center justify-center px-4">
+    <div className="min-h-screen bg-adm-bg flex items-center justify-center px-4">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
         className="w-full max-w-md"
       >
-        <div className="p-8 rounded-xl bg-gradient-to-br from-[#0a0a0a] to-black border border-[#1a1a1a]">
+        <div className="p-8 rounded-xl bg-gradient-to-br from-adm-surface to-black border border-adm-line">
           <div className="text-center mb-8">
             <h1 className="text-3xl font-bold mb-2">
-              Admin<span className="gold-accent">Access</span>
+              Admin<span className="text-adm-accent-ink">Access</span>
             </h1>
-            <div className="w-12 h-1 bg-[#FFB829] mx-auto rounded-full"></div>
+            <div className="w-12 h-1 bg-adm-accent mx-auto rounded-full"></div>
           </div>
 
           {error && (
@@ -73,7 +73,7 @@ export default function AdminLoginPage() {
                 onChange={(e) => setEmail(e.target.value)}
                 required
                 autoComplete="email"
-                className="w-full px-4 py-3 rounded-lg bg-[#1a1a1a] border border-[#2a2a2a] text-white focus:border-[#FFB829] focus:outline-none transition-colors"
+                className="w-full px-4 py-3 rounded-lg bg-adm-raised border border-adm-line-strong text-adm-text focus:border-adm-accent focus:outline-none transition-colors"
                 placeholder="you@jazamedia.com"
                 disabled={isLoading}
               />
@@ -88,7 +88,7 @@ export default function AdminLoginPage() {
                   onChange={(e) => setPassword(e.target.value)}
                   required
                   autoComplete="current-password"
-                  className="w-full px-4 py-3 rounded-lg bg-[#1a1a1a] border border-[#2a2a2a] text-white focus:border-[#FFB829] focus:outline-none transition-colors pr-12"
+                  className="w-full px-4 py-3 rounded-lg bg-adm-raised border border-adm-line-strong text-adm-text focus:border-adm-accent focus:outline-none transition-colors pr-12"
                   placeholder="••••••••"
                   disabled={isLoading}
                 />
@@ -97,7 +97,7 @@ export default function AdminLoginPage() {
                   whileHover={{ scale: 1.1 }}
                   whileTap={{ scale: 0.95 }}
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-[#FFB829] transition-colors"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-adm-muted hover:text-adm-accent-ink transition-colors"
                   disabled={isLoading}
                 >
                   {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
@@ -110,7 +110,7 @@ export default function AdminLoginPage() {
               whileHover={!isLoading ? { scale: 1.05 } : {}}
               whileTap={!isLoading ? { scale: 0.95 } : {}}
               disabled={isLoading}
-              className="w-full px-6 py-3 rounded-full bg-[#FFB829] text-black font-semibold hover:bg-[#FFC849] disabled:opacity-50 disabled:cursor-not-allowed transition-all flex items-center justify-center gap-2"
+              className="w-full px-6 py-3 rounded-full bg-adm-accent text-black font-semibold hover:bg-[#FFC849] disabled:opacity-50 disabled:cursor-not-allowed transition-all flex items-center justify-center gap-2"
             >
               {isLoading && (
                 <motion.div

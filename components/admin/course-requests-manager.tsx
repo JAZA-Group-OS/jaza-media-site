@@ -39,9 +39,9 @@ const followUpLabels: Record<FollowUpStatus, string> = {
 };
 
 const followUpColors: Record<FollowUpStatus, string> = {
-  new: 'bg-[#FFB829]/20 text-[#FFB829] border-[#FFB829]/30',
+  new: 'bg-adm-accent/20 text-adm-accent-ink border-adm-accent/30',
   contacted: 'bg-blue-500/20 text-blue-300 border-blue-500/30',
-  closed: 'bg-gray-500/20 text-gray-300 border-gray-500/30',
+  closed: 'bg-gray-500/20 text-adm-text-2 border-gray-500/30',
 };
 
 function formatDate(iso: string): string {
@@ -127,12 +127,12 @@ export default function CourseRequestsManager({
   if (loading) {
     return (
       <div className="space-y-6">
-        <h2 className="text-2xl font-bold">{courseTitle}</h2>
+        <h2 className="sr-only">{courseTitle}</h2>
         <div className="space-y-4">
           {[1, 2, 3].map((i) => (
             <div
               key={i}
-              className="h-24 rounded-lg bg-[#0a0a0a] border border-[#1a1a1a] animate-pulse"
+              className="h-24 rounded-lg bg-adm-surface border border-adm-line animate-pulse"
             />
           ))}
         </div>
@@ -143,7 +143,7 @@ export default function CourseRequestsManager({
   if (error) {
     return (
       <div className="space-y-6">
-        <h2 className="text-2xl font-bold">{courseTitle}</h2>
+        <h2 className="sr-only">{courseTitle}</h2>
         <div className="p-6 rounded-lg bg-red-500/10 border border-red-500/30 text-red-300">
           <p className="font-semibold mb-1">Failed to load course requests</p>
           <p className="text-sm">{error}</p>
@@ -156,8 +156,8 @@ export default function CourseRequestsManager({
     <div className="space-y-6">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
         <div>
-          <h2 className="text-xl font-bold sm:text-2xl">{courseTitle}</h2>
-          <p className="text-xs text-gray-500 mt-1">
+          <h2 className="sr-only">{courseTitle}</h2>
+          <p className="text-xs text-adm-subtle mt-1">
             People who claimed this course from /courses/{courseSlug}
           </p>
         </div>
@@ -183,12 +183,12 @@ export default function CourseRequestsManager({
       </div>
 
       {filtered.length === 0 ? (
-        <div className="p-12 rounded-lg bg-[#0a0a0a] border border-[#1a1a1a] text-center">
-          <p className="text-gray-400 mb-2">
+        <div className="p-12 rounded-lg bg-adm-surface border border-adm-line text-center">
+          <p className="text-adm-muted mb-2">
             No {filter === 'all' ? '' : `${followUpLabels[filter as FollowUpStatus].toLowerCase()} `}
             requests yet
           </p>
-          <p className="text-xs text-gray-500">
+          <p className="text-xs text-adm-subtle">
             Submissions from /courses/{courseSlug} will appear here.
           </p>
         </div>
@@ -208,7 +208,7 @@ export default function CourseRequestsManager({
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: Math.min(index * 0.03, 0.3) }}
-                className="rounded-lg bg-gradient-to-br from-[#0a0a0a] to-black border border-[#1a1a1a] hover:border-[#FFB829]/30 transition-colors"
+                className="rounded-lg bg-gradient-to-br from-adm-surface to-black border border-adm-line hover:border-adm-accent/30 transition-colors"
               >
                 <button
                   onClick={() => setExpandedId(isExpanded ? null : req.id)}
@@ -221,45 +221,45 @@ export default function CourseRequestsManager({
                         <p className="font-semibold leading-tight truncate">
                           {fullName}
                         </p>
-                        <p className="text-xs text-gray-400 truncate mt-0.5">
+                        <p className="text-xs text-adm-muted truncate mt-0.5">
                           {req.email}
                         </p>
                       </div>
                       <ChevronDown
-                        className={`w-4 h-4 text-gray-400 shrink-0 mt-1 transition-transform duration-200 ${isExpanded ? 'rotate-180' : ''}`}
+                        className={`w-4 h-4 text-adm-muted shrink-0 mt-1 transition-transform duration-200 ${isExpanded ? 'rotate-180' : ''}`}
                       />
                     </div>
                     {/* Asset is the lead's #1 signal — what they asked for —
                         so it gets a full-width row with the brand yellow. */}
-                    <div className="rounded-md bg-[#FFB829]/10 px-3 py-2 border border-[#FFB829]/20">
-                      <p className="text-[10px] uppercase tracking-[0.12em] text-[#FFB829]/70">
+                    <div className="rounded-md bg-adm-accent/10 px-3 py-2 border border-adm-accent/20">
+                      <p className="text-[10px] uppercase tracking-[0.12em] text-adm-accent-ink/70">
                         Asset chosen
                       </p>
-                      <p className="mt-0.5 text-sm font-semibold text-[#FFB829] truncate">
+                      <p className="mt-0.5 text-sm font-semibold text-adm-accent-ink truncate">
                         {assetLabel}
                       </p>
                     </div>
                     <div className="grid grid-cols-2 gap-x-4 gap-y-3">
                       <div className="min-w-0">
-                        <p className="text-[10px] uppercase tracking-[0.12em] text-gray-500">
+                        <p className="text-[10px] uppercase tracking-[0.12em] text-adm-subtle">
                           Phone
                         </p>
                         {req.phone ? (
                           <a
                             href={`tel:${req.phone}`}
                             onClick={(e) => e.stopPropagation()}
-                            className="mt-0.5 block text-sm font-semibold text-[#FFB829] hover:underline truncate"
+                            className="mt-0.5 block text-sm font-semibold text-adm-accent-ink hover:underline truncate"
                           >
                             {req.phone}
                           </a>
                         ) : (
-                          <p className="mt-0.5 text-sm font-semibold text-gray-500">
+                          <p className="mt-0.5 text-sm font-semibold text-adm-subtle">
                             —
                           </p>
                         )}
                       </div>
                       <div className="min-w-0">
-                        <p className="text-[10px] uppercase tracking-[0.12em] text-gray-500">
+                        <p className="text-[10px] uppercase tracking-[0.12em] text-adm-subtle">
                           Submitted
                         </p>
                         <p className="mt-0.5 text-sm font-semibold truncate">
@@ -267,7 +267,7 @@ export default function CourseRequestsManager({
                         </p>
                       </div>
                       <div className="min-w-0">
-                        <p className="text-[10px] uppercase tracking-[0.12em] text-gray-500">
+                        <p className="text-[10px] uppercase tracking-[0.12em] text-adm-subtle">
                           Email
                         </p>
                         <div className="mt-0.5 text-sm">
@@ -278,7 +278,7 @@ export default function CourseRequestsManager({
                         </div>
                       </div>
                       <div>
-                        <p className="text-[10px] uppercase tracking-[0.12em] text-gray-500">
+                        <p className="text-[10px] uppercase tracking-[0.12em] text-adm-subtle">
                           Status
                         </p>
                         <span
@@ -294,35 +294,35 @@ export default function CourseRequestsManager({
                   <div className="hidden sm:grid sm:grid-cols-12 gap-3 items-center">
                     <div className="sm:col-span-3">
                       <p className="font-semibold truncate">{fullName}</p>
-                      <p className="text-xs text-gray-400 truncate">
+                      <p className="text-xs text-adm-muted truncate">
                         {req.email}
                       </p>
                     </div>
 
                     <div className="sm:col-span-3 text-xs">
-                      <p className="text-gray-500">Asset chosen</p>
-                      <p className="font-semibold text-[#FFB829] truncate">
+                      <p className="text-adm-subtle">Asset chosen</p>
+                      <p className="font-semibold text-adm-accent-ink truncate">
                         {assetLabel}
                       </p>
                     </div>
 
                     <div className="sm:col-span-2 text-xs">
-                      <p className="text-gray-500">Phone</p>
+                      <p className="text-adm-subtle">Phone</p>
                       {req.phone ? (
                         <a
                           href={`tel:${req.phone}`}
                           onClick={(e) => e.stopPropagation()}
-                          className="font-semibold text-[#FFB829] hover:underline truncate block"
+                          className="font-semibold text-adm-accent-ink hover:underline truncate block"
                         >
                           {req.phone}
                         </a>
                       ) : (
-                        <p className="font-semibold text-gray-500">—</p>
+                        <p className="font-semibold text-adm-subtle">—</p>
                       )}
                     </div>
 
                     <div className="sm:col-span-2 text-xs">
-                      <p className="text-gray-500">Submitted</p>
+                      <p className="text-adm-subtle">Submitted</p>
                       <p className="font-semibold">
                         {formatDateShort(req.created_at)}
                       </p>
@@ -336,7 +336,7 @@ export default function CourseRequestsManager({
                       </span>
                     </div>
 
-                    <div className="sm:col-span-1 flex justify-end text-gray-400">
+                    <div className="sm:col-span-1 flex justify-end text-adm-muted">
                       {isExpanded ? (
                         <ChevronUp className="w-4 h-4" />
                       ) : (
@@ -350,7 +350,7 @@ export default function CourseRequestsManager({
                   <motion.div
                     initial={{ opacity: 0, height: 0 }}
                     animate={{ opacity: 1, height: 'auto' }}
-                    className="border-t border-[#1a1a1a] p-5 space-y-4"
+                    className="border-t border-adm-line p-5 space-y-4"
                   >
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
                       <DetailItem
@@ -395,12 +395,12 @@ export default function CourseRequestsManager({
                         Rendered as a single labeled block since the address
                         reads as one mailing destination, not five separate
                         fields. */}
-                    <div className="rounded-md border border-[#1a1a1a] bg-black/40 p-3">
-                      <p className="flex items-center gap-1.5 text-xs text-gray-500 mb-1.5">
+                    <div className="rounded-md border border-adm-line bg-black/40 p-3">
+                      <p className="flex items-center gap-1.5 text-xs text-adm-subtle mb-1.5">
                         <MapPin className="w-3.5 h-3.5" />
                         Shipping address
                       </p>
-                      <p className="text-sm leading-relaxed text-gray-200">
+                      <p className="text-sm leading-relaxed text-adm-text-2">
                         {req.shipping_street}
                         <br />
                         {req.shipping_city}, {req.shipping_state}{' '}
@@ -430,7 +430,7 @@ export default function CourseRequestsManager({
                             className={`px-3 py-1.5 rounded-md text-xs font-semibold border transition-colors ${
                               req.follow_up_status === status
                                 ? followUpColors[status]
-                                : 'bg-transparent text-gray-400 border-[#2a2a2a] hover:border-[#FFB829]/40 hover:text-white'
+                                : 'bg-transparent text-adm-muted border-adm-line-strong hover:border-adm-accent/40 hover:text-adm-text'
                             } disabled:opacity-50 disabled:cursor-not-allowed`}
                           >
                             Mark {followUpLabels[status]}
@@ -466,8 +466,8 @@ function FilterPill({
       onClick={onClick}
       className={`shrink-0 rounded-full px-3 py-1.5 text-[11px] font-semibold tracking-wide transition-all ${
         active
-          ? 'bg-[#FFB829] text-black'
-          : 'text-gray-400 hover:bg-white/5 hover:text-white'
+          ? 'bg-adm-accent text-black'
+          : 'text-adm-muted hover:bg-white/5 hover:text-adm-text'
       } ${muted ? 'opacity-40' : ''}`}
     >
       {label}
@@ -502,7 +502,7 @@ function EmailStatus({
     );
   }
   return (
-    <span className="inline-flex items-center gap-1 text-gray-400 font-semibold">
+    <span className="inline-flex items-center gap-1 text-adm-muted font-semibold">
       <Clock className="w-3.5 h-3.5" />
       Pending
     </span>
@@ -522,7 +522,7 @@ function DetailItem({
 }) {
   return (
     <div>
-      <p className="flex items-center gap-1.5 text-xs text-gray-500 mb-1">
+      <p className="flex items-center gap-1.5 text-xs text-adm-subtle mb-1">
         {icon}
         {label}
       </p>
@@ -531,13 +531,13 @@ function DetailItem({
           href={link}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center gap-1 text-gray-200 hover:text-[#FFB829] transition-colors break-all"
+          className="inline-flex items-center gap-1 text-adm-text-2 hover:text-adm-accent-ink transition-colors break-all"
         >
           {value}
           <ExternalLink className="w-3 h-3 shrink-0" />
         </a>
       ) : (
-        <p className="text-gray-200 break-words">{value}</p>
+        <p className="text-adm-text-2 break-words">{value}</p>
       )}
     </div>
   );

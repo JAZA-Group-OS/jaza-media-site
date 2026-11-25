@@ -62,36 +62,36 @@ export default function UpcomingCallAlert({ onOpen }: { onOpen: () => void }) {
   if (hidden || todays.length === 0) return null;
 
   return (
-    <div className={`mb-6 flex flex-col gap-3 rounded-xl border px-4 py-3 sm:flex-row sm:items-center sm:justify-between ${soon ? 'border-[#FFB829] bg-[#FFB829]/10' : 'border-[#FFB829]/30 bg-[#FFB829]/[0.04]'}`}>
+    <div className={`mb-6 flex flex-col gap-3 rounded-xl border px-4 py-3 sm:flex-row sm:items-center sm:justify-between ${soon ? 'border-adm-accent bg-adm-accent/10' : 'border-adm-accent/30 bg-adm-accent/[0.04]'}`}>
       <div className="flex items-start gap-3">
-        <BellRing className={`mt-0.5 size-5 shrink-0 text-[#FFB829] ${soon ? 'animate-pulse' : ''}`} />
+        <BellRing className={`mt-0.5 size-5 shrink-0 text-adm-accent-ink ${soon ? 'animate-pulse' : ''}`} />
         <div className="text-sm">
-          <p className="font-semibold text-white">
+          <p className="font-semibold text-adm-text">
             {todays.length === 1 ? '1 discovery call today' : `${todays.length} discovery calls today`}
             {next && minsToNext !== null && (
-              <span className="text-[#FFB829]">
+              <span className="text-adm-accent-ink">
                 {' · '}next {minsToNext <= 0 ? 'starting now' : minsToNext < 60 ? `in ${minsToNext} min` : `at ${timeLabel(next.start_at, tz)}`}
               </span>
             )}
           </p>
-          <p className="mt-0.5 text-gray-400">
+          <p className="mt-0.5 text-adm-muted">
             {todays.map((b) => `${timeLabel(b.start_at, tz)} ${b.full_name}`).join('  ·  ')}
           </p>
         </div>
       </div>
       <div className="flex shrink-0 items-center gap-2">
         {soon && next?.meet_url && (
-          <a href={next.meet_url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 rounded-lg bg-[#FFB829] px-3 py-1.5 text-xs font-semibold text-black hover:bg-white">
+          <a href={next.meet_url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 rounded-lg bg-adm-accent px-3 py-1.5 text-xs font-semibold text-black hover:bg-white">
             <Video className="size-3.5" /> Join
           </a>
         )}
         {perm === 'default' && (
-          <button type="button" onClick={() => Notification.requestPermission().then(setPerm)} className="rounded-lg border border-[#FFB829]/40 px-3 py-1.5 text-xs text-[#FFB829] hover:bg-[#FFB829]/10">
+          <button type="button" onClick={() => Notification.requestPermission().then(setPerm)} className="rounded-lg border border-adm-accent/40 px-3 py-1.5 text-xs text-adm-accent-ink hover:bg-adm-accent/10">
             Enable reminders
           </button>
         )}
-        <button type="button" onClick={onOpen} className="rounded-lg border border-[#262626] px-3 py-1.5 text-xs text-gray-300 hover:border-[#FFB829]">View</button>
-        <button type="button" aria-label="Dismiss" onClick={() => setHidden(true)} className="p-1 text-gray-500 hover:text-white"><X className="size-4" /></button>
+        <button type="button" onClick={onOpen} className="rounded-lg border border-adm-line-strong px-3 py-1.5 text-xs text-adm-text-2 hover:border-adm-accent">View</button>
+        <button type="button" aria-label="Dismiss" onClick={() => setHidden(true)} className="p-1 text-adm-subtle hover:text-adm-text"><X className="size-4" /></button>
       </div>
     </div>
   );

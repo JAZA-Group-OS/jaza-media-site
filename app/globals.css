@@ -29,6 +29,22 @@
   --color-gold: #ffca26;
   --color-gold-deep: #c9971a;
 
+  /* Admin palette (values per theme live on .admin-ui below) */
+  --color-adm-bg: var(--adm-bg);
+  --color-adm-surface: var(--adm-surface);
+  --color-adm-raised: var(--adm-raised);
+  --color-adm-hover: var(--adm-hover);
+  --color-adm-line: var(--adm-line);
+  --color-adm-line-strong: var(--adm-line-strong);
+  --color-adm-text: var(--adm-text);
+  --color-adm-text-2: var(--adm-text-2);
+  --color-adm-muted: var(--adm-muted);
+  --color-adm-subtle: var(--adm-subtle);
+  --color-adm-faint: var(--adm-faint);
+  --color-adm-accent: var(--adm-accent);
+  --color-adm-accent-ink: var(--adm-accent-ink);
+  --color-adm-accent-soft: var(--adm-accent-soft);
+
   /* Shadcn tokens */
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
@@ -349,3 +365,53 @@ html.dots-scroll::-webkit-scrollbar { display: none; }
 /* Site-wide: former serif headings render in Poppins, upright and semi-bold */
 .font-serif { font-weight: 600; letter-spacing: -0.015em; }
 .font-serif, .font-serif em, .font-serif i, .font-serif.italic, .font-serif .italic { font-style: normal; }
+
+/* ---------- Admin UI theme (app/(admin)) ---------- */
+.admin-ui {
+  --adm-bg: #08090a;
+  --adm-surface: #0f1011;
+  --adm-raised: #16171a;
+  --adm-hover: #1c1d21;
+  --adm-line: #1f2024;
+  --adm-line-strong: #2b2c31;
+  --adm-text: #f4f4f5;
+  --adm-text-2: #d4d4d8;
+  --adm-muted: #a1a1aa;
+  --adm-subtle: #8b8b94;
+  --adm-faint: #6b6b74;
+  --adm-accent: #ffca26;
+  --adm-accent-ink: #ffca26;
+  --adm-accent-soft: rgba(255, 202, 38, 0.12);
+  color-scheme: dark;
+  font-feature-settings: "cv11", "ss01";
+  font-variant-numeric: tabular-nums;
+}
+.admin-ui[data-theme="light"] {
+  --adm-bg: #f6f5f2;
+  --adm-surface: #ffffff;
+  --adm-raised: #f3f2ee;
+  --adm-hover: #ecebe6;
+  --adm-line: #e6e4dd;
+  --adm-line-strong: #d6d3ca;
+  --adm-text: #141416;
+  --adm-text-2: #2f2f35;
+  --adm-muted: #5c5c66;
+  --adm-subtle: #6b6b74;
+  --adm-faint: #8b8b94;
+  --adm-accent: #ffca26;
+  --adm-accent-ink: #8a6400;
+  --adm-accent-soft: rgba(255, 202, 38, 0.18);
+  color-scheme: light;
+}
+/* Status colours keep enough contrast on light surfaces */
+.admin-ui[data-theme="light"] .text-green-300,
+.admin-ui[data-theme="light"] .text-green-400,
+.admin-ui[data-theme="light"] .text-emerald-400 { color: #15803d; }
+.admin-ui[data-theme="light"] .text-red-300,
+.admin-ui[data-theme="light"] .text-red-400 { color: #b91c1c; }
+.admin-ui[data-theme="light"] .text-blue-300,
+.admin-ui[data-theme="light"] .text-blue-400 { color: #1d4ed8; }
+.admin-ui[data-theme="light"] .text-purple-400 { color: #7e22ce; }
+.admin-ui[data-theme="light"] .text-amber-300 { color: #a16207; }
+.admin-ui ::selection { background: var(--adm-accent); color: #141414; }
+.admin-ui input[type="date"], .admin-ui input[type="time"] { color-scheme: inherit; }

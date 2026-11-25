@@ -2,127 +2,200 @@
 
 import { AnimatePresence, motion } from 'framer-motion';
 import {
-  LayoutDashboard,
-  TrendingUp,
-  Briefcase,
   BookOpen,
-  FileBox,
-  LifeBuoy,
+  Briefcase,
   CalendarDays,
-  ChevronDown,
-  Menu,
+  ExternalLink,
+  FileBox,
+  LayoutDashboard,
+  LifeBuoy,
+  LogOut,
+  Moon,
+  PanelLeftClose,
+  PanelLeftOpen,
+  Sun,
+  TrendingUp,
   X,
+  type LucideIcon,
 } from 'lucide-react';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 
-interface AdminNavigationProps {
+import { useAdminTheme } from '@/components/admin/admin-theme';
+
+type Item = { id: string; label: string; icon: LucideIcon };
+
+export const NAV_GROUPS: { title: string; items: Item[] }[] = [
+  {
+    title: 'Overview',
+    items: [
+      { id: 'overview', label: 'Dashboard', icon: LayoutDashboard },
+      { id: 'bookings', label: 'Discovery Calls', icon: CalendarDays },
+    ],
+  },
+  {
+    title: 'Pipeline',
+    items: [
+      { id: 'leads', label: 'Partner Leads', icon: TrendingUp },
+      { id: 'applications', label: 'Career Applications', icon: Briefcase },
+    ],
+  },
+  {
+    title: 'Courses',
+    items: [
+      { id: 'course-rule-of-10x', label: 'Rule of 10X', icon: BookOpen },
+      { id: 'course-marketing-templates', label: 'Marketing Templates', icon: FileBox },
+    ],
+  },
+  {
+    title: 'Help desk',
+    items: [{ id: 'support', label: 'Support Tickets', icon: LifeBuoy }],
+  },
+];
+
+interface Props {
   activeTab: string;
   onTabChange: (tab: string) => void;
   onLogout: () => void;
+  collapsed: boolean;
+  onToggleCollapsed: () => void;
+  mobileOpen: boolean;
+  onMobileOpenChange: (open: boolean) => void;
 }
-
-const MENU_ITEMS = [
-  { id: 'overview', label: 'Dashboard', icon: LayoutDashboard },
-  { id: 'leads', label: 'Partner Leads', icon: TrendingUp },
-  { id: 'bookings', label: 'Discovery Calls', icon: CalendarDays },
-  { id: 'applications', label: 'Career Applications', icon: Briefcase },
-  { id: 'course-rule-of-10x', label: 'Rule of 10X', icon: BookOpen },
-  { id: 'course-marketing-templates', label: 'Marketing Templates', icon: FileBox },
-  { id: 'support', label: 'Support Tickets', icon: LifeBuoy },
-] as const;
 
 export default function AdminNavigation({
   activeTab,
   onTabChange,
   onLogout,
-}: AdminNavigationProps) {
-  const [mobileOpen, setMobileOpen] = useState(false);
+  collapsed,
+  onToggleCollapsed,
+  mobileOpen,
+  onMobileOpenChange,
+}: Props) {
+  const { theme, toggle } = useAdminTheme();
 
-  // Close drawer on route change-ish events (escape key) and lock body scroll while open.
+  // Escape closes the drawer; lock page scroll while it's open.
   useEffect(() => {
     if (!mobileOpen) return;
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setMobileOpen(false);
-    };
+    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && onMobileOpenChange(false);
     document.addEventListener('keydown', onKey);
     document.body.style.overflow = 'hidden';
     return () => {
       document.removeEventListener('keydown', onKey);
       document.body.style.overflow = '';
     };
-  }, [mobileOpen]);
+  }, [mobileOpen, onMobileOpenChange]);
 
-  const navContent = (
-    <>
-      <Link
-        href="/admin/dashboard"
-        className="mb-12 block"
-        onClick={() => setMobileOpen(false)}
-      >
-        <div className="text-2xl font-bold tracking-tight">
-          JAZA<span className="gold-accent">ADMIN</span>
-        </div>
-      </Link>
+  const content = (mini: boolean) => (
+    <div className="flex h-full flex-col">
+      {/* brand + collapse */}
+      <div className={`flex h-16 shrink-0 items-center border-b border-adm-line ${mini ? 'justify-center px-2' : 'justify-between px-5'}`}>
+        <Link href="/admin/dashboard" className="flex items-center gap-2.5" onClick={() => onMobileOpenChange(false)}>
+          <span className="grid size-8 place-items-center rounded-lg bg-adm-accent font-serif text-[17px] font-semibold text-[#141414]">J</span>
+          {!mini && (
+            <span className="leading-none">
+              <span className="block font-serif text-[18px] tracking-[0.18em] text-adm-text">JAZA</span>
+              <span className="mt-0.5 block text-[9px] font-semibold tracking-[0.32em] text-adm-accent-ink">ADMIN</span>
+            </span>
+          )}
+        </Link>
+        {!mini && (
+          <button
+            type="button"
+            onClick={onToggleCollapsed}
+            aria-label="Collapse sidebar"
+            title="Collapse sidebar (Ctrl+B)"
+            className="hidden size-8 place-items-center rounded-md text-adm-subtle transition hover:bg-adm-hover hover:text-adm-text lg:grid"
+          >
+            <PanelLeftClose className="size-[18px]" />
+          </button>
+        )}
+      </div>
 
-      <nav className="space-y-2 flex-1">
-        {MENU_ITEMS.map((item) => {
-          const Icon = item.icon;
-          const isActive = activeTab === item.id;
-          return (
-            <motion.button
-              key={item.id}
-              whileHover={{ x: 4 }}
-              onClick={() => {
-                onTabChange(item.id);
-                setMobileOpen(false);
-              }}
-              className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-sm font-medium ${
-                isActive
-                  ? 'bg-[#FFB829]/20 text-[#FFB829] border border-[#FFB829]/30'
-                  : 'text-gray-400 hover:text-white hover:bg-[#1a1a1a]'
-              }`}
-            >
-              <Icon className="w-5 h-5" />
-              {item.label}
-            </motion.button>
-          );
-        })}
+      {/* nav */}
+      <nav aria-label="Admin" className="flex-1 overflow-y-auto px-3 py-4">
+        {NAV_GROUPS.map((g) => (
+          <div key={g.title} className="mb-5 last:mb-0">
+            {mini ? (
+              <div aria-hidden className="mx-auto mb-2 h-px w-6 bg-adm-line" />
+            ) : (
+              <p className="mb-1.5 px-3 text-[10.5px] font-semibold tracking-[0.14em] text-adm-faint uppercase">{g.title}</p>
+            )}
+            <ul className="space-y-0.5">
+              {g.items.map(({ id, label, icon: Icon }) => {
+                const active = activeTab === id;
+                return (
+                  <li key={id}>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        onTabChange(id);
+                        onMobileOpenChange(false);
+                      }}
+                      aria-current={active ? 'page' : undefined}
+                      title={mini ? label : undefined}
+                      className={`group relative flex w-full items-center rounded-lg text-[13.5px] font-medium transition-colors ${
+                        mini ? 'h-10 justify-center' : 'h-9 gap-3 px-3'
+                      } ${active ? 'bg-adm-accent-soft text-adm-text' : 'text-adm-muted hover:bg-adm-hover hover:text-adm-text'}`}
+                    >
+                      {active && <span aria-hidden className="absolute top-2 bottom-2 left-0 w-[3px] rounded-r-full bg-adm-accent" />}
+                      <Icon className={`size-[18px] shrink-0 ${active ? 'text-adm-accent-ink' : ''}`} strokeWidth={1.8} />
+                      {!mini && <span className="truncate">{label}</span>}
+                      {mini && (
+                        <span className="pointer-events-none absolute left-full z-50 ml-3 hidden rounded-md border border-adm-line bg-adm-surface px-2.5 py-1.5 text-xs whitespace-nowrap text-adm-text shadow-lg group-hover:block">
+                          {label}
+                        </span>
+                      )}
+                    </button>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+        ))}
       </nav>
 
-      <div className="space-y-2 border-t border-[#1a1a1a] pt-4">
-        <motion.button
-          whileHover={{ x: 4 }}
+      {/* footer */}
+      <div className={`shrink-0 space-y-0.5 border-t border-adm-line p-3 ${mini ? 'flex flex-col items-center' : ''}`}>
+        {mini && (
+          <button
+            type="button"
+            onClick={onToggleCollapsed}
+            aria-label="Expand sidebar"
+            title="Expand sidebar (Ctrl+B)"
+            className="hidden size-10 place-items-center rounded-lg text-adm-muted transition hover:bg-adm-hover hover:text-adm-text lg:grid"
+          >
+            <PanelLeftOpen className="size-[18px]" />
+          </button>
+        )}
+        <FooterButton mini={mini} icon={theme === 'dark' ? Sun : Moon} label={theme === 'dark' ? 'Light mode' : 'Dark mode'} onClick={toggle} />
+        <FooterLink mini={mini} icon={ExternalLink} label="View website" href="/" />
+        <FooterButton
+          mini={mini}
+          icon={LogOut}
+          label="Log out"
+          danger
           onClick={() => {
-            setMobileOpen(false);
+            onMobileOpenChange(false);
             onLogout();
           }}
-          className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-red-500/70 hover:text-red-500 hover:bg-red-500/10 transition-all text-sm font-medium"
-        >
-          <ChevronDown className="w-5 h-5 rotate-180" />
-          Logout
-        </motion.button>
+        />
       </div>
-    </>
+    </div>
   );
 
   return (
     <>
-      {/* Mobile hamburger trigger — visible only on screens < lg */}
-      <button
-        onClick={() => setMobileOpen(true)}
-        aria-label="Open navigation menu"
-        className="lg:hidden fixed top-4 left-4 z-40 p-2 rounded-lg bg-[#0a0a0a] border border-[#1a1a1a] text-white hover:bg-[#1a1a1a] transition-colors"
+      {/* Desktop sidebar */}
+      <aside
+        className={`sticky top-0 hidden h-screen shrink-0 border-r border-adm-line bg-adm-surface transition-[width] duration-300 ease-out lg:block ${
+          collapsed ? 'w-[72px]' : 'w-64'
+        }`}
       >
-        <Menu className="w-5 h-5" />
-      </button>
-
-      {/* Desktop sidebar — visible only on lg+ */}
-      <aside className="hidden lg:flex flex-col w-64 bg-[#0a0a0a] border-r border-[#1a1a1a] p-6">
-        {navContent}
+        {content(collapsed)}
       </aside>
 
-      {/* Mobile drawer + backdrop */}
+      {/* Mobile drawer */}
       <AnimatePresence>
         {mobileOpen && (
           <>
@@ -131,28 +204,60 @@ export default function AdminNavigation({
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.2 }}
-              className="lg:hidden fixed inset-0 z-40 bg-black/70 backdrop-blur-sm"
-              onClick={() => setMobileOpen(false)}
+              className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm lg:hidden"
+              onClick={() => onMobileOpenChange(false)}
             />
             <motion.aside
               initial={{ x: '-100%' }}
               animate={{ x: 0 }}
               exit={{ x: '-100%' }}
-              transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-              className="lg:hidden fixed inset-y-0 left-0 z-50 w-72 max-w-[85vw] bg-[#0a0a0a] border-r border-[#1a1a1a] p-6 flex flex-col"
+              transition={{ type: 'spring', stiffness: 320, damping: 32 }}
+              className="fixed inset-y-0 left-0 z-50 w-72 max-w-[85vw] border-r border-adm-line bg-adm-surface lg:hidden"
             >
               <button
-                onClick={() => setMobileOpen(false)}
-                aria-label="Close navigation menu"
-                className="absolute top-4 right-4 p-2 rounded-lg text-gray-400 hover:text-white hover:bg-[#1a1a1a] transition-colors"
+                type="button"
+                onClick={() => onMobileOpenChange(false)}
+                aria-label="Close menu"
+                className="absolute top-4 right-3 grid size-8 place-items-center rounded-md text-adm-muted hover:bg-adm-hover hover:text-adm-text"
               >
-                <X className="w-5 h-5" />
+                <X className="size-[18px]" />
               </button>
-              {navContent}
+              {content(false)}
             </motion.aside>
           </>
         )}
       </AnimatePresence>
     </>
+  );
+}
+
+const footerCls = (mini: boolean, danger?: boolean) =>
+  `group relative flex items-center rounded-lg text-[13px] font-medium transition-colors ${
+    mini ? 'size-10 justify-center' : 'h-9 w-full gap-3 px-3'
+  } ${danger ? 'text-adm-muted hover:bg-red-500/10 hover:text-red-400' : 'text-adm-muted hover:bg-adm-hover hover:text-adm-text'}`;
+
+function Tip({ label }: { label: string }) {
+  return (
+    <span className="pointer-events-none absolute left-full z-50 ml-3 hidden rounded-md border border-adm-line bg-adm-surface px-2.5 py-1.5 text-xs whitespace-nowrap text-adm-text shadow-lg group-hover:block">
+      {label}
+    </span>
+  );
+}
+
+function FooterButton({ mini, icon: Icon, label, onClick, danger }: { mini: boolean; icon: LucideIcon; label: string; onClick: () => void; danger?: boolean }) {
+  return (
+    <button type="button" onClick={onClick} aria-label={mini ? label : undefined} className={footerCls(mini, danger)}>
+      <Icon className="size-[18px] shrink-0" strokeWidth={1.8} />
+      {mini ? <Tip label={label} /> : label}
+    </button>
+  );
+}
+
+function FooterLink({ mini, icon: Icon, label, href }: { mini: boolean; icon: LucideIcon; label: string; href: string }) {
+  return (
+    <a href={href} target="_blank" rel="noopener noreferrer" aria-label={mini ? label : undefined} className={footerCls(mini)}>
+      <Icon className="size-[18px] shrink-0" strokeWidth={1.8} />
+      {mini ? <Tip label={label} /> : label}
+    </a>
   );
 }

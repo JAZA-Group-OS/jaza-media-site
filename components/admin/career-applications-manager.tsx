@@ -41,9 +41,9 @@ const followUpLabels: Record<FollowUpStatus, string> = {
 };
 
 const followUpColors: Record<FollowUpStatus, string> = {
-  new: 'bg-[#FFB829]/20 text-[#FFB829] border-[#FFB829]/30',
+  new: 'bg-adm-accent/20 text-adm-accent-ink border-adm-accent/30',
   contacted: 'bg-blue-500/20 text-blue-300 border-blue-500/30',
-  closed: 'bg-gray-500/20 text-gray-300 border-gray-500/30',
+  closed: 'bg-gray-500/20 text-adm-text-2 border-gray-500/30',
 };
 
 function formatLabel(value: string | null): string {
@@ -143,12 +143,12 @@ export default function CareerApplicationsManager() {
   if (loading) {
     return (
       <div className="space-y-6">
-        <h2 className="text-2xl font-bold">Career Applications</h2>
+        <h2 className="sr-only">Career Applications</h2>
         <div className="space-y-4">
           {[1, 2, 3].map((i) => (
             <div
               key={i}
-              className="h-32 rounded-lg bg-[#0a0a0a] border border-[#1a1a1a] animate-pulse"
+              className="h-32 rounded-lg bg-adm-surface border border-adm-line animate-pulse"
             />
           ))}
         </div>
@@ -159,7 +159,7 @@ export default function CareerApplicationsManager() {
   if (error) {
     return (
       <div className="space-y-6">
-        <h2 className="text-2xl font-bold">Career Applications</h2>
+        <h2 className="sr-only">Career Applications</h2>
         <div className="p-6 rounded-lg bg-red-500/10 border border-red-500/30 text-red-300">
           <p className="font-semibold mb-1">Failed to load applications</p>
           <p className="text-sm">{error}</p>
@@ -171,7 +171,7 @@ export default function CareerApplicationsManager() {
   return (
     <div className="space-y-6">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
-        <h2 className="text-xl font-bold sm:text-2xl">Career Applications</h2>
+        <h2 className="sr-only">Career Applications</h2>
         <div className="-mx-4 overflow-x-auto px-4 scrollbar-hide sm:mx-0 sm:overflow-visible sm:px-0">
           <div className="flex gap-1.5 sm:flex-wrap">
             <FilterPill
@@ -194,9 +194,9 @@ export default function CareerApplicationsManager() {
       </div>
 
       {filtered.length === 0 ? (
-        <div className="p-12 rounded-lg bg-[#0a0a0a] border border-[#1a1a1a] text-center">
-          <p className="text-gray-400 mb-2">No applications yet</p>
-          <p className="text-xs text-gray-500">
+        <div className="p-12 rounded-lg bg-adm-surface border border-adm-line text-center">
+          <p className="text-adm-muted mb-2">No applications yet</p>
+          <p className="text-xs text-adm-subtle">
             Submissions from /careers/apply will appear here.
           </p>
         </div>
@@ -210,7 +210,7 @@ export default function CareerApplicationsManager() {
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: Math.min(index * 0.03, 0.3) }}
-                className="rounded-lg bg-gradient-to-br from-[#0a0a0a] to-black border border-[#1a1a1a] hover:border-[#FFB829]/30 transition-colors"
+                className="rounded-lg bg-gradient-to-br from-adm-surface to-black border border-adm-line hover:border-adm-accent/30 transition-colors"
               >
                 <button
                   onClick={() => setExpandedId(isExpanded ? null : app.id)}
@@ -224,12 +224,12 @@ export default function CareerApplicationsManager() {
                         <p className="font-semibold leading-tight truncate">
                           {app.full_name}
                         </p>
-                        <p className="text-xs text-gray-400 truncate mt-0.5">
+                        <p className="text-xs text-adm-muted truncate mt-0.5">
                           {app.email}
                         </p>
                       </div>
                       <ChevronDown
-                        className={`w-4 h-4 text-gray-400 shrink-0 mt-1 transition-transform duration-200 ${isExpanded ? 'rotate-180' : ''}`}
+                        className={`w-4 h-4 text-adm-muted shrink-0 mt-1 transition-transform duration-200 ${isExpanded ? 'rotate-180' : ''}`}
                       />
                     </div>
                     <div className="grid grid-cols-2 gap-x-4 gap-y-3">
@@ -247,7 +247,7 @@ export default function CareerApplicationsManager() {
                         value={formatDateShort(app.created_at)}
                       />
                       <div>
-                        <p className="text-[10px] uppercase tracking-[0.12em] text-gray-500">
+                        <p className="text-[10px] uppercase tracking-[0.12em] text-adm-subtle">
                           Status
                         </p>
                         <span
@@ -263,25 +263,25 @@ export default function CareerApplicationsManager() {
                   <div className="hidden sm:grid sm:grid-cols-12 gap-3 items-center">
                     <div className="sm:col-span-3">
                       <p className="font-semibold truncate">{app.full_name}</p>
-                      <p className="text-xs text-gray-400 truncate">
+                      <p className="text-xs text-adm-muted truncate">
                         {app.email}
                       </p>
                     </div>
 
                     <div className="sm:col-span-3 text-xs">
-                      <p className="text-gray-500">Position</p>
-                      <p className="font-semibold text-[#FFB829]">
+                      <p className="text-adm-subtle">Position</p>
+                      <p className="font-semibold text-adm-accent-ink">
                         {formatLabel(app.position)}
                       </p>
                     </div>
 
                     <div className="sm:col-span-2 text-xs">
-                      <p className="text-gray-500">Location</p>
+                      <p className="text-adm-subtle">Location</p>
                       <p className="font-semibold">{formatLabel(app.location)}</p>
                     </div>
 
                     <div className="sm:col-span-2 text-xs">
-                      <p className="text-gray-500">Submitted</p>
+                      <p className="text-adm-subtle">Submitted</p>
                       <p className="font-semibold">
                         {formatDate(app.created_at)}
                       </p>
@@ -295,7 +295,7 @@ export default function CareerApplicationsManager() {
                       </span>
                     </div>
 
-                    <div className="sm:col-span-1 flex justify-end text-gray-400">
+                    <div className="sm:col-span-1 flex justify-end text-adm-muted">
                       {isExpanded ? (
                         <ChevronUp className="w-4 h-4" />
                       ) : (
@@ -309,7 +309,7 @@ export default function CareerApplicationsManager() {
                   <motion.div
                     initial={{ opacity: 0, height: 0 }}
                     animate={{ opacity: 1, height: 'auto' }}
-                    className="border-t border-[#1a1a1a] p-5 space-y-4"
+                    className="border-t border-adm-line p-5 space-y-4"
                   >
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
                       <DetailItem
@@ -349,10 +349,10 @@ export default function CareerApplicationsManager() {
 
                     {app.description && (
                       <div>
-                        <p className="text-xs text-gray-500 mb-1">
+                        <p className="text-xs text-adm-subtle mb-1">
                           Self description
                         </p>
-                        <p className="text-sm text-gray-200 whitespace-pre-wrap">
+                        <p className="text-sm text-adm-text-2 whitespace-pre-wrap">
                           {app.description}
                         </p>
                       </div>
@@ -390,7 +390,7 @@ export default function CareerApplicationsManager() {
                             className={`px-3 py-1.5 rounded-md text-xs font-semibold border transition-colors ${
                               app.follow_up_status === status
                                 ? followUpColors[status]
-                                : 'bg-transparent text-gray-400 border-[#2a2a2a] hover:border-[#FFB829]/40 hover:text-white'
+                                : 'bg-transparent text-adm-muted border-adm-line-strong hover:border-adm-accent/40 hover:text-adm-text'
                             } disabled:opacity-50 disabled:cursor-not-allowed`}
                           >
                             Mark {followUpLabels[status]}
@@ -420,12 +420,12 @@ function MobileField({
 }) {
   return (
     <div className="min-w-0">
-      <p className="text-[10px] uppercase tracking-[0.12em] text-gray-500">
+      <p className="text-[10px] uppercase tracking-[0.12em] text-adm-subtle">
         {label}
       </p>
       <p
         className={`mt-0.5 text-sm font-semibold truncate ${
-          accent ? 'text-[#FFB829]' : 'text-white'
+          accent ? 'text-adm-accent-ink' : 'text-adm-text'
         }`}
       >
         {value}
@@ -453,8 +453,8 @@ function FilterPill({
       onClick={onClick}
       className={`shrink-0 rounded-full px-3 py-1.5 text-[11px] font-semibold tracking-wide transition-all ${
         active
-          ? 'bg-[#FFB829] text-black'
-          : 'text-gray-400 hover:bg-white/5 hover:text-white'
+          ? 'bg-adm-accent text-black'
+          : 'text-adm-muted hover:bg-white/5 hover:text-adm-text'
       } ${muted ? 'opacity-40' : ''}`}
     >
       {label}
@@ -478,7 +478,7 @@ function DetailItem({
 }) {
   return (
     <div>
-      <p className="flex items-center gap-1.5 text-xs text-gray-500 mb-1">
+      <p className="flex items-center gap-1.5 text-xs text-adm-subtle mb-1">
         {icon}
         {label}
       </p>
@@ -487,13 +487,13 @@ function DetailItem({
           href={link}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center gap-1 text-gray-200 hover:text-[#FFB829] transition-colors break-all"
+          className="inline-flex items-center gap-1 text-adm-text-2 hover:text-adm-accent-ink transition-colors break-all"
         >
           {value}
           <ExternalLink className="w-3 h-3 shrink-0" />
         </a>
       ) : (
-        <p className="text-gray-200 break-words">{value}</p>
+        <p className="text-adm-text-2 break-words">{value}</p>
       )}
     </div>
   );
@@ -547,21 +547,21 @@ function FileLink({
     <a
       href="#"
       onClick={openSignedUrl}
-      className="flex items-center gap-3 rounded-md bg-[#0a0a0a] border border-[#1a1a1a] p-3 hover:border-[#FFB829]/40 hover:text-white transition-colors group"
+      className="flex items-center gap-3 rounded-md bg-adm-surface border border-adm-line p-3 hover:border-adm-accent/40 hover:text-adm-text transition-colors group"
     >
-      <span className="text-[#FFB829] shrink-0">{icon}</span>
+      <span className="text-adm-accent-ink shrink-0">{icon}</span>
       <span className="min-w-0 flex-1">
-        <span className="block text-[10px] uppercase tracking-wide text-gray-500">
+        <span className="block text-[10px] uppercase tracking-wide text-adm-subtle">
           {label}
         </span>
-        <span className="block text-sm text-gray-200 truncate">
+        <span className="block text-sm text-adm-text-2 truncate">
           {filename}
         </span>
-        <span className="block text-xs text-gray-500">
+        <span className="block text-xs text-adm-subtle">
           {opening ? 'Opening…' : formatBytes(size)}
         </span>
       </span>
-      <ExternalLink className="w-4 h-4 text-gray-500 group-hover:text-[#FFB829] shrink-0" />
+      <ExternalLink className="w-4 h-4 text-adm-subtle group-hover:text-adm-accent-ink shrink-0" />
     </a>
   );
 }

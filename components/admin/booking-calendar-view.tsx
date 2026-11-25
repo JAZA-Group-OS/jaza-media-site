@@ -89,11 +89,11 @@ export default function BookingCalendarView({
     <div className="grid items-start gap-6 lg:grid-cols-[1fr_340px]">
       <div>
         <div className="mb-3 flex items-center justify-between">
-          <button type="button" aria-label="Previous month" onClick={() => shift(-1)} className="rounded-lg p-2 text-gray-400 hover:bg-white/5 hover:text-white"><ChevronLeft className="size-4" /></button>
+          <button type="button" aria-label="Previous month" onClick={() => shift(-1)} className="rounded-lg p-2 text-adm-muted hover:bg-white/5 hover:text-adm-text"><ChevronLeft className="size-4" /></button>
           <p className="font-semibold">{monthName}</p>
-          <button type="button" aria-label="Next month" onClick={() => shift(1)} className="rounded-lg p-2 text-gray-400 hover:bg-white/5 hover:text-white"><ChevronRight className="size-4" /></button>
+          <button type="button" aria-label="Next month" onClick={() => shift(1)} className="rounded-lg p-2 text-adm-muted hover:bg-white/5 hover:text-adm-text"><ChevronRight className="size-4" /></button>
         </div>
-        <div className="grid grid-cols-7 gap-1 text-center text-[11px] tracking-wide text-gray-500 uppercase">
+        <div className="grid grid-cols-7 gap-1 text-center text-[11px] tracking-wide text-adm-subtle uppercase">
           {WEEK.map((d) => <div key={d} className="py-1">{d}</div>)}
         </div>
         <div className="grid grid-cols-7 gap-1">
@@ -108,33 +108,33 @@ export default function BookingCalendarView({
                 type="button"
                 onClick={() => setSelected(k)}
                 className={`relative flex min-h-[84px] flex-col items-start rounded-lg border p-1.5 text-left transition ${
-                  isSel ? 'border-[#FFB829] bg-[#FFB829]/10' : calls.length ? 'border-[#FFB829]/30 bg-[#FFB829]/[0.04] hover:border-[#FFB829]/60' : 'border-[#1a1a1a] hover:border-[#333]'
+                  isSel ? 'border-adm-accent bg-adm-accent/10' : calls.length ? 'border-adm-accent/30 bg-adm-accent/[0.04] hover:border-adm-accent/60' : 'border-adm-line hover:border-adm-line-strong'
                 }`}
               >
-                <span className={`grid size-6 place-items-center rounded-full text-xs ${isToday ? 'bg-[#FFB829] font-semibold text-black' : 'text-gray-300'}`}>{Number(k.slice(8))}</span>
+                <span className={`grid size-6 place-items-center rounded-full text-xs ${isToday ? 'bg-adm-accent font-semibold text-black' : 'text-adm-text-2'}`}>{Number(k.slice(8))}</span>
                 {calls.length > 0 && (
                   <span className="mt-1 flex w-full flex-col gap-1">
                     {calls.slice(0, 2).map((b) => (
-                      <span key={b.id} className={`block w-full rounded-md px-1.5 py-1 text-left leading-tight ${b.status === 'cancelled' ? 'bg-white/5 opacity-60' : 'bg-[#FFB829]/15'}`}>
-                        <span className={`block text-[10.5px] font-semibold ${b.status === 'cancelled' ? 'text-gray-400 line-through' : 'text-[#FFB829]'}`}>{timeLabel(b.start_at, tz)}{b.status === 'cancelled' ? ' · cancelled' : ''}</span>
-                        <span className="block truncate text-[11px] text-white">{b.full_name}</span>
-                        {b.company && <span className="block truncate text-[10px] text-gray-400">{b.company}</span>}
+                      <span key={b.id} className={`block w-full rounded-md px-1.5 py-1 text-left leading-tight ${b.status === 'cancelled' ? 'bg-white/5 opacity-60' : 'bg-adm-accent/15'}`}>
+                        <span className={`block text-[10.5px] font-semibold ${b.status === 'cancelled' ? 'text-adm-muted line-through' : 'text-adm-accent-ink'}`}>{timeLabel(b.start_at, tz)}{b.status === 'cancelled' ? ' · cancelled' : ''}</span>
+                        <span className="block truncate text-[11px] text-adm-text">{b.full_name}</span>
+                        {b.company && <span className="block truncate text-[10px] text-adm-muted">{b.company}</span>}
                       </span>
                     ))}
-                    {calls.length > 2 && <span className="text-[10px] text-[#FFB829]">+{calls.length - 2} more</span>}
+                    {calls.length > 2 && <span className="text-[10px] text-adm-accent-ink">+{calls.length - 2} more</span>}
                   </span>
                 )}
               </button>
             );
           })}
         </div>
-        <p className="mt-3 flex flex-wrap gap-4 text-[11px] text-gray-500">
-          <span className="flex items-center gap-1.5"><span className="size-2 rounded-full bg-[#FFB829]" />Meeting at the time the client chose</span>
+        <p className="mt-3 flex flex-wrap gap-4 text-[11px] text-adm-subtle">
+          <span className="flex items-center gap-1.5"><span className="size-2 rounded-full bg-adm-accent" />Meeting at the time the client chose</span>
           <span className="flex items-center gap-1.5"><span className="size-2 rounded-full bg-gray-600" />Cancelled</span>
         </p>
       </div>
 
-      <div className="rounded-lg border border-[#1a1a1a] p-4">
+      <div className="rounded-lg border border-adm-line p-4">
         <p className="text-sm font-semibold">
           {new Date(`${selected}T00:00:00Z`).toLocaleDateString('en-PH', { timeZone: 'UTC', weekday: 'long', month: 'long', day: 'numeric' })}
         </p>
@@ -149,31 +149,31 @@ export default function BookingCalendarView({
           }
           // bookings at a time that isn't a current slot (hours changed later) still show
           const rows = [...new Set([...slots, ...atSlot.keys()])].sort();
-          if (rows.length === 0) return <p className="mt-3 text-sm text-gray-500">{isOff ? 'Day off — no slots.' : 'No available hours this day.'}</p>;
+          if (rows.length === 0) return <p className="mt-3 text-sm text-adm-subtle">{isOff ? 'Day off — no slots.' : 'No available hours this day.'}</p>;
           return (
-            <ul className="mt-3 max-h-[520px] divide-y [scrollbar-width:thin] [scrollbar-color:#333_transparent] divide-[#1a1a1a] overflow-y-auto rounded-lg border border-[#1a1a1a]">
+            <ul className="mt-3 max-h-[520px] divide-y [scrollbar-width:thin] [scrollbar-color:#333_transparent] divide-adm-line overflow-y-auto rounded-lg border border-adm-line">
               {rows.map((hm) => {
                 const here = atSlot.get(hm) ?? [];
                 const end = toHM(toMin(hm) + slotMinutes);
                 const taken = here.some((b) => b.status === 'confirmed');
                 return (
-                  <li key={hm} className={`flex gap-3 px-3 py-2.5 ${taken ? 'bg-[#FFB829]/10' : ''}`}>
-                    <span className={`w-[92px] shrink-0 pt-0.5 text-xs tabular-nums ${taken ? 'font-semibold text-[#FFB829]' : 'text-gray-400'}`}>
+                  <li key={hm} className={`flex gap-3 px-3 py-2.5 ${taken ? 'bg-adm-accent/10' : ''}`}>
+                    <span className={`w-[92px] shrink-0 pt-0.5 text-xs tabular-nums ${taken ? 'font-semibold text-adm-accent-ink' : 'text-adm-muted'}`}>
                       {hm12(hm)} – {hm12(end)}
                     </span>
                     <span className="min-w-0 flex-1">
                       {here.length === 0 ? (
-                        <span className="text-xs text-gray-600">Open</span>
+                        <span className="text-xs text-adm-faint">Open</span>
                       ) : (
                         here.map((b) => (
                           <span key={b.id} className={`block ${b.status === 'cancelled' ? 'opacity-50' : ''}`}>
-                            <span className={`block truncate text-sm font-semibold uppercase ${b.status === 'cancelled' ? 'text-gray-400 line-through' : 'text-white'}`}>{b.full_name}</span>
-                            {b.company && <span className="block truncate text-xs text-gray-400">{b.company}</span>}
+                            <span className={`block truncate text-sm font-semibold uppercase ${b.status === 'cancelled' ? 'text-adm-muted line-through' : 'text-adm-text'}`}>{b.full_name}</span>
+                            {b.company && <span className="block truncate text-xs text-adm-muted">{b.company}</span>}
                             {b.status === 'cancelled' ? (
                               <span className="text-[11px] text-red-400">Cancelled</span>
                             ) : (
                               b.meet_url && (
-                                <a href={b.meet_url} target="_blank" rel="noopener noreferrer" className="mt-0.5 inline-flex items-center gap-1 text-[11px] text-gray-400 hover:text-[#FFB829]">
+                                <a href={b.meet_url} target="_blank" rel="noopener noreferrer" className="mt-0.5 inline-flex items-center gap-1 text-[11px] text-adm-muted hover:text-adm-accent-ink">
                                   <Video className="size-3" /> Join Meet
                                 </a>
                               )

@@ -120,8 +120,8 @@ export default function DashboardOverview() {
       value: qualified,
       period: 'All time',
       icon: TrendingUp,
-      bgColor: 'bg-[#FFB829]/10',
-      textColor: 'text-[#FFB829]',
+      bgColor: 'bg-adm-accent/10',
+      textColor: 'text-adm-accent-ink',
     },
     {
       label: 'Pending Follow-up',
@@ -162,12 +162,12 @@ export default function DashboardOverview() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.05 }}
-              className={`p-4 sm:p-6 rounded-xl border border-[#1a1a1a] ${metric.bgColor}`}
+              className={`p-4 sm:p-6 rounded-xl border border-adm-line ${metric.bgColor}`}
             >
               <div className="flex justify-between items-start mb-2 sm:mb-4">
                 <div>
-                  <p className="text-gray-400 text-xs sm:text-sm font-medium mb-1">{metric.label}</p>
-                  <h3 className="text-2xl sm:text-3xl font-bold">
+                  <p className="text-adm-muted text-xs sm:text-sm font-medium mb-1">{metric.label}</p>
+                  <h3 className="text-2xl font-semibold tracking-tight text-adm-text sm:text-[30px]">
                     {data === null ? '—' : metric.value}
                   </h3>
                 </div>
@@ -175,7 +175,7 @@ export default function DashboardOverview() {
                   <Icon className={`w-4 h-4 sm:w-6 sm:h-6 ${metric.textColor}`} />
                 </div>
               </div>
-              <p className="text-[10px] sm:text-xs text-gray-500">{metric.period}</p>
+              <p className="text-[10px] sm:text-xs text-adm-subtle">{metric.period}</p>
             </motion.div>
           );
         })}
@@ -186,7 +186,7 @@ export default function DashboardOverview() {
           glancing at the page sees both partner KPIs and lead-magnet
           activity without scrolling on desktop. */}
       <div>
-        <p className="mb-3 text-[10px] uppercase tracking-[0.18em] text-gray-500 sm:text-xs">
+        <p className="mb-3 text-[10px] uppercase tracking-[0.18em] text-adm-subtle sm:text-xs">
           Lead Magnet Funnels
         </p>
         <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-3">
@@ -217,29 +217,29 @@ export default function DashboardOverview() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="p-4 sm:p-6 rounded-xl bg-gradient-to-br from-[#0a0a0a] to-black border border-[#1a1a1a]"
+          className="p-4 sm:p-6 rounded-xl bg-gradient-to-br from-adm-surface to-black border border-adm-line"
         >
-          <h3 className="text-base sm:text-lg font-bold mb-4 sm:mb-6">Submissions — last 7 days</h3>
+          <h3 className="text-[15px] font-semibold text-adm-text mb-4 sm:mb-5">Submissions — last 7 days</h3>
           <ResponsiveContainer width="100%" height={250}>
             <LineChart data={dailySeries}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#1a1a1a" />
-              <XAxis dataKey="date" stroke="#666" fontSize={12} />
-              <YAxis stroke="#666" fontSize={12} allowDecimals={false} />
+              <CartesianGrid strokeDasharray="3 3" stroke="var(--adm-line)" />
+              <XAxis dataKey="date" stroke="var(--adm-faint)" fontSize={12} />
+              <YAxis stroke="var(--adm-faint)" fontSize={12} allowDecimals={false} />
               <Tooltip
                 contentStyle={{
-                  backgroundColor: '#1a1a1a',
-                  border: '1px solid #2a2a2a',
+                  backgroundColor: 'var(--adm-surface)',
+                  border: '1px solid var(--adm-line-strong)',
                   borderRadius: '8px',
                 }}
-                labelStyle={{ color: '#fff' }}
-                cursor={{ stroke: '#FFB829', strokeWidth: 1, strokeDasharray: '3 3' }}
+                labelStyle={{ color: 'var(--adm-text)' }}
+                cursor={{ stroke: 'var(--adm-accent)', strokeWidth: 1, strokeDasharray: '3 3' }}
               />
               <Line
                 type="monotone"
                 dataKey="submissions"
-                stroke="#FFB829"
+                stroke="var(--adm-accent)"
                 strokeWidth={2}
-                dot={{ fill: '#FFB829' }}
+                dot={{ fill: 'var(--adm-accent)' }}
               />
             </LineChart>
           </ResponsiveContainer>
@@ -249,24 +249,24 @@ export default function DashboardOverview() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
-          className="p-4 sm:p-6 rounded-xl bg-gradient-to-br from-[#0a0a0a] to-black border border-[#1a1a1a]"
+          className="p-4 sm:p-6 rounded-xl bg-gradient-to-br from-adm-surface to-black border border-adm-line"
         >
-          <h3 className="text-base sm:text-lg font-bold mb-4 sm:mb-6">Qualification breakdown</h3>
+          <h3 className="text-[15px] font-semibold text-adm-text mb-4 sm:mb-5">Qualification breakdown</h3>
           <ResponsiveContainer width="100%" height={250}>
             <BarChart data={outcomeData}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#1a1a1a" />
-              <XAxis dataKey="stage" stroke="#666" fontSize={12} />
-              <YAxis stroke="#666" fontSize={12} allowDecimals={false} />
+              <CartesianGrid strokeDasharray="3 3" stroke="var(--adm-line)" />
+              <XAxis dataKey="stage" stroke="var(--adm-faint)" fontSize={12} />
+              <YAxis stroke="var(--adm-faint)" fontSize={12} allowDecimals={false} />
               <Tooltip
                 contentStyle={{
-                  backgroundColor: '#1a1a1a',
-                  border: '1px solid #2a2a2a',
+                  backgroundColor: 'var(--adm-surface)',
+                  border: '1px solid var(--adm-line-strong)',
                   borderRadius: '8px',
                 }}
-                labelStyle={{ color: '#fff' }}
+                labelStyle={{ color: 'var(--adm-text)' }}
                 cursor={{ fill: 'rgba(255, 184, 41, 0.08)' }}
               />
-              <Bar dataKey="value" fill="#FFB829" radius={[8, 8, 0, 0]} />
+              <Bar dataKey="value" fill="var(--adm-accent)" radius={[8, 8, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </motion.div>
@@ -277,23 +277,23 @@ export default function DashboardOverview() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.4 }}
-        className="p-4 sm:p-6 rounded-xl bg-gradient-to-br from-[#0a0a0a] to-black border border-[#1a1a1a]"
+        className="p-4 sm:p-6 rounded-xl bg-gradient-to-br from-adm-surface to-black border border-adm-line"
       >
-        <h3 className="text-base sm:text-lg font-bold mb-4 sm:mb-6">Recent inquiries</h3>
+        <h3 className="text-[15px] font-semibold text-adm-text mb-4 sm:mb-5">Recent inquiries</h3>
         {data === null ? (
-          <div className="text-sm text-gray-500">Loading...</div>
+          <div className="text-sm text-adm-subtle">Loading...</div>
         ) : data.length === 0 ? (
-          <div className="text-sm text-gray-500">No inquiries yet.</div>
+          <div className="text-sm text-adm-subtle">No inquiries yet.</div>
         ) : (
           <div className="space-y-2 sm:space-y-3">
             {data.slice(0, 5).map((i) => (
               <div
                 key={i.id}
-                className="flex items-center justify-between gap-3 p-3 sm:p-4 rounded-lg bg-[#1a1a1a]"
+                className="flex items-center justify-between gap-3 p-3 sm:p-4 rounded-lg bg-adm-raised"
               >
                 <div className="min-w-0 flex-1">
                   <p className="text-sm font-medium truncate">{i.full_name}</p>
-                  <p className="text-xs text-gray-500 mt-0.5 truncate">{i.email}</p>
+                  <p className="text-xs text-adm-subtle mt-0.5 truncate">{i.email}</p>
                 </div>
                 <span
                   className={`shrink-0 px-2 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wide border ${
@@ -304,7 +304,7 @@ export default function DashboardOverview() {
                 >
                   {i.outcome === 'qualified' ? 'Qualified' : 'Not'}
                 </span>
-                <span className="shrink-0 text-xs text-gray-500 whitespace-nowrap">
+                <span className="shrink-0 text-xs text-adm-subtle whitespace-nowrap">
                   {formatTimeAgo(i.created_at, now)}
                 </span>
               </div>
@@ -334,15 +334,15 @@ function FunnelTile({
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay }}
-      className="rounded-xl border border-[#1a1a1a] bg-gradient-to-br from-[#0a0a0a] to-black p-3 sm:p-4 hover:border-[#FFB829]/30 transition-colors"
+      className="rounded-xl border border-adm-line bg-gradient-to-br from-adm-surface to-black p-3 sm:p-4 hover:border-adm-accent/30 transition-colors"
     >
       <div className="flex items-center gap-2 mb-1.5">
-        <Icon className="w-3.5 h-3.5 text-[#FFB829]/80 shrink-0" />
-        <p className="text-[10px] uppercase tracking-[0.12em] text-gray-500 truncate">
+        <Icon className="w-3.5 h-3.5 text-adm-accent-ink/80 shrink-0" />
+        <p className="text-[10px] uppercase tracking-[0.12em] text-adm-subtle truncate">
           {label}
         </p>
       </div>
-      <p className="text-2xl font-bold text-white sm:text-3xl">{count}</p>
+      <p className="text-2xl font-bold text-adm-text sm:text-3xl">{count}</p>
     </motion.div>
   );
 }

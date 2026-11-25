@@ -52,8 +52,8 @@ export default function AdminSessionProvider({
 
   if (!checked) {
     return (
-      <div className="min-h-screen bg-black flex items-center justify-center">
-        <div className="w-6 h-6 rounded-full border-2 border-[#FFB829] border-t-transparent animate-spin" />
+      <div className="min-h-screen bg-adm-bg flex items-center justify-center">
+        <div className="w-6 h-6 rounded-full border-2 border-adm-accent border-t-transparent animate-spin" />
       </div>
     );
   }
