@@ -126,10 +126,6 @@ export function TeamGrid() {
               <span aria-hidden className="ml-1 text-gold/80">&rdquo;</span>
             </p>
           </blockquote>
-          <div aria-hidden className="mt-6 h-px w-16 bg-gradient-to-r from-transparent via-gold/60 to-transparent" />
-          <p className="mt-5 text-[11px] font-medium tracking-[0.28em] text-white/45 uppercase">
-            Hover over a profile to read their story
-          </p>
         </Reveal>
       </div>
 
