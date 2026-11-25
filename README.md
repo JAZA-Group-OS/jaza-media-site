@@ -1,34 +1,24 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-## Partner With Us — booking setup (REQUIRED before deploy)
+## Partner With Us — built-in booking (replaces Calendly)
 
-The Step 2 booking page (`/partner-with-us/book`) embeds Calendly via the
-URL set by `NEXT_PUBLIC_CALENDLY_URL`. Two manual setup steps are required
-in the Calendly account that owns this URL — without them, the embed
-still works but the team arrives at every discovery call without the
-lead's phone number or business context:
+Step 2 (`/partner-with-us/book`) uses JAZA's own booking system:
+`lib/booking/*`, `app/api/booking/*`, admin tab **Discovery Calls**.
 
-### 1. Add two Invitee Questions to the Calendly event
+Setup:
 
-In the Calendly event's "Booking page" → "Invitee Questions" settings,
-add **in this order**:
+1. **Database** — run `supabase/migrations/20261125000000_create_booking_system.sql`
+   in the Supabase SQL editor, plus the pg_cron job that POSTs to
+   `/api/booking/reminders` every 5 minutes with
+   `Authorization: Bearer $BOOKING_CRON_SECRET`.
+2. **Env vars (Vercel)** — `BOOKING_CRON_SECRET`, `GOOGLE_CLIENT_ID`,
+   `GOOGLE_CLIENT_SECRET`, `RESEND_API_KEY`, `RESEND_FROM_EMAIL`, `SITE_URL`.
+3. **Google** — create an OAuth client (Web) in Google Cloud with the Calendar
+   API enabled; authorised redirect URI:
+   `https://admin.<domain>/api/booking/google/callback`. Then in the admin
+   dashboard → Discovery Calls → **Connect Google Calendar**.
 
-1. "Best contact number" — text type
-2. "Tell us about your business" — long text type
-
-Order matters: the booking page passes them as `a1` and `a2` URL params,
-which Calendly maps positionally to the additional-question list.
-
-### 2. Set the env var
-
-Local: `cp .env.example .env.local` (the example contains the production
-URL as a sane default).
-
-Vercel: set `NEXT_PUBLIC_CALENDLY_URL` in Project Settings → Environment
-Variables for Production + Preview environments. The component validates
-the URL is `https://*.calendly.com` and falls back to a hardcoded URL if
-the env var is missing or untrusted, but configuring it explicitly lets
-you swap URLs without a redeploy.
+Without Google connected, bookings still work (no Meet link, no busy-time sync).
 
 ## Getting Started
 

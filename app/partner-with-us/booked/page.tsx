@@ -1,5 +1,8 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import { Suspense } from 'react';
+
+import { BookedDetails } from '@/components/partner/booked-details';
 
 export const metadata: Metadata = {
   title: "You're Booked — JAZA Media",
@@ -29,6 +32,9 @@ export default function BookedPage() {
         Check your inbox for the calendar invite. We&apos;ll see you on the
         call.
       </p>
+      <Suspense fallback={null}>
+        <BookedDetails />
+      </Suspense>
       <p className="mx-auto mt-3 max-w-md text-sm text-neutral-500 md:text-base">
         A member of our team will reach out before the call to confirm the
         agenda.

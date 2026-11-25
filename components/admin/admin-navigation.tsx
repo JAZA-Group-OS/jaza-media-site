@@ -8,6 +8,7 @@ import {
   BookOpen,
   FileBox,
   LifeBuoy,
+  CalendarDays,
   ChevronDown,
   Menu,
   X,
@@ -24,6 +25,7 @@ interface AdminNavigationProps {
 const MENU_ITEMS = [
   { id: 'overview', label: 'Dashboard', icon: LayoutDashboard },
   { id: 'leads', label: 'Partner Leads', icon: TrendingUp },
+  { id: 'bookings', label: 'Discovery Calls', icon: CalendarDays },
   { id: 'applications', label: 'Career Applications', icon: Briefcase },
   { id: 'course-rule-of-10x', label: 'Rule of 10X', icon: BookOpen },
   { id: 'course-marketing-templates', label: 'Marketing Templates', icon: FileBox },

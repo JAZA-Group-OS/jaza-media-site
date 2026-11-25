@@ -2,10 +2,11 @@
 
 import { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
-import { CalendarCheck, Check, Clock, Mail, Video } from 'lucide-react';
+import { CalendarCheck, Check, Clock, Video } from 'lucide-react';
 
-// Step 2 of Partner With Us. Calendly was removed — JAZA's own built-in
-// booking system will plug into the right-hand panel below.
+import { BookingCalendar } from '@/components/partner/booking-calendar';
+
+// Step 2 of Partner With Us: JAZA's built-in booking calendar (replaces Calendly).
 
 export function StepTwoBooking() {
   const titleRef = useRef<HTMLHeadingElement>(null);
@@ -48,7 +49,7 @@ export function StepTwoBooking() {
             <em className="bg-gradient-to-br from-[#fbe7a1] via-gold to-[#a97a1f] bg-clip-text pr-1 text-transparent italic">your growth.</em>
           </h1>
           <p className="mt-5 max-w-xl text-[16px] leading-[1.75] font-light text-white/65 md:text-[17px]">
-            You&apos;re one step away. Reach out and we&apos;ll set up your call — the Google Meet link goes straight to
+            You&apos;re one step away. Pick a time below — the Google Meet link goes straight to
             your inbox.
           </p>
 
@@ -140,22 +141,8 @@ export function StepTwoBooking() {
           </aside>
 
           <div className="rounded-[28px] bg-gradient-to-b from-gold/50 via-white/10 to-white/[0.03] p-px shadow-[0_60px_120px_-40px_rgba(0,0,0,0.95)]">
-            <div className="flex min-h-[420px] flex-col items-center justify-center gap-5 rounded-[27px] bg-[linear-gradient(180deg,#171612_0%,#0f0f10_80%)] px-8 py-14 text-center">
-              <span className="grid size-14 place-items-center rounded-2xl border border-gold/40 bg-gold/10 text-gold">
-                <CalendarCheck className="size-6" strokeWidth={1.6} />
-              </span>
-              <h2 className="font-serif text-[30px] leading-tight text-white">Online booking is coming soon</h2>
-              <p className="max-w-md text-[15px] leading-[1.7] text-white/60">
-                We&apos;re upgrading our booking calendar. In the meantime, email us and we&apos;ll arrange your discovery call
-                with you directly.
-              </p>
-              <a
-                href="mailto:admin@jazamedia.com"
-                className="careers-shine group inline-flex items-center gap-2.5 rounded-full bg-gold px-7 py-3.5 text-[12px] font-semibold tracking-[0.14em] text-ink uppercase transition hover:bg-white"
-              >
-                <Mail className="size-4" />
-                admin@jazamedia.com
-              </a>
+            <div className="rounded-[27px] bg-[linear-gradient(180deg,#171612_0%,#0f0f10_80%)]">
+              <BookingCalendar mode="book" />
             </div>
           </div>
         </div>

@@ -12,19 +12,21 @@ import PartnerLeadsManager from '@/components/admin/partner-leads-manager';
 import CareerApplicationsManager from '@/components/admin/career-applications-manager';
 import CourseRequestsManager from '@/components/admin/course-requests-manager';
 import SupportTicketsManager from '@/components/admin/support-tickets-manager';
+import BookingManager from '@/components/admin/booking-manager';
 import { COURSE_CATALOG } from '@/lib/courses/catalog';
 
-type DashboardTab =
+export type DashboardTab =
   | 'overview'
   | 'leads'
   | 'applications'
   | 'course-rule-of-10x'
   | 'course-marketing-templates'
-  | 'support';
+  | 'support'
+  | 'bookings';
 
-export default function AdminDashboardClient() {
+export default function AdminDashboardClient({ initialTab = 'overview' }: { initialTab?: DashboardTab }) {
   const router = useRouter();
-  const [activeTab, setActiveTab] = useState<DashboardTab>('overview');
+  const [activeTab, setActiveTab] = useState<DashboardTab>(initialTab);
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
@@ -74,6 +76,7 @@ export default function AdminDashboardClient() {
               />
             )}
             {activeTab === 'support' && <SupportTicketsManager />}
+            {activeTab === 'bookings' && <BookingManager />}
           </div>
         </div>
       </div>
