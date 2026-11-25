@@ -15,7 +15,7 @@ Setup:
    `GOOGLE_CLIENT_SECRET`, `RESEND_API_KEY`, `RESEND_FROM_EMAIL`, `SITE_URL`.
 3. **Google** — create an OAuth client (Web) in Google Cloud with the Calendar
    API enabled; authorised redirect URI:
-   `https://admin.<domain>/api/booking/google/callback`. Then in the admin
+   `https://<site host>/api/booking/google/callback` (the host you open the admin on). Then in the admin
    dashboard → Discovery Calls → **Connect Google Calendar**.
 
 Without Google connected, bookings still work (no Meet link, no busy-time sync).

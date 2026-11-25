@@ -8,7 +8,7 @@ export const runtime = 'nodejs';
 export async function GET(request: Request) {
   const url = new URL(request.url);
   const back = (status: string) => {
-    const res = NextResponse.redirect(new URL(`/dashboard?booking_google=${status}`, url.origin));
+    const res = NextResponse.redirect(new URL(`/admin/dashboard?booking_google=${status}`, url.origin));
     res.cookies.delete('booking_google_state');
     return res;
   };
