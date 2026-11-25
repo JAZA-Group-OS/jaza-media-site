@@ -176,12 +176,12 @@ export function StepTwoBooking() {
             tabIndex={-1}
             className="mt-8 max-w-3xl font-serif text-[40px] leading-[1.04] tracking-[-0.03em] outline-none md:text-[60px]"
           >
-            <span className="bg-gradient-to-b from-white via-white to-white/60 bg-clip-text text-transparent">Schedule your</span>{' '}
-            <em className="bg-gradient-to-br from-[#fbe7a1] via-gold to-[#a97a1f] bg-clip-text pr-1 text-transparent italic">discovery call</em>
+            <span className="bg-gradient-to-b from-white via-white to-white/60 bg-clip-text text-transparent">Let&apos;s talk about</span>{' '}
+            <em className="bg-gradient-to-br from-[#fbe7a1] via-gold to-[#a97a1f] bg-clip-text pr-1 text-transparent italic">your growth.</em>
           </h1>
           <p className="mt-5 max-w-xl text-[16px] leading-[1.75] font-light text-white/65 md:text-[17px]">
-            Thank you for your application. Please choose a date and time below — you&apos;ll receive a calendar invitation with a
-            Google Meet link once your call is confirmed.
+            You&apos;re one step away. Grab a time that suits you — we&apos;ll send the Google Meet link straight to your
+            inbox.
           </p>
 
           <ul className="mt-7 flex flex-wrap justify-center gap-2.5">
