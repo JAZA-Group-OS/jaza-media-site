@@ -2,7 +2,9 @@
 
 import { Menu, X } from "lucide-react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useCallback, useEffect, useId, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 
 import { NAV_LINKS } from "@/lib/site-nav";
 
@@ -13,6 +15,7 @@ export function MobileMenu({ className = "" }: { className?: string }) {
   const panelId = useId();
 
   const close = useCallback(() => setOpen(false), []);
+  const pathname = usePathname();
 
   // Auto-close when the viewport grows past the mobile breakpoint. The overlay
   // is hidden by `md:hidden` CSS only, so without this the menu state — and
@@ -106,50 +109,67 @@ export function MobileMenu({ className = "" }: { className?: string }) {
         <Menu className="size-9" strokeWidth={2.5} />
       </button>
 
-      {open ? (
-        <div
-          ref={dialogRef}
-          id={panelId}
-          className="fixed inset-0 z-50 flex flex-col bg-ink md:hidden"
-          role="dialog"
-          aria-modal="true"
-          aria-label="Site navigation"
-        >
-          <div className="flex items-center justify-between px-4 py-5">
-            <Link
-              href="/"
-              onClick={close}
-              className="font-display text-3xl tracking-[0.15em] text-white"
-              aria-label="JAZA home"
+      {/* Portal to <body>: the header pill uses backdrop-blur, which makes it the
+          containing block for position:fixed children and squeezed the menu
+          into the 56px pill. */}
+      {open
+        ? createPortal(
+            <div
+              ref={dialogRef}
+              id={panelId}
+              className="fixed inset-0 z-[100] flex flex-col overflow-hidden bg-[#0b0d0c] text-white md:hidden"
+              role="dialog"
+              aria-modal="true"
+              aria-label="Site navigation"
             >
-              JAZA
-            </Link>
-            <button
-              type="button"
-              onClick={close}
-              aria-label="Close menu"
-              className="text-white"
-            >
-              <X className="size-9" strokeWidth={2.5} />
-            </button>
-          </div>
-          <nav className="flex-1 overflow-y-auto px-4 pb-8">
-            <ul className="space-y-3">
-              {NAV_LINKS.map((link) => (
-                <li key={link.label}>
-                  <Link
-                    href={link.href}
-                    onClick={close}
-                    className="block border-b border-white/10 py-5 font-serif text-3xl text-white"
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </nav>
-        </div>
-      ) : null}
+              <div aria-hidden className="pointer-events-none absolute -top-40 left-1/2 size-[600px] -translate-x-1/2 rounded-full bg-gold/10 blur-[140px]" />
+              <div aria-hidden className="pointer-events-none absolute inset-0 opacity-[0.05] [background-image:radial-gradient(white_1px,transparent_1px)] [background-size:4px_4px]" />
+              <div className="relative flex items-center justify-between px-6 pt-6 pb-4">
+                <Link href="/" onClick={close} aria-label="JAZA Media home" className="flex flex-col items-center leading-none">
+                  <span className="font-display text-[28px] tracking-[0.18em]">JAZA</span>
+                  <span className="mt-0.5 pl-[0.35em] text-[10px] font-semibold tracking-[0.35em] text-gold">MEDIA</span>
+                </Link>
+                <button
+                  type="button"
+                  onClick={close}
+                  aria-label="Close menu"
+                  className="grid size-11 place-items-center rounded-full border border-white/15 text-white transition hover:border-gold/60"
+                >
+                  <X className="size-5" strokeWidth={2} />
+                </button>
+              </div>
+              <nav className="relative flex-1 overflow-y-auto px-6 pt-6 pb-8" aria-label="Main">
+                <ul>
+                  {NAV_LINKS.map((link, i) => {
+                    const active = pathname === link.href || pathname.startsWith(`${link.href}/`);
+                    return (
+                      <li key={link.label} className="animate-about-fade-up" style={{ animationDelay: `${60 + i * 60}ms` }}>
+                        <Link
+                          href={link.href}
+                          onClick={close}
+                          className="group flex items-center justify-between border-b border-white/10 py-5"
+                        >
+                          <span className={`font-serif text-[34px] leading-none ${active ? "text-gold italic" : "text-white"}`}>{link.label}</span>
+                          <span className="text-xs tracking-[0.2em] text-white/30">0{i + 1}</span>
+                        </Link>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </nav>
+              <div className="relative px-6 pb-8">
+                <Link
+                  href="/partner-with-us"
+                  onClick={close}
+                  className="flex w-full items-center justify-center rounded-full bg-gold py-4 text-[12px] font-semibold tracking-[0.16em] text-ink uppercase"
+                >
+                  Partner With Us
+                </Link>
+              </div>
+            </div>,
+            document.body,
+          )
+        : null}
     </>
   );
 }
