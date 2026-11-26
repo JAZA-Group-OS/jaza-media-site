@@ -85,7 +85,7 @@ export default function AdminLoginPage() {
               className="mx-auto mb-4 h-[72px] w-[72px] rounded-2xl ring-1 ring-[#FFC400]/40 shadow-[0_0_24px_rgba(255,196,0,0.18)]"
             />
             <h1 className="text-4xl sm:text-5xl font-bold mb-4 tracking-tight">
-              Admin<span className="text-[#FFC400]">Access</span>
+              JAZA Media <span className="text-[#FFC400]">Access</span>
             </h1>
             <div className="w-20 h-1.5 bg-[#FFC400] mx-auto rounded-full" />
           </div>
