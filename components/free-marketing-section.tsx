@@ -37,8 +37,13 @@ const COURSES = [
 export function FreeMarketingSection() {
   return (
     <section id="free-advance-marketing" className="home-slide relative overflow-hidden bg-[#FAF8F3] py-14 text-ink md:flex md:min-h-[calc(100svh-114px)] md:flex-col md:justify-center md:py-10">
-      <div aria-hidden className="pointer-events-none absolute -top-32 -right-32 size-[420px] rounded-full bg-[radial-gradient(closest-side,rgba(255,196,0,0.35),transparent)]" />
-      <div aria-hidden className="pointer-events-none absolute -bottom-40 -left-40 size-[420px] rounded-full bg-[radial-gradient(closest-side,rgba(255,196,0,0.3),transparent)]" />
+      {/* faint dot grid, fading out toward the centre */}
+      <div aria-hidden className="pointer-events-none absolute inset-0 bg-[radial-gradient(rgba(17,17,17,0.09)_1px,transparent_1px)] [background-size:22px_22px] [mask-image:radial-gradient(ellipse_at_center,transparent_35%,black_85%)]" />
+      {/* thin gold rings in the corners */}
+      <div aria-hidden className="pointer-events-none absolute -top-48 -right-48 size-[440px] rounded-full border-[1.5px] border-[#FFC400]/60" />
+      <div aria-hidden className="pointer-events-none absolute -top-32 -right-32 size-[280px] rounded-full border border-[#FFC400]/35" />
+      <div aria-hidden className="pointer-events-none absolute -bottom-56 -left-56 size-[480px] rounded-full border-[1.5px] border-[#FFC400]/60" />
+      <div aria-hidden className="pointer-events-none absolute -bottom-36 -left-36 size-[300px] rounded-full border border-[#FFC400]/35" />
       <div className="relative mx-auto w-full max-w-[1320px] px-4 md:px-8">
         <Reveal className="flex items-end justify-between gap-6">
           <div>
