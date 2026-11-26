@@ -100,8 +100,9 @@ export default function AdminLoginPage() {
                 </span>
               </div>
             </div>
-            <h1 className="font-[family-name:var(--font-heading)] text-2xl sm:text-[1.7rem] font-bold leading-tight mb-2 tracking-tight -translate-y-10">
-              JAZA Media <span className="text-[#FFC400]">Access</span>
+            <h1 className="font-[family-name:var(--font-display)] text-[2rem] sm:text-[2.4rem] font-normal leading-tight mb-2 tracking-[0.01em] text-[#f6f1e4] -translate-y-10">
+              JAZA Media{' '}
+              <span className="font-[family-name:var(--font-serif)] italic text-[#FFC400]">Access</span>
             </h1>
             <div className="w-10 h-[3px] bg-[#FFC400] mx-auto rounded-full -translate-y-10" />
           </div>
