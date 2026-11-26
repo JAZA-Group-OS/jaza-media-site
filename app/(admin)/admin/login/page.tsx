@@ -96,19 +96,11 @@ export default function AdminLoginPage() {
           <div className="pointer-events-none absolute -bottom-[2px] left-1/2 h-[3px] w-[30%] -translate-x-1/2 rounded-full bg-[#FFE27A] blur-[2px]" />
           <div className="pointer-events-none absolute -bottom-10 left-1/2 h-16 w-[60%] -translate-x-1/2 rounded-[50%] bg-[radial-gradient(closest-side,rgba(255,180,0,0.35),transparent)]" />
 
-          <div className="text-center mb-6">
+          <div className="text-center mb-5">
             <div
               className="relative mx-auto mb-3 -translate-x-[7px] -translate-y-[153px]"
               style={{ width: logoW, height: logoW / 2.5 }}
             >
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src="/images/jaza-media-icon.png"
-                alt="JAZA Media"
-                width={140}
-                height={56}
-                className={`h-full w-full rounded-md object-cover object-center ${resizeMode ? 'outline-1 outline-dashed outline-[#FFC400]/70' : ''}`}
-              />
               {resizeMode && (
                 <>
                   <div
@@ -122,10 +114,10 @@ export default function AdminLoginPage() {
                 </>
               )}
             </div>
-            <h1 className="text-2xl sm:text-3xl font-bold mb-3 tracking-tight">
+            <h1 className="font-[family-name:var(--font-heading)] text-2xl sm:text-[1.7rem] font-bold leading-tight mb-2 tracking-tight">
               JAZA Media <span className="text-[#FFC400]">Access</span>
             </h1>
-            <div className="w-14 h-1 bg-[#FFC400] mx-auto rounded-full" />
+            <div className="w-10 h-[3px] bg-[#FFC400] mx-auto rounded-full" />
           </div>
 
           {error && (
