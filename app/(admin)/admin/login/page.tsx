@@ -41,39 +41,27 @@ export default function AdminLoginPage() {
   const fieldBox =
     'group flex items-center rounded-2xl bg-[#1c1c1f]/90 border border-white/10 transition-all focus-within:border-[#FFC400] focus-within:shadow-[0_0_0_1px_#FFC400,0_0_18px_rgba(255,196,0,0.18)]';
   const fieldIcon =
-    'flex items-center pl-5 pr-4 text-white/60 group-focus-within:text-[#FFC400] transition-colors';
+    'relative flex items-center pl-5 pr-5 text-white/60 group-focus-within:text-[#FFC400] transition-colors after:absolute after:right-0 after:top-1/2 after:h-6 after:w-px after:-translate-y-1/2 after:bg-white/25';
   const fieldInput =
-    'flex-1 min-w-0 bg-transparent py-4 pl-4 pr-4 border-l border-white/20 text-white placeholder:text-white/35 focus:outline-none';
+    'flex-1 min-w-0 bg-transparent py-4 pl-4 pr-4 text-white placeholder:text-white/35 focus:outline-none';
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-[#0b0b0c] flex items-center justify-center px-4 text-white">
-      {/* Glowing gold swooshes */}
-      <svg
+    <div className="relative min-h-screen overflow-hidden bg-[#0f0f11] flex items-center justify-center px-4 text-white">
+      {/* Glowing gold swooshes — cut from the approved design */}
+      {/* eslint-disable @next/next/no-img-element */}
+      <img
+        src="/images/admin-swoosh-tl.png"
+        alt=""
         aria-hidden
-        className="pointer-events-none absolute inset-0 h-full w-full"
-        viewBox="0 0 1700 920"
-        preserveAspectRatio="none"
-      >
-        <defs>
-          <linearGradient id="swoosh-gold" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0" stopColor="#FFC400" />
-            <stop offset="1" stopColor="#FF9F00" />
-          </linearGradient>
-          <linearGradient id="swoosh-grey" x1="0" y1="0" x2="1" y2="0">
-            <stop offset="0" stopColor="#3a3a3d" stopOpacity="0.7" />
-            <stop offset="1" stopColor="#1a1a1c" stopOpacity="0" />
-          </linearGradient>
-          <filter id="swoosh-glow" x="-20%" y="-20%" width="140%" height="140%">
-            <feGaussianBlur stdDeviation="10" />
-          </filter>
-        </defs>
-        <path d="M0 230 C 180 90, 330 130, 620 0 L 0 0 Z" fill="url(#swoosh-grey)" />
-        <path d="M0 200 C 120 90, 200 30, 300 0" stroke="url(#swoosh-gold)" strokeWidth="14" fill="none" filter="url(#swoosh-glow)" />
-        <path d="M0 200 C 120 90, 200 30, 300 0" stroke="#FFD23F" strokeWidth="3" fill="none" />
-        <path d="M1700 640 C 1560 820, 1250 760, 960 920 L 1700 920 Z" fill="url(#swoosh-grey)" />
-        <path d="M1700 680 C 1600 800, 1500 860, 1380 920" stroke="url(#swoosh-gold)" strokeWidth="14" fill="none" filter="url(#swoosh-glow)" />
-        <path d="M1700 680 C 1600 800, 1500 860, 1380 920" stroke="#FFD23F" strokeWidth="3" fill="none" />
-      </svg>
+        className="pointer-events-none select-none absolute top-0 left-0 w-[min(640px,75vw)] h-auto [mask-image:linear-gradient(to_right,black_45%,transparent),linear-gradient(to_bottom,black_45%,transparent)] [mask-composite:intersect]"
+      />
+      <img
+        src="/images/admin-swoosh-br.png"
+        alt=""
+        aria-hidden
+        className="pointer-events-none select-none absolute bottom-0 right-0 w-[min(535px,70vw)] h-auto [mask-image:linear-gradient(to_left,black_45%,transparent),linear-gradient(to_top,black_45%,transparent)] [mask-composite:intersect]"
+      />
+      {/* eslint-enable @next/next/no-img-element */}
 
       <motion.div
         initial={{ opacity: 0, y: 20 }}
@@ -81,13 +69,21 @@ export default function AdminLoginPage() {
         transition={{ duration: 0.5 }}
         className="relative w-full max-w-[600px]"
       >
-        <div className="relative rounded-[2.5rem] border border-[#FFC400]/40 bg-gradient-to-br from-[#1d1b16]/95 via-[#0e0e10]/95 to-[#08080a]/95 px-6 py-8 sm:px-12 sm:py-10 shadow-[0_0_40px_rgba(255,196,0,0.08),0_30px_60px_-20px_rgba(0,0,0,0.8)] backdrop-blur">
+        <div className="relative rounded-[2.5rem] border-[1.5px] border-[#E8B400]/70 bg-[#0c0c0e] bg-[radial-gradient(120%_70%_at_0%_0%,rgba(255,196,0,0.14),transparent_55%),linear-gradient(180deg,#141416,#08080a)] px-6 py-8 sm:px-12 sm:py-10 shadow-[inset_0_1px_0_rgba(255,220,120,0.25),0_0_30px_rgba(255,196,0,0.10),0_30px_60px_-20px_rgba(0,0,0,0.85)]">
           {/* bottom edge glow */}
-          <div className="pointer-events-none absolute -bottom-px left-1/2 h-px w-1/2 -translate-x-1/2 bg-gradient-to-r from-transparent via-[#FFC400] to-transparent" />
-          <div className="pointer-events-none absolute -bottom-6 left-1/2 h-10 w-1/3 -translate-x-1/2 rounded-full bg-[#FFC400]/25 blur-2xl" />
+          <div className="pointer-events-none absolute -bottom-[1.5px] left-1/2 h-[2px] w-[70%] -translate-x-1/2 bg-gradient-to-r from-transparent via-[#FFC400] to-transparent" />
+          <div className="pointer-events-none absolute -bottom-[2px] left-1/2 h-[3px] w-[30%] -translate-x-1/2 rounded-full bg-[#FFE27A] blur-[2px]" />
+          <div className="pointer-events-none absolute -bottom-10 left-1/2 h-16 w-[60%] -translate-x-1/2 rounded-[50%] bg-[radial-gradient(closest-side,rgba(255,180,0,0.35),transparent)]" />
 
           <div className="text-center mb-10">
-            <Lock className="mx-auto mb-3 h-10 w-10 text-[#FFC400] fill-[#FFC400]/20" strokeWidth={2.5} />
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/images/jaza-media-icon.png"
+              alt="JAZA Media"
+              width={72}
+              height={72}
+              className="mx-auto mb-4 h-[72px] w-[72px] rounded-2xl ring-1 ring-[#FFC400]/40 shadow-[0_0_24px_rgba(255,196,0,0.18)]"
+            />
             <h1 className="text-4xl sm:text-5xl font-bold mb-4 tracking-tight">
               Admin<span className="text-[#FFC400]">Access</span>
             </h1>
