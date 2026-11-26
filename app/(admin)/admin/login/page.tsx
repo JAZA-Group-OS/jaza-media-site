@@ -3,7 +3,7 @@
 import type React from 'react';
 
 import { motion } from 'framer-motion';
-import { useState } from 'react';
+import { useState, useSyncExternalStore } from 'react';
 import { Eye, EyeOff, Lock, Mail, ShieldCheck } from 'lucide-react';
 import { supabase } from '@/lib/supabase/client';
 
@@ -13,6 +13,27 @@ export default function AdminLoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+
+  // Temporary sizing tool: /admin/login?resize=1 shows a handle on the logo.
+  const resizeMode = useSyncExternalStore(
+    () => () => {},
+    () => new URLSearchParams(window.location.search).has('resize'),
+    () => false,
+  );
+  const [logoW, setLogoW] = useState(140);
+  const startLogoResize = (e: React.PointerEvent) => {
+    e.preventDefault();
+    const sx = e.clientX;
+    const sw = logoW;
+    // logo is centered, so it grows by twice the pointer travel
+    const move = (ev: PointerEvent) => setLogoW(Math.max(40, Math.round(sw + (ev.clientX - sx) * 2)));
+    const up = () => {
+      window.removeEventListener('pointermove', move);
+      window.removeEventListener('pointerup', up);
+    };
+    window.addEventListener('pointermove', move);
+    window.addEventListener('pointerup', up);
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -76,14 +97,31 @@ export default function AdminLoginPage() {
           <div className="pointer-events-none absolute -bottom-10 left-1/2 h-16 w-[60%] -translate-x-1/2 rounded-[50%] bg-[radial-gradient(closest-side,rgba(255,180,0,0.35),transparent)]" />
 
           <div className="text-center mb-6">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="/images/jaza-media-icon.png"
-              alt="JAZA Media"
-              width={140}
-              height={56}
-              className="relative mx-auto mb-3 h-14 w-[140px] -translate-x-[7px] -translate-y-[153px] rounded-md object-cover object-center"
-            />
+            <div
+              className="relative mx-auto mb-3 -translate-x-[7px] -translate-y-[153px]"
+              style={{ width: logoW, height: logoW / 2.5 }}
+            >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/images/jaza-media-icon.png"
+                alt="JAZA Media"
+                width={140}
+                height={56}
+                className={`h-full w-full rounded-md object-cover object-center ${resizeMode ? 'outline-1 outline-dashed outline-[#FFC400]/70' : ''}`}
+              />
+              {resizeMode && (
+                <>
+                  <div
+                    onPointerDown={startLogoResize}
+                    title="Drag to resize"
+                    className="absolute -bottom-2 -right-2 h-4 w-4 cursor-nwse-resize rounded-sm bg-[#FFC400] ring-2 ring-black touch-none"
+                  />
+                  <div className="absolute -bottom-7 left-1/2 -translate-x-1/2 whitespace-nowrap rounded bg-black/80 px-2 py-0.5 font-mono text-xs text-[#FFC400]">
+                    logo {logoW} × {Math.round(logoW / 2.5)}px
+                  </div>
+                </>
+              )}
+            </div>
             <h1 className="text-2xl sm:text-3xl font-bold mb-3 tracking-tight">
               JAZA Media <span className="text-[#FFC400]">Access</span>
             </h1>
