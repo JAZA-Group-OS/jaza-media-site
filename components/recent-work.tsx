@@ -21,6 +21,13 @@ const WORKS = [
     title: "Attention, turned into revenue.",
     copy: "Our own playbook in 30 seconds — how we plan, create and scale ads that bring buyers, not just likes.",
   },
+  {
+    src: "/videos/monthly-graphics-package.mp4",
+    poster: "/videos/monthly-graphics-package.jpg",
+    tag: "Design · Monthly Package",
+    title: "A month of scroll-stoppers.",
+    copy: "Fresh, on-brand graphics delivered every month — so your feed never goes quiet and never looks ordinary.",
+  },
 ];
 
 function WorkVideo({ src, poster, tag, title, copy }: (typeof WORKS)[number]) {
@@ -127,9 +134,9 @@ export function RecentWork() {
           </p>
         </Reveal>
 
-        <div className="mx-auto mt-10 grid max-w-[300px] gap-10 sm:max-w-[640px] sm:grid-cols-2 md:mt-14 md:gap-8">
+        <div className="mx-auto mt-10 grid max-w-[300px] gap-10 sm:max-w-[640px] sm:grid-cols-2 md:mt-14 md:gap-8 lg:max-w-[960px] lg:grid-cols-3">
           {WORKS.map((w, i) => (
-            <Reveal key={w.src} className={i === 1 ? "sm:mt-10" : ""}>
+            <Reveal key={w.src} className={i === 1 ? "sm:mt-10" : i === 2 ? "sm:col-span-2 sm:mx-auto sm:w-[calc(50%-1rem)] lg:col-span-1 lg:w-auto" : ""}>
               <WorkVideo {...w} />
             </Reveal>
           ))}
