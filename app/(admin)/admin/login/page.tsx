@@ -78,15 +78,27 @@ export default function AdminLoginPage() {
           <div className="text-center mb-5">
             {/* fixed-size spacer: the logo floats above the card without shifting the form */}
             <div className="relative mx-auto mb-3 h-14 w-[140px]">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src="/images/jaza-media-icon.png"
-                alt="JAZA Media"
-                width={280}
-                height={112}
-                draggable={false}
-                className="absolute left-1/2 top-0 h-[112px] w-[280px] max-w-none -translate-x-1/2 -translate-y-[199px] select-none rounded-md object-cover object-center"
-              />
+              {/* Live-text wordmark: crisp at any size, no black box */}
+              <div
+                role="img"
+                aria-label="JAZA Media"
+                className="absolute left-1/2 top-0 flex h-[112px] w-[280px] -translate-x-1/2 -translate-y-[199px] select-none flex-col items-center justify-center"
+              >
+                <span
+                  aria-hidden
+                  className="font-[family-name:var(--font-display)] text-[84px] leading-[0.9] tracking-[0.04em] bg-gradient-to-b from-white via-[#f6f1e4] to-[#cfc6b0] bg-clip-text text-transparent drop-shadow-[0_2px_12px_rgba(0,0,0,0.6)]"
+                >
+                  JAZA
+                </span>
+                <span
+                  aria-hidden
+                  className="mt-1 flex w-full items-center justify-center gap-3 font-[family-name:var(--font-heading)] text-[15px] font-semibold tracking-[0.5em] text-[#FFC400] drop-shadow-[0_0_10px_rgba(255,196,0,0.45)]"
+                >
+                  <span className="h-px w-8 bg-gradient-to-r from-transparent to-[#FFC400]/70" />
+                  <span className="-mr-[0.5em]">MEDIA</span>
+                  <span className="h-px w-8 bg-gradient-to-l from-transparent to-[#FFC400]/70" />
+                </span>
+              </div>
             </div>
             <h1 className="font-[family-name:var(--font-heading)] text-2xl sm:text-[1.7rem] font-bold leading-tight mb-2 tracking-tight">
               JAZA Media <span className="text-[#FFC400]">Access</span>
