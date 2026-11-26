@@ -36,50 +36,52 @@ const COURSES = [
 
 export function FreeMarketingSection() {
   return (
-    <section id="free-advance-marketing" className="relative bg-ink pt-10 pb-24 text-white md:pt-14 md:pb-32">
-      <div className="mx-auto max-w-7xl px-4 md:px-6">
+    <section id="free-advance-marketing" className="home-slide relative overflow-hidden bg-[#FAF8F3] py-14 text-ink md:flex md:min-h-[calc(100svh-114px)] md:flex-col md:justify-center md:py-10">
+      <div aria-hidden className="pointer-events-none absolute -top-32 -right-32 size-[420px] rounded-full bg-[radial-gradient(closest-side,rgba(255,196,0,0.35),transparent)]" />
+      <div aria-hidden className="pointer-events-none absolute -bottom-40 -left-40 size-[420px] rounded-full bg-[radial-gradient(closest-side,rgba(255,196,0,0.3),transparent)]" />
+      <div className="relative mx-auto w-full max-w-6xl px-4 md:px-6">
         <Reveal className="flex items-end justify-between gap-6">
           <div>
-            <p className="text-[11px] font-medium tracking-[0.35em] text-gold/90">FREE RESOURCES</p>
-            <h2 className="mt-4 font-serif text-4xl leading-[1.02] tracking-[-0.02em] md:text-6xl">
-              Free <em className="text-gold">advanced</em> marketing
+            <p className="flex items-center gap-3 text-[12px] font-bold tracking-[0.3em] text-ink">FREE RESOURCES <span className="h-0.5 w-12 rounded bg-[#FFC400]" /></p>
+            <h2 className="mt-4 font-serif text-4xl font-bold leading-[1.02] tracking-[-0.02em] md:text-6xl">
+              Free <span className="text-[#FFC400]">advanced</span> marketing
             </h2>
-            <p className="mt-4 max-w-md text-[15px] leading-relaxed font-light text-white/55">
+            <p className="mt-4 max-w-md text-[16px] leading-relaxed text-ink/70">
               Videos, eBooks, guides, templates &amp; downloads to help you succeed.
             </p>
           </div>
           <Link
             href="/courses/rule-of-10x"
-            className="group hidden shrink-0 items-center gap-2 text-sm text-white/80 transition hover:text-white md:inline-flex"
+            className="group hidden shrink-0 items-center gap-2 border-b-2 border-[#FFC400] pb-1 text-[15px] font-medium text-ink transition hover:text-black md:inline-flex"
           >
             Browse all
             <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" />
           </Link>
         </Reveal>
 
-        <div className="mt-12 grid gap-6 md:grid-cols-3">
+        <div className="mt-10 grid gap-6 md:mx-auto md:max-w-[min(100%,calc((100svh-480px)*3.4))] md:grid-cols-3">
           {COURSES.map((c, i) => (
             <Reveal key={c.title} delay={i * 0.08}>
-              <Link href={c.href} className="group block">
+              <Link href={c.href} className="group block overflow-hidden rounded-2xl border border-black/10 bg-white shadow-[0_20px_50px_-30px_rgba(0,0,0,0.35)] transition duration-500 hover:-translate-y-1 hover:shadow-[0_30px_60px_-30px_rgba(0,0,0,0.45)]">
                 <div
-                  className={`relative flex aspect-[4/3] items-center justify-center overflow-hidden rounded-2xl ring-1 ring-white/10 transition duration-500 group-hover:ring-white/25 ${
+                  className={`relative flex aspect-[4/3] items-center justify-center overflow-hidden ${
                     c.dark
-                      ? "bg-[radial-gradient(120%_90%_at_20%_0%,#3a2f12_0%,#141414_55%,#0b0b0b_100%)]"
+                      ? "bg-[linear-gradient(160deg,#FBF6EA_0%,#F1EBDD_100%)]"
                       : i === 0
-                        ? "bg-[radial-gradient(120%_90%_at_15%_0%,#2b2b2b_0%,#151515_55%,#0b0b0b_100%)]"
-                        : "bg-[radial-gradient(120%_90%_at_85%_0%,#4a3a10_0%,#171512_55%,#0b0b0b_100%)]"
+                        ? "bg-[linear-gradient(160deg,#F7F5F0_0%,#E9E5DC_100%)]"
+                        : "bg-[linear-gradient(160deg,#FBF7EC_0%,#ECE6D6_100%)]"
                   }`}
                 >
                   {/* glossy sheen */}
                   <div aria-hidden className="pointer-events-none absolute inset-0 bg-[linear-gradient(115deg,transparent_35%,rgba(255,255,255,0.06)_50%,transparent_65%)]" />
-                  <div aria-hidden className="anim-glow-breathe absolute size-56 rounded-full bg-gold/20 blur-[70px] transition-colors duration-500 group-hover:bg-gold/30" style={{ animationDelay: `${i * -1.6}s` }} />
+                  <div aria-hidden className="anim-glow-breathe absolute size-56 rounded-full bg-white/70 blur-[70px] transition-colors duration-500" style={{ animationDelay: `${i * -1.6}s` }} />
                   {c.dark ? (
                     /* "screen recording": framed window slowly scrolling the team collage */
-                    <div className="absolute inset-x-[9%] top-[13%] bottom-0 overflow-hidden rounded-t-xl bg-black shadow-[0_-10px_60px_-10px_rgba(234,179,8,0.35)] ring-1 ring-white/15 transition duration-700 group-hover:-translate-y-1.5">
-                      <div className="relative z-10 flex h-6 items-center gap-1.5 border-b border-white/10 bg-[#161616] px-3">
-                        <span className="size-2 rounded-full bg-white/20" />
-                        <span className="size-2 rounded-full bg-white/20" />
-                        <span className="size-2 rounded-full bg-white/20" />
+                    <div className="absolute inset-x-[9%] top-[13%] bottom-0 overflow-hidden rounded-t-xl bg-white shadow-[0_-10px_40px_-15px_rgba(0,0,0,0.3)] ring-1 ring-black/10 transition duration-700 group-hover:-translate-y-1.5">
+                      <div className="relative z-10 flex h-6 items-center gap-1.5 border-b border-black/10 bg-[#F3F1EC] px-3">
+                        <span className="size-2 rounded-full bg-black/15" />
+                        <span className="size-2 rounded-full bg-black/15" />
+                        <span className="size-2 rounded-full bg-black/15" />
                       </div>
                       <div className="anim-screen-scroll" style={{ animationDelay: `${i * -3}s` }}>
                         <Image src={c.image} alt={c.alt} width={1536} height={2400} sizes="400px" className="w-full" />
@@ -94,7 +96,7 @@ export function FreeMarketingSection() {
                           width={1600}
                           height={2500}
                           sizes="220px"
-                          className="h-full w-auto rounded-sm shadow-[0_30px_60px_-15px_rgba(0,0,0,0.8)] transition duration-700 group-hover:scale-[1.05]"
+                          className="h-full w-auto rounded-sm shadow-[0_25px_45px_-15px_rgba(0,0,0,0.55)] transition duration-700 group-hover:scale-[1.05]"
                         />
                       </div>
                     </div>
@@ -103,16 +105,16 @@ export function FreeMarketingSection() {
                   <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
                     <div className="anim-card-streak absolute -inset-y-1/2 left-0 w-1/4 rotate-[20deg] bg-gradient-to-r from-transparent via-white/[0.12] to-transparent" style={{ animationDelay: `${i * 1.5}s` }} />
                   </div>
-                  <span className="absolute top-4 left-4 rounded-full border border-white/10 bg-black/40 px-3 py-1 text-[10px] font-medium tracking-[0.22em] text-gold uppercase backdrop-blur">
+                  <span className="absolute top-4 left-4 z-10 rounded-full bg-[#FFC400] px-3.5 py-1.5 text-[10px] font-bold tracking-[0.18em] text-ink uppercase shadow-[0_4px_12px_-4px_rgba(0,0,0,0.3)]">
                     {c.tag}
                   </span>
                 </div>
-                <div className="mt-5 flex items-center justify-between gap-4">
+                <div className="flex items-center justify-between gap-4 px-5 py-4">
                   <div>
-                    <h3 className="text-lg font-medium text-white">{c.title}</h3>
-                    <p className="mt-0.5 text-sm text-white/45">{c.cta}</p>
+                    <h3 className="font-serif text-lg font-semibold text-ink">{c.title}</h3>
+                    <p className="mt-0.5 text-sm text-ink/60">{c.cta}</p>
                   </div>
-                  <span className="grid size-10 shrink-0 place-items-center rounded-full border border-white/15 text-white/80 transition group-hover:rotate-45 group-hover:border-gold group-hover:bg-gold group-hover:text-ink">
+                  <span className="grid size-10 shrink-0 place-items-center rounded-full border-2 border-ink text-ink transition group-hover:rotate-45 group-hover:border-gold group-hover:bg-gold group-hover:text-ink">
                     <ArrowUpRight className="size-4" />
                   </span>
                 </div>
