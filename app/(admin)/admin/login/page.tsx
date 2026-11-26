@@ -3,7 +3,7 @@
 import type React from 'react';
 
 import { motion } from 'framer-motion';
-import { useState } from 'react';
+import { useEffect, useRef, useState, useSyncExternalStore } from 'react';
 import { Eye, EyeOff, Lock, Mail, ShieldCheck } from 'lucide-react';
 import { supabase } from '@/lib/supabase/client';
 
@@ -13,6 +13,25 @@ export default function AdminLoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+
+  // Temporary sizing tool: open /admin/login?resize=1 and drag the card's
+  // bottom-right corner; the live width x height shows above the card.
+  const resizeMode = useSyncExternalStore(
+    () => () => {},
+    () => new URLSearchParams(window.location.search).has('resize'),
+    () => false,
+  );
+  const [cardSize, setCardSize] = useState({ w: 0, h: 0 });
+  const cardRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (!resizeMode || !cardRef.current) return;
+    const el = cardRef.current;
+    const ro = new ResizeObserver(() =>
+      setCardSize({ w: Math.round(el.offsetWidth), h: Math.round(el.offsetHeight) }),
+    );
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, [resizeMode]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -63,11 +82,21 @@ export default function AdminLoginPage() {
       />
       {/* eslint-enable @next/next/no-img-element */}
 
+      {resizeMode && (
+        <div className="fixed top-4 left-1/2 z-50 -translate-x-1/2 rounded-full bg-black/80 px-4 py-2 text-sm font-mono text-[#FFC400] ring-1 ring-[#FFC400]/40">
+          {cardSize.w} × {cardSize.h}px — drag the card&apos;s bottom-right corner
+        </div>
+      )}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="relative w-full max-w-[420px]"
+        ref={cardRef}
+        className={
+          resizeMode
+            ? 'relative w-[420px] max-w-[95vw] min-w-[280px] resize overflow-hidden outline-1 outline-dashed outline-[#FFC400]/60 [&>div]:h-full'
+            : 'relative w-full max-w-[420px]'
+        }
       >
         <div className="relative rounded-[2rem] border-[1.5px] border-[#E8B400]/70 bg-[#0c0c0e] bg-[radial-gradient(120%_70%_at_0%_0%,rgba(255,196,0,0.14),transparent_55%),linear-gradient(180deg,#141416,#08080a)] px-6 py-7 sm:px-8 sm:py-8 shadow-[inset_0_1px_0_rgba(255,220,120,0.25),0_0_30px_rgba(255,196,0,0.10),0_30px_60px_-20px_rgba(0,0,0,0.85)]">
           {/* bottom edge glow */}
