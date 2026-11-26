@@ -24,7 +24,7 @@ export function Hero() {
         <path d="M0 360 C 160 230, 330 110, 560 0" fill="none" stroke="#ffca26" strokeOpacity="0.35" strokeWidth="1.5" />
         <path d="M0 400 C 140 250, 320 100, 600 0 L 0 0 Z" fill="#ffca26" fillOpacity="0.05" />
       </svg>
-      <svg aria-hidden viewBox="0 0 600 400" preserveAspectRatio="none" className="pointer-events-none absolute right-0 -bottom-6 hidden h-[420px] w-[42%] md:block">
+      <svg aria-hidden viewBox="0 0 600 400" preserveAspectRatio="none" className="pointer-events-none absolute right-0 bottom-16 hidden h-[420px] w-[42%] md:block">
         <defs>
           <linearGradient id="hero-sweep-b" x1="0" y1="1" x2="1" y2="0">
             <stop offset="0" stopColor="#ffca26" stopOpacity="0" />
@@ -35,6 +35,9 @@ export function Hero() {
         <path d="M0 400 C 260 330, 460 210, 600 40 L 600 60 C 460 220, 260 340, 0 400 Z" fill="url(#hero-sweep-b)" />
         <path d="M60 400 C 300 330, 480 230, 600 110" fill="none" stroke="#ffca26" strokeOpacity="0.4" strokeWidth="1.5" />
       </svg>
+
+      {/* bottom fade — off-white melts into the white section below, no seam */}
+      <div aria-hidden className="pointer-events-none absolute inset-x-0 bottom-0 z-[5] h-40 bg-gradient-to-b from-transparent to-white" />
 
       <div className="relative z-10 mx-auto flex max-w-6xl flex-col items-center px-4 pt-12 text-center md:px-6 md:pt-20">
         <Reveal>
