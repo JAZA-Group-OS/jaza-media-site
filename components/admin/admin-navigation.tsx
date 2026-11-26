@@ -94,10 +94,26 @@ export default function AdminNavigation({
   const content = (mini: boolean) => (
     <div className="flex h-full flex-col text-white">
       {/* brand + collapse */}
-      <div className={`flex h-[72px] shrink-0 items-center ${mini ? 'justify-center px-2' : 'justify-between pr-3 pl-6'}`}>
-        <Link href="/admin/dashboard" className="leading-none" onClick={() => onMobileOpenChange(false)} aria-label="JAZA Admin home">
-          <span className={`block font-semibold tracking-[0.22em] text-white ${mini ? 'text-[13px]' : 'text-[17px]'}`}>JAZA</span>
-          <span className={`mt-1 block font-semibold tracking-[0.36em] text-adm-accent ${mini ? 'text-[7px]' : 'text-[8.5px]'}`}>ADMIN</span>
+      <div className={`flex h-[76px] shrink-0 items-center border-b border-white/[0.06] ${mini ? 'justify-center px-2' : 'justify-between pr-3 pl-5'}`}>
+        <Link
+          href="/admin/dashboard"
+          className="group flex items-center gap-3 leading-none"
+          onClick={() => onMobileOpenChange(false)}
+          aria-label="JAZA Admin home"
+        >
+          <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-gradient-to-br from-[#FFD84D] via-[#FFC400] to-[#C98F00] font-[family-name:var(--font-heading)] text-lg font-extrabold text-black shadow-[0_6px_18px_-6px_rgba(255,196,0,0.6),inset_0_1px_0_rgba(255,255,255,0.45)] transition-transform group-hover:scale-105">
+            J
+          </span>
+          {!mini && (
+            <span className="flex flex-col gap-1.5">
+              <span className="font-[family-name:var(--font-heading)] text-[17px] font-bold tracking-tight text-white">
+                JAZA <span className="font-semibold text-white/70">Media</span>
+              </span>
+              <span className="w-fit rounded-full border border-[#FFC400]/30 bg-[#FFC400]/10 px-2 py-[3px] text-[9px] font-semibold tracking-[0.2em] text-adm-accent">
+                ADMIN
+              </span>
+            </span>
+          )}
         </Link>
         {!mini && (
           <button
