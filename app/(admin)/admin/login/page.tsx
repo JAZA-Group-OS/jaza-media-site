@@ -23,6 +23,7 @@ export default function AdminLoginPage() {
   );
   const [cardSize, setCardSize] = useState({ w: 0, h: 0 });
   const cardRef = useRef<HTMLDivElement>(null);
+  const [logoOffset, setLogoOffset] = useState({ x: 0, y: 0 });
   useEffect(() => {
     if (!resizeMode || !cardRef.current) return;
     const el = cardRef.current;
@@ -84,7 +85,7 @@ export default function AdminLoginPage() {
 
       {resizeMode && (
         <div className="fixed top-4 left-1/2 z-50 -translate-x-1/2 rounded-full bg-black/80 px-4 py-2 text-sm font-mono text-[#FFC400] ring-1 ring-[#FFC400]/40">
-          {cardSize.w} × {cardSize.h}px — drag the card&apos;s bottom-right corner
+          card {cardSize.w} × {cardSize.h}px · logo moved {logoOffset.x}, {logoOffset.y}px — drag the logo or the card&apos;s corner
         </div>
       )}
       <motion.div
@@ -105,13 +106,18 @@ export default function AdminLoginPage() {
           <div className="pointer-events-none absolute -bottom-10 left-1/2 h-16 w-[60%] -translate-x-1/2 rounded-[50%] bg-[radial-gradient(closest-side,rgba(255,180,0,0.35),transparent)]" />
 
           <div className="text-center mb-6">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
+            <motion.img
               src="/images/jaza-media-icon.png"
               alt="JAZA Media"
               width={140}
               height={56}
-              className="mx-auto mb-3 h-14 w-[140px] rounded-md object-cover object-center"
+              drag={resizeMode}
+              dragMomentum={false}
+              onDrag={(_, info) =>
+                setLogoOffset((o) => ({ x: Math.round(o.x + info.delta.x), y: Math.round(o.y + info.delta.y) }))
+              }
+              draggable={false}
+              className={`relative z-10 mx-auto mb-3 h-14 w-[140px] rounded-md object-cover object-center ${resizeMode ? 'cursor-grab active:cursor-grabbing outline-1 outline-dashed outline-[#FFC400]/60' : ''}`}
             />
             <h1 className="text-2xl sm:text-3xl font-bold mb-3 tracking-tight">
               JAZA Media <span className="text-[#FFC400]">Access</span>
