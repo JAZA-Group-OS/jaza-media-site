@@ -8,7 +8,7 @@ export function Navbar() {
   const links = NAV_LINKS.filter((l) => l.href !== "/partner-with-us");
   return (
     <header className="sticky top-0 z-40 border-b border-black/10 bg-white text-ink shadow-[0_1px_0_rgba(0,0,0,0.02)]">
-      <div className="mx-auto flex h-[72px] max-w-7xl items-center justify-between gap-4 px-5 md:px-10">
+      <div className="flex h-[72px] w-full items-center justify-between gap-4 px-5 md:px-10">
         <Link href="/" aria-label="JAZA Media home" className="flex flex-col items-center leading-none">
           <span className="font-display text-[28px] tracking-[0.18em] text-ink">JAZA</span>
           <span className="mt-0.5 pl-[0.35em] text-[10px] font-semibold tracking-[0.35em] text-gold-deep">MEDIA</span>
