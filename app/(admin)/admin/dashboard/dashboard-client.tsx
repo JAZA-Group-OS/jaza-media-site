@@ -1,6 +1,6 @@
 'use client';
 
-import { LifeBuoy, Menu, Moon, PanelLeftOpen, Sun } from 'lucide-react';
+import { Menu, Moon, PanelLeftOpen, Sun } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
@@ -115,7 +115,7 @@ export default function AdminDashboardClient({ initialTab = 'overview' }: { init
         />
 
         {/* canvas */}
-        <div className="flex min-w-0 flex-1 flex-col bg-adm-bg lg:my-3 lg:mr-3 lg:rounded-[28px]">
+        <div className="adm-canvas relative flex min-w-0 flex-1 flex-col bg-adm-bg lg:my-3 lg:mr-3 lg:rounded-[28px]">
           <header className="sticky top-0 z-30 flex min-h-[72px] shrink-0 flex-wrap items-center gap-x-4 gap-y-2 bg-adm-bg/85 px-4 py-3 backdrop-blur-xl sm:px-6 lg:top-3 lg:rounded-t-[28px] lg:px-8">
             <button
               type="button"
@@ -161,22 +161,7 @@ export default function AdminDashboardClient({ initialTab = 'overview' }: { init
 
           <main className="w-full flex-1 px-4 pt-2 pb-8 sm:px-6 lg:px-8">
             <UpcomingCallAlert onOpen={() => setActiveTab('bookings')} />
-            {activeTab === 'overview' && (
-              <>
-                <button
-                  type="button"
-                  onClick={() => setActiveTab('support')}
-                  className="mb-4 flex w-full items-center justify-between gap-3 rounded-2xl border border-adm-line bg-adm-surface px-4 py-3 text-left transition hover:border-adm-accent"
-                >
-                  <span className="flex items-center gap-2.5 text-[13.5px] text-adm-text">
-                    <LifeBuoy className="size-4 text-adm-accent" aria-hidden />
-                    Support Desk — triage and resolve messages from the Support page
-                  </span>
-                  <span className="text-[12.5px] font-medium text-adm-accent">Open desk →</span>
-                </button>
-                <DashboardOverview />
-              </>
-            )}
+            {activeTab === 'overview' && <DashboardOverview onNavigate={(t) => setActiveTab(t as DashboardTab)} />}
             {activeTab === 'leads' && <PartnerLeadsManager />}
             {activeTab === 'applications' && <CareerApplicationsManager />}
             {activeTab === 'course-rule-of-10x' && (

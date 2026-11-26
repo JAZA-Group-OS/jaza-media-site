@@ -438,3 +438,16 @@ html.dots-scroll::-webkit-scrollbar { display: none; }
 .admin-ui[data-theme="light"] .text-rose-300 { color: #be123c; }
 .admin-ui ::selection { background: var(--adm-accent); color: #141414; }
 .admin-ui input[type="date"], .admin-ui input[type="time"] { color-scheme: inherit; }
+/* Canvas: soft brand glow so the dashboard background is never flat */
+.admin-ui .adm-canvas {
+  background-image:
+    radial-gradient(900px 420px at 100% 0%, rgba(255, 197, 46, 0.07), transparent 60%),
+    radial-gradient(700px 380px at 0% 100%, rgba(139, 92, 246, 0.05), transparent 60%);
+  background-attachment: local;
+}
+.admin-ui[data-theme="light"] .adm-canvas {
+  background-image:
+    radial-gradient(900px 420px at 100% 0%, rgba(255, 197, 46, 0.16), transparent 60%),
+    radial-gradient(700px 380px at 0% 100%, rgba(139, 92, 246, 0.07), transparent 60%);
+}
+.admin-ui[data-theme="light"] .text-purple-400 { color: #7e22ce; }
