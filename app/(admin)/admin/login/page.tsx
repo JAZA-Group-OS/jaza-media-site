@@ -3,7 +3,7 @@
 import type React from 'react';
 
 import { motion } from 'framer-motion';
-import { useEffect, useRef, useState, useSyncExternalStore } from 'react';
+import { useState } from 'react';
 import { Eye, EyeOff, Lock, Mail, ShieldCheck } from 'lucide-react';
 import { supabase } from '@/lib/supabase/client';
 
@@ -13,45 +13,6 @@ export default function AdminLoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-
-  // Temporary sizing tool: open /admin/login?resize=1 and drag the card's
-  // bottom-right corner; the live width x height shows above the card.
-  const resizeMode = useSyncExternalStore(
-    () => () => {},
-    () => new URLSearchParams(window.location.search).has('resize'),
-    () => false,
-  );
-  const [cardSize, setCardSize] = useState({ w: 0, h: 0 });
-  const cardRef = useRef<HTMLDivElement>(null);
-  const [logoOffset, setLogoOffset] = useState({ x: 0, y: 0 });
-  const [dragSize, setDragSize] = useState<{ w: number; h?: number } | null>(null);
-  const startCardResize = (e: React.PointerEvent) => {
-    e.preventDefault();
-    const el = cardRef.current;
-    if (!el) return;
-    const sx = e.clientX, sy = e.clientY, sw = el.offsetWidth, sh = el.offsetHeight;
-    const move = (ev: PointerEvent) =>
-      // card is centered, so width grows by twice the pointer travel
-      setDragSize({
-        w: Math.max(280, Math.round(sw + (ev.clientX - sx) * 2)),
-        h: Math.max(300, Math.round(sh + (ev.clientY - sy) * 2)),
-      });
-    const up = () => {
-      window.removeEventListener('pointermove', move);
-      window.removeEventListener('pointerup', up);
-    };
-    window.addEventListener('pointermove', move);
-    window.addEventListener('pointerup', up);
-  };
-  useEffect(() => {
-    if (!resizeMode || !cardRef.current) return;
-    const el = cardRef.current;
-    const ro = new ResizeObserver(() =>
-      setCardSize({ w: Math.round(el.offsetWidth), h: Math.round(el.offsetHeight) }),
-    );
-    ro.observe(el);
-    return () => ro.disconnect();
-  }, [resizeMode]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -102,42 +63,26 @@ export default function AdminLoginPage() {
       />
       {/* eslint-enable @next/next/no-img-element */}
 
-      {resizeMode && (
-        <div className="fixed top-4 left-1/2 z-50 -translate-x-1/2 rounded-full bg-black/80 px-4 py-2 text-sm font-mono text-[#FFC400] ring-1 ring-[#FFC400]/40">
-          card {cardSize.w} × {cardSize.h}px · logo moved {logoOffset.x}, {logoOffset.y}px — drag the logo or the card&apos;s corner
-        </div>
-      )}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        ref={cardRef}
-        style={resizeMode ? { width: dragSize?.w ?? 420, height: dragSize?.h } : undefined}
-        className={
-          resizeMode
-            ? 'relative max-w-[95vw] outline-1 outline-dashed outline-[#FFC400]/60 [&>div:first-child]:h-full'
-            : 'relative w-full max-w-[420px]'
-        }
+        className="relative w-full max-w-[506px]"
       >
-        <div className="relative rounded-[2rem] border-[1.5px] border-[#E8B400]/70 bg-[#0c0c0e] bg-[radial-gradient(120%_70%_at_0%_0%,rgba(255,196,0,0.14),transparent_55%),linear-gradient(180deg,#141416,#08080a)] px-6 py-7 sm:px-8 sm:py-8 shadow-[inset_0_1px_0_rgba(255,220,120,0.25),0_0_30px_rgba(255,196,0,0.10),0_30px_60px_-20px_rgba(0,0,0,0.85)]">
+        <div className="relative min-h-[473px] rounded-[2rem] border-[1.5px] border-[#E8B400]/70 bg-[#0c0c0e] bg-[radial-gradient(120%_70%_at_0%_0%,rgba(255,196,0,0.14),transparent_55%),linear-gradient(180deg,#141416,#08080a)] px-6 py-7 sm:px-8 sm:py-8 shadow-[inset_0_1px_0_rgba(255,220,120,0.25),0_0_30px_rgba(255,196,0,0.10),0_30px_60px_-20px_rgba(0,0,0,0.85)]">
           {/* bottom edge glow */}
           <div className="pointer-events-none absolute -bottom-[1.5px] left-1/2 h-[2px] w-[70%] -translate-x-1/2 bg-gradient-to-r from-transparent via-[#FFC400] to-transparent" />
           <div className="pointer-events-none absolute -bottom-[2px] left-1/2 h-[3px] w-[30%] -translate-x-1/2 rounded-full bg-[#FFE27A] blur-[2px]" />
           <div className="pointer-events-none absolute -bottom-10 left-1/2 h-16 w-[60%] -translate-x-1/2 rounded-[50%] bg-[radial-gradient(closest-side,rgba(255,180,0,0.35),transparent)]" />
 
           <div className="text-center mb-6">
-            <motion.img
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
               src="/images/jaza-media-icon.png"
               alt="JAZA Media"
               width={140}
               height={56}
-              drag={resizeMode}
-              dragMomentum={false}
-              onDrag={(_, info) =>
-                setLogoOffset((o) => ({ x: Math.round(o.x + info.delta.x), y: Math.round(o.y + info.delta.y) }))
-              }
-              draggable={false}
-              className={`relative z-10 mx-auto mb-3 h-14 w-[140px] rounded-md object-cover object-center ${resizeMode ? 'cursor-grab active:cursor-grabbing outline-1 outline-dashed outline-[#FFC400]/60' : ''}`}
+              className="relative mx-auto mb-3 h-14 w-[140px] -translate-x-[7px] -translate-y-[153px] rounded-md object-cover object-center"
             />
             <h1 className="text-2xl sm:text-3xl font-bold mb-3 tracking-tight">
               JAZA Media <span className="text-[#FFC400]">Access</span>
@@ -231,13 +176,6 @@ export default function AdminLoginPage() {
             </motion.button>
           </form>
         </div>
-        {resizeMode && (
-          <div
-            onPointerDown={startCardResize}
-            title="Drag to resize"
-            className="absolute -bottom-2 -right-2 z-20 h-5 w-5 cursor-nwse-resize rounded-sm bg-[#FFC400] ring-2 ring-black touch-none"
-          />
-        )}
       </motion.div>
     </div>
   );
