@@ -1,5 +1,7 @@
 'use client';
 
+import ChatMarkdown from './chat-markdown';
+
 import { Bot, X } from 'lucide-react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { askAi, runAiAction } from '@/app/(admin)/admin/dashboard/ai-actions';
@@ -105,7 +107,7 @@ export default function AiAssistant({ onChanged, inline = false }: { onChanged?:
               <div key={i} className={m.role === 'user'
                 ? 'self-end rounded-xl bg-adm-accent px-3 py-2 text-[13px] text-[#141414]'
                 : 'max-w-full self-start rounded-xl bg-adm-surface px-3 py-2 text-[13px] leading-relaxed text-adm-text'}>
-                <div className="whitespace-pre-wrap">{m.content}</div>
+                {m.role === 'user' ? <div className="whitespace-pre-wrap">{m.content}</div> : <ChatMarkdown text={m.content} />}
                 {m.table && (
                   <div className="mt-2 max-h-72 overflow-auto">
                     <table className="w-full border-collapse text-[12px]">

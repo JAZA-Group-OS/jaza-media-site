@@ -1,6 +1,7 @@
 'use client';
 
 import ThinkingRobot from './thinking-robot';
+import ChatMarkdown from './chat-markdown';
 
 import { Bot, Plus, RefreshCw, Sparkles, Square } from 'lucide-react';
 import { useCallback, useEffect, useRef, useState } from 'react';
@@ -173,8 +174,8 @@ export default function AiAgent({ fallbackAi = false }: { fallbackAi?: boolean }
             {msgs.map((m, i) => (!m.content && busy && i === msgs.length - 1) ? null : (
               <div key={i} className={m.role === 'user'
                 ? 'self-end max-w-[85%] whitespace-pre-wrap rounded-xl bg-adm-accent px-3 py-2 text-[13.5px] text-[#141414]'
-                : 'self-start max-w-full whitespace-pre-wrap rounded-xl bg-adm-surface px-3 py-2 text-[13.5px] leading-relaxed text-adm-text'}>
-                {m.content || (busy && i === msgs.length - 1 ? '…' : '')}
+                : 'self-start max-w-full rounded-2xl bg-adm-surface px-4 py-3 text-[13.5px] leading-relaxed text-adm-text'}>
+                {m.role === 'user' ? m.content : <ChatMarkdown text={m.content} />}
               </div>
             ))}
             {busy && (
