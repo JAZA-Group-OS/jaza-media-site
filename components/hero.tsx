@@ -24,7 +24,7 @@ export function Hero() {
         <path d="M0 360 C 160 230, 330 110, 560 0" fill="none" stroke="#ffca26" strokeOpacity="0.35" strokeWidth="1.5" />
         <path d="M0 400 C 140 250, 320 100, 600 0 L 0 0 Z" fill="#ffca26" fillOpacity="0.05" />
       </svg>
-      <svg aria-hidden viewBox="0 0 600 400" preserveAspectRatio="none" className="pointer-events-none absolute right-0 bottom-16 hidden h-[420px] w-[42%] md:block">
+      <svg aria-hidden viewBox="0 0 600 400" preserveAspectRatio="none" className="pointer-events-none absolute right-0 -bottom-6 hidden h-[420px] w-[42%] md:block">
         <defs>
           <linearGradient id="hero-sweep-b" x1="0" y1="1" x2="1" y2="0">
             <stop offset="0" stopColor="#ffca26" stopOpacity="0" />
