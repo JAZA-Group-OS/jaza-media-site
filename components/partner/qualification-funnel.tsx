@@ -362,22 +362,18 @@ export function QualificationFunnel() {
   const progressPercent = (stepFromUrl / TOTAL_STEPS) * 100;
 
   return (
-    <section className="relative overflow-hidden bg-[#0b0d0c] text-white">
-      <div aria-hidden className="pointer-events-none absolute -top-48 left-1/2 size-[900px] -translate-x-1/2 rounded-full bg-gold/10 blur-[160px]" />
-      <div aria-hidden className="pointer-events-none absolute inset-0 opacity-[0.05] [background-image:radial-gradient(white_1px,transparent_1px)] [background-size:4px_4px]" />
+    <section className="relative overflow-hidden bg-[#FAF9F6] text-ink">
     <div className="relative mx-auto w-full max-w-3xl px-4 py-12 md:py-16">
       <div className="flex flex-col items-center text-center">
-        <span className="flex items-baseline gap-3 text-[11px] font-semibold tracking-[0.28em] text-white/50 uppercase tabular-nums">
-          <span aria-hidden className="h-px w-8 self-center bg-gold/80" />
+        <span className="flex items-baseline gap-3 text-[11px] font-semibold tracking-[0.28em] text-ink/50 uppercase tabular-nums">
+          <span aria-hidden className="h-px w-8 self-center bg-gold-deep" />
           Step
-          <span className="text-[15px] tracking-normal text-white">{String(stepFromUrl).padStart(2, "0")}</span>
-          <span className="tracking-normal text-white/35">/ {String(TOTAL_STEPS).padStart(2, "0")}</span>
-          <span aria-hidden className="h-px w-8 self-center bg-gold/80" />
+          <span className="text-[15px] tracking-normal text-ink">{String(stepFromUrl).padStart(2, "0")}</span>
+          <span className="tracking-normal text-ink/35">/ {String(TOTAL_STEPS).padStart(2, "0")}</span>
+          <span aria-hidden className="h-px w-8 self-center bg-gold-deep" />
         </span>
-        <h1 className="mt-6 font-serif text-[40px] leading-[1.04] tracking-[-0.03em] text-balance md:text-[60px]">
-          <span className="bg-gradient-to-b from-white via-white to-white/60 bg-clip-text text-transparent">We</span>{' '}
-          <em className="bg-gradient-to-br from-[#fbe7a1] via-gold to-[#a97a1f] bg-clip-text pr-2 text-transparent italic">scale</em>{' '}
-          <span className="bg-gradient-to-b from-white via-white to-white/60 bg-clip-text text-transparent">great companies.</span>
+        <h1 className="mt-5 font-serif text-[40px] leading-[1.06] font-semibold tracking-[-0.03em] text-balance md:text-[56px]">
+          We <span className="text-gold-deep">scale</span> great companies.
         </h1>
       </div>
 
@@ -387,10 +383,10 @@ export function QualificationFunnel() {
         aria-valuemin={1}
         aria-valuemax={TOTAL_STEPS}
         aria-label={`Step ${stepFromUrl} of ${TOTAL_STEPS}`}
-        className="mt-10 h-1 w-full overflow-hidden rounded-full bg-white/10"
+        className="mt-10 h-1 w-full overflow-hidden rounded-full bg-black/10"
       >
         <div
-          className="h-full bg-gradient-to-r from-[#a97a1f] via-gold to-[#fbe7a1] shadow-[0_0_12px_rgba(234,179,8,0.6)] transition-all duration-500 ease-out"
+          className="h-full bg-gold-deep transition-all duration-500 ease-out"
           style={{ width: `${progressPercent}%` }}
         />
       </div>
@@ -406,13 +402,13 @@ export function QualificationFunnel() {
           {stepFromUrl > 1 ? (
             <div
               aria-hidden
-              className="absolute inset-y-4 -left-2 right-2 -z-10 rounded-3xl border border-white/5 bg-white/[0.02]"
+              className="absolute inset-y-4 -left-2 right-2 -z-10 rounded-3xl border border-black/5 bg-white/70"
             />
           ) : null}
           {stepFromUrl < TOTAL_STEPS ? (
             <div
               aria-hidden
-              className="absolute inset-y-4 left-2 -right-2 -z-10 rounded-3xl border border-white/5 bg-white/[0.02]"
+              className="absolute inset-y-4 left-2 -right-2 -z-10 rounded-3xl border border-black/5 bg-white/70"
             />
           ) : null}
 
@@ -469,11 +465,11 @@ export function QualificationFunnel() {
       </p>
 
       <details className="group mx-auto mt-10 max-w-2xl text-center">
-        <summary className="mx-auto inline-flex cursor-pointer list-none items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-4 py-1.5 text-[11px] tracking-[0.18em] text-white/55 uppercase transition hover:border-gold/40 hover:text-white [&::-webkit-details-marker]:hidden">
+        <summary className="mx-auto inline-flex cursor-pointer list-none items-center gap-2 rounded-md border border-black/10 bg-white px-4 py-1.5 text-[11px] tracking-[0.18em] text-ink/55 uppercase transition hover:border-black/25 hover:text-ink [&::-webkit-details-marker]:hidden">
           Privacy &amp; consent
-          <span aria-hidden className="text-gold transition-transform group-open:rotate-45">+</span>
+          <span aria-hidden className="text-gold-deep transition-transform group-open:rotate-45">+</span>
         </summary>
-        <p className="mt-4 text-[11px] leading-relaxed text-white/40">{DISCLAIMER}</p>
+        <p className="mt-4 text-[11px] leading-relaxed text-ink/45">{DISCLAIMER}</p>
       </details>
     </div>
     </section>
