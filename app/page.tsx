@@ -5,6 +5,7 @@ import { Footer } from "@/components/footer";
 import { Founders } from "@/components/founders";
 import { FreeMarketingSection } from "@/components/free-marketing-section";
 import { Hero } from "@/components/hero";
+import { RecentWork } from "@/components/recent-work";
 import { ValuedClients } from "@/components/valued-clients";
 import { Navbar } from "@/components/navbar";
 
@@ -18,6 +19,7 @@ export default function Home() {
       <main>
         <Hero />
         <ValuedClients variant="dark" />
+        <RecentWork />
         <FreeMarketingSection />
         <Founders />
         <Faqs />
