@@ -6,11 +6,7 @@ import { Reveal } from "@/components/reveal";
 export function Hero() {
   return (
     <section className="relative overflow-hidden bg-white text-ink">
-      {/* soft gold glow + fine grid texture */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute -top-40 right-[-10%] size-[720px] rounded-full bg-gold/20 blur-[140px]"
-      />
+      {/* fine grid texture */}
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0 opacity-[0.06] [background-image:linear-gradient(to_right,black_1px,transparent_1px),linear-gradient(to_bottom,black_1px,transparent_1px)] [background-size:72px_72px] [mask-image:radial-gradient(ellipse_at_top,black,transparent_70%)]"
