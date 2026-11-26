@@ -39,11 +39,11 @@ export default function AdminLoginPage() {
   };
 
   const fieldBox =
-    'group flex items-center rounded-2xl bg-[#1c1c1f]/90 border border-white/10 transition-all focus-within:border-[#FFC400] focus-within:shadow-[0_0_0_1px_#FFC400,0_0_18px_rgba(255,196,0,0.18)]';
+    'group flex items-center rounded-xl bg-[#1c1c1f]/90 border border-white/10 transition-all focus-within:border-[#FFC400] focus-within:shadow-[0_0_0_1px_#FFC400,0_0_18px_rgba(255,196,0,0.18)]';
   const fieldIcon =
-    'relative flex items-center pl-5 pr-5 text-white/60 group-focus-within:text-[#FFC400] transition-colors after:absolute after:right-0 after:top-1/2 after:h-6 after:w-px after:-translate-y-1/2 after:bg-white/25';
+    'relative flex items-center pl-4 pr-4 text-white/60 group-focus-within:text-[#FFC400] transition-colors after:absolute after:right-0 after:top-1/2 after:h-5 after:w-px after:-translate-y-1/2 after:bg-white/25';
   const fieldInput =
-    'flex-1 min-w-0 bg-transparent py-4 pl-4 pr-4 text-white placeholder:text-white/35 focus:outline-none';
+    'flex-1 min-w-0 bg-transparent py-3 pl-3 pr-3 text-sm text-white placeholder:text-white/35 focus:outline-none';
 
   return (
     <div className="relative min-h-screen overflow-hidden bg-[#0f0f11] flex items-center justify-center px-4 text-white">
@@ -67,27 +67,27 @@ export default function AdminLoginPage() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="relative w-full max-w-[600px]"
+        className="relative w-full max-w-[420px]"
       >
-        <div className="relative rounded-[2.5rem] border-[1.5px] border-[#E8B400]/70 bg-[#0c0c0e] bg-[radial-gradient(120%_70%_at_0%_0%,rgba(255,196,0,0.14),transparent_55%),linear-gradient(180deg,#141416,#08080a)] px-6 py-8 sm:px-12 sm:py-10 shadow-[inset_0_1px_0_rgba(255,220,120,0.25),0_0_30px_rgba(255,196,0,0.10),0_30px_60px_-20px_rgba(0,0,0,0.85)]">
+        <div className="relative rounded-[2rem] border-[1.5px] border-[#E8B400]/70 bg-[#0c0c0e] bg-[radial-gradient(120%_70%_at_0%_0%,rgba(255,196,0,0.14),transparent_55%),linear-gradient(180deg,#141416,#08080a)] px-6 py-7 sm:px-8 sm:py-8 shadow-[inset_0_1px_0_rgba(255,220,120,0.25),0_0_30px_rgba(255,196,0,0.10),0_30px_60px_-20px_rgba(0,0,0,0.85)]">
           {/* bottom edge glow */}
           <div className="pointer-events-none absolute -bottom-[1.5px] left-1/2 h-[2px] w-[70%] -translate-x-1/2 bg-gradient-to-r from-transparent via-[#FFC400] to-transparent" />
           <div className="pointer-events-none absolute -bottom-[2px] left-1/2 h-[3px] w-[30%] -translate-x-1/2 rounded-full bg-[#FFE27A] blur-[2px]" />
           <div className="pointer-events-none absolute -bottom-10 left-1/2 h-16 w-[60%] -translate-x-1/2 rounded-[50%] bg-[radial-gradient(closest-side,rgba(255,180,0,0.35),transparent)]" />
 
-          <div className="text-center mb-10">
+          <div className="text-center mb-6">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src="/images/jaza-media-icon.png"
               alt="JAZA Media"
-              width={72}
-              height={72}
-              className="mx-auto mb-4 h-[72px] w-[72px] rounded-2xl ring-1 ring-[#FFC400]/40 shadow-[0_0_24px_rgba(255,196,0,0.18)]"
+              width={140}
+              height={56}
+              className="mx-auto mb-3 h-14 w-[140px] rounded-md object-cover object-center"
             />
-            <h1 className="text-4xl sm:text-5xl font-bold mb-4 tracking-tight">
+            <h1 className="text-2xl sm:text-3xl font-bold mb-3 tracking-tight">
               JAZA Media <span className="text-[#FFC400]">Access</span>
             </h1>
-            <div className="w-20 h-1.5 bg-[#FFC400] mx-auto rounded-full" />
+            <div className="w-14 h-1 bg-[#FFC400] mx-auto rounded-full" />
           </div>
 
           {error && (
@@ -100,14 +100,14 @@ export default function AdminLoginPage() {
             </motion.div>
           )}
 
-          <form onSubmit={handleSubmit} className="space-y-7">
+          <form onSubmit={handleSubmit} className="space-y-5">
             <div>
-              <label htmlFor="admin-email" className="block text-base font-semibold mb-3">
+              <label htmlFor="admin-email" className="block text-sm font-semibold mb-2">
                 Email Address
               </label>
               <div className={fieldBox}>
                 <span className={fieldIcon}>
-                  <Mail className="w-6 h-6" />
+                  <Mail className="w-5 h-5" />
                 </span>
                 <input
                   id="admin-email"
@@ -124,12 +124,12 @@ export default function AdminLoginPage() {
             </div>
 
             <div>
-              <label htmlFor="admin-password" className="block text-base font-semibold mb-3">
+              <label htmlFor="admin-password" className="block text-sm font-semibold mb-2">
                 Password
               </label>
               <div className={fieldBox}>
                 <span className={fieldIcon}>
-                  <Lock className="w-6 h-6" />
+                  <Lock className="w-5 h-5" />
                 </span>
                 <input
                   id="admin-password"
@@ -148,10 +148,10 @@ export default function AdminLoginPage() {
                   whileTap={{ scale: 0.95 }}
                   onClick={() => setShowPassword(!showPassword)}
                   aria-label={showPassword ? 'Hide password' : 'Show password'}
-                  className="pr-5 pl-2 text-white/60 hover:text-[#FFC400] transition-colors"
+                  className="pr-4 pl-2 text-white/60 hover:text-[#FFC400] transition-colors"
                   disabled={isLoading}
                 >
-                  {showPassword ? <EyeOff className="w-6 h-6" /> : <Eye className="w-6 h-6" />}
+                  {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                 </motion.button>
               </div>
             </div>
@@ -161,7 +161,7 @@ export default function AdminLoginPage() {
               whileHover={!isLoading ? { scale: 1.02 } : {}}
               whileTap={!isLoading ? { scale: 0.98 } : {}}
               disabled={isLoading}
-              className="w-full px-6 py-4 rounded-full bg-[#FFC400] text-black text-lg font-bold hover:bg-[#FFD23F] hover:shadow-[0_0_24px_rgba(255,196,0,0.35)] disabled:opacity-50 disabled:cursor-not-allowed transition-all flex items-center justify-center gap-3"
+              className="w-full px-6 py-3 rounded-full bg-[#FFC400] text-black text-base font-bold hover:bg-[#FFD23F] hover:shadow-[0_0_24px_rgba(255,196,0,0.35)] disabled:opacity-50 disabled:cursor-not-allowed transition-all flex items-center justify-center gap-3"
             >
               {isLoading ? (
                 <motion.div
@@ -170,7 +170,7 @@ export default function AdminLoginPage() {
                   transition={{ duration: 0.8, repeat: Number.POSITIVE_INFINITY, ease: 'linear' }}
                 />
               ) : (
-                <ShieldCheck className="w-6 h-6" strokeWidth={2.25} />
+                <ShieldCheck className="w-5 h-5" strokeWidth={2.25} />
               )}
               {isLoading ? 'Authenticating...' : 'Secure Login'}
             </motion.button>
