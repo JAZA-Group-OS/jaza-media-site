@@ -15,7 +15,7 @@ const TEAM = ["Jaza-Sarmiento", "Bela-Capistrano", "Crisia-Manzanilla", "Franco-
 /** "One platform" panel: the services JAZA Media runs under one roof, and the in-house team. */
 export function AboutEcosystem() {
   return (
-    <div className="rounded-2xl border border-black/10 bg-white p-6 shadow-[0_24px_60px_-40px_rgba(0,0,0,0.35)] md:p-8">
+    <div className="rounded-2xl border border-black/10 bg-white p-6 shadow-[0_30px_70px_-40px_rgba(0,0,0,0.35)] md:p-9">
       <div className="flex items-center justify-between border-b border-black/10 pb-4">
         <span className="font-display text-xl tracking-[0.16em] text-ink">
           JAZA <span className="text-[11px] font-semibold tracking-[0.3em] text-gold-deep">MEDIA</span>
@@ -25,11 +25,11 @@ export function AboutEcosystem() {
 
       <ul className="mt-2 grid grid-cols-2 sm:grid-cols-3">
         {SERVICES.map(({ label, Icon }) => (
-          <li key={label} className="flex items-center gap-3 px-1 py-4">
-            <span className="grid size-9 shrink-0 place-items-center rounded-lg bg-[#FFF6D9] text-gold-deep">
-              <Icon className="size-4" />
+          <li key={label} className="flex items-center gap-3 px-1 py-5">
+            <span className="grid size-11 shrink-0 place-items-center rounded-xl bg-[#FFF6D9] text-gold-deep">
+              <Icon className="size-5" />
             </span>
-            <span className="text-[14px] font-medium text-ink/85">{label}</span>
+            <span className="text-[15.5px] font-medium text-ink/85">{label}</span>
           </li>
         ))}
       </ul>
@@ -42,7 +42,7 @@ export function AboutEcosystem() {
             </span>
           ))}
         </div>
-        <p className="text-[13px] leading-snug text-ink/65">
+        <p className="text-[14px] leading-snug text-ink/65">
           Run by an in-house team of operators — strategy to execution under one roof.
         </p>
       </div>
