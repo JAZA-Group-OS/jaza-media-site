@@ -24,6 +24,25 @@ export default function AdminLoginPage() {
   const [cardSize, setCardSize] = useState({ w: 0, h: 0 });
   const cardRef = useRef<HTMLDivElement>(null);
   const [logoOffset, setLogoOffset] = useState({ x: 0, y: 0 });
+  const [dragSize, setDragSize] = useState<{ w: number; h?: number } | null>(null);
+  const startCardResize = (e: React.PointerEvent) => {
+    e.preventDefault();
+    const el = cardRef.current;
+    if (!el) return;
+    const sx = e.clientX, sy = e.clientY, sw = el.offsetWidth, sh = el.offsetHeight;
+    const move = (ev: PointerEvent) =>
+      // card is centered, so width grows by twice the pointer travel
+      setDragSize({
+        w: Math.max(280, Math.round(sw + (ev.clientX - sx) * 2)),
+        h: Math.max(300, Math.round(sh + (ev.clientY - sy) * 2)),
+      });
+    const up = () => {
+      window.removeEventListener('pointermove', move);
+      window.removeEventListener('pointerup', up);
+    };
+    window.addEventListener('pointermove', move);
+    window.addEventListener('pointerup', up);
+  };
   useEffect(() => {
     if (!resizeMode || !cardRef.current) return;
     const el = cardRef.current;
@@ -93,9 +112,10 @@ export default function AdminLoginPage() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
         ref={cardRef}
+        style={resizeMode ? { width: dragSize?.w ?? 420, height: dragSize?.h } : undefined}
         className={
           resizeMode
-            ? 'relative w-[420px] max-w-[95vw] min-w-[280px] resize overflow-hidden outline-1 outline-dashed outline-[#FFC400]/60 [&>div]:h-full'
+            ? 'relative max-w-[95vw] outline-1 outline-dashed outline-[#FFC400]/60 [&>div:first-child]:h-full'
             : 'relative w-full max-w-[420px]'
         }
       >
@@ -211,6 +231,13 @@ export default function AdminLoginPage() {
             </motion.button>
           </form>
         </div>
+        {resizeMode && (
+          <div
+            onPointerDown={startCardResize}
+            title="Drag to resize"
+            className="absolute -bottom-2 -right-2 z-20 h-5 w-5 cursor-nwse-resize rounded-sm bg-[#FFC400] ring-2 ring-black touch-none"
+          />
+        )}
       </motion.div>
     </div>
   );
