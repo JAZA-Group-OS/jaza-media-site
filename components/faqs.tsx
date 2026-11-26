@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowRight, Check, ChevronDown } from "lucide-react";
+import { ArrowRight, Check, ChevronDown, MousePointer2 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
@@ -124,13 +124,19 @@ export function Faqs() {
               </li>
             ))}
           </ul>
+          <div className="relative mt-7 w-fit">
           <Link
             href="/courses/marketing-templates"
-            className="group mt-7 inline-flex w-fit items-center gap-2.5 rounded-full bg-[#FFC400] px-8 py-3.5 text-[15px] font-bold text-ink shadow-[0_10px_30px_-10px_rgba(255,196,0,0.7)] transition hover:bg-[#FFD23F]"
+            className="group anim-cta-press inline-flex w-fit items-center gap-2.5 rounded-md bg-[#FFC400] px-8 py-3.5 text-[15px] font-bold text-ink shadow-[0_10px_30px_-10px_rgba(255,196,0,0.7)] transition hover:bg-[#FFD23F]"
           >
             Get Free Templates
             <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" />
           </Link>
+          {/* animated cursor tapping the button */}
+          <span aria-hidden className="anim-cta-cursor pointer-events-none absolute -right-7 -bottom-6">
+            <MousePointer2 className="size-8 -rotate-12 fill-ink text-white drop-shadow-[0_4px_6px_rgba(0,0,0,0.35)]" strokeWidth={1.5} />
+          </span>
+          </div>
         </div>
       </div>
     </section>
