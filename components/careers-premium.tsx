@@ -27,6 +27,19 @@ function Eyebrow({ children, center = false }: { children: ReactNode; center?: b
   );
 }
 
+function AnimatedButton({ href = APPLY, children }: { href?: string; children: ReactNode }) {
+  return (
+    <a
+      href={href}
+      className="anim-apply group relative inline-flex items-center gap-3 overflow-hidden rounded-md bg-ink px-8 py-4 text-[15px] font-semibold text-white shadow-[0_14px_30px_-14px_rgba(0,0,0,0.6)] transition hover:-translate-y-0.5 hover:bg-ink-soft"
+    >
+      <span aria-hidden className="anim-apply-shine pointer-events-none absolute inset-y-0 -left-1/3 w-1/3 skew-x-[-20deg] bg-gradient-to-r from-transparent via-white/25 to-transparent" />
+      <span className="relative">{children}</span>
+      <ArrowRight className="anim-apply-arrow relative size-4" />
+    </a>
+  );
+}
+
 function PrimaryButton({ href = APPLY, children }: { href?: string; children: ReactNode }) {
   return (
     <a
@@ -372,25 +385,29 @@ const PERKS = [
 function Investing() {
   return (
     <section id="perks" className={`${SLIDE} bg-[#FAF9F6] py-20 md:py-14`}>
-      <div className="mx-auto w-full max-w-[1200px] px-5 md:px-8">
+      <div className="mx-auto w-full max-w-[1400px] px-5 md:px-10">
         <Reveal className="mb-12 flex flex-col items-start justify-between gap-6 md:flex-row md:items-end">
           <div>
             <Eyebrow>Benefits</Eyebrow>
-            <h2 className={`${H2} mt-5`}>
+            <h2 className="mt-5 font-heading text-[36px] leading-[1.1] font-semibold tracking-[-0.025em] md:text-[54px]">
               <Accent>Investing</Accent> in high performers
             </h2>
           </div>
-          <PrimaryButton>View job openings</PrimaryButton>
+          <AnimatedButton>View job openings</AnimatedButton>
         </Reveal>
-        <div className="grid gap-6 md:grid-cols-3">
+        <div className="grid gap-6 md:grid-cols-3 lg:gap-8">
           {PERKS.map((p, i) => (
-            <Reveal key={p.title} delay={i * 0.08} className="h-full">
-              <article className="h-full rounded-2xl border border-black/10 bg-white p-8 transition hover:border-black/20">
-                <div className="relative size-14">
-                  <Image src={img(p.icon)} alt="" fill sizes="56px" className="object-contain" />
+            <Reveal key={p.title} delay={i * 0.12} className="h-full">
+              <article className="group relative h-full overflow-hidden rounded-2xl border border-black/10 bg-white p-9 shadow-[0_24px_50px_-38px_rgba(0,0,0,0.35)] transition duration-300 hover:-translate-y-1.5 hover:shadow-[0_34px_60px_-34px_rgba(0,0,0,0.4)] md:p-10">
+                {/* gold bar grows along the top on hover */}
+                <span aria-hidden className="absolute inset-x-0 top-0 h-1 origin-left scale-x-0 bg-gold-deep transition-transform duration-500 group-hover:scale-x-100" />
+                <div className="anim-perk-float grid size-20 place-items-center rounded-full bg-[#FFF6D9]" style={{ animationDelay: `${i * -1.2}s` }}>
+                  <div className="relative size-14 transition-transform duration-500 group-hover:scale-110">
+                    <Image src={img(p.icon)} alt="" fill sizes="56px" className="object-contain" />
+                  </div>
                 </div>
-                <h3 className="mt-6 font-heading text-[21px] font-semibold">{p.title}</h3>
-                <p className="mt-3 text-[15px] leading-7 text-ink/60">{p.body}</p>
+                <h3 className="mt-7 font-heading text-[25px] leading-snug font-semibold md:text-[27px]">{p.title}</h3>
+                <p className="mt-3 text-[16.5px] leading-[1.75] text-ink/60">{p.body}</p>
               </article>
             </Reveal>
           ))}
