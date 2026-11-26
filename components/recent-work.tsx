@@ -133,7 +133,7 @@ export function RecentWork() {
           </p>
         </Reveal>
 
-        <div className="mx-auto mt-8 grid max-w-[340px] gap-10 sm:max-w-[720px] sm:grid-cols-2 md:mt-8 md:gap-8 lg:max-w-[1080px] lg:grid-cols-3">
+        <div className="mx-auto mt-8 grid max-w-[340px] gap-10 sm:max-w-[720px] sm:grid-cols-2 md:mt-8 md:gap-8 lg:max-w-[min(1080px,calc((100svh-580px)*2.4+64px))] lg:grid-cols-3">
           {WORKS.map((w, i) => (
             <Reveal key={w.src} className={i === 2 ? "sm:col-span-2 sm:mx-auto sm:w-[calc(50%-1rem)] lg:col-span-1 lg:w-auto" : ""}>
               <WorkVideo {...w} />
@@ -141,7 +141,7 @@ export function RecentWork() {
           ))}
         </div>
 
-        <Reveal className="mt-16 flex flex-col items-center gap-3 text-center sm:flex-row sm:justify-center sm:gap-6 md:mt-20">
+        <Reveal className="mt-16 flex flex-col items-center gap-3 text-center sm:flex-row sm:justify-center sm:gap-6 md:mt-10">
           <p className="font-serif text-xl md:text-2xl">
             Your brand could be <span className="text-[#FFC400]">next</span>.
           </p>
