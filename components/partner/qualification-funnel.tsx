@@ -367,9 +367,12 @@ export function QualificationFunnel() {
       <div aria-hidden className="pointer-events-none absolute inset-0 opacity-[0.05] [background-image:radial-gradient(white_1px,transparent_1px)] [background-size:4px_4px]" />
     <div className="relative mx-auto w-full max-w-3xl px-4 py-12 md:py-16">
       <div className="flex flex-col items-center text-center">
-        <span className="inline-flex items-center gap-2.5 rounded-full border border-white/10 bg-white/[0.03] px-4 py-1.5 text-[10.5px] font-medium tracking-[0.32em] text-white/70 uppercase backdrop-blur">
-          <span aria-hidden className="size-1.5 rounded-full bg-gold shadow-[0_0_10px_2px_rgba(234,179,8,0.6)]" />
-          Step {stepFromUrl} of {TOTAL_STEPS}
+        <span className="flex items-baseline gap-3 text-[11px] font-semibold tracking-[0.28em] text-white/50 uppercase tabular-nums">
+          <span aria-hidden className="h-px w-8 self-center bg-gold/80" />
+          Step
+          <span className="text-[15px] tracking-normal text-white">{String(stepFromUrl).padStart(2, "0")}</span>
+          <span className="tracking-normal text-white/35">/ {String(TOTAL_STEPS).padStart(2, "0")}</span>
+          <span aria-hidden className="h-px w-8 self-center bg-gold/80" />
         </span>
         <h1 className="mt-6 font-serif text-[40px] leading-[1.04] tracking-[-0.03em] text-balance md:text-[60px]">
           <span className="bg-gradient-to-b from-white via-white to-white/60 bg-clip-text text-transparent">We</span>{' '}
