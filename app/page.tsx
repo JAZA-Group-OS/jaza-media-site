@@ -18,7 +18,7 @@ export default function Home() {
       </div>
       <main>
         <Hero />
-        <ValuedClients variant="dark" />
+        <ValuedClients variant="light" />
         <RecentWork />
         <FreeMarketingSection />
         <Founders />
