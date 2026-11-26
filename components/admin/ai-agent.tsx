@@ -1,5 +1,7 @@
 'use client';
 
+import ThinkingRobot from './thinking-robot';
+
 import { Bot, Plus, RefreshCw, Sparkles, Square } from 'lucide-react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import AiAssistant from '@/components/admin/ai-assistant';
@@ -168,14 +170,18 @@ export default function AiAgent({ fallbackAi = false }: { fallbackAi?: boolean }
                 {STARTERS.map((s) => <button key={s} type="button" onClick={() => void send(s)} className={`${chip} self-start`}>{s}</button>)}
               </div>
             )}
-            {msgs.map((m, i) => (
+            {msgs.map((m, i) => (!m.content && busy && i === msgs.length - 1) ? null : (
               <div key={i} className={m.role === 'user'
                 ? 'self-end max-w-[85%] whitespace-pre-wrap rounded-xl bg-adm-accent px-3 py-2 text-[13.5px] text-[#141414]'
                 : 'self-start max-w-full whitespace-pre-wrap rounded-xl bg-adm-surface px-3 py-2 text-[13.5px] leading-relaxed text-adm-text'}>
                 {m.content || (busy && i === msgs.length - 1 ? '…' : '')}
               </div>
             ))}
-            {busy && <p className="text-[12px] text-adm-subtle">{steps.length ? `${steps[steps.length - 1]}…` : 'Claude is working…'}</p>}
+            {busy && (
+              <div className="self-start rounded-2xl bg-adm-surface px-4 py-3">
+                <ThinkingRobot step={steps[steps.length - 1]} />
+              </div>
+            )}
             <div ref={end} />
           </div>
           <form className="flex items-end gap-2 border-t border-adm-line p-3" onSubmit={(e) => { e.preventDefault(); void send(text); }}>
