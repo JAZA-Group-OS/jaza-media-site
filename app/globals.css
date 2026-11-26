@@ -484,3 +484,12 @@ html.dots-scroll::-webkit-scrollbar { display: none; }
 .anim-cta-cursor { animation: cta-cursor 2.6s ease-in-out infinite; }
 .anim-cta-press { animation: cta-press 2.6s ease-in-out infinite; }
 @media (prefers-reduced-motion: reduce) { .anim-cta-cursor, .anim-cta-press { animation: none; } }
+
+/* Careers: Start your application — light sweep, arrow nudge, gentle pulse ring */
+@keyframes apply-shine { 0%, 55% { transform: translateX(0) skewX(-20deg); } 100% { transform: translateX(450%) skewX(-20deg); } }
+@keyframes apply-arrow { 0%, 60%, 100% { transform: translateX(0); } 70% { transform: translateX(5px); } 80% { transform: translateX(0); } 90% { transform: translateX(3px); } }
+@keyframes apply-ring { 0% { box-shadow: 0 14px 30px -14px rgba(0,0,0,.6), 0 0 0 0 rgba(201,151,26,.45); } 70% { box-shadow: 0 14px 30px -14px rgba(0,0,0,.6), 0 0 0 12px rgba(201,151,26,0); } 100% { box-shadow: 0 14px 30px -14px rgba(0,0,0,.6), 0 0 0 0 rgba(201,151,26,0); } }
+.anim-apply { animation: apply-ring 2.8s ease-out infinite; }
+.anim-apply-shine { animation: apply-shine 2.8s ease-in-out infinite; }
+.anim-apply-arrow { animation: apply-arrow 2.8s ease-in-out infinite; }
+@media (prefers-reduced-motion: reduce) { .anim-apply, .anim-apply-shine, .anim-apply-arrow { animation: none; } }

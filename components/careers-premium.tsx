@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useReducedMotion, useScroll, useSpring, useTime, useTransform, type MotionValue } from "framer-motion";
+import { motion, useInView, useReducedMotion, useScroll, useSpring, useTime, useTransform, type MotionValue } from "framer-motion";
 import { ArrowRight, Check, Compass, Gauge, Handshake } from "lucide-react";
 import Image from "next/image";
 import { useRef, useState, type ReactNode } from "react";
@@ -273,52 +273,76 @@ const STEPS = [
 const PROMISES = ["Transparency", "Respect for your time", "Clear communication"];
 
 function Hire() {
+  const ref = useRef<HTMLOListElement>(null);
+  const inView = useInView(ref, { once: true, margin: "-120px" });
+  const reduce = useReducedMotion();
   return (
-    <section id="openings" className={`${SLIDE} bg-white py-20 md:py-14`}>
-      <div className="mx-auto w-full max-w-[1200px] px-5 md:px-8">
-        <Reveal className="grid gap-6 lg:grid-cols-2 lg:items-end">
-          <div>
-            <Eyebrow>The process</Eyebrow>
-            <h2 className={`${H2} mt-5`}>
-              How we <Accent>hire</Accent>
-            </h2>
-          </div>
-          <p className="max-w-[540px] text-[16px] leading-7 text-ink/60">
+    <section id="openings" className={`${SLIDE} relative overflow-hidden bg-[#FAF9F6] py-20 md:py-14`}>
+      {/* soft paper texture: faint dot grid fading toward the centre */}
+      <div aria-hidden className="pointer-events-none absolute inset-0 bg-[radial-gradient(rgba(17,17,17,0.08)_1px,transparent_1px)] [background-size:24px_24px] [mask-image:radial-gradient(ellipse_at_center,transparent_40%,black_90%)]" />
+      <div className="relative mx-auto w-full max-w-[1400px] px-5 md:px-10">
+        <Reveal className="mx-auto max-w-[760px] text-center">
+          <Eyebrow center>The process</Eyebrow>
+          <h2 className="mt-5 font-heading text-[36px] leading-[1.1] font-semibold tracking-[-0.025em] md:text-[54px]">
+            How we <Accent>hire</Accent>
+          </h2>
+          <p className="mt-4 text-[17px] leading-8 text-ink/60 md:text-[18px]">
             We believe great companies are built by disciplined people who trust and win together. Our process is
             structured, straightforward, and designed to give you a clear sense of what it&apos;s like to work here.
           </p>
         </Reveal>
 
-        <ol className="mt-12 grid gap-px overflow-hidden rounded-2xl border border-black/10 bg-black/10 md:grid-cols-3">
+        <ol ref={ref} className="relative mt-14 grid gap-6 md:grid-cols-3 md:gap-8">
+          {/* connecting line that draws across the three steps */}
+          <span aria-hidden className="absolute top-8 right-[16%] left-[16%] hidden h-px bg-black/10 md:block" />
+          <motion.span
+            aria-hidden
+            className="absolute top-8 right-[16%] left-[16%] hidden h-[2px] origin-left bg-gold-deep md:block"
+            initial={{ scaleX: 0 }}
+            animate={{ scaleX: inView ? 1 : 0 }}
+            transition={{ duration: reduce ? 0 : 1.4, ease: [0.22, 1, 0.36, 1] }}
+          />
           {STEPS.map(({ title, body, Icon }, i) => (
-            <Reveal key={title} delay={i * 0.08} className="bg-[#FAF9F6]">
-              <li className="h-full p-8">
-                <div className="flex items-center justify-between">
-                  <span className="grid size-11 place-items-center rounded-lg bg-white text-gold-deep ring-1 ring-black/10">
-                    <Icon className="size-5" strokeWidth={1.7} />
-                  </span>
-                  <span className="text-[12px] font-semibold tracking-[0.2em] text-ink/45">STEP 0{i + 1}</span>
-                </div>
-                <h3 className="mt-6 font-heading text-[21px] font-semibold">{title}</h3>
-                <p className="mt-2 text-[15px] leading-7 text-ink/60">{body}</p>
-              </li>
-            </Reveal>
+            <motion.li
+              key={title}
+              className="relative flex flex-col items-center text-center"
+              initial={{ opacity: 0, y: 24 }}
+              animate={inView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: reduce ? 0 : 0.6, delay: reduce ? 0 : 0.25 + i * 0.3, ease: [0.22, 1, 0.36, 1] }}
+            >
+              <span className="relative z-10 grid size-16 place-items-center rounded-full bg-ink font-heading text-[22px] font-semibold text-white ring-8 ring-[#FAF9F6]">
+                {i + 1}
+              </span>
+              <div className="mt-6 w-full rounded-2xl border border-black/10 bg-white p-8 shadow-[0_24px_50px_-36px_rgba(0,0,0,0.35)] transition duration-300 hover:-translate-y-1 hover:shadow-[0_30px_60px_-34px_rgba(0,0,0,0.4)] md:p-9">
+                <span className="mx-auto grid size-12 place-items-center rounded-xl bg-[#FFF6D9] text-gold-deep">
+                  <Icon className="size-6" strokeWidth={1.7} />
+                </span>
+                <p className="mt-5 text-[12px] font-semibold tracking-[0.22em] text-ink/45">STEP 0{i + 1}</p>
+                <h3 className="mt-2 font-heading text-[24px] font-semibold md:text-[26px]">{title}</h3>
+                <p className="mt-3 text-[16.5px] leading-7 text-ink/60">{body}</p>
+              </div>
+            </motion.li>
           ))}
         </ol>
 
-        <Reveal className="mt-10 flex flex-col items-start justify-between gap-6 md:flex-row md:items-center">
-          <div>
-            <ul className="flex flex-wrap gap-x-6 gap-y-2">
-              {PROMISES.map((p) => (
-                <li key={p} className="flex items-center gap-2 text-[14.5px] text-ink/75">
-                  <Check className="size-4 text-gold-deep" strokeWidth={2.4} />
-                  {p}
-                </li>
-              ))}
-            </ul>
-            <p className="mt-2 text-[14px] text-ink/50">Every role is a little different, but this is our promise at every step.</p>
-          </div>
-          <PrimaryButton>Start your application</PrimaryButton>
+        <Reveal className="mt-12 flex flex-col items-center gap-5 text-center">
+          <ul className="flex flex-wrap justify-center gap-x-7 gap-y-2">
+            {PROMISES.map((p) => (
+              <li key={p} className="flex items-center gap-2 text-[15.5px] text-ink/75">
+                <Check className="size-4 text-gold-deep" strokeWidth={2.4} />
+                {p}
+              </li>
+            ))}
+          </ul>
+          <p className="text-[14.5px] text-ink/50">Every role is a little different, but this is our promise at every step.</p>
+          <a
+            href={APPLY}
+            className="anim-apply group relative mt-2 inline-flex items-center gap-3 overflow-hidden rounded-md bg-ink px-8 py-4 text-[15px] font-semibold text-white shadow-[0_14px_30px_-14px_rgba(0,0,0,0.6)] transition hover:-translate-y-0.5 hover:bg-ink-soft"
+          >
+            <span aria-hidden className="anim-apply-shine pointer-events-none absolute inset-y-0 -left-1/3 w-1/3 skew-x-[-20deg] bg-gradient-to-r from-transparent via-white/25 to-transparent" />
+            <span className="relative">Start your application</span>
+            <ArrowRight className="anim-apply-arrow relative size-4" />
+          </a>
         </Reveal>
       </div>
     </section>
