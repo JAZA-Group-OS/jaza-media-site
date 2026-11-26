@@ -104,26 +104,21 @@ function TeamCard({ member, hidden, onOpen }: { member: Member; hidden?: boolean
 
 export function TeamGrid() {
   return (
-    <section className="relative overflow-hidden bg-[#0b0d0c] pt-5 pb-10 text-white md:pt-6 md:pb-14">
-      <div aria-hidden className="pointer-events-none absolute -top-40 left-1/2 size-[820px] -translate-x-1/2 rounded-full bg-gold/12 blur-[160px]" />
-      <div aria-hidden className="pointer-events-none absolute inset-0 opacity-[0.05] [background-image:radial-gradient(white_1px,transparent_1px)] [background-size:4px_4px]" />
+    <section className="relative overflow-hidden bg-[#FAF9F6] pt-10 pb-10 text-ink md:pt-14 md:pb-14">
 
       <div className="relative mx-auto max-w-6xl px-4 md:px-6">
         <Reveal className="mx-auto flex max-w-3xl flex-col items-center text-center">
-          <p className="inline-flex items-center gap-2.5 rounded-full border border-white/10 bg-white/[0.03] px-4 py-1.5 text-[10.5px] font-medium tracking-[0.32em] text-white/70 backdrop-blur">
-            <span aria-hidden className="size-1.5 rounded-full bg-gold shadow-[0_0_10px_2px_rgba(234,179,8,0.6)]" />
+          <p className="flex items-center gap-3 text-[11px] font-semibold tracking-[0.28em] text-ink/60">
+            <span aria-hidden className="h-px w-8 bg-gold-deep" />
             LEADERSHIP
+            <span aria-hidden className="h-px w-8 bg-gold-deep" />
           </p>
-          <h1 className="mt-7 font-serif text-[40px] leading-[1.04] tracking-[-0.03em] text-balance md:text-[60px]">
-            <span className="bg-gradient-to-b from-white via-white to-white/60 bg-clip-text text-transparent">Meet the</span>{" "}
-            <em className="bg-gradient-to-br from-[#fbe7a1] via-gold to-[#a97a1f] bg-clip-text pr-2 text-transparent">operators</em>{" "}
-            <span className="bg-gradient-to-b from-white via-white to-white/60 bg-clip-text text-transparent">behind JAZA</span>
+          <h1 className="mt-5 font-serif text-[40px] leading-[1.06] font-semibold tracking-[-0.03em] text-balance md:text-[58px]">
+            Meet the <span className="text-gold-deep">operators</span> behind JAZA
           </h1>
-          <blockquote className="mt-7 max-w-2xl">
-            <p className="font-serif text-[19px] leading-8 italic text-white/80 md:text-[22px] md:leading-9">
-              <span aria-hidden className="mr-1 text-gold/80">&ldquo;</span>
+          <blockquote className="mt-6 max-w-2xl">
+            <p className="text-[17px] leading-8 text-ink/65 md:text-[19px] md:leading-9">
               Each department is led by a head who sets the standard: people who carry the vision of the JAZA Group of Companies into every project and client we take on.
-              <span aria-hidden className="ml-1 text-gold/80">&rdquo;</span>
             </p>
           </blockquote>
         </Reveal>
@@ -189,7 +184,7 @@ function WaveSlider() {
             </div>
           ))}
         </div>
-        <p className="text-center text-[11px] tracking-[0.24em] text-white/40 uppercase">Swipe to meet the team · tap to read</p>
+        <p className="text-center text-[11px] tracking-[0.24em] text-ink/45 uppercase">Swipe to meet the team · tap to read</p>
         <AnimatePresence>{open && <ProfilePanel key={open.member.slug} {...open} onClose={() => setOpen(null)} />}</AnimatePresence>
       </div>
     );
