@@ -37,13 +37,21 @@ const COURSES = [
 export function FreeMarketingSection() {
   return (
     <section id="free-advance-marketing" className="home-slide relative overflow-hidden bg-[#FAF8F3] py-14 text-ink md:flex md:min-h-[calc(100svh-114px)] md:flex-col md:justify-center md:py-10">
-      {/* faint dot grid, fading out toward the centre */}
-      <div aria-hidden className="pointer-events-none absolute inset-0 bg-[radial-gradient(rgba(17,17,17,0.09)_1px,transparent_1px)] [background-size:22px_22px] [mask-image:radial-gradient(ellipse_at_center,transparent_35%,black_85%)]" />
-      {/* thin gold rings in the corners */}
-      <div aria-hidden className="pointer-events-none absolute -top-48 -right-48 size-[440px] rounded-full border-[1.5px] border-[#FFC400]/60" />
-      <div aria-hidden className="pointer-events-none absolute -top-32 -right-32 size-[280px] rounded-full border border-[#FFC400]/35" />
-      <div aria-hidden className="pointer-events-none absolute -bottom-56 -left-56 size-[480px] rounded-full border-[1.5px] border-[#FFC400]/60" />
-      <div aria-hidden className="pointer-events-none absolute -bottom-36 -left-36 size-[300px] rounded-full border border-[#FFC400]/35" />
+      {/* giant outlined words drifting slowly left to right behind the content */}
+      <div aria-hidden className="pointer-events-none absolute inset-x-0 top-1/2 -translate-y-1/2 overflow-hidden">
+        <div className="anim-drift-right flex w-max whitespace-nowrap font-serif text-[22vw] leading-none font-bold tracking-[-0.04em] text-transparent [-webkit-text-stroke:1.5px_rgba(255,196,0,0.28)] md:text-[15vw]">
+          <span className="pr-[6vw]">Learn · Grow · Scale ·</span>
+          <span className="pr-[6vw]">Learn · Grow · Scale ·</span>
+        </div>
+      </div>
+      {/* soft gold sweep, same language as the hero */}
+      <svg aria-hidden viewBox="0 0 600 400" preserveAspectRatio="none" className="pointer-events-none absolute top-0 right-0 hidden h-[360px] w-[40%] md:block">
+        <path d="M0 0 C 220 60, 420 180, 600 400 L 600 0 Z" fill="#FFC400" fillOpacity="0.07" />
+        <path d="M60 0 C 260 70, 440 200, 600 370" fill="none" stroke="#FFC400" strokeOpacity="0.5" strokeWidth="1.5" />
+        <path d="M150 0 C 320 80, 480 190, 600 300" fill="none" stroke="#FFC400" strokeOpacity="0.3" strokeWidth="1" />
+      </svg>
+      {/* fade the edges so the drifting words never look cut off */}
+      <div aria-hidden className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,#FAF8F3,transparent_15%,transparent_85%,#FAF8F3)]" />
       <div className="relative mx-auto w-full max-w-[1320px] px-4 md:px-8">
         <Reveal className="flex items-end justify-between gap-6">
           <div>
@@ -57,10 +65,14 @@ export function FreeMarketingSection() {
           </div>
           <Link
             href="/courses/rule-of-10x"
-            className="group hidden shrink-0 items-center gap-2 border-b-2 border-[#FFC400] pb-1 text-[15px] font-medium text-ink transition hover:text-black md:inline-flex"
+            className="group relative hidden shrink-0 items-center gap-3 overflow-hidden rounded-full bg-ink py-3 pr-3 pl-6 text-[15px] font-semibold text-white shadow-[0_12px_30px_-12px_rgba(0,0,0,0.5)] transition hover:bg-black md:inline-flex"
           >
-            Browse all
-            <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" />
+            {/* light sweep moving left to right across the button */}
+            <span aria-hidden className="anim-btn-sheen pointer-events-none absolute inset-y-0 -left-1/2 w-1/2 -skew-x-12 bg-gradient-to-r from-transparent via-white/25 to-transparent" />
+            <span className="relative">Browse all</span>
+            <span className="relative grid size-8 place-items-center overflow-hidden rounded-full bg-[#FFC400] text-ink">
+              <ArrowRight className="anim-arrow-nudge size-4" />
+            </span>
           </Link>
         </Reveal>
 
