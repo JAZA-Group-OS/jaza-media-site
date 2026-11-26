@@ -67,8 +67,7 @@ function WorkVideo({ src, poster, tag, title, copy }: (typeof WORKS)[number]) {
   return (
     <article className="group">
       <div className="relative">
-        <div className="absolute -inset-px rounded-[1.5rem] bg-gradient-to-b from-[#FFC400]/70 via-[#FFC400]/10 to-white/5 transition-opacity duration-500 group-hover:opacity-100 md:opacity-60" />
-        <div className="relative overflow-hidden rounded-[1.5rem] bg-black shadow-[0_40px_90px_-30px_rgba(255,196,0,0.35)]">
+        <div className="relative overflow-hidden rounded-[1.5rem] bg-black shadow-[0_24px_60px_-28px_rgba(0,0,0,0.35)] transition duration-500 group-hover:shadow-[0_30px_70px_-26px_rgba(0,0,0,0.45)]">
           <video
             ref={ref}
             src={src}
@@ -84,8 +83,7 @@ function WorkVideo({ src, poster, tag, title, copy }: (typeof WORKS)[number]) {
             className="aspect-[4/5] w-full cursor-pointer object-cover"
             aria-label={`${tag} — ${title}`}
           />
-          <div className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-black/60 to-transparent" />
-          <span className="absolute top-4 left-4 rounded-full border border-[#FFC400]/40 bg-black/60 px-3 py-1 text-[10px] font-semibold tracking-[0.2em] text-[#FFC400] uppercase backdrop-blur">
+          <span className="absolute top-4 left-4 rounded-full bg-[#FFC400] px-3.5 py-1.5 text-[10px] font-bold tracking-[0.12em] text-ink uppercase shadow-[0_4px_12px_-4px_rgba(0,0,0,0.35)]">
             {tag}
           </span>
           <div className="absolute right-4 bottom-4 left-4 flex items-center justify-between">
@@ -109,26 +107,27 @@ function WorkVideo({ src, poster, tag, title, copy }: (typeof WORKS)[number]) {
           </div>
         </div>
       </div>
-      <h3 className="mt-4 font-serif text-xl">{title}</h3>
-      <p className="mt-2 max-w-md text-sm leading-relaxed text-white/60">{copy}</p>
+      <h3 className="mt-5 font-serif text-xl font-semibold text-ink">{title}</h3>
+      <p className="mt-2 max-w-md text-sm leading-relaxed text-ink/70">{copy}</p>
     </article>
   );
 }
 
 export function RecentWork() {
   return (
-    <section id="recent-work" className="relative overflow-hidden bg-ink py-16 text-white md:py-20">
-      <div className="pointer-events-none absolute top-1/3 left-1/2 h-[600px] w-[1000px] -translate-x-1/2 rounded-full bg-[radial-gradient(closest-side,rgba(255,196,0,0.10),transparent)]" />
+    <section id="recent-work" className="relative overflow-hidden bg-[#FAF8F3] py-16 text-ink md:py-20">
+      <div className="pointer-events-none absolute -top-40 -left-40 h-[340px] w-[520px] -rotate-[20deg] rounded-[50%] bg-gradient-to-br from-[#FFC400] to-[#FFD84D] opacity-90" />
+      <div className="pointer-events-none absolute -right-40 -bottom-40 h-[300px] w-[520px] -rotate-[20deg] rounded-[50%] bg-gradient-to-tl from-[#FFC400] to-[#FFD84D] opacity-90" />
       <div className="relative mx-auto max-w-6xl px-4 md:px-6">
         <Reveal className="mx-auto max-w-3xl text-center">
-          <p className="inline-flex items-center gap-2 rounded-full border border-white/10 px-4 py-1.5 text-[11px] font-semibold tracking-[0.3em] text-white/80">
-            <span className="size-1.5 animate-pulse rounded-full bg-[#FFC400]" /> RECENT OUTPUT
+          <p className="inline-flex items-center gap-2 rounded-full border border-black/15 bg-white px-4 py-1.5 text-[11px] font-bold tracking-[0.3em] text-ink shadow-sm">
+            <span className="size-2.5 animate-pulse rounded-full bg-[#FFC400]" /> RECENT OUTPUT
           </p>
-          <h2 className="mt-5 font-serif text-3xl leading-[1.1] md:text-5xl">
+          <h2 className="mt-5 font-serif text-3xl font-bold leading-[1.1] md:text-5xl">
             Ads people <span className="text-[#FFC400]">stop</span> for.
             <br className="hidden md:block" /> Brands people <span className="text-[#FFC400]">buy</span> from.
           </h2>
-          <p className="mx-auto mt-4 max-w-xl text-white/65">
+          <p className="mx-auto mt-4 max-w-xl text-ink/75">
             Every frame is engineered to win the scroll and close the sale. Here&apos;s a taste of what we&apos;re
             shipping for brands right now.
           </p>
@@ -136,7 +135,7 @@ export function RecentWork() {
 
         <div className="mx-auto mt-10 grid max-w-[300px] gap-10 sm:max-w-[640px] sm:grid-cols-2 md:mt-14 md:gap-8 lg:max-w-[960px] lg:grid-cols-3">
           {WORKS.map((w, i) => (
-            <Reveal key={w.src} className={i === 1 ? "sm:mt-10" : i === 2 ? "sm:col-span-2 sm:mx-auto sm:w-[calc(50%-1rem)] lg:col-span-1 lg:w-auto" : ""}>
+            <Reveal key={w.src} className={i === 2 ? "sm:col-span-2 sm:mx-auto sm:w-[calc(50%-1rem)] lg:col-span-1 lg:w-auto" : ""}>
               <WorkVideo {...w} />
             </Reveal>
           ))}
