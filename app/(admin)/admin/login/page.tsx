@@ -86,7 +86,7 @@ export default function AdminLoginPage() {
               >
                 <span
                   aria-hidden
-                  className="font-[family-name:var(--font-display)] text-[84px] leading-[0.9] tracking-[0.04em] bg-gradient-to-b from-white via-[#f6f1e4] to-[#cfc6b0] bg-clip-text text-transparent drop-shadow-[0_2px_12px_rgba(0,0,0,0.6)]"
+                  className="font-[family-name:var(--font-display)] text-[84px] leading-[1] px-3 pb-1 tracking-[0.04em] bg-gradient-to-b from-white via-[#f6f1e4] to-[#cfc6b0] bg-clip-text text-transparent drop-shadow-[0_2px_12px_rgba(0,0,0,0.6)]"
                 >
                   JAZA
                 </span>
