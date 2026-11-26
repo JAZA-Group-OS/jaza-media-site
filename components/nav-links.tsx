@@ -5,23 +5,23 @@ import { usePathname } from "next/navigation";
 
 import { isInternalRoute, type NavLink } from "@/lib/site-nav";
 
-const BASE = "relative rounded-full px-3.5 py-1.5 transition-colors hover:bg-white/[0.06] hover:text-white";
+const BASE = "relative inline-block px-6 py-3.5 transition-colors hover:text-gold-deep";
 
 export function NavLinks({ links }: { links: NavLink[] }) {
   const pathname = usePathname();
   return (
-    <ul className="flex items-center gap-1 text-sm text-white/80">
+    <ul className="flex items-center gap-2 text-[15px] text-ink/80">
       {links.map((link) => {
         const active =
           isInternalRoute(link.href) && (pathname === link.href || pathname.startsWith(`${link.href}/`));
-        const className = `${BASE} ${active ? "text-white" : ""}`;
+        const className = `${BASE} ${active ? "font-medium text-ink" : ""}`;
         const content = (
           <>
             {link.label}
             {active && (
               <span
                 aria-hidden
-                className="absolute -bottom-1 left-1/2 size-1.5 -translate-x-1/2 rounded-full bg-gold shadow-[0_0_8px_2px_rgba(255,202,38,0.55)]"
+                className="absolute inset-x-6 -bottom-px h-0.5 rounded-full bg-gold"
               />
             )}
           </>

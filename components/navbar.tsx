@@ -7,25 +7,33 @@ import { NAV_LINKS } from "@/lib/site-nav";
 export function Navbar() {
   const links = NAV_LINKS.filter((l) => l.href !== "/partner-with-us");
   return (
-    <header className="sticky top-0 z-40 bg-ink px-3 py-3 text-white md:px-6">
-      <div className="mx-auto flex h-14 max-w-4xl items-center justify-between gap-4 rounded-full md:w-fit md:gap-8 border border-white/10 bg-white/[0.04] pl-6 pr-2 shadow-[0_8px_32px_rgba(0,0,0,0.35)] backdrop-blur-xl md:pl-7">
+    <header className="sticky top-0 z-40 border-b border-black/10 bg-white text-ink shadow-[0_1px_0_rgba(0,0,0,0.02)]">
+      <div className="mx-auto flex h-[72px] max-w-7xl items-center justify-between gap-4 px-5 md:px-10">
         <Link href="/" aria-label="JAZA Media home" className="flex flex-col items-center leading-none">
-          <span className="font-display text-[28px] tracking-[0.18em]">JAZA</span>
-          <span className="mt-0.5 pl-[0.35em] text-[10px] font-semibold tracking-[0.35em] text-gold">MEDIA</span>
+          <span className="font-display text-[28px] tracking-[0.18em] text-ink">JAZA</span>
+          <span className="mt-0.5 pl-[0.35em] text-[10px] font-semibold tracking-[0.35em] text-gold-deep">MEDIA</span>
         </Link>
-        <nav className="hidden md:block" aria-label="Main">
-          <NavLinks links={links} />
-        </nav>
         <div className="flex items-center gap-3">
           <Link
+            href="/support"
+            className="hidden rounded-full border border-ink px-5 py-2 text-sm font-medium text-ink shadow-[0_2px_6px_rgba(0,0,0,0.12)] transition hover:bg-ink hover:text-white md:inline-flex"
+          >
+            Book a call
+          </Link>
+          <Link
             href="/partner-with-us"
-            className="cta-breathe hidden rounded-full bg-gold px-4 py-2 text-sm font-semibold text-ink transition hover:bg-white hover:text-ink md:inline-flex"
+            className="hidden rounded-full bg-gold px-5 py-2 text-sm font-semibold text-ink shadow-[0_2px_8px_rgba(0,0,0,0.18)] transition hover:bg-ink hover:text-white md:inline-flex"
           >
             Partner With Us
           </Link>
           <MobileMenu className="md:hidden" />
         </div>
       </div>
+      <nav className="hidden border-t border-black/10 md:block" aria-label="Main">
+        <div className="mx-auto max-w-7xl px-10">
+          <NavLinks links={links} />
+        </div>
+      </nav>
     </header>
   );
 }
