@@ -67,17 +67,17 @@ export default function AdminLoginPage() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="relative w-full max-w-[506px]"
+        className="relative w-full max-w-[400px]"
       >
-        <div className="relative min-h-[473px] rounded-[2rem] border-[1.5px] border-[#E8B400]/70 bg-[#0c0c0e] bg-[radial-gradient(120%_70%_at_0%_0%,rgba(255,196,0,0.14),transparent_55%),linear-gradient(180deg,#141416,#08080a)] px-6 py-7 sm:px-8 sm:py-8 shadow-[inset_0_1px_0_rgba(255,220,120,0.25),0_0_30px_rgba(255,196,0,0.10),0_30px_60px_-20px_rgba(0,0,0,0.85)]">
+        <div className="relative rounded-[2rem] border-[1.5px] border-[#E8B400]/70 bg-[#0c0c0e] bg-[radial-gradient(120%_70%_at_0%_0%,rgba(255,196,0,0.14),transparent_55%),linear-gradient(180deg,#141416,#08080a)] px-6 py-7 sm:px-8 sm:py-8 shadow-[inset_0_1px_0_rgba(255,220,120,0.25),0_0_30px_rgba(255,196,0,0.10),0_30px_60px_-20px_rgba(0,0,0,0.85)]">
           {/* bottom edge glow */}
           <div className="pointer-events-none absolute -bottom-[1.5px] left-1/2 h-[2px] w-[70%] -translate-x-1/2 bg-gradient-to-r from-transparent via-[#FFC400] to-transparent" />
           <div className="pointer-events-none absolute -bottom-[2px] left-1/2 h-[3px] w-[30%] -translate-x-1/2 rounded-full bg-[#FFE27A] blur-[2px]" />
           <div className="pointer-events-none absolute -bottom-10 left-1/2 h-16 w-[60%] -translate-x-1/2 rounded-[50%] bg-[radial-gradient(closest-side,rgba(255,180,0,0.35),transparent)]" />
 
-          <div className="text-center mb-5">
-            {/* fixed-size spacer: the logo floats above the card without shifting the form */}
-            <div className="relative mx-auto mb-3 h-14 w-[140px]">
+          <div className="text-center">
+            {/* zero-height anchor: the logo floats above the card without shifting the form */}
+            <div className="relative mx-auto h-0 w-[140px]">
               {/* Live-text wordmark: crisp at any size, no black box */}
               <div
                 role="img"
@@ -100,10 +100,7 @@ export default function AdminLoginPage() {
                 </span>
               </div>
             </div>
-            <h1 className="font-[family-name:var(--font-heading)] text-[2rem] sm:text-[2.4rem] font-bold leading-tight mb-2 tracking-tight text-white -translate-y-10">
-              Admin
-            </h1>
-            <div className="w-10 h-[3px] bg-[#FFC400] mx-auto rounded-full -translate-y-10" />
+            <h1 className="sr-only">Admin login</h1>
           </div>
 
           {error && (
