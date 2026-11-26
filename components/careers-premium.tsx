@@ -235,24 +235,24 @@ const TOGETHER = [
 function Together() {
   return (
     <section id="life" className={`${SLIDE} bg-[#FAF9F6] py-20 md:py-14`}>
-      <div className="mx-auto w-full max-w-[1200px] px-5 md:px-8">
+      <div className="mx-auto w-full max-w-[1400px] px-5 md:px-10">
         <Reveal className="mb-12 max-w-[720px]">
           <Eyebrow>Life at JAZA</Eyebrow>
           <h2 className={`${H2} mt-5`}>
             How we work <Accent>together.</Accent>
           </h2>
-          <p className="mt-3 text-[17px] text-ink/60">Impact over hours. Systems over shortcuts. Growth as part of the job.</p>
+          <p className="mt-3 text-[19px] text-ink/60">Impact over hours. Systems over shortcuts. Growth as part of the job.</p>
         </Reveal>
-        <div className="grid gap-8 md:grid-cols-3">
+        <div className="grid gap-8 md:grid-cols-3 lg:gap-10">
           {TOGETHER.map((t, i) => (
             <Reveal key={t.title} delay={i * 0.1}>
               <article>
-                <div className="relative aspect-[4/3] overflow-hidden rounded-2xl bg-[#EDEAE3]">
-                  <Image src={img(t.photo)} alt={t.title} fill sizes="(min-width: 768px) 380px, 100vw" className="object-cover object-top" />
+                <div className="relative aspect-[5/4] overflow-hidden rounded-2xl bg-[#EDEAE3]">
+                  <Image src={img(t.photo)} alt={t.title} fill sizes="(min-width: 768px) 460px, 100vw" className="object-cover object-top" />
                 </div>
-                <h3 className="mt-5 font-heading text-[22px] font-semibold">{t.title}</h3>
-                <p className="mt-1 text-[15px] font-medium text-gold-deep">{t.short}</p>
-                <p className="mt-3 text-[15px] leading-7 text-ink/60">{t.body}</p>
+                <h3 className="mt-6 font-heading text-[26px] font-semibold">{t.title}</h3>
+                <p className="mt-1 text-[17px] font-medium text-gold-deep">{t.short}</p>
+                <p className="mt-3 text-[16.5px] leading-[1.75] text-ink/60">{t.body}</p>
               </article>
             </Reveal>
           ))}
