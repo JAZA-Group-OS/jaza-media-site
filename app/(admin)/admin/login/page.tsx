@@ -21,8 +21,23 @@ export default function AdminLoginPage() {
     () => false,
   );
   const [logoW, setLogoW] = useState(140);
+  const [logoPos, setLogoPos] = useState({ x: -7, y: -153 });
+  const startLogoDrag = (e: React.PointerEvent) => {
+    if (!resizeMode) return;
+    e.preventDefault();
+    const sx = e.clientX, sy = e.clientY, s0 = logoPos;
+    const move = (ev: PointerEvent) =>
+      setLogoPos({ x: Math.round(s0.x + ev.clientX - sx), y: Math.round(s0.y + ev.clientY - sy) });
+    const up = () => {
+      window.removeEventListener('pointermove', move);
+      window.removeEventListener('pointerup', up);
+    };
+    window.addEventListener('pointermove', move);
+    window.addEventListener('pointerup', up);
+  };
   const startLogoResize = (e: React.PointerEvent) => {
     e.preventDefault();
+    e.stopPropagation();
     const sx = e.clientX;
     const sw = logoW;
     // logo is centered, so it grows by twice the pointer travel
@@ -97,9 +112,16 @@ export default function AdminLoginPage() {
           <div className="pointer-events-none absolute -bottom-10 left-1/2 h-16 w-[60%] -translate-x-1/2 rounded-[50%] bg-[radial-gradient(closest-side,rgba(255,180,0,0.35),transparent)]" />
 
           <div className="text-center mb-5">
+            {/* fixed-size spacer: moving or resizing the logo never shifts the form */}
+            <div className="relative mx-auto mb-3 h-14 w-[140px]">
             <div
-              className="relative mx-auto mb-3 -translate-x-[7px] -translate-y-[153px]"
-              style={{ width: logoW, height: logoW / 2.5 }}
+              onPointerDown={startLogoDrag}
+              className={`absolute left-1/2 top-0 ${resizeMode ? 'cursor-grab active:cursor-grabbing touch-none' : ''}`}
+              style={{
+                width: logoW,
+                height: logoW / 2.5,
+                transform: `translate(calc(-50% + ${logoPos.x}px), ${logoPos.y}px)`,
+              }}
             >
               {resizeMode && (
                 <>
@@ -109,10 +131,11 @@ export default function AdminLoginPage() {
                     className="absolute -bottom-2 -right-2 h-4 w-4 cursor-nwse-resize rounded-sm bg-[#FFC400] ring-2 ring-black touch-none"
                   />
                   <div className="absolute -bottom-7 left-1/2 -translate-x-1/2 whitespace-nowrap rounded bg-black/80 px-2 py-0.5 font-mono text-xs text-[#FFC400]">
-                    logo {logoW} × {Math.round(logoW / 2.5)}px
+                    logo {logoW} × {Math.round(logoW / 2.5)}px · moved {logoPos.x}, {logoPos.y}
                   </div>
                 </>
               )}
+            </div>
             </div>
             <h1 className="font-[family-name:var(--font-heading)] text-2xl sm:text-[1.7rem] font-bold leading-tight mb-2 tracking-tight">
               JAZA Media <span className="text-[#FFC400]">Access</span>
