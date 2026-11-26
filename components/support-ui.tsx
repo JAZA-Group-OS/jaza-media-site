@@ -16,12 +16,10 @@ export function Gold({ children }: { children: ReactNode }) {
 
 export function Eyebrow({ children }: { children: ReactNode }) {
   return (
-    <p className="inline-flex items-center gap-2.5 rounded-full border border-white/10 bg-white/[0.03] px-4 py-1.5 text-[10.5px] font-medium tracking-[0.32em] text-white/70 uppercase backdrop-blur">
-      <span aria-hidden className="relative flex size-1.5">
-        <span className="absolute inline-flex size-full animate-ping rounded-full bg-gold/70" />
-        <span className="relative size-1.5 rounded-full bg-gold shadow-[0_0_10px_2px_rgba(234,179,8,0.6)]" />
-      </span>
+    <p className="flex items-center gap-3 text-[11px] font-semibold tracking-[0.28em] text-white/60 uppercase">
+      <span aria-hidden className="h-px w-8 bg-gold/80" />
       {children}
+      <span aria-hidden className="h-px w-8 bg-gold/80" />
     </p>
   );
 }
