@@ -37,16 +37,16 @@ export function Hero() {
       </svg>
 
       {/* bottom fade — off-white melts into the white section below, no seam */}
-      <div aria-hidden className="pointer-events-none absolute inset-x-0 bottom-0 z-[5] h-40 bg-gradient-to-b from-transparent to-white" />
+      <div aria-hidden className="pointer-events-none absolute inset-x-0 bottom-0 z-[5] h-28 bg-gradient-to-b from-transparent to-white" />
 
-      <div className="relative z-10 mx-auto flex max-w-6xl flex-col items-center px-4 pt-12 text-center md:px-6 md:pt-20">
+      <div className="relative z-10 mx-auto flex max-w-6xl flex-col items-center px-4 pt-10 text-center md:px-6 md:pt-14">
         <Reveal>
           <p className="text-[12px] font-bold tracking-[0.32em] text-ink md:text-[15px]">
             MARKETING <span className="mx-2 text-gold">·</span> ADVERTISING <span className="mx-2 text-gold">·</span> SCALING
           </p>
         </Reveal>
         <Reveal delay={0.08}>
-          <h1 className="mt-10 max-w-[16ch] font-sans text-[46px] leading-[1.02] font-extrabold tracking-[-0.035em] text-ink sm:text-6xl lg:text-[104px]">
+          <h1 className="mt-7 max-w-[16ch] font-sans text-[46px] leading-[1.02] font-extrabold tracking-[-0.035em] text-ink sm:text-6xl lg:text-[88px]">
             Do you want to{" "}
             <em className="relative inline-block not-italic text-gold">
               scale
@@ -58,23 +58,23 @@ export function Hero() {
           </h1>
         </Reveal>
         <Reveal delay={0.16}>
-          <p className="mx-auto mt-8 max-w-3xl text-[18px] leading-relaxed text-ink/65 md:text-[30px]">
+          <p className="mx-auto mt-6 max-w-3xl text-[18px] leading-relaxed text-ink/65 md:text-[25px]">
             Learn from the team that has scaled a portfolio to over{" "}
             <span className="font-extrabold text-gold">₱150M+</span> in annual revenue.
           </p>
         </Reveal>
         <Reveal delay={0.24}>
-          <div className="mt-12 flex flex-wrap items-center justify-center gap-6 pb-20 md:pb-24">
+          <div className="mt-9 flex flex-wrap items-center justify-center gap-6 pb-16 md:pb-14">
             <Link
               href="/partner-with-us"
-              className="group inline-flex items-center gap-3 rounded-full bg-gold px-12 py-5 text-[15px] font-bold tracking-[0.12em] text-ink shadow-[0_14px_36px_-12px_rgba(234,179,8,0.7)] transition hover:bg-ink hover:text-white"
+              className="group inline-flex items-center gap-3 rounded-full bg-gold px-11 py-4 text-[15px] font-bold tracking-[0.12em] text-ink shadow-[0_14px_36px_-12px_rgba(234,179,8,0.7)] transition hover:bg-ink hover:text-white"
             >
               LEARN TO SCALE
               <ArrowRight className="size-5 transition-transform group-hover:translate-x-1" strokeWidth={2.5} />
             </Link>
             <a
               href="#free-advance-marketing"
-              className="inline-flex items-center rounded-full border border-ink/40 bg-white px-14 py-5 text-[15px] font-bold tracking-[0.12em] text-ink transition hover:border-ink hover:bg-ink hover:text-white"
+              className="inline-flex items-center rounded-full border border-ink/40 bg-white px-12 py-4 text-[15px] font-bold tracking-[0.12em] text-ink transition hover:border-ink hover:bg-ink hover:text-white"
             >
               FREE RESOURCES
             </a>
