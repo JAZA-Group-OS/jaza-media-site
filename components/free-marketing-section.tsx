@@ -39,11 +39,11 @@ export function FreeMarketingSection() {
     <section id="free-advance-marketing" className="home-slide relative overflow-hidden bg-[#FAF8F3] py-14 text-ink md:flex md:min-h-[calc(100svh-114px)] md:flex-col md:justify-center md:py-10">
       <div aria-hidden className="pointer-events-none absolute -top-32 -right-32 size-[420px] rounded-full bg-[radial-gradient(closest-side,rgba(255,196,0,0.35),transparent)]" />
       <div aria-hidden className="pointer-events-none absolute -bottom-40 -left-40 size-[420px] rounded-full bg-[radial-gradient(closest-side,rgba(255,196,0,0.3),transparent)]" />
-      <div className="relative mx-auto w-full max-w-6xl px-4 md:px-6">
+      <div className="relative mx-auto w-full max-w-[1320px] px-4 md:px-8">
         <Reveal className="flex items-end justify-between gap-6">
           <div>
             <p className="flex items-center gap-3 text-[12px] font-bold tracking-[0.3em] text-ink">FREE RESOURCES <span className="h-0.5 w-12 rounded bg-[#FFC400]" /></p>
-            <h2 className="mt-4 font-serif text-4xl font-bold leading-[1.02] tracking-[-0.02em] md:text-6xl">
+            <h2 className="mt-4 font-serif text-4xl font-bold leading-[1.02] tracking-[-0.02em] md:text-7xl">
               Free <span className="text-[#FFC400]">advanced</span> marketing
             </h2>
             <p className="mt-4 max-w-md text-[16px] leading-relaxed text-ink/70">
@@ -59,7 +59,7 @@ export function FreeMarketingSection() {
           </Link>
         </Reveal>
 
-        <div className="mt-10 grid gap-6 md:mx-auto md:max-w-[min(100%,calc((100svh-480px)*3.4))] md:grid-cols-3">
+        <div className="mt-10 grid gap-8 md:mx-auto md:max-w-[min(100%,calc((100svh-400px)*4.2))] md:grid-cols-3">
           {COURSES.map((c, i) => (
             <Reveal key={c.title} delay={i * 0.08}>
               <Link href={c.href} className="group block overflow-hidden rounded-2xl border border-black/10 bg-white shadow-[0_20px_50px_-30px_rgba(0,0,0,0.35)] transition duration-500 hover:-translate-y-1 hover:shadow-[0_30px_60px_-30px_rgba(0,0,0,0.45)]">
