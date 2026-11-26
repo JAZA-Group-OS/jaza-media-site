@@ -1,6 +1,9 @@
-import { ArrowRight, Check } from "lucide-react";
+"use client";
+
+import { ArrowRight, Check, ChevronDown } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { useState } from "react";
 
 
 const PERKS = ["Sales Call Script", "AI Prompt Template", "Sent to your inbox in under 30 seconds"];
@@ -26,82 +29,109 @@ const FAQS = [
 ];
 
 export function Faqs() {
+  const [open, setOpen] = useState<number | null>(0);
   return (
-    <section className="relative overflow-hidden bg-ink py-20 text-white md:py-28">
-      <div
-        aria-hidden
-        className="pointer-events-none absolute left-1/2 top-0 size-[640px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-gold/10 blur-[140px]"
-      />
-      <div className="relative mx-auto grid max-w-[1560px] gap-10 px-4 md:px-8 lg:grid-cols-[1.3fr_1fr] lg:gap-14 xl:px-12">
+    <section className="home-slide relative overflow-hidden bg-[#FAF8F3] py-16 text-ink md:flex md:min-h-[calc(100svh-114px)] md:flex-col md:justify-center md:py-12">
+      <div aria-hidden className="pointer-events-none absolute -right-48 -bottom-48 h-[380px] w-[620px] -rotate-[25deg] rounded-[50%] bg-gradient-to-tl from-[#FFC400] to-[#FFE07A] opacity-90" />
+      <div aria-hidden className="pointer-events-none absolute -right-40 -bottom-64 h-[380px] w-[620px] -rotate-[25deg] rounded-[50%] bg-[#FFD84D]/60" />
+      <div className="relative mx-auto grid w-full max-w-[1320px] gap-10 px-4 md:px-8 lg:grid-cols-[1.25fr_1fr] lg:items-center lg:gap-12">
         {/* FAQs */}
         <div>
-          <p className="inline-flex w-fit items-center gap-2.5 rounded-full border border-white/10 bg-white/[0.03] px-4 py-1.5 text-[10.5px] font-medium tracking-[0.32em] text-white/70 backdrop-blur">
-            <span aria-hidden className="size-1.5 rounded-full bg-gold shadow-[0_0_10px_2px_rgba(234,179,8,0.6)]" />
-            FAQS
+          <p className="flex items-center gap-3 text-[12px] font-bold tracking-[0.3em] text-ink">
+            FAQS <span className="h-0.5 w-12 rounded bg-[#FFC400]" />
           </p>
-          <h2 className="mt-6 font-serif text-5xl leading-[1.02] tracking-[-0.03em] md:text-[60px]">
-            <span className="bg-gradient-to-b from-white via-white to-white/60 bg-clip-text text-transparent">Questions,</span>{" "}
-            <em className="bg-gradient-to-br from-[#fbe7a1] via-gold to-[#a97a1f] bg-clip-text pr-2 text-transparent">answered</em>
+          <h2 className="mt-3 font-serif text-5xl font-bold leading-[1.05] tracking-[-0.03em] md:text-[64px]">
+            Questions,{" "}
+            <span className="relative inline-block px-2">
+              <span aria-hidden className="absolute inset-x-0 top-[12%] bottom-[2%] -skew-x-3 bg-[#FFC400]" />
+              <span className="relative">answered.</span>
+            </span>
           </h2>
-          <div className="mt-8 grid gap-4 sm:grid-cols-2">
-            {FAQS.map((item, i) => (
-              <article
-                key={i}
-                className="flex flex-col rounded-3xl border border-white/10 bg-white/[0.03] p-7 transition duration-300 hover:-translate-y-0.5 hover:border-gold/40 hover:bg-white/[0.05]"
-              >
-                <div className="flex items-center justify-between">
-                  <span className="font-serif text-2xl italic text-gold">0{i + 1}</span>
-                  <span aria-hidden className="h-px w-12 bg-gradient-to-r from-gold/60 to-transparent" />
-                </div>
-                <h3 className="mt-4 font-sans text-[17px] font-semibold leading-snug tracking-[-0.01em] text-white">{item.q}</h3>
-                <p className="mt-3 text-[14px] font-light leading-6 tracking-wide text-white/55">{item.a}</p>
-              </article>
-            ))}
+          <div className="mt-8 space-y-3">
+            {FAQS.map((item, i) => {
+              const isOpen = open === i;
+              return (
+                <article
+                  key={i}
+                  className={`rounded-2xl border bg-white transition-all duration-300 ${
+                    isOpen
+                      ? "border-[#FFC400]/70 shadow-[0_20px_45px_-28px_rgba(0,0,0,0.4)]"
+                      : "border-black/10 shadow-[0_8px_24px_-20px_rgba(0,0,0,0.3)] hover:border-black/20"
+                  }`}
+                >
+                  <button
+                    type="button"
+                    onClick={() => setOpen(isOpen ? null : i)}
+                    aria-expanded={isOpen}
+                    className="flex w-full items-center gap-4 px-5 py-4 text-left md:px-6"
+                  >
+                    <span className="grid h-8 w-11 shrink-0 place-items-center rounded-md bg-[#FFC400] text-sm font-bold text-ink">
+                      0{i + 1}
+                    </span>
+                    <span aria-hidden className="h-7 w-px shrink-0 bg-[#FFC400]/70" />
+                    <h3 className="flex-1 font-serif text-[17px] font-bold leading-snug md:text-[19px]">{item.q}</h3>
+                    <ChevronDown
+                      className={`size-5 shrink-0 transition-transform duration-300 ${isOpen ? "rotate-180" : ""}`}
+                    />
+                  </button>
+                  <div
+                    className={`grid transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+                      isOpen ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
+                    }`}
+                  >
+                    <div className="overflow-hidden">
+                      <p
+                        className={`pr-6 pb-5 pl-5 text-[14.5px] leading-6 text-ink/75 transition-transform duration-500 md:pl-[100px] ${
+                          isOpen ? "translate-y-0" : "-translate-y-2"
+                        }`}
+                      >
+                        {item.a}
+                      </p>
+                    </div>
+                  </div>
+                </article>
+              );
+            })}
           </div>
         </div>
 
         {/* Free templates promo */}
-        <div className="flex rounded-[32px] lg:mt-[118px] bg-gradient-to-br from-gold/50 via-white/10 to-white/[0.04] p-px shadow-[0_40px_120px_-40px_rgba(0,0,0,0.9)]">
-          <div className="relative flex w-full flex-col justify-center overflow-hidden rounded-[31px] bg-[radial-gradient(120%_120%_at_0%_0%,#2a2210_0%,#121212_45%,#0c0c0d_100%)] p-7 md:p-10 xl:p-12">
-            <div aria-hidden className="pointer-events-none absolute -top-32 -left-32 size-[380px] rounded-full bg-gold/20 blur-[120px]" />
-            <div className="relative overflow-hidden rounded-2xl ring-1 ring-white/15 shadow-[0_30px_60px_-30px_rgba(0,0,0,0.95)]">
-              <Image
-                src="/about-the-form/Marketing Templates.png"
-                alt="JAZA Media marketing templates preview"
-                width={4000}
-                height={2250}
-                sizes="(min-width: 1024px) 40vw, 100vw"
-                className="h-auto w-full"
-              />
-            </div>
-            <p className="relative mt-7 inline-flex w-fit items-center gap-2.5 rounded-full border border-white/10 bg-white/[0.03] px-4 py-1.5 text-[10.5px] font-medium tracking-[0.32em] text-white/70">
-              <span aria-hidden className="size-1.5 rounded-full bg-gold shadow-[0_0_10px_2px_rgba(234,179,8,0.6)]" />
-              BRAND NEW · FREE
-            </p>
-            <h3 className="relative mt-6 font-serif text-4xl leading-[1.04] tracking-[-0.03em] md:text-[52px]">
-              <span className="bg-gradient-to-b from-white via-white to-white/60 bg-clip-text text-transparent">JAZA Media</span>{" "}
-              <em className="bg-gradient-to-br from-[#fbe7a1] via-gold to-[#a97a1f] bg-clip-text pr-1 text-transparent">Marketing Templates</em>
-            </h3>
-            <ul className="relative mt-6 space-y-3">
-              {PERKS.map((p) => (
-                <li key={p} className="flex items-center gap-3 text-[15px] text-white/75">
-                  <span className="grid size-5 place-items-center rounded-full bg-gold/15 text-gold ring-1 ring-gold/30">
-                    <Check className="size-3" />
-                  </span>
-                  {p}
-                </li>
-              ))}
-            </ul>
-            <Link
-              href="/courses/marketing-templates"
-              className="group relative mt-8 inline-flex w-fit items-center gap-2.5 rounded-full bg-gold px-7 py-3.5 text-[13px] font-semibold tracking-[0.12em] text-ink shadow-[0_10px_40px_-10px_rgba(234,179,8,0.55)] transition hover:bg-white"
-            >
-              DOWNLOAD NOW
-              <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" />
-            </Link>
+        <div className="relative rounded-[28px] border-[1.5px] border-[#FFC400]/70 bg-[#FFFCF2] p-6 shadow-[0_30px_70px_-40px_rgba(0,0,0,0.35)] md:p-9">
+          <div className="overflow-hidden rounded-2xl shadow-[0_20px_45px_-25px_rgba(0,0,0,0.5)]">
+            <Image
+              src="/about-the-form/Marketing Templates.png"
+              alt="JAZA Media marketing templates preview"
+              width={4000}
+              height={2250}
+              sizes="(min-width: 1024px) 40vw, 100vw"
+              className="h-auto w-full"
+            />
           </div>
+          <p className="mt-6 inline-flex w-fit items-center gap-2 rounded-full bg-[#F3EEE2] px-4 py-1.5 text-[11px] font-bold tracking-[0.18em] text-ink">
+            <span aria-hidden className="size-2 rounded-full bg-[#FFC400]" />
+            BRAND NEW · FREE
+          </p>
+          <h3 className="mt-4 font-serif text-4xl font-bold leading-[1.02] tracking-[-0.03em] md:text-[48px]">
+            JAZA Media <span className="block text-[#FFC400]">Marketing Templates</span>
+          </h3>
+          <ul className="mt-5 space-y-2.5">
+            {PERKS.map((p) => (
+              <li key={p} className="flex items-center gap-3 text-[15px] text-ink/85">
+                <span className="grid size-5 place-items-center rounded-full bg-[#FFC400] text-ink">
+                  <Check className="size-3" strokeWidth={3} />
+                </span>
+                {p}
+              </li>
+            ))}
+          </ul>
+          <Link
+            href="/courses/marketing-templates"
+            className="group mt-7 inline-flex w-fit items-center gap-2.5 rounded-full bg-[#FFC400] px-8 py-3.5 text-[15px] font-bold text-ink shadow-[0_10px_30px_-10px_rgba(255,196,0,0.7)] transition hover:bg-[#FFD23F]"
+          >
+            Get Free Templates
+            <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" />
+          </Link>
         </div>
-
       </div>
     </section>
   );
