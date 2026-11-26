@@ -23,8 +23,7 @@ export function Hero() {
 
       <div className="relative z-10 mx-auto flex max-w-3xl flex-col items-center px-4 pt-6 text-center md:px-6 md:pt-24">
         <Reveal>
-          <p className="inline-flex items-center gap-2.5 rounded-full border border-black/10 bg-black/[0.03] px-4 py-1.5 text-[10.5px] font-medium tracking-[0.32em] text-ink/70 backdrop-blur">
-            <span aria-hidden className="size-1.5 rounded-full bg-gold shadow-[0_0_10px_2px_rgba(234,179,8,0.6)]" />
+          <p className="text-[11px] font-semibold tracking-[0.3em] text-ink/60">
             MARKETING · ADVERTISING · SCALING
           </p>
         </Reveal>
