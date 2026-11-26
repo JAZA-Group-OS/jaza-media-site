@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 
 import { isInternalRoute, type NavLink } from "@/lib/site-nav";
 
-const BASE = "relative inline-block px-6 py-3.5 transition-colors hover:text-gold-deep";
+const BASE = "relative inline-block px-4 py-2 transition-colors hover:text-gold-deep";
 
 export function NavLinks({ links }: { links: NavLink[] }) {
   const pathname = usePathname();
@@ -21,7 +21,7 @@ export function NavLinks({ links }: { links: NavLink[] }) {
             {active && (
               <span
                 aria-hidden
-                className="absolute inset-x-6 -bottom-px h-0.5 rounded-full bg-gold"
+                className="absolute inset-x-4 bottom-0 h-0.5 rounded-full bg-gold"
               />
             )}
           </>

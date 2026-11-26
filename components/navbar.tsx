@@ -13,6 +13,9 @@ export function Navbar() {
           <span className="font-display text-[28px] tracking-[0.18em] text-ink">JAZA</span>
           <span className="mt-0.5 pl-[0.35em] text-[10px] font-semibold tracking-[0.35em] text-gold-deep">MEDIA</span>
         </Link>
+        <nav className="hidden md:block" aria-label="Main">
+          <NavLinks links={links} />
+        </nav>
         <div className="flex items-center gap-3">
           <Link
             href="/support"
@@ -29,11 +32,6 @@ export function Navbar() {
           <MobileMenu className="md:hidden" />
         </div>
       </div>
-      <nav className="hidden border-t border-black/10 md:block" aria-label="Main">
-        <div className="mx-auto max-w-7xl px-10">
-          <NavLinks links={links} />
-        </div>
-      </nav>
     </header>
   );
 }
