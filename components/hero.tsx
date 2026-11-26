@@ -39,7 +39,7 @@ export function Hero() {
       {/* bottom fade — off-white melts into the white section below, no seam */}
       <div aria-hidden className="pointer-events-none absolute inset-x-0 bottom-0 z-[5] h-28 bg-gradient-to-b from-transparent to-white" />
 
-      <div className="relative z-10 mx-auto flex max-w-6xl flex-col items-center px-4 pt-10 text-center md:px-6 md:pt-14">
+      <div className="relative z-10 mx-auto flex max-w-6xl flex-col items-center px-4 pt-10 text-center md:px-6 md:pt-20">
         <Reveal>
           <p className="text-[12px] font-bold tracking-[0.32em] text-ink md:text-[15px]">
             MARKETING <span className="mx-2 text-gold">·</span> ADVERTISING <span className="mx-2 text-gold">·</span> SCALING
@@ -64,7 +64,7 @@ export function Hero() {
           </p>
         </Reveal>
         <Reveal delay={0.24}>
-          <div className="mt-9 flex flex-wrap items-center justify-center gap-6 pb-16 md:pb-14">
+          <div className="mt-9 flex flex-wrap items-center justify-center gap-6 pb-16 md:pb-20">
             <Link
               href="/partner-with-us"
               className="group inline-flex items-center gap-3 rounded-full bg-gold px-11 py-4 text-[15px] font-bold tracking-[0.12em] text-ink shadow-[0_14px_36px_-12px_rgba(234,179,8,0.7)] transition hover:bg-ink hover:text-white"
