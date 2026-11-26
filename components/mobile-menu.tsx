@@ -104,7 +104,7 @@ export function MobileMenu({ className = "" }: { className?: string }) {
         aria-haspopup="dialog"
         aria-expanded={open}
         aria-controls={panelId}
-        className={`text-ink ${className}`}
+        className={`text-white ${className}`}
       >
         <Menu className="size-9" strokeWidth={2.5} />
       </button>
