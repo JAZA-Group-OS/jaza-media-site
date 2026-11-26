@@ -127,7 +127,7 @@ export function RecentWork() {
           </p>
         </Reveal>
 
-        <div className="mx-auto mt-10 grid max-w-[640px] gap-10 sm:grid-cols-2 md:mt-14 md:gap-8">
+        <div className="mx-auto mt-10 grid max-w-[300px] gap-10 sm:max-w-[640px] sm:grid-cols-2 md:mt-14 md:gap-8">
           {WORKS.map((w, i) => (
             <Reveal key={w.src} className={i === 1 ? "sm:mt-10" : ""}>
               <WorkVideo {...w} />

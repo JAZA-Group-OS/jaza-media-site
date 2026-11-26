@@ -110,7 +110,7 @@ export function SupportSlides({ children }: { children: ReactNode }) {
             aria-hidden={i !== index}
             inert={i !== index}
             data-dir={dir}
-            className={`absolute inset-0 overflow-x-hidden overflow-y-auto transition-[transform,opacity] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none ${offset}`}
+            className={`absolute inset-0 overflow-x-hidden overflow-y-auto pb-20 md:pb-0 transition-[transform,opacity] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none ${offset}`}
           >
             {slide}
           </div>
