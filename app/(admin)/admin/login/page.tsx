@@ -3,7 +3,7 @@
 import type React from 'react';
 
 import { motion } from 'framer-motion';
-import { useState, useSyncExternalStore } from 'react';
+import { useState } from 'react';
 import { Eye, EyeOff, Lock, Mail, ShieldCheck } from 'lucide-react';
 import { supabase } from '@/lib/supabase/client';
 
@@ -13,42 +13,6 @@ export default function AdminLoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-
-  // Temporary sizing tool: /admin/login?resize=1 shows a handle on the logo.
-  const resizeMode = useSyncExternalStore(
-    () => () => {},
-    () => new URLSearchParams(window.location.search).has('resize'),
-    () => false,
-  );
-  const [logoW, setLogoW] = useState(140);
-  const [logoPos, setLogoPos] = useState({ x: -7, y: -153 });
-  const startLogoDrag = (e: React.PointerEvent) => {
-    if (!resizeMode) return;
-    e.preventDefault();
-    const sx = e.clientX, sy = e.clientY, s0 = logoPos;
-    const move = (ev: PointerEvent) =>
-      setLogoPos({ x: Math.round(s0.x + ev.clientX - sx), y: Math.round(s0.y + ev.clientY - sy) });
-    const up = () => {
-      window.removeEventListener('pointermove', move);
-      window.removeEventListener('pointerup', up);
-    };
-    window.addEventListener('pointermove', move);
-    window.addEventListener('pointerup', up);
-  };
-  const startLogoResize = (e: React.PointerEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    const sx = e.clientX;
-    const sw = logoW;
-    // logo is centered, so it grows by twice the pointer travel
-    const move = (ev: PointerEvent) => setLogoW(Math.max(40, Math.round(sw + (ev.clientX - sx) * 2)));
-    const up = () => {
-      window.removeEventListener('pointermove', move);
-      window.removeEventListener('pointerup', up);
-    };
-    window.addEventListener('pointermove', move);
-    window.addEventListener('pointerup', up);
-  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -112,39 +76,17 @@ export default function AdminLoginPage() {
           <div className="pointer-events-none absolute -bottom-10 left-1/2 h-16 w-[60%] -translate-x-1/2 rounded-[50%] bg-[radial-gradient(closest-side,rgba(255,180,0,0.35),transparent)]" />
 
           <div className="text-center mb-5">
-            {/* fixed-size spacer: moving or resizing the logo never shifts the form */}
+            {/* fixed-size spacer: the logo floats above the card without shifting the form */}
             <div className="relative mx-auto mb-3 h-14 w-[140px]">
-            <div
-              onPointerDown={startLogoDrag}
-              className={`absolute left-1/2 top-0 ${resizeMode ? 'cursor-grab active:cursor-grabbing touch-none' : ''}`}
-              style={{
-                width: logoW,
-                height: logoW / 2.5,
-                transform: `translate(calc(-50% + ${logoPos.x}px), ${logoPos.y}px)`,
-              }}
-            >
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src="/images/jaza-media-icon.png"
                 alt="JAZA Media"
-                width={140}
-                height={56}
+                width={280}
+                height={112}
                 draggable={false}
-                className={`h-full w-full select-none rounded-md object-cover object-center ${resizeMode ? 'outline-1 outline-dashed outline-[#FFC400]/70' : ''}`}
+                className="absolute left-1/2 top-0 h-[112px] w-[280px] max-w-none -translate-x-1/2 -translate-y-[199px] select-none rounded-md object-cover object-center"
               />
-              {resizeMode && (
-                <>
-                  <div
-                    onPointerDown={startLogoResize}
-                    title="Drag to resize"
-                    className="absolute -bottom-2 -right-2 h-4 w-4 cursor-nwse-resize rounded-sm bg-[#FFC400] ring-2 ring-black touch-none"
-                  />
-                  <div className="absolute -bottom-7 left-1/2 -translate-x-1/2 whitespace-nowrap rounded bg-black/80 px-2 py-0.5 font-mono text-xs text-[#FFC400]">
-                    logo {logoW} × {Math.round(logoW / 2.5)}px · moved {logoPos.x}, {logoPos.y}
-                  </div>
-                </>
-              )}
-            </div>
             </div>
             <h1 className="font-[family-name:var(--font-heading)] text-2xl sm:text-[1.7rem] font-bold leading-tight mb-2 tracking-tight">
               JAZA Media <span className="text-[#FFC400]">Access</span>
