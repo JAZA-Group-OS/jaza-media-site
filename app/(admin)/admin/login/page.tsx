@@ -123,6 +123,15 @@ export default function AdminLoginPage() {
                 transform: `translate(calc(-50% + ${logoPos.x}px), ${logoPos.y}px)`,
               }}
             >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/images/jaza-media-icon.png"
+                alt="JAZA Media"
+                width={140}
+                height={56}
+                draggable={false}
+                className={`h-full w-full select-none rounded-md object-cover object-center ${resizeMode ? 'outline-1 outline-dashed outline-[#FFC400]/70' : ''}`}
+              />
               {resizeMode && (
                 <>
                   <div
