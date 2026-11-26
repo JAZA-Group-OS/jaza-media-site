@@ -17,8 +17,10 @@ export default function Home() {
         <Navbar />
       </div>
       <main>
-        <Hero />
-        <ValuedClients variant="light" />
+        <section data-dot-label="Home" className="home-slide flex flex-col md:min-h-[calc(100svh-114px)] md:justify-between">
+          <Hero />
+          <ValuedClients variant="light" />
+        </section>
         <RecentWork />
         <FreeMarketingSection />
         <Founders />

@@ -125,6 +125,11 @@ html.no-scrollbar { scrollbar-width: none; scroll-behavior: smooth; scroll-paddi
 @media (min-width: 768px) {
   html.no-scrollbar { scroll-snap-type: y mandatory; }
 }
+/* Home page: hero+clients and Recent Output each fill one screen and snap like slides */
+@media (min-width: 768px) {
+  html:has(.home-slide) { scroll-snap-type: y proximity; scroll-padding-top: 114px; }
+  .home-slide { scroll-snap-align: start; }
+}
 html.no-scrollbar::-webkit-scrollbar { display: none; }
 
 @layer base {

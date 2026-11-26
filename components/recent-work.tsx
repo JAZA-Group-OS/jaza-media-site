@@ -115,7 +115,7 @@ function WorkVideo({ src, poster, tag, title, copy }: (typeof WORKS)[number]) {
 
 export function RecentWork() {
   return (
-    <section id="recent-work" className="relative overflow-hidden bg-[#FAF8F3] py-12 text-ink md:py-12">
+    <section id="recent-work" className="home-slide relative overflow-hidden md:flex md:min-h-[calc(100svh-114px)] md:flex-col md:justify-center bg-[#FAF8F3] py-12 text-ink md:py-12">
       <div className="pointer-events-none absolute -top-40 -left-40 h-[340px] w-[520px] -rotate-[20deg] rounded-[50%] bg-gradient-to-br from-[#FFC400] to-[#FFD84D] opacity-90" />
       <div className="pointer-events-none absolute -right-40 -bottom-40 h-[300px] w-[520px] -rotate-[20deg] rounded-[50%] bg-gradient-to-tl from-[#FFC400] to-[#FFD84D] opacity-90" />
       <div className="relative mx-auto max-w-6xl px-4 md:px-6">
