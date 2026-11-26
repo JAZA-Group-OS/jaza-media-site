@@ -141,7 +141,7 @@ export function RecentWork() {
           ))}
         </div>
 
-        <Reveal className="mt-8 flex flex-col items-center gap-3 text-center sm:flex-row sm:justify-center sm:gap-6 md:mt-8">
+        <Reveal className="mt-12 flex flex-col items-center gap-3 text-center sm:flex-row sm:justify-center sm:gap-6 md:mt-14">
           <p className="font-serif text-xl md:text-2xl">
             Your brand could be <span className="text-[#FFC400]">next</span>.
           </p>
