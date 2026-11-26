@@ -69,12 +69,12 @@ function WorkVideo({ src, poster, tag, title, copy }: (typeof WORKS)[number]) {
             muted
             loop
             playsInline
-            preload="metadata"
+            preload="auto"
             onPlay={() => setPlaying(true)}
             onPause={() => setPlaying(false)}
             onVolumeChange={(e) => setMuted(e.currentTarget.muted)}
             onClick={togglePlay}
-            className="aspect-[4/5] w-full cursor-pointer object-cover transition-transform duration-700 group-hover:scale-[1.02]"
+            className="aspect-[4/5] w-full cursor-pointer object-cover"
             aria-label={`${tag} — ${title}`}
           />
           <div className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-black/60 to-transparent" />
