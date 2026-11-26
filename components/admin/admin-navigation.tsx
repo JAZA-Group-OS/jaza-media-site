@@ -12,8 +12,8 @@ import {
   LifeBuoy,
   LogOut,
   Moon,
-  PanelLeftClose,
-  PanelLeftOpen,
+  ChevronLeft,
+  ChevronRight,
   Sun,
   TrendingUp,
   X,
@@ -94,7 +94,7 @@ export default function AdminNavigation({
   const content = (mini: boolean) => (
     <div className="flex h-full flex-col text-white">
       {/* brand + collapse */}
-      <div className={`flex h-[76px] shrink-0 items-center border-b border-white/[0.06] ${mini ? 'justify-center px-2' : 'justify-between pr-3 pl-5'}`}>
+      <div className={`flex h-[76px] shrink-0 items-center border-b border-white/[0.06] ${mini ? 'justify-center px-2' : 'pl-5 pr-3'}`}>
         <Link
           href="/admin/dashboard"
           className="group flex items-center gap-3 leading-none"
@@ -115,17 +115,6 @@ export default function AdminNavigation({
             </span>
           )}
         </Link>
-        {!mini && (
-          <button
-            type="button"
-            onClick={onToggleCollapsed}
-            aria-label="Collapse sidebar"
-            title="Collapse sidebar (Ctrl+B)"
-            className="hidden size-8 place-items-center rounded-lg text-adm-rail-text transition hover:bg-white/10 hover:text-white lg:grid"
-          >
-            <PanelLeftClose className="size-[18px]" />
-          </button>
-        )}
       </div>
 
       {/* nav */}
@@ -173,18 +162,29 @@ export default function AdminNavigation({
 
       {/* footer */}
       <div className={`shrink-0 space-y-1 border-t border-white/[0.08] p-3 ${mini ? 'flex flex-col items-center' : ''}`}>
-        {mini && (
-          <button
-            type="button"
-            onClick={onToggleCollapsed}
-            aria-label="Expand sidebar"
-            title="Expand sidebar (Ctrl+B)"
-            className="hidden size-10 place-items-center rounded-xl text-adm-rail-text transition hover:bg-white/10 hover:text-white lg:grid"
-          >
-            <PanelLeftOpen className="size-[18px]" />
-          </button>
+        {mini ? (
+          <FooterButton mini icon={theme === 'dark' ? Sun : Moon} label={theme === 'dark' ? 'Light mode' : 'Dark mode'} onClick={toggle} />
+        ) : (
+          <div role="group" aria-label="Theme" className="mb-2 grid grid-cols-2 gap-1 rounded-xl bg-white/[0.05] p-1 ring-1 ring-white/[0.06]">
+            {([['light', Sun, 'Light'], ['dark', Moon, 'Dark']] as const).map(([value, Icon, text]) => {
+              const active = theme === value;
+              return (
+                <button
+                  key={value}
+                  type="button"
+                  aria-pressed={active}
+                  onClick={() => !active && toggle()}
+                  className={`flex items-center justify-center gap-1.5 rounded-lg py-1.5 text-xs font-semibold transition ${
+                    active ? 'bg-adm-accent text-black shadow-sm' : 'text-adm-rail-text hover:text-white'
+                  }`}
+                >
+                  <Icon className="size-3.5" />
+                  {text}
+                </button>
+              );
+            })}
+          </div>
         )}
-        <FooterButton mini={mini} icon={theme === 'dark' ? Sun : Moon} label={theme === 'dark' ? 'Light mode' : 'Dark mode'} onClick={toggle} />
         <FooterLink mini={mini} icon={ExternalLink} label="View website" href="/" />
         <FooterButton
           mini={mini}
@@ -209,6 +209,15 @@ export default function AdminNavigation({
         }`}
       >
         {content(collapsed)}
+        <button
+          type="button"
+          onClick={onToggleCollapsed}
+          aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+          title={`${collapsed ? 'Expand' : 'Collapse'} sidebar (Ctrl+B)`}
+          className="absolute top-1/2 -right-3.5 z-30 grid size-7 -translate-y-1/2 place-items-center rounded-full border border-white/10 bg-adm-rail text-adm-rail-text shadow-md transition hover:border-adm-accent hover:text-adm-accent"
+        >
+          {collapsed ? <ChevronRight className="size-4" /> : <ChevronLeft className="size-4" />}
+        </button>
       </aside>
 
       {/* Mobile drawer */}
