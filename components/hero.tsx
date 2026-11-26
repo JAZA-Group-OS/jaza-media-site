@@ -1,5 +1,4 @@
 import { ArrowRight } from "lucide-react";
-import Image from "next/image";
 import Link from "next/link";
 
 import { Reveal } from "@/components/reveal";
@@ -16,17 +15,6 @@ export function Hero() {
         aria-hidden
         className="pointer-events-none absolute inset-0 opacity-[0.07] [background-image:linear-gradient(to_right,white_1px,transparent_1px),linear-gradient(to_bottom,white_1px,transparent_1px)] [background-size:72px_72px] [mask-image:radial-gradient(ellipse_at_top,black,transparent_70%)]"
       />
-
-      {/* Jaza — far left, md+ */}
-      <div aria-hidden className="pointer-events-none absolute bottom-0 left-0 hidden aspect-square w-[30%] max-w-[540px] md:block">
-        <div className="absolute inset-x-[10%] bottom-[10%] top-[25%] rounded-full bg-gold/15 blur-[80px]" />
-        <Image src="/about-the-form/Jaza-portrait-v2.png" alt="" fill priority sizes="30vw" className="object-contain object-bottom object-left brightness-[0.9] contrast-[1.04] saturate-[0.92] [mask-image:linear-gradient(to_top,transparent_0%,black_28%),linear-gradient(to_left,transparent_0%,black_18%)] [mask-composite:intersect]" />
-      </div>
-      {/* Bela — far right, md+ */}
-      <div aria-hidden className="pointer-events-none absolute right-0 bottom-0 hidden aspect-square w-[24%] max-w-[420px] md:block">
-        <div className="absolute inset-x-[10%] bottom-[10%] top-[25%] rounded-full bg-gold/15 blur-[80px]" />
-        <Image src="/about-the-form/Bela%20soft.png" alt="" fill priority sizes="24vw" className="object-cover object-bottom object-right brightness-[0.92] contrast-[1.05] saturate-[0.9] [mask-image:linear-gradient(to_top,transparent_0%,black_28%),linear-gradient(to_right,transparent_0%,black_22%),linear-gradient(to_bottom,transparent_0%,black_15%)] [mask-composite:intersect]" />
-      </div>
 
       {/* top fade — no hard line where the navbar ends and the glow/grid begin */}
       <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 z-[5] h-40 bg-gradient-to-b from-ink via-ink/70 to-transparent" />
@@ -81,18 +69,6 @@ export function Hero() {
           </div>
         </Reveal>
 
-        {/* Combined cutout — mobile only */}
-        {/* Same treatment as desktop: gold glow behind, edges melted into the background. */}
-        <div aria-hidden className="relative -mx-4 -mt-6 aspect-[7331/6191] w-[calc(100%+2rem)] max-w-md md:hidden">
-          <div className="absolute inset-x-[12%] top-[20%] bottom-[8%] rounded-full bg-gold/15 blur-[70px]" />
-          <Image
-            src="/about-the-form/JazaBela%20no%20bg%20trimmed.png"
-            alt=""
-            fill
-            sizes="100vw"
-            className="object-contain object-bottom brightness-[0.92] contrast-[1.04] saturate-[0.92] [mask-image:linear-gradient(to_top,transparent_0%,black_30%),linear-gradient(to_right,transparent_0%,black_14%,black_86%,transparent_100%)] [mask-composite:intersect] [-webkit-mask-composite:source-in]"
-          />
-        </div>
       </div>
     </section>
   );
