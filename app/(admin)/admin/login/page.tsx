@@ -43,7 +43,7 @@ export default function AdminLoginPage() {
   const fieldIcon =
     'relative flex items-center pl-4 pr-4 text-white/60 group-focus-within:text-[#FFC400] transition-colors after:absolute after:right-0 after:top-1/2 after:h-5 after:w-px after:-translate-y-1/2 after:bg-white/25';
   const fieldInput =
-    'flex-1 min-w-0 bg-transparent py-3 pl-3 pr-3 text-sm text-white placeholder:text-white/35 focus:outline-none';
+    'flex-1 min-w-0 bg-transparent py-3.5 pl-3 pr-3 text-base text-white placeholder:text-white/35 focus:outline-none';
 
   return (
     <div className="relative min-h-screen overflow-hidden bg-[#0f0f11] flex items-center justify-center px-4 text-white">
@@ -67,9 +67,9 @@ export default function AdminLoginPage() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="relative w-full max-w-[400px]"
+        className="relative w-full max-w-[460px]"
       >
-        <div className="relative rounded-[2rem] border-[1.5px] border-[#E8B400]/70 bg-[#0c0c0e] bg-[radial-gradient(120%_70%_at_0%_0%,rgba(255,196,0,0.14),transparent_55%),linear-gradient(180deg,#141416,#08080a)] px-6 py-7 sm:px-8 sm:py-8 shadow-[inset_0_1px_0_rgba(255,220,120,0.25),0_0_30px_rgba(255,196,0,0.10),0_30px_60px_-20px_rgba(0,0,0,0.85)]">
+        <div className="relative rounded-[2rem] border-[1.5px] border-[#E8B400]/70 bg-[#0c0c0e] bg-[radial-gradient(120%_70%_at_0%_0%,rgba(255,196,0,0.14),transparent_55%),linear-gradient(180deg,#141416,#08080a)] px-6 py-8 sm:px-9 sm:py-9 shadow-[inset_0_1px_0_rgba(255,220,120,0.25),0_0_30px_rgba(255,196,0,0.10),0_30px_60px_-20px_rgba(0,0,0,0.85)]">
           {/* bottom edge glow */}
           <div className="pointer-events-none absolute -bottom-[1.5px] left-1/2 h-[2px] w-[70%] -translate-x-1/2 bg-gradient-to-r from-transparent via-[#FFC400] to-transparent" />
           <div className="pointer-events-none absolute -bottom-[2px] left-1/2 h-[3px] w-[30%] -translate-x-1/2 rounded-full bg-[#FFE27A] blur-[2px]" />
@@ -174,7 +174,7 @@ export default function AdminLoginPage() {
               whileHover={!isLoading ? { scale: 1.02 } : {}}
               whileTap={!isLoading ? { scale: 0.98 } : {}}
               disabled={isLoading}
-              className="w-full px-6 py-3 rounded-full bg-[#FFC400] text-black text-base font-bold hover:bg-[#FFD23F] hover:shadow-[0_0_24px_rgba(255,196,0,0.35)] disabled:opacity-50 disabled:cursor-not-allowed transition-all flex items-center justify-center gap-3"
+              className="w-full px-6 py-3.5 rounded-full bg-[#FFC400] text-black text-base font-bold hover:bg-[#FFD23F] hover:shadow-[0_0_24px_rgba(255,196,0,0.35)] disabled:opacity-50 disabled:cursor-not-allowed transition-all flex items-center justify-center gap-3"
             >
               {isLoading ? (
                 <motion.div
