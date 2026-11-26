@@ -9,7 +9,7 @@ export function Navbar() {
   return (
     <header className="sticky top-0 z-40 border-b border-white/10 bg-ink text-white">
       <div className="flex h-[72px] w-full items-center justify-between gap-4 px-5 md:px-10">
-        <Link href="/" aria-label="JAZA Media home" className="flex flex-col items-center leading-none">
+        <Link href="/" aria-label="JAZA Media home" className="ml-2 flex flex-col items-center leading-none md:ml-8">
           <span className="font-display text-[28px] tracking-[0.18em] text-white">JAZA</span>
           <span className="mt-0.5 pl-[0.35em] text-[10px] font-semibold tracking-[0.35em] text-gold">MEDIA</span>
         </Link>
