@@ -498,3 +498,20 @@ html.dots-scroll::-webkit-scrollbar { display: none; }
 @keyframes perk-float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
 .anim-perk-float { animation: perk-float 3.6s ease-in-out infinite; }
 @media (prefers-reduced-motion: reduce) { .anim-perk-float { animation: none; } }
+
+/* Book a call page: the shared booking calendar is dark-themed; this flips
+   its white text and hairlines to ink so it sits directly on the cream page. */
+.booking-light .text-white { color: #111; }
+.booking-light .text-white\/80 { color: rgb(17 17 17 / 0.8); }
+.booking-light .text-white\/70 { color: rgb(17 17 17 / 0.75); }
+.booking-light .text-white\/60 { color: rgb(17 17 17 / 0.65); }
+.booking-light .text-white\/55,
+.booking-light .text-white\/50 { color: rgb(17 17 17 / 0.6); }
+.booking-light .text-white\/40 { color: rgb(17 17 17 / 0.5); }
+.booking-light .text-white\/25 { color: rgb(17 17 17 / 0.3); }
+.booking-light .placeholder\:text-white\/30::placeholder { color: rgb(17 17 17 / 0.35); }
+.booking-light .border-white\/12 { border-color: rgb(17 17 17 / 0.12); }
+.booking-light .md\:border-white\/\[0\.08\] { border-color: rgb(17 17 17 / 0.1); }
+.booking-light .bg-white\/\[0\.03\] { background-color: #fff; }
+.booking-light .hover\:text-white:hover { color: #111; }
+.booking-light .hover\:bg-white:hover { background-color: #111; color: #fff; }

@@ -47,7 +47,7 @@ export default function BookACallPage() {
         </section>
 
         <section id="calendar" className="mx-auto w-full max-w-5xl px-4 pb-20">
-          <div className="rounded-[28px] bg-[#0b0d0c] p-5 text-white shadow-[0_30px_60px_-30px_rgba(0,0,0,0.45)] md:p-10">
+          <div className="booking-light">
             <BookingCalendar mode="book" />
           </div>
         </section>
