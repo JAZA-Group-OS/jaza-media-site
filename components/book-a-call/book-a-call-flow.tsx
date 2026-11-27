@@ -144,7 +144,7 @@ export function BookACallFlow() {
               {
                 id: 'ceo',
                 Icon: Crown,
-                tag: `Priority · ${GCASH.amount}`,
+                tag: '',
                 title: 'Book with our CEO',
                 body: 'A one-on-one strategy session with our CEO. Secure your slot via GCash, then pick a time.',
                 points: ['Direct access to the CEO', 'Priority scheduling'],
@@ -176,7 +176,7 @@ export function BookACallFlow() {
                   >
                     <Icon className="size-[18px]" strokeWidth={1.75} />
                   </span>
-                  <span className={`text-[10.5px] font-medium tracking-[0.24em] uppercase ${dark ? 'text-gold' : 'text-gold-deep'}`}>{tag}</span>
+                  {tag ? <span className={`text-[10.5px] font-medium tracking-[0.24em] uppercase ${dark ? 'text-gold' : 'text-gold-deep'}`}>{tag}</span> : null}
                 </span>
                 <span className="mt-7 font-display text-[28px] leading-tight">{title}</span>
                 <span className={`mt-3 text-[15px] leading-relaxed ${dark ? 'text-white/60' : 'text-black/55'}`}>{body}</span>
