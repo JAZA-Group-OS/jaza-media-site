@@ -7,6 +7,8 @@ import { createAdminClient } from '@/lib/supabase/admin';
 export type WeeklyHours = Record<string, [string, string][]>;
 
 export type BookingSettings = {
+  id: number;
+  label: string | null;
   timezone: string;
   slot_minutes: number;
   buffer_minutes: number;
@@ -31,6 +33,8 @@ export type Booking = {
   description: string | null;
   invitee_timezone: string | null;
   manage_token: string;
+  calendar_id: number;
+  lead_id: string | null;
   google_event_id: string | null;
   meet_url: string | null;
   reminder_24h_sent_at: string | null;
@@ -44,8 +48,9 @@ export function db(): any {
   return createAdminClient();
 }
 
-export async function getSettings(): Promise<BookingSettings> {
-  const { data, error } = await db().from('booking_settings').select('*').eq('id', 1).single();
+/** Calendar settings: 1 = CEO (also used by Partner With Us), 2 = Sales team. */
+export async function getSettings(calendarId: number = 1): Promise<BookingSettings> {
+  const { data, error } = await db().from('booking_settings').select('*').eq('id', calendarId).single();
   if (error || !data) throw new Error(`booking settings unavailable: ${error?.message ?? 'no row'}`);
   return data as BookingSettings;
 }
@@ -244,6 +249,7 @@ export async function computeSlots(s: BookingSettings, opts: { ignoreBookingId?:
       .from('bookings')
       .select('id,start_at,end_at')
       .eq('status', 'confirmed')
+      .eq('calendar_id', s.id)
       .gte('end_at', new Date(now).toISOString())
       .then((r: { data: { id: string; start_at: string; end_at: string }[] | null }) => r.data ?? []),
     googleBusy(s, now, rangeEnd),

@@ -24,8 +24,10 @@ export async function createBooking(input: {
   phone?: string | null;
   description?: string | null;
   timezone?: string | null;
+  calendarId?: number;
+  leadId?: string | null;
 }): Promise<ActionResult> {
-  const s = await getSettings();
+  const s = await getSettings(input.calendarId ?? 1);
   const start = new Date(input.start).toISOString();
   const slots = await computeSlots(s);
   if (!slots.includes(start)) return { ok: false, status: 409, error: SLOT_TAKEN };
@@ -43,6 +45,8 @@ export async function createBooking(input: {
       description: input.description || null,
       invitee_timezone: input.timezone || null,
       manage_token: newToken(),
+      calendar_id: s.id,
+      lead_id: input.leadId ?? null,
     })
     .select('*')
     .single();
@@ -77,7 +81,7 @@ export async function getBookingByToken(token: string): Promise<Booking | null> 
 
 export async function rescheduleBooking(b: Booking, startIso: string): Promise<ActionResult> {
   if (b.status !== 'confirmed') return { ok: false, status: 400, error: 'This booking is cancelled.' };
-  const s = await getSettings();
+  const s = await getSettings(b.calendar_id);
   const start = new Date(startIso).toISOString();
   const slots = await computeSlots(s, { ignoreBookingId: b.id });
   if (!slots.includes(start)) return { ok: false, status: 409, error: SLOT_TAKEN };
@@ -101,7 +105,7 @@ export async function rescheduleBooking(b: Booking, startIso: string): Promise<A
 
 export async function cancelBooking(b: Booking): Promise<ActionResult> {
   if (b.status === 'cancelled') return { ok: true, booking: b };
-  const s = await getSettings();
+  const s = await getSettings(b.calendar_id);
   const { data, error } = await db()
     .from('bookings')
     .update({ status: 'cancelled', cancelled_at: new Date().toISOString() })

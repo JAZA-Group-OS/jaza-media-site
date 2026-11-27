@@ -39,6 +39,7 @@ function fmt(iso: string, tz: string) {
 }
 
 export default function BookingManager() {
+  const [cal, setCal] = useState<1 | 2>(1);
   const [data, setData] = useState<Data | null>(null);
   const [form, setForm] = useState<Settings | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -64,12 +65,12 @@ export default function BookingManager() {
   });
 
   const load = useCallback(async () => {
-    const res = await fetch('/api/booking/admin', { cache: 'no-store' });
+    const res = await fetch(`/api/booking/admin?cal=${cal}`, { cache: 'no-store' });
     const json = await res.json().catch(() => ({}));
     if (!res.ok) return setError(json.error ?? 'Could not load booking data. Did you run the booking SQL in Supabase?');
     setData(json);
     setForm(json.settings);
-  }, []);
+  }, [cal]);
 
   useEffect(() => {
     // Defer so the fetch's state updates never run synchronously in the effect.
@@ -78,7 +79,7 @@ export default function BookingManager() {
 
   async function action(body: Record<string, unknown>) {
     setError(null);
-    const res = await fetch('/api/booking/admin', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+    const res = await fetch(`/api/booking/admin?cal=${cal}`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
     const json = await res.json().catch(() => ({}));
     if (!res.ok) setError(json.error ?? 'Action failed');
     await load();
@@ -90,7 +91,7 @@ export default function BookingManager() {
     setError(null);
     const { google_account_email: _ignored, ...payload } = form;
     void _ignored;
-    const res = await fetch('/api/booking/admin', { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ...payload, host_email: payload.host_email ?? '' }) });
+    const res = await fetch(`/api/booking/admin?cal=${cal}`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ...payload, host_email: payload.host_email ?? '' }) });
     const json = await res.json().catch(() => ({}));
     setSaving(false);
     if (!res.ok) return setError(json.error ?? 'Save failed');
@@ -109,6 +110,29 @@ export default function BookingManager() {
 
   return (
     <div className="space-y-6">
+      <div className="flex flex-wrap items-center gap-3">
+        <div role="tablist" aria-label="Calendar" className="inline-flex rounded-xl border border-adm-line-strong p-1">
+          {([[1, 'CEO calendar'], [2, 'Sales team calendar']] as const).map(([id, name]) => (
+            <button
+              key={id}
+              type="button"
+              role="tab"
+              aria-selected={cal === id}
+              onClick={() => {
+                setData(null);
+                setForm(null);
+                setCal(id);
+              }}
+              className={`rounded-lg px-4 py-1.5 text-sm font-medium transition ${cal === id ? 'bg-adm-accent text-black' : 'text-adm-muted hover:text-adm-text'}`}
+            >
+              {name}
+            </button>
+          ))}
+        </div>
+        <span className="text-[13px] text-adm-subtle">
+          {cal === 1 ? 'Big-budget, ready-now leads from Book a Call + Partner With Us bookings.' : 'Qualified mid-budget leads from Book a Call.'}
+        </span>
+      </div>
       {error && <p className="rounded-lg border border-red-500/30 bg-red-500/10 p-3 text-sm text-red-300">{error}</p>}
 
       {/* Calendar */}
@@ -260,7 +284,7 @@ export default function BookingManager() {
         ) : (
           <div className="flex flex-wrap items-center gap-3">
             <p className="text-sm text-adm-muted">Not connected — slots ignore your Google events and calls get no Meet link.</p>
-            <a href="/api/booking/google/connect" className={`${BTN} bg-adm-accent text-black hover:bg-white`}>Connect Google Calendar</a>
+            <a href={`/api/booking/google/connect?cal=${cal}`} className={`${BTN} bg-adm-accent text-black hover:bg-white`}>Connect Google Calendar</a>
           </div>
         )}
             <div className="mt-4 grid gap-4 sm:grid-cols-2">

@@ -8,14 +8,18 @@ import { type Booking, db, getDaysOff, getSettings, googleConfigured } from '@/l
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
+const calOf = (request: Request) => (new URL(request.url).searchParams.get('cal') === '2' ? 2 : 1);
+
 const deny = () => NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
-export async function GET() {
+export async function GET(request: Request) {
   if (!(await isAdminRequest())) return deny();
-  const s = await getSettings();
+  const cal = calOf(request);
+  const s = await getSettings(cal);
   const { data: bookings } = await db()
     .from('bookings')
     .select('*')
+    .eq('calendar_id', cal)
     .gte('start_at', new Date(Date.now() - 7 * 86400_000).toISOString())
     .order('start_at', { ascending: true })
     .limit(300);
@@ -53,7 +57,7 @@ export async function PUT(request: Request) {
   const { error } = await db()
     .from('booking_settings')
     .update({ ...parsed.data, host_email: parsed.data.host_email || null, updated_at: new Date().toISOString() })
-    .eq('id', 1);
+    .eq('id', calOf(request));
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
   return NextResponse.json({ ok: true });
 }
@@ -75,7 +79,7 @@ export async function POST(request: Request) {
   } else if (a.action === 'remove_day_off') {
     await db().from('booking_days_off').delete().eq('day', a.day);
   } else if (a.action === 'disconnect_google') {
-    await db().from('booking_settings').update({ google_refresh_token: null, google_account_email: null }).eq('id', 1);
+    await db().from('booking_settings').update({ google_refresh_token: null, google_account_email: null }).eq('id', calOf(request));
   } else {
     const { data } = await db().from('bookings').select('*').eq('id', a.id).maybeSingle();
     if (!data) return NextResponse.json({ error: 'Not found' }, { status: 404 });

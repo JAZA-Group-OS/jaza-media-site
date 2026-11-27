@@ -35,6 +35,8 @@ export async function GET(request: Request) {
   }).toString();
 
   const res = NextResponse.redirect(url);
+  const cal = new URL(request.url).searchParams.get('cal') === '2' ? '2' : '1';
+  res.cookies.set('booking_google_cal', cal, { httpOnly: true, secure: true, sameSite: 'lax', maxAge: 600, path: '/' });
   res.cookies.set('booking_google_state', state, { httpOnly: true, secure: true, sameSite: 'lax', maxAge: 600, path: '/' });
   return res;
 }

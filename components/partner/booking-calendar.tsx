@@ -33,7 +33,7 @@ function longDate(key: string) {
 }
 
 type Props =
-  | { mode: 'book' }
+  | { mode: 'book'; leadId?: string; prefill?: BookingPrefill }
   | { mode: 'reschedule'; token: string; onDone: (start: string) => void };
 
 export function BookingCalendar(props: Props) {
@@ -45,14 +45,19 @@ export function BookingCalendar(props: Props) {
   const [pickedMonth, setMonth] = useState<{ y: number; m: number } | null>(null);
   const [day, setDay] = useState<string | null>(null);
   const [slot, setSlot] = useState<string | null>(null);
-  const [prefill] = useState<BookingPrefill>(() => (props.mode === 'book' ? readPrefill() : {}));
+  const [prefill] = useState<BookingPrefill>(() => (props.mode === 'book' ? (props.prefill ?? readPrefill()) : {}));
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
 
   async function load() {
     try {
-      const q = props.mode === 'reschedule' ? `?token=${encodeURIComponent(props.token)}` : '';
+      const q =
+        props.mode === 'reschedule'
+          ? `?token=${encodeURIComponent(props.token)}`
+          : props.leadId
+            ? `?lead=${encodeURIComponent(props.leadId)}`
+            : '';
       const res = await fetch(`/api/booking/slots${q}`, { cache: 'no-store' });
       const json = await res.json();
       if (!res.ok) throw new Error(json.error || 'Could not load times');
@@ -106,6 +111,7 @@ export function BookingCalendar(props: Props) {
           phone: String(fd.get('phone') ?? '') || null,
           description: String(fd.get('description') ?? '') || null,
           timezone: tz,
+          leadId: props.mode === 'book' ? (props.leadId ?? null) : null,
           _hp: String(fd.get('_hp') ?? ''),
         }),
       });

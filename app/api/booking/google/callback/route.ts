@@ -10,6 +10,7 @@ export async function GET(request: Request) {
   const back = (status: string) => {
     const res = NextResponse.redirect(new URL(`/admin/dashboard?booking_google=${status}`, url.origin));
     res.cookies.delete('booking_google_state');
+    res.cookies.delete('booking_google_cal');
     return res;
   };
   if (!(await isAdminRequest())) return back('unauthorized');
@@ -18,6 +19,11 @@ export async function GET(request: Request) {
     .get('cookie')
     ?.split(/;\s*/)
     .find((c) => c.startsWith('booking_google_state='))
+    ?.split('=')[1];
+  const calCookie = request.headers
+    .get('cookie')
+    ?.split(/;\s*/)
+    .find((c) => c.startsWith('booking_google_cal='))
     ?.split('=')[1];
   const code = url.searchParams.get('code');
   if (!code || !cookieState || cookieState !== url.searchParams.get('state')) return back('error');
@@ -50,6 +56,6 @@ export async function GET(request: Request) {
   await db()
     .from('booking_settings')
     .update({ google_refresh_token: tokens.refresh_token, google_account_email: email, updated_at: new Date().toISOString() })
-    .eq('id', 1);
+    .eq('id', calCookie === '2' ? 2 : 1);
   return back('connected');
 }

@@ -454,3 +454,61 @@ export async function emailHost(kind: 'confirmed' | 'rescheduled' | 'cancelled',
   const { subject, html, text } = renderHost(kind, b, s);
   return send({ to: [s.host_email || SUPPORT_EMAIL], reply_to: b.email, subject, html, text });
 }
+
+/* ---------------- Book a Call: auto-nurture (no call) ---------------- */
+
+export type NurtureLead = {
+  full_name: string;
+  email: string;
+  phone: string | null;
+  company: string | null;
+  service: string;
+  company_size: string;
+  budget: string;
+  start_when: string;
+  decision_maker: string;
+  score: number;
+};
+
+/** Thank-you to a lead who was not routed to a call. */
+export async function emailNurtureLead(l: NurtureLead, replyTo: string | null) {
+  const subject = 'Thanks for reaching out to JAZA Media';
+  const inner = `${logoRow({ label: 'THANK YOU', tone: 'gold' })}
+<div style="padding:24px 32px 32px;">
+  <h1 class="d-ink" style="margin:0;font-family:Georgia,'Times New Roman',serif;font-size:26px;font-weight:400;color:#141414;">Thanks, ${esc(firstName(l.full_name))}.</h1>
+  <p class="d-mute" style="margin:14px 0 0;font-size:15px;line-height:1.7;color:#4a4740;">We got your details about <strong>${esc(l.service.toLowerCase())}</strong>. Our team will look them over and follow up by email or Messenger with ideas and next steps that fit where you are right now.</p>
+  <p class="d-mute" style="margin:14px 0 0;font-size:15px;line-height:1.7;color:#4a4740;">When you're ready to start, just reply to this email.</p>
+</div>`;
+  const text = `Thanks, ${firstName(l.full_name)}.\n\nWe got your details about ${l.service.toLowerCase()}. Our team will look them over and follow up by email or Messenger with ideas and next steps.\n\nWhen you're ready to start, just reply to this email.\n\n— JAZA Media`;
+  return send({
+    to: [l.email],
+    reply_to: replyTo || SUPPORT_EMAIL,
+    subject,
+    html: shell(subject, inner, 'You received this because you filled in the Book a Call form on jazamedia.com.'),
+    text,
+  });
+}
+
+/** Heads-up to the sales inbox about a nurture lead (to follow up later). */
+export async function emailNurtureHost(l: NurtureLead, to: string | null) {
+  const subject = `Nurture lead — ${l.full_name}${l.company ? ` · ${l.company}` : ''}`;
+  const rows = [
+    ['Email', esc(l.email)],
+    ['Phone', esc(l.phone || '—')],
+    ['Service', esc(l.service)],
+    ['Company size', esc(l.company_size)],
+    ['Budget', esc(l.budget)],
+    ['Start', esc(l.start_when)],
+    ['Decision-maker', esc(l.decision_maker)],
+    ['Score', String(l.score)],
+  ];
+  const inner = `${logoRow({ label: 'NURTURE LEAD', tone: 'gold' })}
+<div style="padding:24px 32px 32px;">
+  <p class="d-ink" style="margin:0 0 16px;font-size:15px;color:#141414;">${esc(l.full_name)}${l.company ? ` · ${esc(l.company)}` : ''} filled in Book a Call but wasn't routed to a call. They got a thank-you email — follow up later.</p>
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0">${rows
+    .map(([k, v]) => `<tr><td class="d-mute" style="padding:4px 0;font-size:13px;color:#7a766d;width:140px;">${k}</td><td class="d-ink" style="padding:4px 0;font-size:13.5px;color:#141414;">${v}</td></tr>`)
+    .join('')}</table>
+</div>`;
+  const text = rows.map(([k, v]) => `${k}: ${v}`).join('\n');
+  return send({ to: [to || SUPPORT_EMAIL], reply_to: l.email, subject, html: shell(subject, inner, 'Book a Call — auto-nurture.'), text });
+}

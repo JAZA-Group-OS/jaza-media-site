@@ -10,7 +10,7 @@ export async function GET(request: Request) {
   const token = new URL(request.url).searchParams.get('token') ?? '';
   const b = await getBookingByToken(token);
   if (!b || b.status !== 'confirmed') return new Response('Booking not found', { status: 404 });
-  const ics = buildIcs(b, await getSettings(), 'PUBLISH');
+  const ics = buildIcs(b, await getSettings(b.calendar_id), 'PUBLISH');
   return new Response(ics, {
     headers: {
       'Content-Type': 'text/calendar; charset=utf-8',

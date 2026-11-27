@@ -13,7 +13,7 @@ export async function POST(request: Request) {
   if (!secret || request.headers.get('authorization') !== `Bearer ${secret}`) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
-  const s = await getSettings();
+  const cals = { 1: await getSettings(1), 2: await getSettings(2).catch(() => null) } as Record<number, Awaited<ReturnType<typeof getSettings>> | null>;
   const now = Date.now();
   const { data } = await db()
     .from('bookings')
@@ -24,6 +24,7 @@ export async function POST(request: Request) {
 
   let sent = 0;
   for (const b of (data ?? []) as Booking[]) {
+    const s = cals[b.calendar_id] ?? cals[1]!;
     const minsAway = (Date.parse(b.start_at) - now) / 60_000;
     // Skip the 24h reminder for calls booked less than ~2h before they start.
     const bookedLate = Date.parse(b.start_at) - Date.parse(b.created_at) < 2 * 3600_000;
