@@ -186,17 +186,8 @@ export function CareerFunnel() {
   const handleRadioChange = useCallback(
     (id: keyof Answers, value: string) => {
       setAnswer(id, value as Answers[keyof Answers]);
-      if (advanceTimerRef.current) {
-        clearTimeout(advanceTimerRef.current);
-      }
-      advanceTimerRef.current = setTimeout(() => {
-        if (stepFromUrl < TOTAL_STEPS) {
-          setDirection('forward');
-          router.push(`/careers/apply?step=${stepFromUrl + 1}`);
-        }
-      }, 350);
     },
-    [setAnswer, router, stepFromUrl],
+    [setAnswer],
   );
 
   useEffect(() => {
