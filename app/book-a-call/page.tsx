@@ -27,7 +27,7 @@ const STEPS = [
 export default function BookACallPage() {
   return (
     <>
-      <Navbar />
+      <Navbar centered />
       <main className="bg-[#f8f6f1] text-ink">
         <section className="mx-auto w-full max-w-6xl px-4 pt-14 pb-10 text-center md:pt-20">
           <p className="flex items-center justify-center gap-3 text-[11px] font-medium tracking-[0.3em] text-gold-deep uppercase">
