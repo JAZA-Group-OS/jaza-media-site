@@ -42,13 +42,15 @@ export async function POST(request: Request) {
 
   try {
     let calendarId = 1;
+    let description = parsed.data.description ?? null;
     if (parsed.data.leadId) {
       const routed = await calendarForLead(parsed.data.leadId);
       if (!routed) return NextResponse.json({ error: 'This booking link is not valid.' }, { status: 403 });
       if (routed.lead.booking_id) return NextResponse.json({ error: 'You already booked a call. Check your email to reschedule.' }, { status: 409 });
       calendarId = routed.calendarId;
+      if (routed.lead.payment_ref) description = [`GCash reference: ${routed.lead.payment_ref} (check payment)`, description].filter(Boolean).join('\n\n');
     }
-    const res = await createBooking({ ...parsed.data, calendarId });
+    const res = await createBooking({ ...parsed.data, description, calendarId });
     if (!res.ok) return NextResponse.json({ error: res.error }, { status: res.status });
     if (parsed.data.leadId) await db().from('booking_leads').update({ booking_id: res.booking.id }).eq('id', parsed.data.leadId);
     return NextResponse.json({ ok: true, manageToken: res.booking.manage_token, start: res.booking.start_at, meetUrl: res.booking.meet_url });

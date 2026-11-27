@@ -44,3 +44,12 @@ ALTER TABLE public.booking_leads ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "Only admin email can read booking leads"
   ON public.booking_leads FOR SELECT TO authenticated
   USING ((auth.jwt() ->> 'email') = 'jaza.intern@gmail.com');
+
+-- 4) Two paths: "Book with CEO" (paid via GCash, no questions) or "Book with Sales team" (questions).
+ALTER TABLE public.booking_leads ADD COLUMN IF NOT EXISTS path text NOT NULL DEFAULT 'sales' CHECK (path IN ('ceo', 'sales'));
+ALTER TABLE public.booking_leads ADD COLUMN IF NOT EXISTS payment_ref text;
+ALTER TABLE public.booking_leads ALTER COLUMN service DROP NOT NULL;
+ALTER TABLE public.booking_leads ALTER COLUMN company_size DROP NOT NULL;
+ALTER TABLE public.booking_leads ALTER COLUMN budget DROP NOT NULL;
+ALTER TABLE public.booking_leads ALTER COLUMN start_when DROP NOT NULL;
+ALTER TABLE public.booking_leads ALTER COLUMN decision_maker DROP NOT NULL;
