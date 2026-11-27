@@ -37,8 +37,8 @@ export function Founders() {
         </Reveal>
 
         <Reveal delay={0.1}>
-          <p className="inline-flex items-center gap-2.5 rounded-full border border-white/10 bg-white/[0.03] px-4 py-1.5 text-[10.5px] font-medium tracking-[0.32em] text-white/70 backdrop-blur">
-            <span aria-hidden className="size-1.5 rounded-full bg-gold shadow-[0_0_10px_2px_rgba(234,179,8,0.6)]" />
+          <p className="flex items-center gap-3 text-[11px] font-semibold tracking-[0.3em] text-gold">
+            <span aria-hidden className="h-px w-8 bg-gold/80" />
             ABOUT OUR FOUNDERS
           </p>
           <h2 className="mt-7 font-serif text-5xl leading-[1.02] tracking-[-0.03em] text-balance md:text-[68px]">
