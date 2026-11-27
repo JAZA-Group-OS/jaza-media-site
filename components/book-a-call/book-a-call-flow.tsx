@@ -1,6 +1,6 @@
 'use client';
 
-import { ArrowLeft, ArrowRight, Check, Crown, Loader2, Users } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Check, Copy, Crown, Loader2, ShieldCheck, Users } from 'lucide-react';
 import Image from 'next/image';
 import { useState, type FormEvent } from 'react';
 
@@ -26,6 +26,7 @@ const LABEL = 'mb-1.5 block text-[11px] font-medium tracking-[0.2em] text-black/
 export function BookACallFlow() {
   const [path, setPath] = useState<'ceo' | 'sales' | null>(null);
   const [paymentRef, setPaymentRef] = useState('');
+  const [copied, setCopied] = useState(false);
   const [step, setStep] = useState(0);
   const [answers, setAnswers] = useState<Partial<LeadAnswers>>({});
   const [contact, setContact] = useState<Contact>({ fullName: '', email: '', phone: '', company: '' });
@@ -217,31 +218,71 @@ export function BookACallFlow() {
       <div className="mt-4 rounded-3xl border border-black/5 bg-white shadow-[0_30px_60px_-30px_rgba(0,0,0,0.25)]">
         <div className="p-6 md:p-10">
           {onPayment ? (
-            <div className="text-center">
-              <h2 className="font-display text-2xl md:text-3xl">Pay with GCash</h2>
-              <p className="mx-auto mt-2 max-w-md text-[15px] text-black/60">
-                Send <strong className="text-ink">{GCASH.amount}</strong> for your CEO strategy call, then enter the reference number from your GCash receipt.
-              </p>
-              <div className="mx-auto mt-7 grid max-w-md items-center gap-6 sm:grid-cols-[180px_1fr] sm:text-left">
-                <div className="relative mx-auto size-[180px] overflow-hidden rounded-2xl border border-black/10 bg-white">
-                  <Image src={GCASH.qrSrc} alt="GCash QR code" fill sizes="180px" className="object-contain p-2" />
-                </div>
-                <dl className="space-y-3 text-[15px]">
-                  <div>
-                    <dt className={LABEL}>GCash number</dt>
-                    <dd className="font-medium tracking-wide text-ink">{GCASH.number}</dd>
-                  </div>
-                  <div>
-                    <dt className={LABEL}>Account name</dt>
-                    <dd className="font-medium text-ink">{GCASH.name}</dd>
-                  </div>
-                  <div>
-                    <dt className={LABEL}>Amount</dt>
-                    <dd className="font-medium text-ink">{GCASH.amount}</dd>
-                  </div>
-                </dl>
+            <div>
+              <div className="text-center">
+                <p className="flex items-center justify-center gap-3 text-[10.5px] font-medium tracking-[0.3em] text-gold-deep uppercase">
+                  <span aria-hidden className="h-px w-6 bg-gold-deep/50" />
+                  CEO strategy session
+                  <span aria-hidden className="h-px w-6 bg-gold-deep/50" />
+                </p>
+                <h2 className="mt-3 font-display text-[28px] leading-tight md:text-[34px]">Secure your session</h2>
+                <p className="mx-auto mt-2 max-w-md text-[15px] leading-relaxed text-black/55">
+                  Pay through GCash, then enter the reference number from your receipt.
+                </p>
               </div>
-              <label className="mx-auto mt-8 block max-w-md text-left">
+
+              <div className="mt-8 grid gap-5 md:grid-cols-[minmax(0,240px)_1fr]">
+                {/* QR pass */}
+                <div className="relative overflow-hidden rounded-[22px] border border-gold/25 bg-[linear-gradient(160deg,#1b1914_0%,#0e0e0f_75%)] p-5 text-center text-white shadow-[0_30px_60px_-35px_rgba(0,0,0,0.7)]">
+                  <span aria-hidden className="absolute inset-x-6 top-0 h-px bg-gradient-to-r from-transparent via-gold/70 to-transparent" />
+                  <p className="text-[10px] tracking-[0.3em] text-gold uppercase">Scan to pay</p>
+                  <div className="relative mx-auto mt-4 aspect-square w-full max-w-[200px] rounded-2xl bg-white p-3">
+                    <Image src={GCASH.qrSrc} alt="GCash QR code" fill sizes="200px" className="object-contain p-3" />
+                  </div>
+                  <p className="mt-4 text-[12px] text-white/50">Open GCash › Pay QR</p>
+                </div>
+
+                {/* details */}
+                <div className="flex flex-col rounded-[22px] border border-black/[0.07] bg-[#fcfaf5] p-6">
+                  <p className="text-[10.5px] tracking-[0.24em] text-black/45 uppercase">Amount due</p>
+                  <p className="mt-1 font-display text-[40px] leading-none text-ink">{GCASH.amount}</p>
+                  <dl className="mt-5 divide-y divide-black/[0.07] border-y border-black/[0.07] text-[14px]">
+                    <div className="flex items-center justify-between gap-3 py-3">
+                      <dt className="text-black/50">GCash number</dt>
+                      <dd className="flex items-center gap-2 font-medium tracking-wide text-ink">
+                        {GCASH.number}
+                        <button
+                          type="button"
+                          onClick={() => {
+                            void navigator.clipboard?.writeText(GCASH.number.replace(/\s/g, '')).then(() => {
+                              setCopied(true);
+                              setTimeout(() => setCopied(false), 1600);
+                            });
+                          }}
+                          className="inline-flex items-center gap-1 rounded-full border border-black/10 bg-white px-2.5 py-1 text-[11px] font-medium tracking-[0.12em] text-black/60 uppercase transition hover:border-gold-deep hover:text-gold-deep"
+                        >
+                          {copied ? <Check className="size-3" /> : <Copy className="size-3" />}
+                          {copied ? 'Copied' : 'Copy'}
+                        </button>
+                      </dd>
+                    </div>
+                    <div className="flex items-center justify-between gap-3 py-3">
+                      <dt className="text-black/50">Account name</dt>
+                      <dd className="font-medium text-ink">{GCASH.name}</dd>
+                    </div>
+                  </dl>
+                  <ol className="mt-5 space-y-2 text-[13.5px] text-black/60">
+                    {['Scan the QR or send to the number above', 'Pay the exact amount', 'Enter your reference number below'].map((t, i) => (
+                      <li key={t} className="flex items-center gap-3">
+                        <span className="grid size-5 shrink-0 place-items-center rounded-full bg-ink text-[10px] font-semibold text-white">{i + 1}</span>
+                        {t}
+                      </li>
+                    ))}
+                  </ol>
+                </div>
+              </div>
+
+              <label className="mt-6 block">
                 <span className={LABEL}>GCash reference number</span>
                 <input
                   type="text"
@@ -250,11 +291,14 @@ export function BookACallFlow() {
                   placeholder="e.g. 1234 567 890123"
                   value={paymentRef}
                   onChange={(e) => setPaymentRef(e.target.value)}
-                  className={INPUT}
+                  className={`${INPUT} py-3.5 text-[16px] tracking-[0.08em]`}
                 />
                 {fieldErrors.paymentRef ? <span className="mt-1 block text-xs text-red-600">{fieldErrors.paymentRef}</span> : null}
               </label>
-              <p className="mx-auto mt-3 max-w-md text-[13px] text-black/45">We check every payment before the call. Your booking may be cancelled if we can&apos;t find it.</p>
+              <p className="mt-3 flex items-start gap-2 text-[12.5px] leading-relaxed text-black/45">
+                <ShieldCheck className="mt-0.5 size-4 shrink-0 text-gold-deep" strokeWidth={1.75} />
+                Every payment is verified before your session. Bookings without a matching payment may be cancelled.
+              </p>
             </div>
           ) : q ? (
             <fieldset>
