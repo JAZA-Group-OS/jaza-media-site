@@ -21,16 +21,7 @@ export function Navbar({ centered = false }: { centered?: boolean }) {
             MEDIA
           </span>
         </Link>
-        {centered ? (
-          <div className="absolute left-1/2 hidden -translate-x-1/2 md:block">
-            <Link
-              href="/book-a-call"
-              className="inline-flex rounded-full border border-white/70 px-5 py-2 text-sm font-medium text-white transition hover:bg-white hover:text-ink"
-            >
-              Book a call
-            </Link>
-          </div>
-        ) : (
+        {centered ? null : (
           <nav className="hidden md:block" aria-label="Main">
             <NavLinks links={links} />
           </nav>
@@ -44,12 +35,14 @@ export function Navbar({ centered = false }: { centered?: boolean }) {
               Book a call
             </Link>
           ) : null}
-          <Link
-            href="/partner-with-us"
-            className="hidden rounded-full bg-gold px-5 py-2 text-sm font-semibold text-ink transition hover:bg-white hover:text-ink md:inline-flex"
-          >
-            Partner With Us
-          </Link>
+          {!centered ? (
+            <Link
+              href="/partner-with-us"
+              className="hidden rounded-full bg-gold px-5 py-2 text-sm font-semibold text-ink transition hover:bg-white hover:text-ink md:inline-flex"
+            >
+              Partner With Us
+            </Link>
+          ) : null}
           <MobileMenu className="md:hidden" />
         </div>
       </div>
