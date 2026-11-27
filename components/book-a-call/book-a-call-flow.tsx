@@ -164,14 +164,14 @@ export function BookACallFlow() {
                 className={`group relative flex flex-col overflow-hidden rounded-[28px] border p-8 transition duration-300 hover:-translate-y-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/60 md:p-9 ${
                   dark
                     ? 'border-gold/25 bg-[linear-gradient(160deg,#1b1914_0%,#0e0e0f_70%)] text-white shadow-[0_40px_80px_-40px_rgba(0,0,0,0.7)] hover:shadow-[0_50px_90px_-40px_rgba(0,0,0,0.8)]'
-                    : 'border-gold bg-gold text-ink shadow-[0_30px_60px_-35px_rgba(184,144,42,0.6)] hover:shadow-[0_40px_80px_-35px_rgba(184,144,42,0.7)]'
+                    : 'border-gold/40 bg-[#fdf1c4] text-ink shadow-[0_30px_60px_-40px_rgba(184,144,42,0.5)] hover:border-gold/70 hover:shadow-[0_40px_80px_-40px_rgba(184,144,42,0.6)]'
                 }`}
               >
                 {dark ? <span aria-hidden className="absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-gold/70 to-transparent" /> : null}
                 <span className="flex items-center justify-between">
                   <span
                     className={`grid size-11 place-items-center rounded-full ring-1 ${
-                      dark ? 'bg-gold/10 text-gold ring-gold/40' : 'bg-white/40 text-ink ring-ink/15'
+                      dark ? 'bg-gold/10 text-gold ring-gold/40' : 'bg-white/70 text-gold-deep ring-gold-deep/25'
                     }`}
                   >
                     <Icon className="size-[18px]" strokeWidth={1.75} />
