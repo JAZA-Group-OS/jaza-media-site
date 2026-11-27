@@ -16,7 +16,7 @@ export default function BookACallPage() {
   return (
     <div className="flex min-h-svh flex-col">
       <Navbar centered />
-      <main className="flex-1 bg-[#f8f6f1] px-4 py-14 text-ink md:py-20">
+      <main className="flex-1 bg-[#f8f6f1] px-4 py-8 text-ink md:py-10">
         <div className="mx-auto max-w-5xl">
           <BookACallFlow />
         </div>
