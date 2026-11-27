@@ -129,35 +129,77 @@ export function BookACallFlow() {
       <div className="mx-auto max-w-3xl text-center">
         <h2 className="font-display text-3xl md:text-4xl">Who would you like to talk to?</h2>
         <p className="mx-auto mt-3 max-w-lg text-[16px] text-black/60">Pick one to get started.</p>
-        <div className="mt-10 grid gap-4 sm:grid-cols-2">
+        <div className="mt-12 grid gap-5 text-left sm:grid-cols-2">
           {(
             [
-              ['sales', Users, 'Book with our Sales team', 'Answer a few quick questions, then pick a time.'],
-              ['ceo', Crown, 'Book with our CEO', `A paid strategy call (${GCASH.amount} via GCash), then pick a time.`],
+              {
+                id: 'sales',
+                Icon: Users,
+                tag: 'Complimentary · 30 min',
+                title: 'Book with our Sales team',
+                body: 'Answer five quick questions so we come prepared, then choose a time that suits you.',
+                points: ['Tailored to your goals', 'Google Meet invite by email'],
+              },
+              {
+                id: 'ceo',
+                Icon: Crown,
+                tag: `Priority · ${GCASH.amount}`,
+                title: 'Book with our CEO',
+                body: 'A one-on-one strategy session with our CEO. Secure your slot via GCash, then pick a time.',
+                points: ['Direct access to the CEO', 'Priority scheduling'],
+              },
             ] as const
-          ).map(([id, Icon, title, body]) => (
-            <button
-              key={id}
-              type="button"
-              onClick={() => {
-                setPath(id);
-                setStep(0);
-                setError(null);
-              }}
-              className={`group flex flex-col items-center rounded-3xl border p-8 text-center transition hover:-translate-y-0.5 hover:shadow-[0_30px_60px_-30px_rgba(0,0,0,0.3)] ${
-                id === 'ceo' ? 'border-ink bg-ink text-white' : 'border-black/10 bg-white text-ink'
-              }`}
-            >
-              <span className={`grid size-12 place-items-center rounded-full ${id === 'ceo' ? 'bg-gold text-ink' : 'bg-gold/15 text-gold-deep'}`}>
-                <Icon className="size-5" />
-              </span>
-              <span className="mt-5 font-display text-2xl">{title}</span>
-              <span className={`mt-2 text-[15px] leading-relaxed ${id === 'ceo' ? 'text-white/65' : 'text-black/55'}`}>{body}</span>
-              <span className="mt-6 inline-flex items-center gap-2 text-[12px] font-semibold tracking-[0.2em] uppercase">
-                Continue <ArrowRight className="size-4 transition group-hover:translate-x-1" />
-              </span>
-            </button>
-          ))}
+          ).map(({ id, Icon, tag, title, body, points }) => {
+            const dark = id === 'ceo';
+            return (
+              <button
+                key={id}
+                type="button"
+                onClick={() => {
+                  setPath(id);
+                  setStep(0);
+                  setError(null);
+                }}
+                className={`group relative flex flex-col overflow-hidden rounded-[28px] border p-8 transition duration-300 hover:-translate-y-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/60 md:p-9 ${
+                  dark
+                    ? 'border-gold/25 bg-[linear-gradient(160deg,#1b1914_0%,#0e0e0f_70%)] text-white shadow-[0_40px_80px_-40px_rgba(0,0,0,0.7)] hover:shadow-[0_50px_90px_-40px_rgba(0,0,0,0.8)]'
+                    : 'border-black/[0.07] bg-white text-ink shadow-[0_30px_60px_-40px_rgba(0,0,0,0.25)] hover:border-black/15 hover:shadow-[0_40px_80px_-40px_rgba(0,0,0,0.3)]'
+                }`}
+              >
+                {dark ? <span aria-hidden className="absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-gold/70 to-transparent" /> : null}
+                <span className="flex items-center justify-between">
+                  <span
+                    className={`grid size-11 place-items-center rounded-full ring-1 ${
+                      dark ? 'bg-gold/10 text-gold ring-gold/40' : 'bg-[#f8f3e6] text-gold-deep ring-gold-deep/20'
+                    }`}
+                  >
+                    <Icon className="size-[18px]" strokeWidth={1.75} />
+                  </span>
+                  <span className={`text-[10.5px] font-medium tracking-[0.24em] uppercase ${dark ? 'text-gold' : 'text-gold-deep'}`}>{tag}</span>
+                </span>
+                <span className="mt-7 font-display text-[28px] leading-tight">{title}</span>
+                <span className={`mt-3 text-[15px] leading-relaxed ${dark ? 'text-white/60' : 'text-black/55'}`}>{body}</span>
+                <span className={`mt-6 space-y-2 border-t pt-5 ${dark ? 'border-white/10' : 'border-black/[0.07]'}`}>
+                  {points.map((pt) => (
+                    <span key={pt} className={`flex items-center gap-2.5 text-[14px] ${dark ? 'text-white/75' : 'text-black/65'}`}>
+                      <Check className={`size-4 ${dark ? 'text-gold' : 'text-gold-deep'}`} strokeWidth={2} />
+                      {pt}
+                    </span>
+                  ))}
+                </span>
+                <span
+                  className={`careers-shine mt-8 inline-flex w-full items-center justify-center gap-2.5 rounded-full px-6 py-3.5 text-[12px] font-semibold tracking-[0.22em] uppercase transition duration-300 ${
+                    dark
+                      ? 'bg-gold text-ink group-hover:bg-[#f7d24a] group-hover:shadow-[0_12px_30px_-10px_rgba(234,179,8,0.55)]'
+                      : 'bg-ink text-white group-hover:bg-black group-hover:shadow-[0_12px_30px_-12px_rgba(0,0,0,0.5)]'
+                  }`}
+                >
+                  Continue
+                  <ArrowRight className="size-4 transition-transform duration-300 group-hover:translate-x-1.5" />
+                </span>
+              </button>
+            );
+          })}
         </div>
       </div>
     );
