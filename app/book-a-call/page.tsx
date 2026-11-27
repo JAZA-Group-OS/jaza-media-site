@@ -12,11 +12,11 @@ export const metadata: Metadata = {
 // Left empty on purpose — content to be added.
 export default function BookACallPage() {
   return (
-    <>
+    <div className="flex min-h-svh flex-col">
       <Navbar centered />
-      <main className="min-h-[60svh] bg-[#f8f6f1]" />
+      <main className="flex-1 bg-[#f8f6f1]" />
       <Footer />
       <CopyrightBar />
-    </>
+    </div>
   );
 }
