@@ -46,7 +46,8 @@ const nextConfig: NextConfig = {
           "img-src 'self' data: blob: https:",
           "font-src 'self' data: https://fonts.gstatic.com",
           // 127.0.0.1:47822 = the admin AI Agent's Claude bridge on the owner's own computer.
-          "connect-src 'self' https://*.supabase.co wss://*.supabase.co http://127.0.0.1:47822",
+          // Dev only: ws://localhost lets the hot-reload socket push edits live.
+          `connect-src 'self' https://*.supabase.co wss://*.supabase.co http://127.0.0.1:47822${isDev ? ' ws://localhost:* ws://127.0.0.1:*' : ''}`,
           "frame-src 'none'",
           "frame-ancestors 'none'",
           "base-uri 'self'",
