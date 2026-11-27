@@ -3,6 +3,6 @@
 export const GCASH = {
   name: 'JAZA Media',
   number: '09XX XXX XXXX',
-  amount: '₱0.00',
+  amount: '₱5,000',
   qrSrc: '/images/gcash-qr.png',
 };
