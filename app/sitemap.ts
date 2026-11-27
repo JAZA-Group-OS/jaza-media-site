@@ -23,6 +23,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: "/careers/apply", changeFrequency: "monthly", priority: 0.5 },
     { path: "/partner-with-us", changeFrequency: "monthly", priority: 0.9 },
     { path: "/support", changeFrequency: "monthly", priority: 0.5 },
+    { path: "/book-a-call", changeFrequency: "monthly", priority: 0.7 },
     { path: "/privacy", changeFrequency: "yearly", priority: 0.3 },
     { path: "/terms", changeFrequency: "yearly", priority: 0.3 },
   ];
