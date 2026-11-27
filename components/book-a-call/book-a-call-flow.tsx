@@ -164,26 +164,26 @@ export function BookACallFlow() {
                 className={`group relative flex flex-col overflow-hidden rounded-[28px] border p-8 transition duration-300 hover:-translate-y-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/60 md:p-9 ${
                   dark
                     ? 'border-gold/25 bg-[linear-gradient(160deg,#1b1914_0%,#0e0e0f_70%)] text-white shadow-[0_40px_80px_-40px_rgba(0,0,0,0.7)] hover:shadow-[0_50px_90px_-40px_rgba(0,0,0,0.8)]'
-                    : 'border-gold/40 bg-[#f9e3a0] text-ink shadow-[0_30px_60px_-40px_rgba(184,144,42,0.5)] hover:border-gold/70 hover:shadow-[0_40px_80px_-40px_rgba(184,144,42,0.6)]'
+                    : 'border-black/[0.07] bg-white text-ink shadow-[0_30px_60px_-40px_rgba(0,0,0,0.25)] hover:border-black/15 hover:shadow-[0_40px_80px_-40px_rgba(0,0,0,0.3)]'
                 }`}
               >
                 {dark ? <span aria-hidden className="absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-gold/70 to-transparent" /> : null}
                 <span className="flex items-center justify-between">
                   <span
                     className={`grid size-11 place-items-center rounded-full ring-1 ${
-                      dark ? 'bg-gold/10 text-gold ring-gold/40' : 'bg-white/70 text-gold-deep ring-gold-deep/25'
+                      dark ? 'bg-gold/10 text-gold ring-gold/40' : 'bg-[#f8f3e6] text-gold-deep ring-gold-deep/20'
                     }`}
                   >
                     <Icon className="size-[18px]" strokeWidth={1.75} />
                   </span>
-                  {tag ? <span className={`text-[10.5px] font-medium tracking-[0.24em] uppercase ${dark ? 'text-gold' : 'text-ink/70'}`}>{tag}</span> : null}
+                  {tag ? <span className={`text-[10.5px] font-medium tracking-[0.24em] uppercase ${dark ? 'text-gold' : 'text-gold-deep'}`}>{tag}</span> : null}
                 </span>
                 <span className="mt-7 font-display text-[28px] leading-tight">{title}</span>
-                <span className={`mt-3 text-[15px] leading-relaxed ${dark ? 'text-white/60' : 'text-ink/70'}`}>{body}</span>
-                <span className={`mt-6 space-y-2 border-t pt-5 ${dark ? 'border-white/10' : 'border-ink/15'}`}>
+                <span className={`mt-3 text-[15px] leading-relaxed ${dark ? 'text-white/60' : 'text-black/55'}`}>{body}</span>
+                <span className={`mt-6 space-y-2 border-t pt-5 ${dark ? 'border-white/10' : 'border-black/[0.07]'}`}>
                   {points.map((pt) => (
-                    <span key={pt} className={`flex items-center gap-2.5 text-[14px] ${dark ? 'text-white/75' : 'text-ink/80'}`}>
-                      <Check className={`size-4 ${dark ? 'text-gold' : 'text-ink'}`} strokeWidth={2} />
+                    <span key={pt} className={`flex items-center gap-2.5 text-[14px] ${dark ? 'text-white/75' : 'text-black/65'}`}>
+                      <Check className={`size-4 ${dark ? 'text-gold' : 'text-gold-deep'}`} strokeWidth={2} />
                       {pt}
                     </span>
                   ))}
