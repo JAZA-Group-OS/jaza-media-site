@@ -203,27 +203,12 @@ export function QualificationFunnel() {
     [],
   );
 
-  // Auto-advance on radio selection (matches acquisition.com flow). Wraps
-  // setAnswer and queues a step advance after a short delay so the user sees
-  // the radio dot fill before the slide. The clear-and-reschedule pattern
-  // means keyboard users arrowing through options don't trigger advance on
-  // every keypress — only when they pause on their choice.
+  // Choosing an option only records it; the user moves on with NEXT.
   const handleRadioChange = useCallback(
     (id: keyof Answers, value: string) => {
       setAnswer(id, value);
-      if (advanceTimerRef.current) {
-        clearTimeout(advanceTimerRef.current);
-      }
-      advanceTimerRef.current = setTimeout(() => {
-        // Defensive guard: all current radio questions are mid-funnel, but if
-        // a radio ever lands on the final step we still want manual submit.
-        if (stepFromUrl < TOTAL_STEPS) {
-          setDirection('forward');
-          router.push(`/partner-with-us?step=${stepFromUrl + 1}`);
-        }
-      }, 350);
     },
-    [setAnswer, router, stepFromUrl],
+    [setAnswer],
   );
 
   // Cancel any pending auto-advance when the step changes for any reason
