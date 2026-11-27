@@ -12,7 +12,11 @@ export function Navbar({ centered = false }: { centered?: boolean }) {
         <Link
           href="/"
           aria-label="JAZA Media home"
-          className="ml-2 flex flex-col items-center leading-none md:ml-8"
+          className={
+            centered
+              ? "absolute left-1/2 flex -translate-x-1/2 flex-col items-center leading-none"
+              : "ml-2 flex flex-col items-center leading-none md:ml-8"
+          }
         >
           <span className="font-display text-[28px] tracking-[0.18em] text-white">
             JAZA
